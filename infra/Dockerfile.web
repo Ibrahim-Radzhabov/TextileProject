@@ -1,0 +1,38 @@
+FROM node:20-alpine AS deps
+WORKDIR /app
+
+COPY package.json turbo.json ./
+COPY apps/web/package.json ./apps/web/package.json
+COPY packages/ui/package.json ./packages/ui/package.json
+COPY packages/shared-types/package.json ./packages/shared-types/package.json
+COPY packages/config-schema/package.json ./packages/config-schema/package.json
+
+RUN corepack enable && pnpm install
+
+FROM node:20-alpine AS builder
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+ENV STORE_API_URL=http://api:8000
+ENV STORE_CLIENT_ID=demo
+ENV NEXT_PUBLIC_STORE_API_URL=http://api:8000
+
+RUN corepack enable && pnpm build --filter web
+
+FROM node:20-alpine AS runner
+WORKDIR /app
+
+ENV NODE_ENV=production \
+    STORE_API_URL=http://api:8000 \
+    STORE_CLIENT_ID=demo \
+    NEXT_PUBLIC_STORE_API_URL=http://api:8000
+
+COPY --from=builder /app/apps/web/.next ./apps/web/.next
+COPY --from=builder /app/apps/web/package.json ./apps/web/package.json
+
+EXPOSE 3000
+
+CMD ["node", "apps/web/node_modules/next/dist/bin/next", "start", "apps/web"]
+

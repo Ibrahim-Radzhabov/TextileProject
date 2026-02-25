@@ -1,0 +1,10 @@
+{
+  "id": "demo",
+  "name": "Textile Studio",
+  "logo": {
+    "src": "https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg",
+    "alt": "Textile Studio"
+  },
+  "primaryLocale": "ru-RU",
+  "currency": "USD"
+}

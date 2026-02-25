@@ -1,0 +1,60 @@
+[
+  {
+    "id": "home",
+    "slug": "/",
+    "kind": "home",
+    "title": "Главная",
+    "blocks": [
+      {
+        "id": "hero-main",
+        "type": "hero",
+        "eyebrow": "Curated textiles",
+        "title": "Тихий люкс для повседневного ритма.",
+        "subtitle": "Мягкие фактуры, выверенные пропорции и спокойная палитра. Соберите гардероб, который не кричит, а звучит.",
+        "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
+        "secondaryCta": { "label": "Смотреть избранное", "href": "#featured" }
+      },
+      {
+        "id": "home-featured",
+        "type": "product-grid",
+        "title": "Избранное",
+        "subtitle": "Предметы, вокруг которых строится весь гардероб.",
+        "layout": "auto-fit",
+        "filter": { "featured": true }
+      }
+    ]
+  },
+  {
+    "id": "catalog",
+    "slug": "/catalog",
+    "kind": "catalog",
+    "title": "Каталог",
+    "blocks": [
+      {
+        "id": "catalog-header",
+        "type": "rich-text",
+        "content": "Подборка фактур и базовых вещей для спокойного гардероба."
+      },
+      {
+        "id": "catalog-grid",
+        "type": "product-grid",
+        "title": "Все позиции",
+        "layout": "auto-fit",
+        "filter": {}
+      }
+    ]
+  },
+  {
+    "id": "product",
+    "slug": "/product/[slug]",
+    "kind": "product",
+    "title": "Товар",
+    "blocks": [
+      {
+        "id": "product-intro",
+        "type": "rich-text",
+        "content": "Детали, фактура и посадка — всё, что важно почувствовать."
+      }
+    ]
+  }
+]

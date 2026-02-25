@@ -1,0 +1,27 @@
+{
+  "name": "store-platform",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "clients/*"
+  ],
+  "scripts": {
+    "dev:web": "turbo dev --filter=web",
+    "dev:api": "uvicorn apps.api.main:app --reload",
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "lint": "turbo lint",
+    "format": "prettier --write .",
+    "init-client": "node scripts/init-client.mjs"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.2",
+    "turbo": "^2.3.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "packageManager": "pnpm@9.12.0"
+}

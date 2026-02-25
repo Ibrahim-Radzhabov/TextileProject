@@ -1,0 +1,38 @@
+{
+  "products": [
+    {
+      "id": "p1",
+      "slug": "textured-wool-coat",
+      "name": "Textured Wool Coat",
+      "shortDescription": "Тактильный, архитектурный силуэт для повседневного ритма.",
+      "price": { "currency": "USD", "amount": 420 },
+      "media": [
+        {
+          "id": "m1",
+          "url": "https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg",
+          "alt": "Textured Wool Coat"
+        }
+      ],
+      "badges": [{ "id": "b1", "label": "New", "tone": "accent" }],
+      "tags": ["featured"],
+      "isFeatured": true
+    },
+    {
+      "id": "p2",
+      "slug": "minimal-cotton-shirt",
+      "name": "Minimal Cotton Shirt",
+      "shortDescription": "Чистые линии, мягкий хлопок, идеальная посадка.",
+      "price": { "currency": "USD", "amount": 140 },
+      "media": [
+        {
+          "id": "m2",
+          "url": "https://images.pexels.com/photos/7671169/pexels-photo-7671169.jpeg",
+          "alt": "Minimal Cotton Shirt"
+        }
+      ],
+      "badges": [{ "id": "b2", "label": "Essential", "tone": "neutral" }],
+      "tags": ["featured"],
+      "isFeatured": true
+    }
+  ]
+}

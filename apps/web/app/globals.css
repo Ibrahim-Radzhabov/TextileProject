@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-background: #050816;
+  --color-foreground: #e5e7eb;
+  --color-muted: rgba(148, 163, 184, 0.24);
+  --color-muted-foreground: #9ca3af;
+  --color-accent: #6366f1;
+  --color-accent-soft: rgba(99, 102, 241, 0.18);
+  --color-border: rgba(148, 163, 184, 0.35);
+  --color-input: rgba(15, 23, 42, 0.7);
+  --color-ring: rgba(129, 140, 248, 0.65);
+  --color-card: rgba(15, 23, 42, 0.72);
+  --color-card-foreground: #e5e7eb;
+
+  --radius-xl: 32px;
+  --radius-lg: 24px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+}
+
+.glass-panel {
+  @apply bg-card/80 backdrop-blur-xl border border-border/60 shadow-soft-subtle;
+}
+
+.premium-gradient {
+  background-image: radial-gradient(circle at top left, rgba(129, 140, 248, 0.52), transparent 55%),
+    radial-gradient(circle at bottom right, rgba(45, 212, 191, 0.4), transparent 55%),
+    radial-gradient(circle at center, rgba(15, 23, 42, 1), rgba(15, 23, 42, 1));
+}
+
+.page-shell {
+  @apply min-h-screen premium-gradient;
+}
