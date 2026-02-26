@@ -1,4 +1,5 @@
 import * as React from "react";
+import { motion } from "framer-motion";
 import { Surface } from "./Surface";
 
 export type LayoutShellProps = {
@@ -10,23 +11,36 @@ export type LayoutShellProps = {
 export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, footer }) => {
   return (
     <div className="page-shell">
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 pb-10 pt-6 sm:px-8 lg:px-10 lg:pt-8">
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-10 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
         {topNav && (
-          <div className="mb-6">
-            <Surface tone="subtle" className="flex items-center justify-between px-4 py-3 lg:px-5">
+          <motion.div
+            className="mb-6"
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <Surface
+              tone="subtle"
+              className="flex items-center justify-between px-4 py-3 backdrop-blur-xl lg:px-5"
+            >
               {topNav}
             </Surface>
-          </div>
+          </motion.div>
         )}
 
-        <main className="flex-1 py-4 lg:py-6">{children}</main>
+        <main className="min-h-0 flex-1 py-4 lg:py-6">{children}</main>
 
         {footer && (
-          <div className="mt-8 text-sm text-muted-foreground">
+          <motion.div
+            className="mt-8 text-sm text-muted-foreground"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.15, duration: 0.2 }}
+          >
             <Surface tone="subtle" className="px-4 py-3 lg:px-5">
               {footer}
             </Surface>
-          </div>
+          </motion.div>
         )}
       </div>
     </div>

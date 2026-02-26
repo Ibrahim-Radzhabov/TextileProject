@@ -200,4 +200,5 @@ class CheckoutResponse(BaseModel):
     order_id: str
     status: Literal["pending", "redirect", "confirmed"]
     stripe_session_id: Optional[str] = None
+    redirect_url: Optional[str] = None
 

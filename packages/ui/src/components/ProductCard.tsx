@@ -16,7 +16,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
     <motion.div
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 260, damping: 25 }}
-      className="group"
+      className="group h-full"
     >
       <Surface className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card/80 shadow-soft-subtle">
         <div className="relative overflow-hidden">
@@ -59,7 +59,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
         <div className="flex flex-1 flex-col gap-2 px-4 py-3">
           <div className="flex items-start justify-between gap-2">
             <div className="space-y-0.5">
-              <p className="line-clamp-1 text-sm font-medium">{product.name}</p>
+              <p className="line-clamp-1 text-sm font-medium tracking-tight">
+                {product.name}
+              </p>
               {product.shortDescription && (
                 <p className="line-clamp-2 text-xs text-muted-foreground">
                   {product.shortDescription}

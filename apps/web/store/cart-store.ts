@@ -17,6 +17,7 @@ type CartState = {
   error?: string;
   addProduct: (productId: string) => Promise<void>;
   setOpen: (open: boolean) => void;
+  clearCart: () => void;
 };
 
 export const useCartStore = create<CartState>((set, get) => ({
@@ -28,6 +29,10 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   setOpen(open) {
     set({ open });
+  },
+
+  clearCart() {
+    set({ lines: [], cart: undefined, error: undefined });
   },
 
   async addProduct(productId) {

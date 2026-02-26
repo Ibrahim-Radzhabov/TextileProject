@@ -25,12 +25,18 @@ export default function CatalogPage() {
       config.catalog.products.flatMap((p) => p.tags ?? [])
     )
   );
+  const hasFilteredResults =
+    config.catalog.products.filter((p) => {
+      if (!tagsFilter.length) return true;
+      const tags = p.tags ?? [];
+      return tagsFilter.some((t) => tags.includes(t));
+    }).length > 0;
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-0 space-y-6 pb-8">
       {page && (
         <header className="space-y-1">
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             {page.title}
           </h1>
         </header>

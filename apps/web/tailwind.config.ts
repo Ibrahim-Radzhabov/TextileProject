@@ -28,9 +28,9 @@ const config: Config = {
         sm: "var(--radius-sm)"
       },
       boxShadow: {
-        soft: "0 24px 60px rgba(15, 23, 42, 0.26)",
-        "soft-subtle": "0 18px 45px rgba(15, 23, 42, 0.18)",
-        ring: "0 0 0 1px rgba(148, 163, 184, 0.3)"
+        soft: "var(--shadow-soft)",
+        "soft-subtle": "var(--shadow-soft-subtle)",
+        ring: "var(--shadow-ring)"
       }
     }
   },

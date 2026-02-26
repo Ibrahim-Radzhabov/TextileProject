@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import { createContext, useContext } from "react";
+import Link from "next/link";
 import { DefaultSeo } from "next-seo";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
@@ -19,7 +20,7 @@ export function useStorefrontConfig(): StorefrontConfig | null {
 }
 
 export function StorefrontShell({ children, config }: StorefrontShellProps) {
-  const { cart, open, isPricing, setOpen } = useCartStore();
+  const { cart, open, isPricing, setOpen, error: cartError } = useCartStore();
   const itemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
   return (
@@ -41,6 +42,8 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
           <TopNav
             shopName={config.shop.name}
             logo={config.shop.logo}
+            leftWrapper={Link}
+            leftWrapperProps={{ href: "/" }}
             rightSlot={
               <Button
                 variant="secondary"
@@ -69,6 +72,7 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
         open={open}
         cart={cart}
         isUpdating={isPricing}
+        error={cartError}
         onClose={() => setOpen(false)}
         onCheckout={() => {
           window.location.href = "/checkout";

@@ -20,7 +20,15 @@ function themeToCssVars(theme: ThemeConfig): CSSProperties {
     "--radius-xl": `${theme.radii.xl}px`,
     "--radius-lg": `${theme.radii.lg}px`,
     "--radius-md": `${theme.radii.md}px`,
-    "--radius-sm": `${theme.radii.sm}px`
+    "--radius-sm": `${theme.radii.sm}px`,
+    "--shadow-soft": theme.shadows.soft,
+    "--shadow-soft-subtle": theme.shadows.softSubtle,
+    "--shadow-ring": theme.shadows.ring,
+    "--gradient-hero": theme.gradients.hero,
+    "--gradient-surface": theme.gradients.surface,
+    "--font-sans": theme.typography.fontSans,
+    "--font-base-size": `${theme.typography.baseFontSize}px`,
+    "--font-scale-ratio": `${theme.typography.scaleRatio}`
   } as CSSProperties;
 }
 
@@ -36,5 +44,4 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     </html>
   );
 }
-
 

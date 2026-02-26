@@ -53,7 +53,7 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 8, scale: 0.98 }}
               transition={{ duration: 0.18 }}
-              className="absolute right-0 z-40 mt-2 w-56"
+              className="absolute left-0 right-0 z-40 mt-2 w-full min-w-0 sm:left-auto sm:right-0 sm:w-56"
             >
               <Surface tone="subtle" className="space-y-3 px-3 py-3">
                 <div className="flex items-center justify-between">

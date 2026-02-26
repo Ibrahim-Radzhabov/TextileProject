@@ -27,7 +27,7 @@ export const Hero: React.FC<HeroProps> = ({
   return (
     <section className="relative overflow-hidden">
       <div className="pointer-events-none absolute inset-0">
-        <div className="h-full w-full bg-gradient-to-br from-accent/30 via-transparent to-emerald-400/25 mix-blend-screen blur-3xl" />
+        <div className="h-full w-full premium-gradient mix-blend-screen blur-3xl" />
       </div>
       <Surface className="relative flex flex-col gap-6 px-6 py-10 sm:px-8 sm:py-12 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-14">
         <div className="max-w-xl space-y-5">

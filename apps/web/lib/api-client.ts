@@ -68,6 +68,7 @@ export type CheckoutResponse = {
   order_id: string;
   status: "pending" | "redirect" | "confirmed";
   stripe_session_id?: string | null;
+  redirect_url?: string | null;
 };
 
 export async function checkout(payload: CheckoutPayload): Promise<CheckoutResponse> {

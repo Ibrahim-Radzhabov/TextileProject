@@ -60,4 +60,5 @@ for (const file of jsonFiles) {
 
 console.log(`Client "${newClientId}" created at ${targetDir}`);
 console.log(`Set CLIENT_ID=${newClientId} for API and STORE_CLIENT_ID=${newClientId} for web.`);
+console.log(`You can validate the new client config with: pnpm validate-client ${newClientId}`);
 
