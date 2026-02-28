@@ -45,6 +45,10 @@ test("customer can checkout, then see order in admin", async ({ page, request })
   const checkoutPayload = (await checkoutResponse.json()) as { order_id: string };
   const orderId = checkoutPayload.order_id;
   expect(orderId).toBeTruthy();
+  const createdOrderResponse = await request.get(`${API_BASE_URL}/orders/${orderId}`);
+  expect(createdOrderResponse.ok()).toBeTruthy();
+  const createdOrderPayload = (await createdOrderResponse.json()) as { created_at: string };
+  const createdOrderDate = new Date(createdOrderPayload.created_at).toISOString().slice(0, 10);
 
   await page.goto(`/checkout/success?order_id=${encodeURIComponent(orderId)}`);
   await expect(page.getByRole("heading", { name: "Заказ оформлен" })).toBeVisible();
@@ -53,10 +57,18 @@ test("customer can checkout, then see order in admin", async ({ page, request })
   await page.goto(`/order-status?order_id=${encodeURIComponent(orderId)}`);
   await expect(page.getByRole("heading", { level: 1, name: "Статус заказа" })).toBeVisible();
   await expect(page.getByText(orderId)).toBeVisible();
-  await expect(page.getByText("Ожидает оплаты")).toBeVisible();
+  await expect(page.getByText("Ожидает оплаты").first()).toBeVisible();
+  await expect(page.getByText("Ход заказа")).toBeVisible();
+  await expect(page.getByText("Заказ создан")).toBeVisible();
 
   await loginToAdmin(page);
   await expect(page.getByRole("heading", { name: "Заказы" })).toBeVisible();
+  await page.getByLabel(/Поиск/).fill("e2e@example.com");
+  await page.getByLabel("С даты").fill(createdOrderDate);
+  await page.getByRole("button", { name: "Применить" }).click();
+  await expect(page).toHaveURL(/q=e2e%40example\.com/);
+  await expect(page).toHaveURL(new RegExp(`created_from=${createdOrderDate}`));
+  await expect(page.getByRole("link", { name: orderId })).toBeVisible();
 
   await page.getByRole("link", { name: "Ожидают оплаты" }).click();
   await expect(page).toHaveURL(/payment_state=awaiting/);
@@ -67,7 +79,8 @@ test("customer can checkout, then see order in admin", async ({ page, request })
   await expect(page.getByText("Заказы не найдены.")).toBeVisible();
 
   await page.getByRole("link", { name: "Все оплаты" }).click();
-  await expect(page).toHaveURL(/\/admin\/orders$/);
+  await expect(page).toHaveURL(/\/admin\/orders\?/);
+  await expect(page).not.toHaveURL(/payment_state=/);
 
   const orderLink = page.getByRole("link", { name: orderId });
   await expect(orderLink).toBeVisible();

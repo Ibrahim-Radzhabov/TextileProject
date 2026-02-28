@@ -493,6 +493,9 @@ export async function checkout(payload: CheckoutPayload): Promise<CheckoutRespon
 export async function fetchOrders(options?: {
   status?: OrderStatus;
   paymentState?: OrderPaymentState;
+  query?: string;
+  createdFrom?: string;
+  createdTo?: string;
   limit?: number;
   offset?: number;
 }): Promise<OrdersListResponse> {
@@ -502,6 +505,15 @@ export async function fetchOrders(options?: {
   }
   if (options?.paymentState) {
     params.set("payment_state", options.paymentState);
+  }
+  if (options?.query) {
+    params.set("q", options.query);
+  }
+  if (options?.createdFrom) {
+    params.set("created_from", options.createdFrom);
+  }
+  if (options?.createdTo) {
+    params.set("created_to", options.createdTo);
   }
   if (options?.limit !== undefined) {
     params.set("limit", String(options.limit));

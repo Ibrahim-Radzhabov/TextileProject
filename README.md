@@ -125,7 +125,7 @@ When Stripe is not configured or fails, checkout gracefully falls back to `statu
 
 Additional endpoints:
 
-- `GET /orders?status=&payment_state=&limit=&offset=` — list persisted orders with status/payment filters and pagination.
+- `GET /orders?status=&payment_state=&q=&created_from=&created_to=&limit=&offset=` — list persisted orders with status/payment, search (`order_id` / `customer.email`), date range and pagination.
 - `GET /orders/{order_id}` — get persisted order details.
 - `GET /checkout/{order_id}` — fetch persisted order for current tenant.
 - `POST /webhooks/stripe` — verifies Stripe signature, deduplicates by (`event_id`, `livemode`, `account`, `client_id`), updates order status (`paid` / `failed` / `cancelled`) and sends Telegram payment notification on `paid`.

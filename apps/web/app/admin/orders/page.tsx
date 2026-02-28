@@ -48,9 +48,37 @@ function parseOrderPaymentState(value: string | undefined): OrderPaymentState | 
   return allowed.includes(value as OrderPaymentState) ? (value as OrderPaymentState) : undefined;
 }
 
+function parseSearchQuery(value: string | undefined): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const normalized = value.trim();
+  if (!normalized.length) {
+    return undefined;
+  }
+  return normalized.slice(0, 200);
+}
+
+function parseDateParam(value: string | undefined): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    return undefined;
+  }
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    return undefined;
+  }
+  return parsed.toISOString().slice(0, 10) === value ? value : undefined;
+}
+
 function buildOrdersHref(options: {
   status?: OrderStatus;
   paymentState?: OrderPaymentState;
+  query?: string;
+  createdFrom?: string;
+  createdTo?: string;
   offset?: number;
 }): string {
   const params = new URLSearchParams();
@@ -59,6 +87,15 @@ function buildOrdersHref(options: {
   }
   if (options.paymentState) {
     params.set("payment_state", options.paymentState);
+  }
+  if (options.query) {
+    params.set("q", options.query);
+  }
+  if (options.createdFrom) {
+    params.set("created_from", options.createdFrom);
+  }
+  if (options.createdTo) {
+    params.set("created_to", options.createdTo);
   }
   if (options.offset !== undefined && options.offset > 0) {
     params.set("offset", String(options.offset));
@@ -98,16 +135,28 @@ export default async function AdminOrdersPage({
   searchParams?: {
     status?: string;
     payment_state?: string;
+    q?: string;
+    created_from?: string;
+    created_to?: string;
     offset?: string;
   };
 }) {
   const status = parseOrderStatus(searchParams?.status);
   const paymentState = parseOrderPaymentState(searchParams?.payment_state);
+  const query = parseSearchQuery(searchParams?.q);
+  const createdFrom = parseDateParam(searchParams?.created_from);
+  const createdTo = parseDateParam(searchParams?.created_to);
   const offset = toPositiveInt(searchParams?.offset, 0);
+  const hasInvalidDateRange = Boolean(createdFrom && createdTo && createdFrom > createdTo);
+  const effectiveCreatedFrom = hasInvalidDateRange ? undefined : createdFrom;
+  const effectiveCreatedTo = hasInvalidDateRange ? undefined : createdTo;
 
   const response = await fetchOrders({
     status,
     paymentState,
+    query,
+    createdFrom: effectiveCreatedFrom,
+    createdTo: effectiveCreatedTo,
     limit: PAGE_SIZE,
     offset
   });
@@ -133,13 +182,76 @@ export default async function AdminOrdersPage({
         <p className="text-sm text-muted-foreground">Текущий tenant: витрина активного клиента.</p>
       </header>
 
+      <form
+        method="get"
+        className="glass-panel grid gap-3 rounded-2xl border border-border/60 px-4 py-4 sm:grid-cols-4"
+      >
+        {status && <input type="hidden" name="status" value={status} />}
+        {paymentState && <input type="hidden" name="payment_state" value={paymentState} />}
+        <label className="space-y-1 sm:col-span-2">
+          <span className="text-xs text-muted-foreground">Поиск (order_id / email)</span>
+          <input
+            type="search"
+            name="q"
+            defaultValue={query}
+            placeholder="Например, e2e@example.com"
+            className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+          />
+        </label>
+        <label className="space-y-1">
+          <span className="text-xs text-muted-foreground">С даты</span>
+          <input
+            type="date"
+            name="created_from"
+            defaultValue={createdFrom}
+            className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+          />
+        </label>
+        <label className="space-y-1">
+          <span className="text-xs text-muted-foreground">По дату</span>
+          <input
+            type="date"
+            name="created_to"
+            defaultValue={createdTo}
+            className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+          />
+        </label>
+        <div className="flex flex-wrap items-center gap-2 sm:col-span-4">
+          <button
+            type="submit"
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-accent/60 bg-accent px-4 text-xs font-medium text-white transition-colors hover:bg-accent/90"
+          >
+            Применить
+          </button>
+          <Link
+            href={buildOrdersHref({ status, paymentState })}
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-4 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+          >
+            Сбросить
+          </Link>
+        </div>
+      </form>
+
+      {hasInvalidDateRange && (
+        <div className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+          Некорректный диапазон дат: "С даты" не может быть позже "По дату".
+        </div>
+      )}
+
       <div className="flex flex-wrap gap-2">
         {statusFilters.map((filter) => {
           const active = filter.value === status || (!filter.value && !status);
           return (
             <Link
               key={filter.label}
-              href={buildOrdersHref({ status: filter.value, paymentState, offset: 0 })}
+              href={buildOrdersHref({
+                status: filter.value,
+                paymentState,
+                query,
+                createdFrom,
+                createdTo,
+                offset: 0
+              })}
               className={[
                 "rounded-full border px-3 py-1 text-xs transition-colors",
                 active
@@ -159,7 +271,14 @@ export default async function AdminOrdersPage({
           return (
             <Link
               key={filter.label}
-              href={buildOrdersHref({ status, paymentState: filter.value, offset: 0 })}
+              href={buildOrdersHref({
+                status,
+                paymentState: filter.value,
+                query,
+                createdFrom,
+                createdTo,
+                offset: 0
+              })}
               className={[
                 "rounded-full border px-3 py-1 text-xs transition-colors",
                 active
@@ -252,6 +371,9 @@ export default async function AdminOrdersPage({
             href={buildOrdersHref({
               status,
               paymentState,
+              query,
+              createdFrom,
+              createdTo,
               offset: Math.max(0, response.offset - response.limit)
             })}
             className={[
@@ -264,7 +386,14 @@ export default async function AdminOrdersPage({
             Назад
           </Link>
           <Link
-            href={buildOrdersHref({ status, paymentState, offset: nextOffset })}
+            href={buildOrdersHref({
+              status,
+              paymentState,
+              query,
+              createdFrom,
+              createdTo,
+              offset: nextOffset
+            })}
             className={[
               "rounded-lg border px-3 py-1.5 text-xs",
               hasNext

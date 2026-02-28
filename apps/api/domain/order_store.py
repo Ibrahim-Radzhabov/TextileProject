@@ -289,6 +289,9 @@ class OrderStore:
         client_id: str,
         status: Optional[str],
         payment_state: Optional[Literal["awaiting", "paid", "failed", "cancelled"]],
+        search_query: Optional[str],
+        created_from_iso: Optional[str],
+        created_to_exclusive_iso: Optional[str],
         limit: int,
         offset: int,
     ) -> tuple[list[dict[str, Any]], int]:
@@ -314,6 +317,28 @@ class OrderStore:
             elif payment_state == "cancelled":
                 where_parts.append("status = ?")
                 params.append("cancelled")
+
+        if search_query:
+            normalized_query = search_query.strip().lower()
+            if normalized_query:
+                like_query = f"%{normalized_query}%"
+                where_parts.append(
+                    """
+                    (
+                        LOWER(order_id) LIKE ?
+                        OR LOWER(COALESCE(json_extract(customer_json, '$.email'), '')) LIKE ?
+                    )
+                    """
+                )
+                params.extend([like_query, like_query])
+
+        if created_from_iso:
+            where_parts.append("created_at >= ?")
+            params.append(created_from_iso)
+
+        if created_to_exclusive_iso:
+            where_parts.append("created_at < ?")
+            params.append(created_to_exclusive_iso)
 
         where_sql = " AND ".join(where_parts)
 

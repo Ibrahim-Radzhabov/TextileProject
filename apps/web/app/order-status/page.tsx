@@ -3,6 +3,15 @@ import { Surface } from "@store-platform/ui";
 import { ApiError, fetchOrderById, type OrderStatus } from "@/lib/api-client";
 import { OrderStatusLookupCard } from "@/components/order-status-lookup-card";
 
+type TimelineStepState = "completed" | "current" | "failed" | "upcoming";
+type TimelineStep = {
+  id: string;
+  title: string;
+  description: string;
+  state: TimelineStepState;
+  timestamp?: string;
+};
+
 function getOrderStatusLabel(status: OrderStatus): { label: string; className: string } {
   if (status === "paid") {
     return {
@@ -45,6 +54,140 @@ function normalizeOrderId(value: string | string[] | undefined): string | undefi
   return undefined;
 }
 
+function formatTimelineTimestamp(value: string): string {
+  return new Date(value).toLocaleString();
+}
+
+function getOrderTimeline(order: Awaited<ReturnType<typeof fetchOrderById>>): TimelineStep[] {
+  const createdAt = formatTimelineTimestamp(order.createdAt);
+  const updatedAt = formatTimelineTimestamp(order.updatedAt);
+
+  const createdStep: TimelineStep = {
+    id: "created",
+    title: "Заказ создан",
+    description: "Мы получили заказ и зафиксировали его в системе.",
+    state: "completed",
+    timestamp: createdAt
+  };
+
+  if (order.status === "paid") {
+    return [
+      createdStep,
+      {
+        id: "payment",
+        title: "Оплата подтверждена",
+        description: "Платеж успешно принят.",
+        state: "completed",
+        timestamp: updatedAt
+      },
+      {
+        id: "processing",
+        title: "Заказ передан в обработку",
+        description: "Команда магазина начала подготовку вашего заказа.",
+        state: "current",
+        timestamp: updatedAt
+      }
+    ];
+  }
+
+  if (order.status === "failed") {
+    return [
+      createdStep,
+      {
+        id: "payment",
+        title: "Ошибка оплаты",
+        description: "Платеж не прошел. Попробуйте оплатить заказ повторно.",
+        state: "failed",
+        timestamp: updatedAt
+      },
+      {
+        id: "next",
+        title: "Ожидаем повторную оплату",
+        description: "После успешной оплаты статус заказа обновится автоматически.",
+        state: "upcoming"
+      }
+    ];
+  }
+
+  if (order.status === "cancelled") {
+    return [
+      createdStep,
+      {
+        id: "payment",
+        title: "Оплата отменена",
+        description: "Платеж был отменен и заказ не передан в обработку.",
+        state: "failed",
+        timestamp: updatedAt
+      },
+      {
+        id: "next",
+        title: "Можно оформить заново",
+        description: "Если заказ всё ещё актуален, оформите его повторно.",
+        state: "upcoming"
+      }
+    ];
+  }
+
+  if (order.status === "redirect") {
+    return [
+      createdStep,
+      {
+        id: "payment",
+        title: "Ожидает оплаты в Stripe Checkout",
+        description: "Перейдите к оплате, чтобы завершить оформление.",
+        state: "current",
+        timestamp: updatedAt
+      },
+      {
+        id: "next",
+        title: "Дождитесь подтверждения",
+        description: "После оплаты мы автоматически обновим статус заказа.",
+        state: "upcoming"
+      }
+    ];
+  }
+
+  return [
+    createdStep,
+    {
+      id: "payment",
+      title: "Ожидает оплаты",
+      description: "Заказ сохранен и ждет подтверждения оплаты.",
+      state: "current",
+      timestamp: updatedAt
+    },
+    {
+      id: "next",
+      title: "Подготовка к обработке",
+      description: "После подтверждения оплаты начнется обработка заказа.",
+      state: "upcoming"
+    }
+  ];
+}
+
+function getTimelineDotClass(state: TimelineStepState): string {
+  if (state === "completed") {
+    return "bg-emerald-400";
+  }
+  if (state === "current") {
+    return "bg-accent";
+  }
+  if (state === "failed") {
+    return "bg-red-400";
+  }
+  return "bg-muted-foreground/40";
+}
+
+function getTimelineTitleClass(state: TimelineStepState): string {
+  if (state === "failed") {
+    return "text-red-300";
+  }
+  if (state === "upcoming") {
+    return "text-muted-foreground";
+  }
+  return "text-foreground";
+}
+
 export default async function OrderStatusPage({
   searchParams
 }: {
@@ -71,6 +214,7 @@ export default async function OrderStatusPage({
     }
   }
   const orderStatusMeta = order ? getOrderStatusLabel(order.status) : null;
+  const timeline = order ? getOrderTimeline(order) : [];
 
   return (
     <div className="space-y-6 pb-8">
@@ -131,6 +275,38 @@ export default async function OrderStatusPage({
               <dd className="mt-1 font-medium">{new Date(order.createdAt).toLocaleString()}</dd>
             </div>
           </dl>
+
+          <div className="space-y-3">
+            <h2 className="text-sm font-semibold uppercase tracking-wide text-muted-foreground">
+              Ход заказа
+            </h2>
+            <ol className="space-y-3">
+              {timeline.map((step, index) => (
+                <li key={step.id} className="flex gap-3">
+                  <div className="flex flex-col items-center pt-1">
+                    <span
+                      className={[
+                        "h-2.5 w-2.5 rounded-full",
+                        getTimelineDotClass(step.state)
+                      ].join(" ")}
+                    />
+                    {index < timeline.length - 1 && (
+                      <span className="mt-1 h-full w-px bg-border/60" />
+                    )}
+                  </div>
+                  <div className="space-y-1 pb-1">
+                    <p className={["text-sm font-medium", getTimelineTitleClass(step.state)].join(" ")}>
+                      {step.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{step.description}</p>
+                    {step.timestamp && (
+                      <p className="text-xs text-muted-foreground/80">{step.timestamp}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
 
           <div className="flex flex-wrap gap-3">
             <Link
