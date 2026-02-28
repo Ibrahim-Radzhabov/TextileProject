@@ -14,6 +14,9 @@ def list_orders(
     status: Optional[
         Literal["pending", "redirect", "confirmed", "paid", "failed", "cancelled"]
     ] = Query(default=None),
+    payment_state: Optional[
+        Literal["awaiting", "paid", "failed", "cancelled"]
+    ] = Query(default=None),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ) -> StoredOrderListResponse:
@@ -22,6 +25,7 @@ def list_orders(
     items, total = store.list_orders(
         client_id=settings.client_id,
         status=status,
+        payment_state=payment_state,
         limit=limit,
         offset=offset,
     )

@@ -26,5 +26,8 @@ out/
 playwright-report/
 test-results/
 
+# Local env files
+infra/.env
+
 # Local package build outputs
 packages/*/dist/

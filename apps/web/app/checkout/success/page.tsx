@@ -41,12 +41,20 @@ function SuccessContent() {
         <p className="mb-6 text-sm text-muted-foreground">
           Детали отправлены на почту. Можно закрыть вкладку или вернуться в магазин.
         </p>
-        <Link
-          href="/"
-          className="inline-flex h-11 items-center justify-center rounded-lg border border-accent/60 bg-accent px-5 text-sm font-medium text-white shadow-soft-subtle transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-        >
-          Вернуться на главную
-        </Link>
+        <div className="flex flex-col justify-center gap-2 sm:flex-row">
+          <Link
+            href={orderId ? `/order-status?order_id=${encodeURIComponent(orderId)}` : "/order-status"}
+            className="inline-flex h-11 items-center justify-center rounded-lg border border-border/60 px-5 text-sm font-medium text-foreground shadow-soft-subtle transition-colors hover:border-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            Проверить статус
+          </Link>
+          <Link
+            href="/"
+            className="inline-flex h-11 items-center justify-center rounded-lg border border-accent/60 bg-accent px-5 text-sm font-medium text-white shadow-soft-subtle transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            Вернуться на главную
+          </Link>
+        </div>
       </Surface>
     </motion.div>
   );

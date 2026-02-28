@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from functools import lru_cache
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from ..config import get_settings
 
@@ -288,6 +288,7 @@ class OrderStore:
         *,
         client_id: str,
         status: Optional[str],
+        payment_state: Optional[Literal["awaiting", "paid", "failed", "cancelled"]],
         limit: int,
         offset: int,
     ) -> tuple[list[dict[str, Any]], int]:
@@ -297,6 +298,22 @@ class OrderStore:
         if status:
             where_parts.append("status = ?")
             params.append(status)
+
+        if payment_state:
+            if payment_state == "awaiting":
+                awaiting_statuses = ("pending", "redirect", "confirmed")
+                placeholders = ", ".join(["?"] * len(awaiting_statuses))
+                where_parts.append(f"status IN ({placeholders})")
+                params.extend(awaiting_statuses)
+            elif payment_state == "paid":
+                where_parts.append("status = ?")
+                params.append("paid")
+            elif payment_state == "failed":
+                where_parts.append("status = ?")
+                params.append("failed")
+            elif payment_state == "cancelled":
+                where_parts.append("status = ?")
+                params.append("cancelled")
 
         where_sql = " AND ".join(where_parts)
 

@@ -125,7 +125,7 @@ When Stripe is not configured or fails, checkout gracefully falls back to `statu
 
 Additional endpoints:
 
-- `GET /orders?status=&limit=&offset=` — list persisted orders with status filter and pagination.
+- `GET /orders?status=&payment_state=&limit=&offset=` — list persisted orders with status/payment filters and pagination.
 - `GET /orders/{order_id}` — get persisted order details.
 - `GET /checkout/{order_id}` — fetch persisted order for current tenant.
 - `POST /webhooks/stripe` — verifies Stripe signature, deduplicates by (`event_id`, `livemode`, `account`, `client_id`), updates order status (`paid` / `failed` / `cancelled`) and sends Telegram payment notification on `paid`.
@@ -138,6 +138,14 @@ Additional endpoints:
 - `GET /admin/login` — login screen for token-based admin access.
 - `POST /admin/logout` — clears admin cookie and returns to login.
 - Middleware protects `/admin/*` routes and redirects unauthorized requests to `/admin/login?next=...`.
+- `GET /admin/orders` supports combined lifecycle + payment filters (`payment_state`).
+
+---
+
+### Storefront order status
+
+- `GET /order-status` — customer-facing status page by `order_id`.
+- `GET /order-status?order_id=<uuid>` — resolves current order status and surfaces next action (for example, continue payment when status is `redirect`).
 
 ---
 

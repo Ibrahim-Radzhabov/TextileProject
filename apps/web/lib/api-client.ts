@@ -291,6 +291,7 @@ function normalizeCheckoutCustomer(dto: CheckoutCustomerDto): CheckoutPayload["c
 }
 
 export type OrderStatus = "pending" | "redirect" | "confirmed" | "paid" | "failed" | "cancelled";
+export type OrderPaymentState = "awaiting" | "paid" | "failed" | "cancelled";
 
 export type StoredOrder = {
   orderId: string;
@@ -491,12 +492,16 @@ export async function checkout(payload: CheckoutPayload): Promise<CheckoutRespon
 
 export async function fetchOrders(options?: {
   status?: OrderStatus;
+  paymentState?: OrderPaymentState;
   limit?: number;
   offset?: number;
 }): Promise<OrdersListResponse> {
   const params = new URLSearchParams();
   if (options?.status) {
     params.set("status", options.status);
+  }
+  if (options?.paymentState) {
+    params.set("payment_state", options.paymentState);
   }
   if (options?.limit !== undefined) {
     params.set("limit", String(options.limit));

@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
@@ -50,18 +51,26 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
             logo={config.shop.logo}
             leftHref="/"
             rightSlot={
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setOpen(true)}
-              >
-                Корзина
-                {itemCount > 0 && (
-                  <span className="ml-2 rounded-full bg-accent-soft px-2 py-0.5 text-[11px]">
-                    {itemCount}
-                  </span>
-                )}
-              </Button>
+              <>
+                <Link
+                  href="/order-status"
+                  className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                >
+                  Статус заказа
+                </Link>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setOpen(true)}
+                >
+                  Корзина
+                  {itemCount > 0 && (
+                    <span className="ml-2 rounded-full bg-accent-soft px-2 py-0.5 text-[11px]">
+                      {itemCount}
+                    </span>
+                  )}
+                </Button>
+              </>
             }
           />
         }
