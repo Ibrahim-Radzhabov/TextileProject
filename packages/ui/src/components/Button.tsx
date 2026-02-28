@@ -14,7 +14,7 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const baseClasses =
-  "relative inline-flex items-center justify-center rounded-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
+  "relative inline-flex items-center justify-center rounded-lg border font-medium tracking-tight transition-all duration-[var(--motion-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
 
 const sizeClasses: Record<ButtonSize, string> = {
   sm: "h-9 px-4 text-sm",
@@ -24,11 +24,11 @@ const sizeClasses: Record<ButtonSize, string> = {
 
 const variantClasses: Record<ButtonVariant, string> = {
   primary:
-    "bg-accent text-white shadow-soft-subtle hover:bg-accent/90 active:bg-accent/80 border border-accent/60",
+    "border-accent/65 bg-[var(--gradient-accent-soft)] text-accent-contrast shadow-glow hover:border-accent/90 hover:shadow-floating hover:brightness-110 active:translate-y-px",
   secondary:
-    "bg-card text-foreground border border-border/70 hover:border-accent/60 hover:bg-card/95",
+    "border-border/70 bg-surface-soft text-foreground shadow-inset hover:border-accent/55 hover:bg-surface-strong hover:shadow-soft-subtle",
   ghost:
-    "bg-transparent text-foreground hover:bg-accent-soft/40 border border-transparent hover:border-accent-soft/80"
+    "border-border/30 bg-transparent text-muted-foreground hover:border-accent/50 hover:bg-accent-soft/25 hover:text-foreground"
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -38,8 +38,8 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         ref={ref}
-        whileTap={{ scale: 0.97 }}
-        whileHover={{ y: -1 }}
+        whileTap={{ scale: 0.975 }}
+        whileHover={{ y: -1.5 }}
         className={[
           baseClasses,
           sizeClasses[size],

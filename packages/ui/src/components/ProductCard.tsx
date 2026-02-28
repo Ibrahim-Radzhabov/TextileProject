@@ -3,6 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import type { Product } from "@store-platform/shared-types";
+import { Badge } from "./Badge";
 import { Button } from "./Button";
 import { Surface } from "./Surface";
 
@@ -16,12 +17,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
 
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ type: "spring", stiffness: 260, damping: 25 }}
+      whileHover={{ y: -6 }}
+      transition={{ type: "spring", stiffness: 240, damping: 24 }}
       className="group h-full"
       data-testid={`product-card-${product.slug}`}
     >
-      <Surface className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card/80 shadow-soft-subtle">
+      <Surface
+        tone="subtle"
+        className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-surface-soft"
+      >
         <div className="relative overflow-hidden">
           <div className="aspect-[4/3] overflow-hidden">
             {primaryImage && (
@@ -33,20 +37,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
               />
             )}
           </div>
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/45 via-transparent to-transparent opacity-0 transition-opacity duration-[var(--motion-normal)] group-hover:opacity-100" />
           {product.badges && product.badges.length > 0 && (
             <div className="pointer-events-none absolute left-3 top-3 flex gap-1">
               {product.badges.map((badge) => (
-                <span
-                  key={badge.id}
-                  className="rounded-full bg-accent-soft/70 px-2 py-0.5 text-[11px] font-medium text-accent"
-                >
+                <Badge key={badge.id} tone="accent">
                   {badge.label}
-                </span>
+                </Badge>
               ))}
             </div>
           )}
           {onQuickAdd && (
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-full px-3 pb-3 transition-transform duration-300 ease-out group-hover:translate-y-0">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 translate-y-3 px-3 pb-3 opacity-0 transition-all duration-[var(--motion-normal)] ease-out group-hover:translate-y-0 group-hover:opacity-100">
               <div className="pointer-events-auto">
                 <Button
                   size="sm"
@@ -63,7 +65,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
         <div className="flex flex-1 flex-col gap-2 px-4 py-3">
           <div className="flex items-start justify-between gap-2">
             <div className="space-y-0.5">
-              <p className="line-clamp-1 text-sm font-medium tracking-tight">
+              <p className="line-clamp-1 text-sm font-semibold tracking-tight">
                 {product.name}
               </p>
               {product.shortDescription && (
@@ -72,11 +74,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
                 </p>
               )}
             </div>
-            <div className="text-right text-sm font-medium">
-              {product.price.amount.toLocaleString(undefined, {
-                style: "currency",
-                currency: product.price.currency
-              })}
+            <div className="text-right">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Price</p>
+              <p className="text-sm font-semibold">
+                {product.price.amount.toLocaleString(undefined, {
+                  style: "currency",
+                  currency: product.price.currency
+                })}
+              </p>
             </div>
           </div>
         </div>

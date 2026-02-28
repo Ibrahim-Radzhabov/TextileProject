@@ -13,17 +13,17 @@ export type LayoutShellProps = {
 export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, footer }) => {
   return (
     <div className="page-shell">
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-10 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1180px] flex-col px-4 pb-10 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
         {topNav && (
           <motion.div
-            className="mb-6"
+            className="mb-7"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.2 }}
           >
             <Surface
-              tone="subtle"
-              className="flex items-center justify-between px-4 py-3 backdrop-blur-xl lg:px-5"
+              tone="elevated"
+              className="flex items-center justify-between rounded-2xl px-4 py-3 lg:px-5"
             >
               {topNav}
             </Surface>
@@ -39,7 +39,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15, duration: 0.2 }}
           >
-            <Surface tone="subtle" className="px-4 py-3 lg:px-5">
+            <Surface tone="ghost" className="rounded-2xl px-4 py-3 lg:px-5">
               {footer}
             </Surface>
           </motion.div>

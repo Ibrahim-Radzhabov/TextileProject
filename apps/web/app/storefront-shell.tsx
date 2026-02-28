@@ -52,12 +52,9 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
             leftHref="/"
             rightSlot={
               <>
-                <Link
-                  href="/order-status"
-                  className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
-                >
-                  Статус заказа
-                </Link>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/order-status">Статус заказа</Link>
+                </Button>
                 <Button
                   variant="secondary"
                   size="sm"

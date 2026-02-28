@@ -2,13 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   @apply bg-background text-foreground antialiased;
   font-size: var(--font-base-size, 16px);
+  background-image: var(--gradient-page);
+  background-attachment: fixed;
+}
+
+::selection {
+  @apply bg-accent/35 text-accent-contrast;
 }
 
 .glass-panel {
-  @apply bg-card backdrop-blur-xl border border-border shadow-soft-subtle;
+  @apply border border-border/65 bg-surface-soft shadow-soft-subtle backdrop-blur-2xl;
+  background-image: var(--gradient-surface);
+  box-shadow: var(--shadow-soft-subtle), var(--shadow-inset-soft);
+}
+
+.glass-panel-strong {
+  @apply border shadow-floating backdrop-blur-2xl;
+  border-color: var(--surface-border-strong);
+  background: var(--surface-bg-strong);
+  box-shadow: var(--shadow-floating), var(--shadow-inset-soft);
 }
 
 .premium-gradient {
@@ -16,5 +35,68 @@ body {
 }
 
 .page-shell {
-  @apply min-h-screen premium-gradient;
+  @apply relative min-h-screen;
+  background-image: var(--gradient-page);
+}
+
+.page-shell::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgb(var(--color-foreground) / 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgb(var(--color-foreground) / 0.03) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: radial-gradient(ellipse at center, black 48%, transparent 100%);
+}
+
+.text-hero {
+  background-image: linear-gradient(
+    120deg,
+    rgb(var(--color-foreground) / 0.98),
+    rgb(var(--color-foreground) / 0.78) 36%,
+    rgb(var(--color-accent) / 0.92)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.premium-divider {
+  height: 1px;
+  width: 100%;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--color-border) / 0.8) 18%,
+    rgb(var(--color-accent) / 0.45) 50%,
+    rgb(var(--color-border) / 0.8) 82%,
+    transparent
+  );
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--color-foreground) / 0.08),
+    transparent
+  );
+  animation: skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
 }

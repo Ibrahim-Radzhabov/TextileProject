@@ -40,6 +40,12 @@ function toRgbChannels(value: string): string {
 }
 
 function themeToCssVars(theme: ThemeConfig): CSSProperties {
+  const accentChannels = toRgbChannels(theme.colors.accent);
+  const cardChannels = toRgbChannels(theme.colors.card);
+  const borderChannels = toRgbChannels(theme.colors.border);
+  const backgroundChannels = toRgbChannels(theme.colors.background);
+  const foregroundChannels = toRgbChannels(theme.colors.foreground);
+
   return {
     "--color-background": toRgbChannels(theme.colors.background),
     "--color-foreground": toRgbChannels(theme.colors.foreground),
@@ -61,6 +67,19 @@ function themeToCssVars(theme: ThemeConfig): CSSProperties {
     "--shadow-ring": theme.shadows.ring,
     "--gradient-hero": theme.gradients.hero,
     "--gradient-surface": theme.gradients.surface,
+    "--gradient-page": `${theme.gradients.hero}, linear-gradient(180deg, rgba(${backgroundChannels} / 1), rgba(${backgroundChannels} / 0.96))`,
+    "--gradient-accent-soft": `linear-gradient(135deg, rgba(${accentChannels} / 0.32), rgba(${accentChannels} / 0.1) 42%, rgba(${backgroundChannels} / 0.18) 100%)`,
+    "--gradient-outline": `linear-gradient(135deg, rgba(${borderChannels} / 0.7), rgba(${accentChannels} / 0.45))`,
+    "--surface-border-strong": `rgba(${borderChannels} / 0.56)`,
+    "--surface-bg-soft": `rgba(${cardChannels} / 0.62)`,
+    "--surface-bg-strong": `rgba(${cardChannels} / 0.86)`,
+    "--text-accent-contrast": `rgb(${foregroundChannels})`,
+    "--radius-pill": "999px",
+    "--shadow-floating": `0 24px 60px rgba(${backgroundChannels} / 0.34)`,
+    "--shadow-glow": `0 0 0 1px rgba(${accentChannels} / 0.24), 0 20px 55px rgba(${accentChannels} / 0.18)`,
+    "--shadow-inset-soft": `inset 0 1px 0 rgba(${foregroundChannels} / 0.1)`,
+    "--motion-fast": "180ms",
+    "--motion-normal": "320ms",
     "--font-sans": theme.typography.fontSans,
     "--font-base-size": `${theme.typography.baseFontSize}px`,
     "--font-scale-ratio": `${theme.typography.scaleRatio}`

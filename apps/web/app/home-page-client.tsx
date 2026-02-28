@@ -35,14 +35,14 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const { addProduct } = useCartStore();
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-14 lg:space-y-16">
       {homePage.blocks.map((block) => {
         if (block.type === "product-grid") {
           return (
             <section
               key={block.id}
               id={block.id === "home-featured" ? "featured" : undefined}
-              className="space-y-4"
+              className="scroll-mt-24 space-y-4"
             >
               <ProductGrid
                 title={block.title}

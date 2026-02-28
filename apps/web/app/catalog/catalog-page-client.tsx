@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { CatalogFilterSidebar, ProductGrid } from "@store-platform/ui";
+import { Badge, CatalogFilterSidebar, ProductGrid, Surface } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { renderNonProductGridBlock } from "@/lib/page-block-renderers";
@@ -28,16 +28,23 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   }, [products, tagsFilter]);
 
   return (
-    <div className="min-h-0 space-y-6 pb-8">
-      <header className="space-y-1">
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{page.title}</h1>
+    <div className="min-h-0 space-y-7 pb-8">
+      <header className="space-y-3">
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{page.title}</h1>
+        <div className="premium-divider" />
+        <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <Badge tone="muted">Всего: {products.length}</Badge>
+          <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
+        </div>
       </header>
 
-      <CatalogFilterSidebar
-        availableTags={allTags}
-        value={{ tags: tagsFilter }}
-        onChange={(next) => setTagsFilter(next.tags)}
-      />
+      <Surface tone="ghost" className="rounded-2xl px-4 py-3">
+        <CatalogFilterSidebar
+          availableTags={allTags}
+          value={{ tags: tagsFilter }}
+          onChange={(next) => setTagsFilter(next.tags)}
+        />
+      </Surface>
 
       {page.blocks.map((block) => {
         if (block.type === "product-grid") {
