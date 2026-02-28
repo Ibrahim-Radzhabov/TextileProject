@@ -8,6 +8,7 @@ PIP := $(VENV_DIR)/bin/pip
 
 API_HOST ?= 127.0.0.1
 API_PORT ?= 8000
+WEB_HOST ?= 127.0.0.1
 WEB_PORT ?= 3000
 
 CLIENT_ID ?= demo
@@ -58,14 +59,16 @@ dev-web:
 	STORE_API_URL="$(STORE_API_URL)" \
 	NEXT_PUBLIC_STORE_API_URL="$(NEXT_PUBLIC_STORE_API_URL)" \
 	ADMIN_TOKEN="$(ADMIN_TOKEN)" \
-	$(PNPM) --filter web dev -- --port $(WEB_PORT)
+	$(PNPM) --filter web dev --hostname $(WEB_HOST) --port $(WEB_PORT)
 
 dev:
 	@set -euo pipefail; \
 	$(MAKE) dev-api & API_PID=$$!; \
 	$(MAKE) dev-web & WEB_PID=$$!; \
 	trap 'kill $$API_PID $$WEB_PID >/dev/null 2>&1 || true' INT TERM EXIT; \
-	wait
+	wait -n $$API_PID $$WEB_PID || true; \
+	kill $$API_PID $$WEB_PID >/dev/null 2>&1 || true; \
+	wait || true
 
 build:
 	$(PNPM) build
