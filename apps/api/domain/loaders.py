@@ -58,9 +58,15 @@ class ClientConfigLoader:
         )
 
 
+def _resolve_project_root(start: Path) -> Path:
+    for candidate in [start, *start.parents]:
+        if (candidate / "clients").is_dir():
+            return candidate
+    raise RuntimeError("Unable to locate project root containing clients/ directory")
+
+
 @lru_cache(maxsize=1)
 def get_loader() -> ClientConfigLoader:
     settings = get_settings()
-    root = Path(__file__).resolve().parents[2]
+    root = _resolve_project_root(Path(__file__).resolve())
     return ClientConfigLoader(root_dir=root, client_id=settings.client_id)
-

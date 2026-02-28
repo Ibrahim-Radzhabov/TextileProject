@@ -8,7 +8,7 @@ body {
 }
 
 .glass-panel {
-  @apply bg-card/80 backdrop-blur-xl border border-border/60 shadow-soft-subtle;
+  @apply bg-card backdrop-blur-xl border border-border shadow-soft-subtle;
 }
 
 .premium-gradient {

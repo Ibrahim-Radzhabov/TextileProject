@@ -97,15 +97,21 @@ class SeoConfig(BaseModel):
 
 class IntegrationStripe(BaseModel):
     type: Literal["stripe"]
-    publishable_key: str
-    secret_key: str
-    webhook_secret: Optional[str] = None
+    publishable_key: str = Field(alias="publishableKey")
+    secret_key: str = Field(alias="secretKey")
+    webhook_secret: Optional[str] = Field(default=None, alias="webhookSecret")
+
+    class Config:
+        populate_by_name = True
 
 
 class IntegrationTelegram(BaseModel):
     type: Literal["telegram"]
-    bot_token: str
-    chat_id: str
+    bot_token: str = Field(alias="botToken")
+    chat_id: str = Field(alias="chatId")
+
+    class Config:
+        populate_by_name = True
 
 
 class IntegrationsConfig(BaseModel):
