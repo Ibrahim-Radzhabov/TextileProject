@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Badge, Button, Input, Surface } from "@store-platform/ui";
 import type { Product } from "@store-platform/shared-types";
 import { fetchCatalogProductsAdmin } from "@/lib/api-client";
+import { BulkSelectionControls } from "./bulk-selection-controls";
 
 const PAGE_SIZE = 12;
 
@@ -354,9 +355,12 @@ export default async function AdminProductsPage({
         className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/60 bg-card/35 px-4 py-3"
       >
         <input type="hidden" name="return_to" value={currentHref} />
-        <p className="text-xs text-muted-foreground">
-          Выберите товары в таблице и примените массовое действие.
-        </p>
+        <div className="space-y-1">
+          <p className="text-xs text-muted-foreground">
+            Выберите товары в таблице и примените массовое действие.
+          </p>
+          <BulkSelectionControls formId={bulkFormId} pageItemsCount={paged.length} />
+        </div>
         <div className="flex flex-wrap items-center gap-2">
           <button
             type="submit"
