@@ -1,10 +1,19 @@
+from typing import Literal
+
 from fastapi import APIRouter, Depends, HTTPException, status
+from pydantic import BaseModel, Field
 
 from ..domain.loaders import get_loader
 from ..domain.models import CatalogConfig, Product
 from .admin_auth import require_admin_token
 
 router = APIRouter(prefix="/catalog", tags=["catalog"])
+
+
+class BulkProductsUpdateRequest(BaseModel):
+    action: Literal["set_active", "set_inactive", "sort_order_delta"]
+    product_ids: list[str] = Field(min_length=1, max_length=250)
+    sort_order_delta: int | None = None
 
 
 def _is_active(product: Product) -> bool:
@@ -61,6 +70,55 @@ def list_catalog() -> CatalogConfig:
 def list_catalog_products() -> CatalogConfig:
     loader = get_loader()
     return _build_catalog(loader.load_catalog().products)
+
+
+@router.post(
+    "/products/bulk",
+    dependencies=[Depends(require_admin_token)],
+)
+def bulk_update_products(payload: BulkProductsUpdateRequest) -> dict[str, int | bool]:
+    normalized_ids: list[str] = []
+    seen_ids: set[str] = set()
+    for raw_id in payload.product_ids:
+        product_id = raw_id.strip()
+        if not product_id or product_id in seen_ids:
+            continue
+        seen_ids.add(product_id)
+        normalized_ids.append(product_id)
+
+    if not normalized_ids:
+        raise HTTPException(status_code=422, detail="At least one product_id is required")
+
+    if payload.action == "sort_order_delta":
+        if payload.sort_order_delta is None or payload.sort_order_delta == 0:
+            raise HTTPException(status_code=422, detail="sort_order_delta must be provided and non-zero")
+
+    loader = get_loader()
+    catalog = loader.load_catalog()
+    existing_ids = {product.id for product in catalog.products}
+    missing_ids = [product_id for product_id in normalized_ids if product_id not in existing_ids]
+    if missing_ids:
+        raise HTTPException(
+            status_code=404,
+            detail=f'Products not found: {", ".join(missing_ids[:5])}',
+        )
+
+    ids_set = set(normalized_ids)
+    updated = 0
+    for product in catalog.products:
+        if product.id not in ids_set:
+            continue
+
+        if payload.action == "set_active":
+            product.is_active = True
+        elif payload.action == "set_inactive":
+            product.is_active = False
+        else:
+            product.sort_order = (product.sort_order or 0) + (payload.sort_order_delta or 0)
+        updated += 1
+
+    loader.save_catalog(catalog)
+    return {"ok": True, "updated": updated}
 
 
 @router.get("/products/{product_id}", response_model=Product)

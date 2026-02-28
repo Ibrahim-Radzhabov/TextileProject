@@ -12,12 +12,15 @@ type CatalogPageClientProps = {
   allTags: string[];
 };
 
+type CatalogSort = "recommended" | "price_asc" | "price_desc" | "name_asc" | "name_desc";
+
 export function CatalogPageClient({ page, products, allTags }: CatalogPageClientProps) {
   const { addProduct } = useCartStore();
   const [tagsFilter, setTagsFilter] = useState<string[]>([]);
+  const [sort, setSort] = useState<CatalogSort>("recommended");
 
   const filteredProducts = useMemo(() => {
-    return products.filter((product) => {
+    const filtered = products.filter((product) => {
       if (!tagsFilter.length) {
         return true;
       }
@@ -25,7 +28,24 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
       const tags = product.tags ?? [];
       return tagsFilter.some((tag) => tags.includes(tag));
     });
-  }, [products, tagsFilter]);
+
+    if (sort === "recommended") {
+      return filtered;
+    }
+
+    return [...filtered].sort((a, b) => {
+      if (sort === "price_asc") {
+        return a.price.amount - b.price.amount;
+      }
+      if (sort === "price_desc") {
+        return b.price.amount - a.price.amount;
+      }
+      if (sort === "name_desc") {
+        return b.name.localeCompare(a.name);
+      }
+      return a.name.localeCompare(b.name);
+    });
+  }, [products, sort, tagsFilter]);
 
   return (
     <div className="min-h-0 space-y-7 pb-8">
@@ -35,6 +55,21 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
           <Badge tone="muted">Всего: {products.length}</Badge>
           <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
+          <label className="ml-auto flex items-center gap-2">
+            <span className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Сортировка</span>
+            <select
+              aria-label="Сортировка каталога"
+              value={sort}
+              onChange={(event) => setSort(event.target.value as CatalogSort)}
+              className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
+            >
+              <option value="recommended">Рекомендовано</option>
+              <option value="price_asc">Цена ↑</option>
+              <option value="price_desc">Цена ↓</option>
+              <option value="name_asc">Название A-Z</option>
+              <option value="name_desc">Название Z-A</option>
+            </select>
+          </label>
         </div>
       </header>
 

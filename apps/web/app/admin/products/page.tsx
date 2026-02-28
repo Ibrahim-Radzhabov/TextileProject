@@ -202,6 +202,10 @@ export default async function AdminProductsPage({
       .filter((product) => matchesFeaturedFilter(product, featuredFilter)),
     sort
   );
+  const activeCount = products.filter((product) => product.isActive !== false).length;
+  const inactiveCount = products.length - activeCount;
+  const featuredCount = products.filter((product) => product.isFeatured === true).length;
+  const bulkFormId = "bulk-products-form";
 
   const total = filtered.length;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
@@ -312,6 +316,25 @@ export default async function AdminProductsPage({
         </form>
       </Surface>
 
+      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <Surface tone="subtle" className="rounded-xl px-4 py-3">
+          <p className="text-xs text-muted-foreground">Всего</p>
+          <p className="mt-1 text-lg font-semibold">{products.length}</p>
+        </Surface>
+        <Surface tone="subtle" className="rounded-xl px-4 py-3">
+          <p className="text-xs text-muted-foreground">Active</p>
+          <p className="mt-1 text-lg font-semibold text-emerald-300">{activeCount}</p>
+        </Surface>
+        <Surface tone="subtle" className="rounded-xl px-4 py-3">
+          <p className="text-xs text-muted-foreground">Inactive</p>
+          <p className="mt-1 text-lg font-semibold text-zinc-300">{inactiveCount}</p>
+        </Surface>
+        <Surface tone="subtle" className="rounded-xl px-4 py-3">
+          <p className="text-xs text-muted-foreground">Featured</p>
+          <p className="mt-1 text-lg font-semibold">{featuredCount}</p>
+        </Surface>
+      </div>
+
       {actionSuccess && (
         <div className="rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-300">
           {actionSuccess}
@@ -324,10 +347,57 @@ export default async function AdminProductsPage({
         </div>
       )}
 
+      <form
+        id={bulkFormId}
+        action="/admin/products/bulk"
+        method="post"
+        className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-border/60 bg-card/35 px-4 py-3"
+      >
+        <input type="hidden" name="return_to" value={currentHref} />
+        <p className="text-xs text-muted-foreground">
+          Выберите товары в таблице и примените массовое действие.
+        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="submit"
+            name="bulk_action"
+            value="activate"
+            className="inline-flex h-8 items-center justify-center rounded-md border border-emerald-400/35 px-2.5 text-xs text-emerald-300 transition-colors hover:border-emerald-400/60 hover:bg-emerald-500/10"
+          >
+            Активировать выбранные
+          </button>
+          <button
+            type="submit"
+            name="bulk_action"
+            value="deactivate"
+            className="inline-flex h-8 items-center justify-center rounded-md border border-zinc-400/35 px-2.5 text-xs text-zinc-300 transition-colors hover:border-zinc-300/70 hover:bg-zinc-500/10"
+          >
+            Деактивировать выбранные
+          </button>
+          <button
+            type="submit"
+            name="bulk_action"
+            value="sort_up"
+            className="inline-flex h-8 items-center justify-center rounded-md border border-border/60 px-2.5 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+          >
+            Sort -10
+          </button>
+          <button
+            type="submit"
+            name="bulk_action"
+            value="sort_down"
+            className="inline-flex h-8 items-center justify-center rounded-md border border-border/60 px-2.5 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+          >
+            Sort +10
+          </button>
+        </div>
+      </form>
+
       <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/40">
         <table className="w-full min-w-[1100px] table-fixed border-collapse text-left text-sm">
           <thead className="bg-muted/20 text-xs uppercase tracking-wide text-muted-foreground">
             <tr>
+              <th className="px-4 py-3">#</th>
               <th className="px-4 py-3">ID</th>
               <th className="px-4 py-3">Slug</th>
               <th className="px-4 py-3">Название</th>
@@ -343,6 +413,16 @@ export default async function AdminProductsPage({
               const status = getStatusBadge(product);
               return (
                 <tr key={product.id} className="border-t border-border/50">
+                  <td className="px-4 py-3">
+                    <input
+                      form={bulkFormId}
+                      type="checkbox"
+                      name="product_ids"
+                      value={product.id}
+                      aria-label={`Выбрать ${product.id}`}
+                      className="h-4 w-4 rounded border-border/65 bg-input/80"
+                    />
+                  </td>
                   <td className="px-4 py-3 font-mono text-xs text-muted-foreground">{product.id}</td>
                   <td className="px-4 py-3 text-xs text-muted-foreground">{product.slug}</td>
                   <td className="px-4 py-3 font-medium">{product.name}</td>
@@ -383,7 +463,7 @@ export default async function AdminProductsPage({
             })}
             {paged.length === 0 && (
               <tr>
-                <td className="px-4 py-10 text-center text-sm text-muted-foreground" colSpan={8}>
+                <td className="px-4 py-10 text-center text-sm text-muted-foreground" colSpan={9}>
                   Товары не найдены.
                 </td>
               </tr>
