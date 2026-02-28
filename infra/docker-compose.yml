@@ -6,9 +6,22 @@ services:
       context: ..
       dockerfile: infra/Dockerfile.api
     environment:
-      CLIENT_ID: demo
+      CLIENT_ID: ${CLIENT_ID:-demo}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:3000}
+      ORDER_DB_PATH: /data/orders.sqlite3
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN:-}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID:-}
+    volumes:
+      - store-platform-data:/data
     ports:
       - "8000:8000"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health', timeout=2).read()"]
+      interval: 10s
+      timeout: 4s
+      retries: 6
 
   web:
     build:
@@ -16,10 +29,13 @@ services:
       dockerfile: infra/Dockerfile.web
     environment:
       STORE_API_URL: http://api:8000
-      STORE_CLIENT_ID: demo
-      NEXT_PUBLIC_STORE_API_URL: http://api:8000
+      NEXT_PUBLIC_STORE_API_URL: ${NEXT_PUBLIC_STORE_API_URL:-http://localhost:8000}
+      ADMIN_TOKEN: ${ADMIN_TOKEN:-}
     depends_on:
-      - api
+      api:
+        condition: service_healthy
     ports:
       - "3000:3000"
 
+volumes:
+  store-platform-data:

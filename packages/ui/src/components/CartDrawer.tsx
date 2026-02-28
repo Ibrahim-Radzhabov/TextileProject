@@ -9,6 +9,9 @@ export type CartDrawerProps = {
   cart?: Cart;
   onClose: () => void;
   onCheckout: () => void;
+  onIncrement?: (productId: string) => void;
+  onDecrement?: (productId: string) => void;
+  onRemove?: (productId: string) => void;
   isUpdating?: boolean;
   error?: string | null;
 };
@@ -28,6 +31,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   cart,
   onClose,
   onCheckout,
+  onIncrement,
+  onDecrement,
+  onRemove,
   isUpdating,
   error
 }) => {
@@ -108,9 +114,35 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             <p className="truncate text-xs font-medium">
                               {item.productSnapshot.name}
                             </p>
-                            <p className="text-[11px] text-muted-foreground">
-                              × {item.quantity}
-                            </p>
+                            <div className="mt-1 flex items-center gap-1.5 text-[11px]">
+                              <button
+                                type="button"
+                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                                onClick={() => onDecrement?.(item.productId)}
+                                disabled={isUpdating}
+                              >
+                                -
+                              </button>
+                              <span className="min-w-4 text-center text-muted-foreground">
+                                {item.quantity}
+                              </span>
+                              <button
+                                type="button"
+                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                                onClick={() => onIncrement?.(item.productId)}
+                                disabled={isUpdating}
+                              >
+                                +
+                              </button>
+                              <button
+                                type="button"
+                                className="ml-1 text-muted-foreground underline-offset-2 transition-colors hover:text-foreground hover:underline"
+                                onClick={() => onRemove?.(item.productId)}
+                                disabled={isUpdating}
+                              >
+                                Удалить
+                              </button>
+                            </div>
                           </div>
                           <div className="shrink-0 text-xs font-medium">
                             {item.lineTotal.amount.toLocaleString(undefined, {
@@ -157,4 +189,3 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     </AnimatePresence>
   );
 };
-

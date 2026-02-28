@@ -1,9 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { createContext, useContext } from "react";
-import Link from "next/link";
-import { DefaultSeo } from "next-seo";
+import dynamic from "next/dynamic";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
@@ -13,19 +11,27 @@ type StorefrontShellProps = {
   config: StorefrontConfig;
 };
 
-const StorefrontConfigContext = createContext<StorefrontConfig | null>(null);
-
-export function useStorefrontConfig(): StorefrontConfig | null {
-  return useContext(StorefrontConfigContext);
-}
+const ClientDefaultSeo = dynamic(
+  () => import("next-seo").then((mod) => mod.DefaultSeo),
+  { ssr: false }
+);
 
 export function StorefrontShell({ children, config }: StorefrontShellProps) {
-  const { cart, open, isPricing, setOpen, error: cartError } = useCartStore();
+  const {
+    cart,
+    open,
+    isPricing,
+    setOpen,
+    error: cartError,
+    incrementProduct,
+    decrementProduct,
+    removeProduct
+  } = useCartStore();
   const itemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
 
   return (
-    <StorefrontConfigContext.Provider value={config}>
-      <DefaultSeo
+    <>
+      <ClientDefaultSeo
         defaultTitle={config.seo.defaultTitle}
         titleTemplate={config.seo.titleTemplate}
         description={config.seo.description}
@@ -42,8 +48,7 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
           <TopNav
             shopName={config.shop.name}
             logo={config.shop.logo}
-            leftWrapper={Link}
-            leftWrapperProps={{ href: "/" }}
+            leftHref="/"
             rightSlot={
               <Button
                 variant="secondary"
@@ -74,11 +79,19 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
         isUpdating={isPricing}
         error={cartError}
         onClose={() => setOpen(false)}
+        onIncrement={(productId) => {
+          void incrementProduct(productId);
+        }}
+        onDecrement={(productId) => {
+          void decrementProduct(productId);
+        }}
+        onRemove={(productId) => {
+          void removeProduct(productId);
+        }}
         onCheckout={() => {
           window.location.href = "/checkout";
         }}
       />
-    </StorefrontConfigContext.Provider>
+    </>
   );
 }
-

@@ -1,8 +1,10 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import logging
 import uuid
-from typing import List, Optional
+from typing import List, Literal, Optional
 
 import requests
 import stripe
@@ -20,9 +22,21 @@ from .models import (
     PriceCartRequest,
     Product,
 )
+from .order_store import get_order_store
 
 
 logger = logging.getLogger("store_platform")
+
+
+class IdempotencyConflictError(Exception):
+    pass
+
+
+def _is_placeholder_secret(value: Optional[str]) -> bool:
+    if not value:
+        return True
+    normalized = value.strip().lower()
+    return "placeholder" in normalized
 
 
 def _find_product(products: List[Product], product_id: str) -> Product | None:
@@ -84,22 +98,53 @@ def _resolve_frontend_urls() -> tuple[str, str]:
     return success_url, cancel_url
 
 
-def _resolve_stripe_secret_key() -> Optional[str]:
+def resolve_stripe_secret_key() -> Optional[str]:
     """
     Determine which Stripe secret key to use.
     Prefers environment variables, then client config integrations.
     """
 
     settings = get_settings()
-    if settings.stripe_secret_key:
+    if settings.stripe_secret_key and not _is_placeholder_secret(settings.stripe_secret_key):
         return settings.stripe_secret_key
 
     loader = get_loader()
     storefront = loader.load_storefront_config()
-    if storefront.integrations.stripe and storefront.integrations.stripe.secret_key:
+    if (
+        storefront.integrations.stripe
+        and storefront.integrations.stripe.secret_key
+        and not _is_placeholder_secret(storefront.integrations.stripe.secret_key)
+    ):
         return storefront.integrations.stripe.secret_key
 
     return None
+
+
+def resolve_stripe_webhook_secret() -> Optional[str]:
+    """
+    Determine Stripe webhook secret.
+    Prefers env vars, then client config integrations.
+    """
+
+    settings = get_settings()
+    if settings.stripe_webhook_secret and not _is_placeholder_secret(settings.stripe_webhook_secret):
+        return settings.stripe_webhook_secret
+
+    loader = get_loader()
+    storefront = loader.load_storefront_config()
+    if (
+        storefront.integrations.stripe
+        and storefront.integrations.stripe.webhook_secret
+        and not _is_placeholder_secret(storefront.integrations.stripe.webhook_secret)
+    ):
+        return storefront.integrations.stripe.webhook_secret
+
+    return None
+
+
+def _hash_checkout_payload(payload: CheckoutRequest) -> str:
+    normalized = json.dumps(payload.model_dump(mode="json"), sort_keys=True, ensure_ascii=False, separators=(",", ":"))
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
 def _send_telegram_notification(order_id: str, cart: Cart) -> None:
@@ -120,7 +165,12 @@ def _send_telegram_notification(order_id: str, cart: Cart) -> None:
         token = token or storefront.integrations.telegram.bot_token
         chat_id = chat_id or storefront.integrations.telegram.chat_id
 
-    if not token or not chat_id:
+    if (
+        not token
+        or not chat_id
+        or _is_placeholder_secret(token)
+        or _is_placeholder_secret(chat_id)
+    ):
         return
 
     total = cart.totals.grand_total
@@ -167,7 +217,7 @@ def _send_telegram_notification(order_id: str, cart: Cart) -> None:
         return
 
 
-def create_checkout(payload: CheckoutRequest) -> CheckoutResponse:
+def create_checkout(payload: CheckoutRequest, *, idempotency_key: Optional[str] = None) -> CheckoutResponse:
     """
     Domain-level checkout service.
 
@@ -178,9 +228,19 @@ def create_checkout(payload: CheckoutRequest) -> CheckoutResponse:
        либо confirmed (MVP без Stripe).
     """
 
+    settings = get_settings()
+    store = get_order_store()
+    request_hash = _hash_checkout_payload(payload)
+
+    if idempotency_key:
+        existing = store.get_idempotency_record(client_id=settings.client_id, idempotency_key=idempotency_key)
+        if existing:
+            if existing.request_hash != request_hash:
+                raise IdempotencyConflictError("Idempotency key already used with a different payload")
+            return CheckoutResponse.model_validate(existing.response_payload)
+
     cart = price_cart(payload.cart)
     order_id = str(uuid.uuid4())
-    settings = get_settings()
 
     grand_total = cart.totals.grand_total
 
@@ -198,9 +258,9 @@ def create_checkout(payload: CheckoutRequest) -> CheckoutResponse:
     # Попытка интеграции со Stripe, если сконфигурировано.
     stripe_session_id: Optional[str] = None
     redirect_url: Optional[str] = None
-    status: str = "confirmed"
+    status: Literal["pending", "redirect", "confirmed"] = "confirmed"
 
-    secret_key = _resolve_stripe_secret_key()
+    secret_key = resolve_stripe_secret_key()
     if secret_key:
         stripe.api_key = secret_key
         success_url_base, cancel_url = _resolve_frontend_urls()
@@ -265,11 +325,31 @@ def create_checkout(payload: CheckoutRequest) -> CheckoutResponse:
         },
     )
 
-    return CheckoutResponse(
+    response = CheckoutResponse(
         order_id=order_id,
-        status=status,  # type: ignore[arg-type]
+        status=status,
         stripe_session_id=stripe_session_id,
         redirect_url=redirect_url,
     )
 
+    store.save_order(
+        order_id=order_id,
+        client_id=settings.client_id,
+        status=status,
+        currency=grand_total.currency,
+        amount=grand_total.amount,
+        cart_payload=cart.model_dump(mode="json"),
+        customer_payload=payload.customer.model_dump(mode="json"),
+        stripe_session_id=stripe_session_id,
+        redirect_url=redirect_url,
+    )
+    if idempotency_key:
+        store.save_idempotency_record(
+            client_id=settings.client_id,
+            idempotency_key=idempotency_key,
+            request_hash=request_hash,
+            order_id=order_id,
+            response_payload=response.model_dump(mode="json"),
+        )
 
+    return response

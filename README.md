@@ -62,6 +62,8 @@ Core:
 - `STORE_CLIENT_ID` — current tenant id for the web app.
 - `NEXT_PUBLIC_STORE_API_URL` — base URL of the API for the web app.
 - `FRONTEND_ORIGIN` / `frontend_origin` — origin of the web app, used for CORS and Stripe redirect URLs.
+- `ADMIN_TOKEN` — optional token for protecting `/admin/*` pages in web middleware.
+  - If set, open `/admin/login`, enter the token and middleware will store an httpOnly cookie for `/admin`.
 
 Stripe:
 
@@ -73,6 +75,11 @@ Telegram:
 - `TELEGRAM_BOT_TOKEN` — bot token; if not set, backend falls back to `integrations.telegram.botToken`.
 - `TELEGRAM_CHAT_ID` — chat id; if not set, backend falls back to `integrations.telegram.chatId`.
 
+Checkout persistence:
+
+- `ORDER_DB_PATH` — optional path to SQLite file for persisted orders and idempotency keys.
+  - Default: `apps/api/data/orders.sqlite3`
+
 All env vars are read via `apps/api/config.py` (`Settings`).
 
 ---
@@ -83,6 +90,7 @@ The `infra/docker-compose.yml` file starts API and Web together:
 
 ```bash
 cd infra
+cp .env.example .env
 docker compose up --build
 ```
 
@@ -94,7 +102,9 @@ Services:
 The compose file wires:
 
 - `CLIENT_ID` for the API,
-- `STORE_CLIENT_ID` and `NEXT_PUBLIC_STORE_API_URL` for the web app.
+- `STORE_API_URL` (internal SSR URL) and `NEXT_PUBLIC_STORE_API_URL` (browser URL) for the web app,
+- `ORDER_DB_PATH` to persisted API SQLite storage volume,
+- optional `ADMIN_TOKEN` for `/admin/*`.
 
 ---
 
@@ -102,6 +112,8 @@ The compose file wires:
 
 - Checkout (`POST /checkout`) always:
   - recalculates cart totals,
+  - persists order snapshot in SQLite,
+  - supports idempotency via `Idempotency-Key` / `X-Idempotency-Key`,
   - logs order metadata,
   - sends Telegram notification (if configured).
 - If Stripe is configured (env or `integrations.json`):
@@ -110,6 +122,45 @@ The compose file wires:
   - uses `FRONTEND_ORIGIN` (or `http://localhost:3000`) to build success/cancel URLs.
 
 When Stripe is not configured or fails, checkout gracefully falls back to `status: "confirmed"` without redirects.
+
+Additional endpoints:
+
+- `GET /orders?status=&limit=&offset=` — list persisted orders with status filter and pagination.
+- `GET /orders/{order_id}` — get persisted order details.
+- `GET /checkout/{order_id}` — fetch persisted order for current tenant.
+- `POST /webhooks/stripe` — verifies Stripe signature, deduplicates by (`event_id`, `livemode`, `account`, `client_id`) and updates order status (`paid` / `failed` / `cancelled`).
+- `GET /webhooks/audit?order_id=&processing_status=&limit=&offset=` — list Stripe webhook audit records.
+
+---
+
+### Admin panel auth
+
+- `GET /admin/login` — login screen for token-based admin access.
+- `POST /admin/logout` — clears admin cookie and returns to login.
+- Middleware protects `/admin/*` routes and redirects unauthorized requests to `/admin/login?next=...`.
+
+---
+
+### E2E tests (Playwright)
+
+From repo root:
+
+```bash
+pnpm e2e:install
+pnpm e2e
+```
+
+What is covered:
+
+- storefront pages render (`/` and `/catalog`) + checkout success UI (`/checkout/success`),
+- API checkout contract (`POST /checkout`) with real order creation,
+- admin flow (`/admin/login` -> orders list -> order details -> logout),
+- integration between created order and admin visibility.
+
+Playwright config auto-starts:
+
+- API on `127.0.0.1:8000`,
+- Web on `127.0.0.1:3000` with `ADMIN_TOKEN=e2e-admin`.
 
 ---
 
@@ -122,4 +173,3 @@ pnpm validate-client demo
 ```
 
 This ensures that `shop.json`, `theme.json`, `catalog.json`, `pages.json`, `seo.json` and `integrations.json` all conform to the shared schemas in `@store-platform/config-schema`.
-

@@ -17,6 +17,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
       whileHover={{ y: -4 }}
       transition={{ type: "spring", stiffness: 260, damping: 25 }}
       className="group h-full"
+      data-testid={`product-card-${product.slug}`}
     >
       <Surface className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-border/70 bg-card/80 shadow-soft-subtle">
         <div className="relative overflow-hidden">
@@ -48,6 +49,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
                 <Button
                   size="sm"
                   fullWidth
+                  data-testid={`quick-add-${product.slug}`}
                   onClick={() => onQuickAdd(product)}
                 >
                   Быстрый заказ
@@ -80,4 +82,3 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
     </motion.div>
   );
 };
-

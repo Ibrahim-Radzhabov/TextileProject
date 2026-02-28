@@ -4,19 +4,54 @@ import type { ThemeConfig } from "@store-platform/shared-types";
 import { fetchStorefrontConfig } from "@/lib/api-client";
 import { StorefrontShell } from "./storefront-shell";
 
+export const dynamic = "force-dynamic";
+
+function toRgbChannels(value: string): string {
+  const raw = value.trim();
+
+  if (raw.startsWith("#")) {
+    const hex = raw.slice(1);
+    const normalized =
+      hex.length === 3
+        ? hex
+            .split("")
+            .map((c) => c + c)
+            .join("")
+        : hex;
+
+    if (normalized.length === 6) {
+      const r = Number.parseInt(normalized.slice(0, 2), 16);
+      const g = Number.parseInt(normalized.slice(2, 4), 16);
+      const b = Number.parseInt(normalized.slice(4, 6), 16);
+      return `${r} ${g} ${b}`;
+    }
+  }
+
+  // rgba(148,163,184,0.24) or rgb(148, 163, 184)
+  const rgbMatch = raw.match(
+    /^rgba?\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})(?:\s*,\s*(\d*\.?\d+)\s*)?\)$/
+  );
+  if (rgbMatch) {
+    return `${rgbMatch[1]} ${rgbMatch[2]} ${rgbMatch[3]}`;
+  }
+
+  // Fallback: keep as-is (will likely render incorrectly, but avoids crashing).
+  return raw;
+}
+
 function themeToCssVars(theme: ThemeConfig): CSSProperties {
   return {
-    "--color-background": theme.colors.background,
-    "--color-foreground": theme.colors.foreground,
-    "--color-muted": theme.colors.muted,
-    "--color-muted-foreground": theme.colors.mutedForeground,
-    "--color-accent": theme.colors.accent,
-    "--color-accent-soft": theme.colors.accentSoft,
-    "--color-border": theme.colors.border,
-    "--color-input": theme.colors.input,
-    "--color-ring": theme.colors.ring,
-    "--color-card": theme.colors.card,
-    "--color-card-foreground": theme.colors.cardForeground,
+    "--color-background": toRgbChannels(theme.colors.background),
+    "--color-foreground": toRgbChannels(theme.colors.foreground),
+    "--color-muted": toRgbChannels(theme.colors.muted),
+    "--color-muted-foreground": toRgbChannels(theme.colors.mutedForeground),
+    "--color-accent": toRgbChannels(theme.colors.accent),
+    "--color-accent-soft": toRgbChannels(theme.colors.accentSoft),
+    "--color-border": toRgbChannels(theme.colors.border),
+    "--color-input": toRgbChannels(theme.colors.input),
+    "--color-ring": toRgbChannels(theme.colors.ring),
+    "--color-card": toRgbChannels(theme.colors.card),
+    "--color-card-foreground": toRgbChannels(theme.colors.cardForeground),
     "--radius-xl": `${theme.radii.xl}px`,
     "--radius-lg": `${theme.radii.lg}px`,
     "--radius-md": `${theme.radii.md}px`,
@@ -44,4 +79,3 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     </html>
   );
 }
-

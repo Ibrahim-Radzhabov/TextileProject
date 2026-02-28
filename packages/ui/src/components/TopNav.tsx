@@ -8,17 +8,14 @@ export type TopNavProps = {
   };
   shopName: string;
   rightSlot?: React.ReactNode;
-  /** Обёртка для левой части (например Next.js Link). Принимает один child. */
-  leftWrapper?: React.ElementType<{ children: React.ReactNode; className?: string }>;
-  leftWrapperProps?: Record<string, unknown>;
+  leftHref?: string;
 };
 
 export const TopNav: React.FC<TopNavProps> = ({
   logo,
   shopName,
   rightSlot,
-  leftWrapper: LeftWrapper,
-  leftWrapperProps
+  leftHref
 }) => {
   const leftContent = (
     <div className="flex items-center gap-3">
@@ -52,13 +49,13 @@ export const TopNav: React.FC<TopNavProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.25 }}
     >
-      {LeftWrapper ? (
-        <LeftWrapper
+      {leftHref ? (
+        <a
           className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background rounded-xl transition-opacity hover:opacity-90"
-          {...leftWrapperProps}
+          href={leftHref}
         >
           {leftContent}
-        </LeftWrapper>
+        </a>
       ) : (
         leftContent
       )}
@@ -66,4 +63,3 @@ export const TopNav: React.FC<TopNavProps> = ({
     </motion.header>
   );
 };
-

@@ -4,6 +4,7 @@ const nextConfig = {
     appDir: true
   },
   reactStrictMode: true,
+  output: "standalone",
   images: {
     remotePatterns: [
       {
@@ -11,10 +12,6 @@ const nextConfig = {
         hostname: "**"
       }
     ]
-  },
-  env: {
-    NEXT_PUBLIC_STORE_API_URL: process.env.STORE_API_URL,
-    STORE_CLIENT_ID: process.env.STORE_CLIENT_ID
   }
 };
 

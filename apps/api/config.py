@@ -15,6 +15,7 @@ class Settings(BaseSettings):
 
     telegram_bot_token: Optional[str] = None
     telegram_chat_id: Optional[str] = None
+    order_db_path: Optional[str] = None
 
     class Config:
         env_prefix = ""
@@ -28,4 +29,3 @@ def get_settings() -> Settings:
     if settings.frontend_origin and not settings.cors_allow_origins:
         settings.cors_allow_origins = [settings.frontend_origin]
     return settings
-

@@ -202,3 +202,46 @@ class CheckoutResponse(BaseModel):
     stripe_session_id: Optional[str] = None
     redirect_url: Optional[str] = None
 
+
+class StoredOrder(BaseModel):
+    order_id: str
+    client_id: str
+    status: Literal["pending", "redirect", "confirmed", "paid", "failed", "cancelled"]
+    currency: str
+    amount: float
+    stripe_session_id: Optional[str] = None
+    redirect_url: Optional[str] = None
+    cart: Cart
+    customer: CheckoutCustomer
+    created_at: str
+    updated_at: str
+
+
+class StoredOrderListResponse(BaseModel):
+    items: List[StoredOrder]
+    total: int
+    limit: int
+    offset: int
+
+
+class StripeWebhookAuditEntry(BaseModel):
+    id: int
+    event_id: str
+    livemode: bool
+    account_id: str
+    client_id: str
+    event_type: str
+    order_id: Optional[str] = None
+    stripe_session_id: Optional[str] = None
+    processing_status: Literal["processing", "processed", "ignored", "failed"]
+    order_status: Optional[Literal["paid", "failed", "cancelled"]] = None
+    error_text: Optional[str] = None
+    created_at: str
+    updated_at: str
+
+
+class StripeWebhookAuditListResponse(BaseModel):
+    items: List[StripeWebhookAuditEntry]
+    total: int
+    limit: int
+    offset: int
