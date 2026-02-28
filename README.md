@@ -131,6 +131,30 @@ Additional endpoints:
 - `POST /webhooks/stripe` — verifies Stripe signature, deduplicates by (`event_id`, `livemode`, `account`, `client_id`), updates order status (`paid` / `failed` / `cancelled`) and sends Telegram payment notification on `paid`.
 - `GET /webhooks/audit?order_id=&processing_status=&limit=&offset=` — list Stripe webhook audit records.
 
+### Real Stripe smoke check (CLI)
+
+From repo root:
+
+```bash
+./.bin/stripe login
+pnpm stripe:smoke
+```
+
+Requirements:
+
+- `STRIPE_SECRET_KEY` must be set (env or `infra/.env`).
+- `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` must be set (env or `infra/.env`).
+- Local python env must exist at `.venv` with API dependencies installed.
+
+The smoke command runs an end-to-end local flow:
+
+- starts `stripe listen` and captures runtime webhook secret,
+- starts API with Stripe/Telegram env,
+- creates checkout (`POST /checkout`),
+- triggers Stripe event (`checkout.session.async_payment_succeeded`) via Stripe CLI,
+- verifies order becomes `paid`,
+- verifies `/webhooks/audit` has `processed` + `paid`.
+
 ---
 
 ### Admin panel auth

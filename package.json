@@ -16,6 +16,7 @@
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
     "e2e:install": "playwright install",
+    "stripe:smoke": "bash scripts/stripe-smoke.sh",
     "format": "prettier --write .",
     "init-client": "node scripts/init-client.mjs",
     "validate-client": "corepack pnpm --filter @store-platform/config-schema build && node scripts/validate-client.mjs"
