@@ -10,7 +10,9 @@ export type AdminProductFormDefaults = {
   priceCurrency: string;
   comparePriceAmount: string;
   comparePriceCurrency: string;
+  sortOrder: string;
   tags: string;
+  isActive: boolean;
   isFeatured: boolean;
   mediaId: string;
   mediaUrl: string;
@@ -102,6 +104,11 @@ export function AdminProductForm({
           />
         </div>
 
+        <div className="space-y-1">
+          <FormFieldLabel htmlFor="product-sort-order">Sort order</FormFieldLabel>
+          <Input id="product-sort-order" name="sort_order" type="number" defaultValue={defaults.sortOrder} />
+        </div>
+
         <div className="space-y-1 sm:col-span-2">
           <FormFieldLabel htmlFor="product-short-description">Короткое описание</FormFieldLabel>
           <Input
@@ -127,15 +134,27 @@ export function AdminProductForm({
           <Input id="product-tags" name="tags" defaultValue={defaults.tags} />
         </div>
 
-        <label className="inline-flex items-center gap-2 sm:col-span-2">
-          <input
-            type="checkbox"
-            name="is_featured"
-            defaultChecked={defaults.isFeatured}
-            className="h-4 w-4 rounded border-border/65 bg-input/80"
-          />
-          <span className="text-sm text-muted-foreground">Показывать как featured</span>
-        </label>
+        <div className="grid gap-2 sm:col-span-2 sm:grid-cols-2">
+          <label className="inline-flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="is_active"
+              defaultChecked={defaults.isActive}
+              className="h-4 w-4 rounded border-border/65 bg-input/80"
+            />
+            <span className="text-sm text-muted-foreground">Товар активен</span>
+          </label>
+
+          <label className="inline-flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="is_featured"
+              defaultChecked={defaults.isFeatured}
+              className="h-4 w-4 rounded border-border/65 bg-input/80"
+            />
+            <span className="text-sm text-muted-foreground">Показывать как featured</span>
+          </label>
+        </div>
 
         <div className="space-y-1">
           <FormFieldLabel htmlFor="product-media-id">ID медиа</FormFieldLabel>

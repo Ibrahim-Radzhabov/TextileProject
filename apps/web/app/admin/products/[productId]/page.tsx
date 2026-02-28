@@ -3,11 +3,28 @@ import { ApiError, fetchProductByIdAdmin } from "@/lib/api-client";
 import { productToFormDefaults } from "@/lib/admin-products";
 import { AdminProductForm } from "../product-form";
 
+function resolveReturnTo(value: string | undefined): string {
+  if (!value) {
+    return "/admin/products";
+  }
+  const normalized = value.trim();
+  if (!normalized.startsWith("/admin/products")) {
+    return "/admin/products";
+  }
+  return normalized;
+}
+
 export default async function AdminEditProductPage({
   params,
+  searchParams,
 }: {
   params: { productId: string };
+  searchParams?: {
+    return_to?: string;
+  };
 }) {
+  const returnTo = resolveReturnTo(searchParams?.return_to);
+
   try {
     const product = await fetchProductByIdAdmin(params.productId);
     const defaults = productToFormDefaults(product);
@@ -17,7 +34,7 @@ export default async function AdminEditProductPage({
         <header className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <Link
-              href="/admin/products"
+              href={returnTo}
               className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
             >
               ← К списку товаров
@@ -41,7 +58,7 @@ export default async function AdminEditProductPage({
           submitLabel="Сохранить изменения"
           defaults={defaults}
           readOnlyId
-          returnTo="/admin/products"
+          returnTo={returnTo}
         />
       </div>
     );
@@ -51,7 +68,7 @@ export default async function AdminEditProductPage({
         <div className="space-y-3 py-8">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <Link
-              href="/admin/products"
+              href={returnTo}
               className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
             >
               ← К списку товаров

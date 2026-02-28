@@ -32,6 +32,8 @@ export type Product = {
   badges?: ProductBadge[];
   tags?: string[];
   media: ProductMedia[];
+  isActive?: boolean;
+  sortOrder?: number;
   isFeatured?: boolean;
   metadata?: Record<string, string | number | boolean>;
 };

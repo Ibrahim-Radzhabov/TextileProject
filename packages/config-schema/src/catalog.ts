@@ -30,6 +30,8 @@ const productSchema = z.object({
       alt: z.string()
     })
   ),
+  isActive: z.boolean().optional(),
+  sortOrder: z.number().int().optional(),
   isFeatured: z.boolean().optional(),
   metadata: z.record(z.union([z.string(), z.number(), z.boolean()])).optional()
 });
@@ -39,4 +41,3 @@ export const catalogSchema = z.object({
 });
 
 export type CatalogConfigInput = z.infer<typeof catalogSchema>;
-

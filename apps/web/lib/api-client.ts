@@ -32,6 +32,10 @@ type ProductDto = {
   badges?: Product["badges"];
   tags?: string[];
   media: Product["media"];
+  isActive?: boolean;
+  is_active?: boolean;
+  sortOrder?: number;
+  sort_order?: number;
   isFeatured?: boolean;
   is_featured?: boolean;
   metadata?: Product["metadata"];
@@ -208,6 +212,8 @@ function normalizeProduct(product: ProductDto): Product {
     badges: product.badges,
     tags: product.tags,
     media: product.media,
+    isActive: product.isActive ?? product.is_active,
+    sortOrder: product.sortOrder ?? product.sort_order,
     isFeatured: product.isFeatured ?? product.is_featured,
     metadata: product.metadata
   };

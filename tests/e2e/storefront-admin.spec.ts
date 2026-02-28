@@ -151,6 +151,8 @@ test("admin can create, update and delete product in products panel", async ({ p
 
     await page.locator('input[name="name"]').fill(updatedName);
     await page.locator('input[name="price_amount"]').fill("249.99");
+    await page.locator('input[name="sort_order"]').fill("7");
+    await page.locator('input[name="is_active"]').uncheck();
     await page.getByRole("button", { name: "Сохранить изменения" }).click();
 
     await expect(page).toHaveURL(/\/admin\/products/);
@@ -160,6 +162,8 @@ test("admin can create, update and delete product in products panel", async ({ p
     const updatedRow = page.locator("tr", { hasText: productId });
     await expect(updatedRow).toBeVisible();
     await expect(updatedRow).toContainText(updatedName);
+    await expect(updatedRow).toContainText("Inactive");
+    await expect(updatedRow).toContainText("7");
 
     const updatedProductResponse = await request.get(
       `${API_BASE_URL}/catalog/products/${encodeURIComponent(productId)}`
@@ -170,11 +174,31 @@ test("admin can create, update and delete product in products panel", async ({ p
       slug: string;
       name: string;
       price: { amount: number };
+      sortOrder?: number;
+      sort_order?: number;
+      isActive?: boolean;
+      is_active?: boolean;
     };
     expect(updatedProductPayload.id).toBe(productId);
     expect(updatedProductPayload.slug).toBe(productSlug);
     expect(updatedProductPayload.name).toBe(updatedName);
     expect(updatedProductPayload.price.amount).toBe(249.99);
+    expect(updatedProductPayload.sortOrder ?? updatedProductPayload.sort_order).toBe(7);
+    expect(updatedProductPayload.isActive ?? updatedProductPayload.is_active).toBe(false);
+
+    await page.getByLabel("Статус").selectOption("inactive");
+    await page.getByRole("button", { name: "Применить" }).click();
+    await expect(page).toHaveURL(/state=inactive/);
+    await expect(page.locator("tr", { hasText: productId })).toBeVisible();
+
+    await page.getByLabel("Статус").selectOption("active");
+    await page.getByRole("button", { name: "Применить" }).click();
+    await expect(page).toHaveURL(/state=active/);
+    await expect(page.getByText("Товары не найдены.")).toBeVisible();
+
+    await page.getByLabel("Статус").selectOption("inactive");
+    await page.getByRole("button", { name: "Применить" }).click();
+    await expect(page).toHaveURL(/state=inactive/);
 
     const rowForDelete = page.locator("tr", { hasText: productId });
     await expect(rowForDelete).toBeVisible();

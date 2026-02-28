@@ -46,6 +46,24 @@ function parseOptionalMoneyAmount(value: FormDataEntryValue | null, fieldName: s
   return amount;
 }
 
+function parseOptionalInteger(value: FormDataEntryValue | null, fieldName: string): number | undefined {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  const normalized = value.trim();
+  if (!normalized.length) {
+    return undefined;
+  }
+  if (!/^-?\d+$/.test(normalized)) {
+    throw new Error(`Поле "${fieldName}" должно быть целым числом.`);
+  }
+  const parsed = Number.parseInt(normalized, 10);
+  if (!Number.isInteger(parsed)) {
+    throw new Error(`Поле "${fieldName}" должно быть целым числом.`);
+  }
+  return parsed;
+}
+
 function parseTags(value: FormDataEntryValue | null): string[] | undefined {
   if (typeof value !== "string") {
     return undefined;
@@ -146,7 +164,12 @@ export function buildProductPayloadFromFormData(formData: FormData): Product {
   const priceCurrency = parseRequiredString(formData.get("price_currency"), "price_currency").toUpperCase();
   const compareAmount = parseOptionalMoneyAmount(formData.get("compare_price_amount"), "compare_price_amount");
   const compareCurrencyRaw = parseOptionalString(formData.get("compare_price_currency"));
+  const sortOrder = parseOptionalInteger(formData.get("sort_order"), "sort_order");
   const tags = parseTags(formData.get("tags"));
+  const isActive =
+    formData.get("is_active") === "on" ||
+    formData.get("is_active") === "true" ||
+    formData.get("is_active") === "1";
   const isFeatured =
     formData.get("is_featured") === "on" ||
     formData.get("is_featured") === "true" ||
@@ -189,6 +212,8 @@ export function buildProductPayloadFromFormData(formData: FormData): Product {
     badges,
     tags,
     media,
+    isActive,
+    sortOrder,
     isFeatured,
     metadata,
   };
@@ -204,7 +229,9 @@ export function productToFormDefaults(product: Product): {
   priceCurrency: string;
   comparePriceAmount: string;
   comparePriceCurrency: string;
+  sortOrder: string;
   tags: string;
+  isActive: boolean;
   isFeatured: boolean;
   mediaId: string;
   mediaUrl: string;
@@ -224,7 +251,9 @@ export function productToFormDefaults(product: Product): {
     priceCurrency: product.price.currency,
     comparePriceAmount: product.compareAtPrice ? String(product.compareAtPrice.amount) : "",
     comparePriceCurrency: product.compareAtPrice?.currency ?? "",
+    sortOrder: product.sortOrder !== undefined && product.sortOrder !== null ? String(product.sortOrder) : "",
     tags: product.tags?.join(", ") ?? "",
+    isActive: product.isActive !== false,
     isFeatured: Boolean(product.isFeatured),
     mediaId: firstMedia.id,
     mediaUrl: firstMedia.url,

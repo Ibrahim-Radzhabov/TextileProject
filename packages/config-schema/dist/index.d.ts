@@ -255,6 +255,8 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             url: string;
             alt: string;
         }>, "many">;
+        isActive: import("zod").ZodOptional<import("zod").ZodBoolean>;
+        sortOrder: import("zod").ZodOptional<import("zod").ZodNumber>;
         isFeatured: import("zod").ZodOptional<import("zod").ZodBoolean>;
         metadata: import("zod").ZodOptional<import("zod").ZodRecord<import("zod").ZodString, import("zod").ZodUnion<[import("zod").ZodString, import("zod").ZodNumber, import("zod").ZodBoolean]>>>;
     }, "strip", import("zod").ZodTypeAny, {
@@ -282,6 +284,8 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             tone: "accent" | "neutral" | "critical";
         }[] | undefined;
         tags?: string[] | undefined;
+        isActive?: boolean | undefined;
+        sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
         metadata?: Record<string, string | number | boolean> | undefined;
     }, {
@@ -309,6 +313,8 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             tone: "accent" | "neutral" | "critical";
         }[] | undefined;
         tags?: string[] | undefined;
+        isActive?: boolean | undefined;
+        sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
         metadata?: Record<string, string | number | boolean> | undefined;
     }>, "many">;
@@ -338,6 +344,8 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             tone: "accent" | "neutral" | "critical";
         }[] | undefined;
         tags?: string[] | undefined;
+        isActive?: boolean | undefined;
+        sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
         metadata?: Record<string, string | number | boolean> | undefined;
     }[];
@@ -367,6 +375,8 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             tone: "accent" | "neutral" | "critical";
         }[] | undefined;
         tags?: string[] | undefined;
+        isActive?: boolean | undefined;
+        sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
         metadata?: Record<string, string | number | boolean> | undefined;
     }[];

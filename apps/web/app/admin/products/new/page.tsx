@@ -11,7 +11,9 @@ const emptyProductDefaults: AdminProductFormDefaults = {
   priceCurrency: "USD",
   comparePriceAmount: "",
   comparePriceCurrency: "",
+  sortOrder: "0",
   tags: "",
+  isActive: true,
   isFeatured: false,
   mediaId: "",
   mediaUrl: "",
@@ -21,13 +23,32 @@ const emptyProductDefaults: AdminProductFormDefaults = {
   metadataJson: "",
 };
 
-export default function AdminNewProductPage() {
+function resolveReturnTo(value: string | undefined): string | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const normalized = value.trim();
+  if (!normalized.startsWith("/admin/products")) {
+    return undefined;
+  }
+  return normalized;
+}
+
+export default function AdminNewProductPage({
+  searchParams,
+}: {
+  searchParams?: {
+    return_to?: string;
+  };
+}) {
+  const returnTo = resolveReturnTo(searchParams?.return_to) ?? "/admin/products";
+
   return (
     <div className="space-y-6 pb-8">
       <header className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <Link
-            href="/admin/products"
+            href={returnTo}
             className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
           >
             ← К списку товаров
@@ -44,7 +65,12 @@ export default function AdminNewProductPage() {
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Новый товар</h1>
       </header>
 
-      <AdminProductForm action="/admin/products/create" submitLabel="Создать товар" defaults={emptyProductDefaults} />
+      <AdminProductForm
+        action="/admin/products/create"
+        submitLabel="Создать товар"
+        defaults={emptyProductDefaults}
+        returnTo={returnTo}
+      />
     </div>
   );
 }

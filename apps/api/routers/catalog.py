@@ -7,6 +7,22 @@ from .admin_auth import require_admin_token
 router = APIRouter(prefix="/catalog", tags=["catalog"])
 
 
+def _is_active(product: Product) -> bool:
+    return product.is_active is not False
+
+
+def _sort_key(product: Product) -> tuple[int, str, str]:
+    return (
+        product.sort_order or 0,
+        product.name.casefold(),
+        product.id.casefold(),
+    )
+
+
+def _build_catalog(products: list[Product]) -> CatalogConfig:
+    return CatalogConfig(products=sorted(products, key=_sort_key))
+
+
 def _find_product_index_by_id(catalog: CatalogConfig, product_id: str) -> int:
     for index, product in enumerate(catalog.products):
         if product.id == product_id:
@@ -14,8 +30,10 @@ def _find_product_index_by_id(catalog: CatalogConfig, product_id: str) -> int:
     return -1
 
 
-def _find_product_by_slug(catalog: CatalogConfig, slug: str) -> Product | None:
+def _find_product_by_slug(catalog: CatalogConfig, slug: str, *, include_inactive: bool = False) -> Product | None:
     for product in catalog.products:
+        if not include_inactive and not _is_active(product):
+            continue
         if product.slug == slug:
             return product
     return None
@@ -34,13 +52,15 @@ def _ensure_unique_product(catalog: CatalogConfig, payload: Product, *, ignore_p
 @router.get("", response_model=CatalogConfig)
 def list_catalog() -> CatalogConfig:
     loader = get_loader()
-    return loader.load_catalog()
+    catalog = loader.load_catalog()
+    active_products = [product for product in catalog.products if _is_active(product)]
+    return _build_catalog(active_products)
 
 
 @router.get("/products", response_model=CatalogConfig)
 def list_catalog_products() -> CatalogConfig:
     loader = get_loader()
-    return loader.load_catalog()
+    return _build_catalog(loader.load_catalog().products)
 
 
 @router.get("/products/{product_id}", response_model=Product)

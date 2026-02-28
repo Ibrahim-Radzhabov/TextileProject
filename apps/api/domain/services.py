@@ -41,7 +41,7 @@ def _is_placeholder_secret(value: Optional[str]) -> bool:
 
 def _find_product(products: List[Product], product_id: str) -> Product | None:
     for p in products:
-        if p.id == product_id:
+        if p.id == product_id and p.is_active is not False:
             return p
     return None
 

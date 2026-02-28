@@ -45,6 +45,8 @@ class Product(BaseModel):
     badges: Optional[List[ProductBadge]] = None
     tags: Optional[List[str]] = None
     media: List[ProductMedia]
+    is_active: Optional[bool] = Field(default=None, alias="isActive")
+    sort_order: Optional[int] = Field(default=None, alias="sortOrder")
     is_featured: Optional[bool] = Field(default=None, alias="isFeatured")
     metadata: Optional[Dict[str, Any]] = None
 
