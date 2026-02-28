@@ -356,6 +356,7 @@ export type StripeWebhookAuditListResponse = {
 };
 
 export type ManualOrderStatus = "processing" | "shipped" | "cancelled";
+export type StatusAuditActorType = "checkout" | "webhook" | "admin" | "system";
 
 type OrderStatusAuditEntryDto = {
   id: number;
@@ -634,6 +635,8 @@ export async function fetchOrderStatusAudit(params: {
   orderId: string;
   limit?: number;
   offset?: number;
+  toStatus?: OrderStatus;
+  actorType?: StatusAuditActorType;
 }): Promise<OrderStatusAuditListResponse> {
   const query = new URLSearchParams();
   if (params.limit !== undefined) {
@@ -641,6 +644,12 @@ export async function fetchOrderStatusAudit(params: {
   }
   if (params.offset !== undefined) {
     query.set("offset", String(params.offset));
+  }
+  if (params.toStatus) {
+    query.set("to_status", params.toStatus);
+  }
+  if (params.actorType) {
+    query.set("actor_type", params.actorType);
   }
   const queryString = query.toString();
   const res = await fetch(

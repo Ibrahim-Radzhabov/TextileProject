@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { fetchOrders, type OrderPaymentState, type OrderStatus } from "@/lib/api-client";
+import {
+  fetchOrders,
+  type ManualOrderStatus,
+  type OrderPaymentState,
+  type OrderStatus
+} from "@/lib/api-client";
 
 const PAGE_SIZE = 20;
 
@@ -21,6 +26,12 @@ const paymentFilters: Array<{ label: string; value?: OrderPaymentState }> = [
   { label: "Оплаченные", value: "paid" },
   { label: "Failed", value: "failed" },
   { label: "Cancelled", value: "cancelled" }
+];
+
+const quickStatusActions: Array<{ label: string; value: ManualOrderStatus }> = [
+  { label: "В обработку", value: "processing" },
+  { label: "Отправлен", value: "shipped" },
+  { label: "Отменить", value: "cancelled" }
 ];
 
 function toPositiveInt(value: string | undefined, fallback: number): number {
@@ -140,6 +151,20 @@ function getPaymentBadge(status: OrderStatus): { label: string; className: strin
   };
 }
 
+function getAllowedManualStatuses(currentStatus: OrderStatus): ManualOrderStatus[] {
+  const map: Record<OrderStatus, ManualOrderStatus[]> = {
+    pending: ["cancelled"],
+    redirect: ["cancelled"],
+    confirmed: ["processing", "cancelled"],
+    paid: ["processing", "shipped", "cancelled"],
+    processing: ["shipped", "cancelled"],
+    shipped: ["cancelled"],
+    failed: [],
+    cancelled: []
+  };
+  return map[currentStatus] ?? [];
+}
+
 function buildOrdersExportHref(options: {
   status?: OrderStatus;
   paymentState?: OrderPaymentState;
@@ -177,6 +202,8 @@ export default async function AdminOrdersPage({
     created_from?: string;
     created_to?: string;
     offset?: string;
+    action_error?: string;
+    action_success?: string;
   };
 }) {
   const status = parseOrderStatus(searchParams?.status);
@@ -185,9 +212,25 @@ export default async function AdminOrdersPage({
   const createdFrom = parseDateParam(searchParams?.created_from);
   const createdTo = parseDateParam(searchParams?.created_to);
   const offset = toPositiveInt(searchParams?.offset, 0);
+  const actionError =
+    typeof searchParams?.action_error === "string" && searchParams.action_error.trim().length > 0
+      ? searchParams.action_error
+      : null;
+  const actionSuccess =
+    typeof searchParams?.action_success === "string" && searchParams.action_success.trim().length > 0
+      ? searchParams.action_success
+      : null;
   const hasInvalidDateRange = Boolean(createdFrom && createdTo && createdFrom > createdTo);
   const effectiveCreatedFrom = hasInvalidDateRange ? undefined : createdFrom;
   const effectiveCreatedTo = hasInvalidDateRange ? undefined : createdTo;
+  const currentOrdersHref = buildOrdersHref({
+    status,
+    paymentState,
+    query,
+    createdFrom,
+    createdTo,
+    offset
+  });
 
   const response = await fetchOrders({
     status,
@@ -282,6 +325,18 @@ export default async function AdminOrdersPage({
         </div>
       </form>
 
+      {actionSuccess && (
+        <div className="rounded-lg border border-emerald-400/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-300">
+          {actionSuccess}
+        </div>
+      )}
+
+      {actionError && (
+        <div className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
+          {actionError}
+        </div>
+      )}
+
       {hasInvalidDateRange && (
         <div className="rounded-lg border border-red-400/30 bg-red-500/10 px-3 py-2 text-xs text-red-300">
           Некорректный диапазон дат: "С даты" не может быть позже "По дату".
@@ -353,11 +408,13 @@ export default async function AdminOrdersPage({
               <th className="px-4 py-3">Клиент</th>
               <th className="px-4 py-3">Итого</th>
               <th className="px-4 py-3">Позиций</th>
+              <th className="px-4 py-3">Действия</th>
             </tr>
           </thead>
           <tbody>
             {response.items.map((order) => {
               const paymentBadge = getPaymentBadge(order.status);
+              const allowedManualStatuses = getAllowedManualStatuses(order.status);
               return (
               <tr key={order.orderId} className="border-t border-border/50">
                 <td className="truncate px-4 py-3 font-mono text-xs">
@@ -398,12 +455,38 @@ export default async function AdminOrdersPage({
                 <td className="px-4 py-3 text-xs text-muted-foreground">
                   {order.cart.items.length}
                 </td>
+                <td className="px-4 py-3">
+                  {allowedManualStatuses.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                      {quickStatusActions
+                        .filter((action) => allowedManualStatuses.includes(action.value))
+                        .map((action) => (
+                          <form
+                            key={`${order.orderId}-${action.value}`}
+                            action={`/admin/orders/${encodeURIComponent(order.orderId)}/status`}
+                            method="post"
+                          >
+                            <input type="hidden" name="status" value={action.value} />
+                            <input type="hidden" name="return_to" value={currentOrdersHref} />
+                            <button
+                              type="submit"
+                              className="inline-flex h-7 items-center justify-center rounded-md border border-border/60 px-2.5 text-[11px] text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                            >
+                              {action.label}
+                            </button>
+                          </form>
+                        ))}
+                    </div>
+                  ) : (
+                    <span className="text-xs text-muted-foreground/70">—</span>
+                  )}
+                </td>
               </tr>
             );
             })}
             {response.items.length === 0 && (
               <tr>
-                <td className="px-4 py-10 text-center text-sm text-muted-foreground" colSpan={7}>
+                <td className="px-4 py-10 text-center text-sm text-muted-foreground" colSpan={8}>
                   Заказы не найдены.
                 </td>
               </tr>

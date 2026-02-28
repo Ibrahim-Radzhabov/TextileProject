@@ -6,10 +6,12 @@ import {
   fetchWebhookAudit,
   type ManualOrderStatus,
   type OrderStatus,
+  type StatusAuditActorType,
   type WebhookProcessingStatus
 } from "@/lib/api-client";
 
-const AUDIT_PAGE_SIZE = 20;
+const WEBHOOK_AUDIT_PAGE_SIZE = 20;
+const STATUS_AUDIT_PAGE_SIZE = 10;
 
 const auditFilters: Array<{ label: string; value?: WebhookProcessingStatus }> = [
   { label: "Все" },
@@ -25,6 +27,26 @@ const manualStatusOptions: Array<{ label: string; value: ManualOrderStatus }> = 
   { label: "Отменен", value: "cancelled" }
 ];
 
+const statusAuditStatusFilters: Array<{ label: string; value?: OrderStatus }> = [
+  { label: "Все статусы" },
+  { label: "Pending", value: "pending" },
+  { label: "Redirect", value: "redirect" },
+  { label: "Confirmed", value: "confirmed" },
+  { label: "Paid", value: "paid" },
+  { label: "Processing", value: "processing" },
+  { label: "Shipped", value: "shipped" },
+  { label: "Failed", value: "failed" },
+  { label: "Cancelled", value: "cancelled" }
+];
+
+const statusAuditActorFilters: Array<{ label: string; value?: StatusAuditActorType }> = [
+  { label: "Все источники" },
+  { label: "Checkout", value: "checkout" },
+  { label: "Webhook", value: "webhook" },
+  { label: "Admin", value: "admin" },
+  { label: "System", value: "system" }
+];
+
 function parseProcessingStatus(value: string | undefined): WebhookProcessingStatus | undefined {
   if (!value) {
     return undefined;
@@ -32,6 +54,33 @@ function parseProcessingStatus(value: string | undefined): WebhookProcessingStat
   const allowed: WebhookProcessingStatus[] = ["processing", "processed", "ignored", "failed"];
   return allowed.includes(value as WebhookProcessingStatus)
     ? (value as WebhookProcessingStatus)
+    : undefined;
+}
+
+function parseOrderStatus(value: string | undefined): OrderStatus | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const allowed: OrderStatus[] = [
+    "pending",
+    "redirect",
+    "confirmed",
+    "paid",
+    "processing",
+    "shipped",
+    "failed",
+    "cancelled"
+  ];
+  return allowed.includes(value as OrderStatus) ? (value as OrderStatus) : undefined;
+}
+
+function parseStatusAuditActor(value: string | undefined): StatusAuditActorType | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const allowed: StatusAuditActorType[] = ["checkout", "webhook", "admin", "system"];
+  return allowed.includes(value as StatusAuditActorType)
+    ? (value as StatusAuditActorType)
     : undefined;
 }
 
@@ -51,6 +100,9 @@ function buildOrderHref(options: {
   processingStatus?: WebhookProcessingStatus;
   actionError?: string;
   offset?: number;
+  statusAuditTo?: OrderStatus;
+  statusAuditActor?: StatusAuditActorType;
+  statusAuditOffset?: number;
 }): string {
   const params = new URLSearchParams();
   if (options.processingStatus) {
@@ -61,6 +113,15 @@ function buildOrderHref(options: {
   }
   if (options.actionError) {
     params.set("action_error", options.actionError);
+  }
+  if (options.statusAuditTo) {
+    params.set("status_audit_to", options.statusAuditTo);
+  }
+  if (options.statusAuditActor) {
+    params.set("status_audit_actor", options.statusAuditActor);
+  }
+  if (options.statusAuditOffset !== undefined && options.statusAuditOffset > 0) {
+    params.set("status_audit_offset", String(options.statusAuditOffset));
   }
 
   const query = params.toString();
@@ -91,14 +152,20 @@ export default async function AdminOrderDetailsPage({
     processing_status?: string;
     action_error?: string;
     offset?: string;
+    status_audit_to?: string;
+    status_audit_actor?: string;
+    status_audit_offset?: string;
   };
 }) {
   const processingStatus = parseProcessingStatus(searchParams?.processing_status);
+  const statusAuditTo = parseOrderStatus(searchParams?.status_audit_to);
+  const statusAuditActor = parseStatusAuditActor(searchParams?.status_audit_actor);
   const actionError =
     typeof searchParams?.action_error === "string" && searchParams.action_error.trim().length > 0
       ? searchParams.action_error
       : null;
-  const offset = toPositiveInt(searchParams?.offset, 0);
+  const webhookOffset = toPositiveInt(searchParams?.offset, 0);
+  const statusAuditOffset = toPositiveInt(searchParams?.status_audit_offset, 0);
 
   try {
     const [order, audit, statusAudit] = await Promise.all([
@@ -106,18 +173,25 @@ export default async function AdminOrderDetailsPage({
       fetchWebhookAudit({
         orderId: params.orderId,
         processingStatus,
-        limit: AUDIT_PAGE_SIZE,
-        offset
+        limit: WEBHOOK_AUDIT_PAGE_SIZE,
+        offset: webhookOffset
       }),
       fetchOrderStatusAudit({
         orderId: params.orderId,
-        limit: 30
+        limit: STATUS_AUDIT_PAGE_SIZE,
+        offset: statusAuditOffset,
+        toStatus: statusAuditTo,
+        actorType: statusAuditActor
       })
     ]);
 
-    const hasPrev = audit.offset > 0;
-    const nextOffset = audit.offset + audit.limit;
-    const hasNext = nextOffset < audit.total;
+    const webhookHasPrev = audit.offset > 0;
+    const webhookNextOffset = audit.offset + audit.limit;
+    const webhookHasNext = webhookNextOffset < audit.total;
+
+    const statusAuditHasPrev = statusAudit.offset > 0;
+    const statusAuditNextOffset = statusAudit.offset + statusAudit.limit;
+    const statusAuditHasNext = statusAuditNextOffset < statusAudit.total;
     const allowedManualStatuses = getAllowedManualStatuses(order.status);
 
     return (
@@ -182,7 +256,14 @@ export default async function AdminOrderDetailsPage({
             className="grid gap-3 rounded-2xl border border-border/60 bg-card/40 px-4 py-4 sm:grid-cols-4"
           >
             <input type="hidden" name="processing_status" value={processingStatus ?? ""} />
-            <input type="hidden" name="offset" value={offset > 0 ? String(offset) : ""} />
+            <input type="hidden" name="offset" value={webhookOffset > 0 ? String(webhookOffset) : ""} />
+            <input type="hidden" name="status_audit_to" value={statusAuditTo ?? ""} />
+            <input type="hidden" name="status_audit_actor" value={statusAuditActor ?? ""} />
+            <input
+              type="hidden"
+              name="status_audit_offset"
+              value={statusAuditOffset > 0 ? String(statusAuditOffset) : ""}
+            />
 
             <label className="space-y-1">
               <span className="text-xs text-muted-foreground">Новый статус</span>
@@ -233,6 +314,60 @@ export default async function AdminOrderDetailsPage({
 
         <section className="space-y-3">
           <h2 className="text-sm font-medium tracking-tight text-muted-foreground">История статусов</h2>
+          <form method="get" className="grid gap-3 rounded-2xl border border-border/60 bg-card/40 px-4 py-4 sm:grid-cols-4">
+            <input type="hidden" name="processing_status" value={processingStatus ?? ""} />
+            <input type="hidden" name="offset" value={webhookOffset > 0 ? String(webhookOffset) : ""} />
+
+            <label className="space-y-1">
+              <span className="text-xs text-muted-foreground">Статус назначения</span>
+              <select
+                name="status_audit_to"
+                defaultValue={statusAuditTo ?? ""}
+                className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+              >
+                {statusAuditStatusFilters.map((filter) => (
+                  <option key={filter.label} value={filter.value ?? ""}>
+                    {filter.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label className="space-y-1">
+              <span className="text-xs text-muted-foreground">Источник</span>
+              <select
+                name="status_audit_actor"
+                defaultValue={statusAuditActor ?? ""}
+                className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+              >
+                {statusAuditActorFilters.map((filter) => (
+                  <option key={filter.label} value={filter.value ?? ""}>
+                    {filter.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="flex items-end gap-2 sm:col-span-2">
+              <button
+                type="submit"
+                className="inline-flex h-10 items-center justify-center rounded-lg border border-accent/60 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90"
+              >
+                Применить фильтры
+              </button>
+              <Link
+                href={buildOrderHref({
+                  orderId: params.orderId,
+                  processingStatus,
+                  offset: webhookOffset
+                })}
+                className="inline-flex h-10 items-center justify-center rounded-lg border border-border/60 px-4 text-sm text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+              >
+                Сбросить
+              </Link>
+            </div>
+          </form>
+
           <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/40">
             <table className="w-full min-w-[760px] table-fixed border-collapse text-left text-sm">
               <thead className="bg-muted/20 text-xs uppercase tracking-wide text-muted-foreground">
@@ -269,6 +404,50 @@ export default async function AdminOrderDetailsPage({
                 )}
               </tbody>
             </table>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <p className="text-xs text-muted-foreground">
+              Показано {statusAudit.items.length} из {statusAudit.total}
+            </p>
+            <div className="flex items-center gap-2">
+              <Link
+                href={buildOrderHref({
+                  orderId: params.orderId,
+                  processingStatus,
+                  offset: webhookOffset,
+                  statusAuditTo,
+                  statusAuditActor,
+                  statusAuditOffset: Math.max(0, statusAudit.offset - statusAudit.limit)
+                })}
+                className={[
+                  "rounded-lg border px-3 py-1.5 text-xs",
+                  statusAuditHasPrev
+                    ? "border-border/60 text-foreground hover:border-accent/50"
+                    : "pointer-events-none border-border/40 text-muted-foreground/60"
+                ].join(" ")}
+              >
+                Назад
+              </Link>
+              <Link
+                href={buildOrderHref({
+                  orderId: params.orderId,
+                  processingStatus,
+                  offset: webhookOffset,
+                  statusAuditTo,
+                  statusAuditActor,
+                  statusAuditOffset: statusAuditNextOffset
+                })}
+                className={[
+                  "rounded-lg border px-3 py-1.5 text-xs",
+                  statusAuditHasNext
+                    ? "border-border/60 text-foreground hover:border-accent/50"
+                    : "pointer-events-none border-border/40 text-muted-foreground/60"
+                ].join(" ")}
+              >
+                Вперёд
+              </Link>
+            </div>
           </div>
         </section>
 
@@ -341,7 +520,10 @@ export default async function AdminOrderDetailsPage({
                     href={buildOrderHref({
                       orderId: params.orderId,
                       processingStatus: filter.value,
-                      offset: 0
+                      offset: 0,
+                      statusAuditTo,
+                      statusAuditActor,
+                      statusAuditOffset
                     })}
                     className={[
                       "rounded-full border px-3 py-1 text-xs transition-colors",
@@ -417,11 +599,14 @@ export default async function AdminOrderDetailsPage({
                 href={buildOrderHref({
                   orderId: params.orderId,
                   processingStatus,
-                  offset: Math.max(0, audit.offset - audit.limit)
+                  offset: Math.max(0, audit.offset - audit.limit),
+                  statusAuditTo,
+                  statusAuditActor,
+                  statusAuditOffset
                 })}
                 className={[
                   "rounded-lg border px-3 py-1.5 text-xs",
-                  hasPrev
+                  webhookHasPrev
                     ? "border-border/60 text-foreground hover:border-accent/50"
                     : "pointer-events-none border-border/40 text-muted-foreground/60"
                 ].join(" ")}
@@ -432,11 +617,14 @@ export default async function AdminOrderDetailsPage({
                 href={buildOrderHref({
                   orderId: params.orderId,
                   processingStatus,
-                  offset: nextOffset
+                  offset: webhookNextOffset,
+                  statusAuditTo,
+                  statusAuditActor,
+                  statusAuditOffset
                 })}
                 className={[
                   "rounded-lg border px-3 py-1.5 text-xs",
-                  hasNext
+                  webhookHasNext
                     ? "border-border/60 text-foreground hover:border-accent/50"
                     : "pointer-events-none border-border/40 text-muted-foreground/60"
                 ].join(" ")}

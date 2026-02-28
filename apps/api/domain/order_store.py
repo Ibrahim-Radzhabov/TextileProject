@@ -577,21 +577,36 @@ class OrderStore:
         *,
         order_id: str,
         client_id: str,
+        to_status: Optional[str] = None,
+        actor_type: Optional[str] = None,
         limit: int,
         offset: int,
     ) -> tuple[list[dict[str, Any]], int]:
+        where_parts: list[str] = ["order_id = ?", "client_id = ?"]
+        params: list[Any] = [order_id, client_id]
+
+        if to_status:
+            where_parts.append("to_status = ?")
+            params.append(to_status)
+
+        if actor_type:
+            where_parts.append("actor_type = ?")
+            params.append(actor_type)
+
+        where_sql = " AND ".join(where_parts)
+
         with self._connect() as conn:
             count_row = conn.execute(
-                """
+                f"""
                 SELECT COUNT(*) AS total
                 FROM order_status_audit
-                WHERE order_id = ? AND client_id = ?
+                WHERE {where_sql}
                 """,
-                (order_id, client_id),
+                params,
             ).fetchone()
 
             rows = conn.execute(
-                """
+                f"""
                 SELECT
                     id,
                     order_id,
@@ -602,11 +617,11 @@ class OrderStore:
                     actor_type,
                     created_at
                 FROM order_status_audit
-                WHERE order_id = ? AND client_id = ?
+                WHERE {where_sql}
                 ORDER BY created_at DESC
                 LIMIT ? OFFSET ?
                 """,
-                (order_id, client_id, limit, offset),
+                [*params, limit, offset],
             ).fetchall()
 
         items = [

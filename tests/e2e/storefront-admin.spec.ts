@@ -148,19 +148,24 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   const exportHref = await page.getByRole("link", { name: "Экспорт CSV" }).getAttribute("href");
   expect(exportHref).not.toBeNull();
   expect(exportHref).toContain(`/admin/orders/export?q=${encodeURIComponent(email)}`);
-  await page.getByRole("link", { name: orderId }).click();
+  const orderRow = page.locator("tr", { has: page.getByRole("link", { name: orderId }) });
 
+  await orderRow.getByRole("button", { name: "В обработку" }).click();
+  await expect(page.getByText("Статус обновлён: processing.")).toBeVisible();
+  await expect(orderRow.getByText("processing")).toBeVisible();
+
+  await orderRow.getByRole("button", { name: "Отправлен" }).click();
+  await expect(page.getByText("Статус обновлён: shipped.")).toBeVisible();
+  await expect(orderRow.getByText("shipped").first()).toBeVisible();
+
+  await orderRow.getByRole("link", { name: orderId }).click();
   await expect(page.getByRole("heading", { name: new RegExp(`Заказ ${orderId}`) })).toBeVisible();
-  await page.getByLabel("Новый статус").selectOption("processing");
-  await page.getByLabel(/Комментарий/).fill("Передано на склад");
-  await page.getByRole("button", { name: "Обновить статус" }).click();
-  await expect(page.getByText("Передано на склад")).toBeVisible();
-
-  await page.getByLabel("Новый статус").selectOption("shipped");
-  await page.getByLabel(/Комментарий/).fill("Передано в доставку");
-  await page.getByRole("button", { name: "Обновить статус" }).click();
+  await page.getByLabel("Статус назначения").selectOption("shipped");
+  await page.getByLabel("Источник").selectOption("admin");
+  await page.getByRole("button", { name: "Применить фильтры" }).click();
+  await expect(page).toHaveURL(/status_audit_to=shipped/);
+  await expect(page).toHaveURL(/status_audit_actor=admin/);
   await expect(page.getByText("shipped").first()).toBeVisible();
-  await expect(page.getByText("Передано в доставку")).toBeVisible();
 
   const paidOrdersResponse = await request.get(`${API_BASE_URL}/orders?payment_state=paid`);
   expect(paidOrdersResponse.ok()).toBeTruthy();
@@ -170,15 +175,38 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   expect(paidOrdersPayload.items.some((item) => item.order_id === orderId)).toBeTruthy();
 
   const statusAuditResponse = await request.get(
-    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit`
+    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&limit=1&offset=0`
   );
   expect(statusAuditResponse.ok()).toBeTruthy();
   const statusAuditPayload = (await statusAuditResponse.json()) as {
-    items: Array<{ to_status: string; actor_type: string; reason: string | null }>;
+    items: Array<{ id: number; to_status: string; actor_type: string }>;
+    total: number;
   };
-  expect(statusAuditPayload.items.some((item) => item.to_status === "processing")).toBeTruthy();
-  expect(statusAuditPayload.items.some((item) => item.to_status === "shipped")).toBeTruthy();
-  expect(statusAuditPayload.items.some((item) => item.actor_type === "admin")).toBeTruthy();
+  expect(statusAuditPayload.total).toBeGreaterThanOrEqual(2);
+  expect(statusAuditPayload.items[0]?.actor_type).toBe("admin");
+
+  const statusAuditSecondPageResponse = await request.get(
+    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&limit=1&offset=1`
+  );
+  expect(statusAuditSecondPageResponse.ok()).toBeTruthy();
+  const statusAuditSecondPagePayload = (await statusAuditSecondPageResponse.json()) as {
+    items: Array<{ id: number; to_status: string; actor_type: string }>;
+  };
+  expect(statusAuditSecondPagePayload.items.length).toBeGreaterThan(0);
+  expect(statusAuditSecondPagePayload.items[0]?.id).not.toBe(statusAuditPayload.items[0]?.id);
+
+  const shippedStatusAuditResponse = await request.get(
+    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&to_status=shipped`
+  );
+  expect(shippedStatusAuditResponse.ok()).toBeTruthy();
+  const shippedStatusAuditPayload = (await shippedStatusAuditResponse.json()) as {
+    items: Array<{ to_status: string; actor_type: string }>;
+  };
+  expect(
+    shippedStatusAuditPayload.items.some(
+      (item) => item.to_status === "shipped" && item.actor_type === "admin"
+    )
+  ).toBeTruthy();
 
   const csvResponse = await request.get(
     `${API_BASE_URL}/orders/export.csv?status=shipped&q=${encodeURIComponent(email)}`

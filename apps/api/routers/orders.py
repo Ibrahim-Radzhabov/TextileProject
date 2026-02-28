@@ -30,6 +30,7 @@ OrderFilterStatus = Literal[
 
 OrderPaymentState = Literal["awaiting", "paid", "failed", "cancelled"]
 ManualOrderStatus = Literal["processing", "shipped", "cancelled"]
+OrderStatusAuditActorType = Literal["checkout", "webhook", "admin", "system"]
 
 ALLOWED_MANUAL_TRANSITIONS: dict[str, set[str]] = {
     "pending": {"cancelled"},
@@ -256,6 +257,8 @@ def update_order_status(order_id: str, payload: UpdateOrderStatusRequest) -> Sto
 @router.get("/{order_id}/status-audit", response_model=OrderStatusAuditListResponse)
 def get_order_status_audit(
     order_id: str,
+    to_status: Optional[OrderFilterStatus] = Query(default=None),
+    actor_type: Optional[OrderStatusAuditActorType] = Query(default=None),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ) -> OrderStatusAuditListResponse:
@@ -268,6 +271,8 @@ def get_order_status_audit(
     items, total = store.list_order_status_audit(
         order_id=order_id,
         client_id=settings.client_id,
+        to_status=to_status,
+        actor_type=actor_type,
         limit=limit,
         offset=offset,
     )
