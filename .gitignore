@@ -13,14 +13,17 @@ yarn-error.log*
 .turbo/
 **/.turbo/
 **/.corepack/
+.bin/
 
 # Next.js
 **/.next/
 out/
+apps/web/next-env.d.ts
 
 # Python
 **/__pycache__/
 *.py[cod]
+.venv/
 
 # Playwright
 playwright-report/

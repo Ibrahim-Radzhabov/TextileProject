@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { motion } from "framer-motion";
 import type { Product } from "@store-platform/shared-types";
@@ -70,4 +72,3 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     </section>
   );
 };
-

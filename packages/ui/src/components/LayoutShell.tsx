@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { motion } from "framer-motion";
 import { Surface } from "./Surface";
@@ -46,4 +48,3 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
     </div>
   );
 };
-

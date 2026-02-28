@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { motion } from "framer-motion";
 import type { ProductMedia } from "@store-platform/shared-types";
@@ -56,4 +58,3 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media }) => {
     </div>
   );
 };
-

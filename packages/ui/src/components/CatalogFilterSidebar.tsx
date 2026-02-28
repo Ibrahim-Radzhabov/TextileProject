@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Surface } from "./Surface";
@@ -105,4 +107,3 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
     </div>
   );
 };
-
