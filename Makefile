@@ -66,9 +66,10 @@ dev:
 	$(MAKE) dev-api & API_PID=$$!; \
 	$(MAKE) dev-web & WEB_PID=$$!; \
 	trap 'kill $$API_PID $$WEB_PID >/dev/null 2>&1 || true' INT TERM EXIT; \
-	wait -n $$API_PID $$WEB_PID || true; \
-	kill $$API_PID $$WEB_PID >/dev/null 2>&1 || true; \
-	wait || true
+	STATUS=0; \
+	wait $$API_PID || STATUS=$$?; \
+	wait $$WEB_PID || STATUS=$$?; \
+	exit $$STATUS
 
 build:
 	$(PNPM) build
