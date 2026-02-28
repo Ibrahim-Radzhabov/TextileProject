@@ -1,9 +1,11 @@
 import Link from "next/link";
+import { QuickActionForms } from "@store-platform/ui";
 import {
   fetchOrders,
   type ManualOrderStatus,
   type OrderPaymentState,
-  type OrderStatus
+  type OrderStatus,
+  type SortOrder
 } from "@/lib/api-client";
 
 const PAGE_SIZE = 20;
@@ -32,6 +34,11 @@ const quickStatusActions: Array<{ label: string; value: ManualOrderStatus }> = [
   { label: "В обработку", value: "processing" },
   { label: "Отправлен", value: "shipped" },
   { label: "Отменить", value: "cancelled" }
+];
+
+const sortFilters: Array<{ label: string; value: SortOrder }> = [
+  { label: "Новые сверху", value: "newest" },
+  { label: "Старые сверху", value: "oldest" }
 ];
 
 function toPositiveInt(value: string | undefined, fallback: number): number {
@@ -70,6 +77,14 @@ function parseOrderPaymentState(value: string | undefined): OrderPaymentState | 
   return allowed.includes(value as OrderPaymentState) ? (value as OrderPaymentState) : undefined;
 }
 
+function parseSortOrder(value: string | undefined): SortOrder | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const allowed: SortOrder[] = ["newest", "oldest"];
+  return allowed.includes(value as SortOrder) ? (value as SortOrder) : undefined;
+}
+
 function parseSearchQuery(value: string | undefined): string | undefined {
   if (!value) {
     return undefined;
@@ -101,6 +116,7 @@ function buildOrdersHref(options: {
   query?: string;
   createdFrom?: string;
   createdTo?: string;
+  sort?: SortOrder;
   offset?: number;
 }): string {
   const params = new URLSearchParams();
@@ -118,6 +134,9 @@ function buildOrdersHref(options: {
   }
   if (options.createdTo) {
     params.set("created_to", options.createdTo);
+  }
+  if (options.sort) {
+    params.set("sort", options.sort);
   }
   if (options.offset !== undefined && options.offset > 0) {
     params.set("offset", String(options.offset));
@@ -171,6 +190,7 @@ function buildOrdersExportHref(options: {
   query?: string;
   createdFrom?: string;
   createdTo?: string;
+  sort?: SortOrder;
 }): string {
   const params = new URLSearchParams();
   if (options.status) {
@@ -188,6 +208,9 @@ function buildOrdersExportHref(options: {
   if (options.createdTo) {
     params.set("created_to", options.createdTo);
   }
+  if (options.sort) {
+    params.set("sort", options.sort);
+  }
   const query = params.toString();
   return query ? `/admin/orders/export?${query}` : "/admin/orders/export";
 }
@@ -201,6 +224,7 @@ export default async function AdminOrdersPage({
     q?: string;
     created_from?: string;
     created_to?: string;
+    sort?: string;
     offset?: string;
     action_error?: string;
     action_success?: string;
@@ -211,6 +235,7 @@ export default async function AdminOrdersPage({
   const query = parseSearchQuery(searchParams?.q);
   const createdFrom = parseDateParam(searchParams?.created_from);
   const createdTo = parseDateParam(searchParams?.created_to);
+  const sort = parseSortOrder(searchParams?.sort) ?? "newest";
   const offset = toPositiveInt(searchParams?.offset, 0);
   const actionError =
     typeof searchParams?.action_error === "string" && searchParams.action_error.trim().length > 0
@@ -229,6 +254,7 @@ export default async function AdminOrdersPage({
     query,
     createdFrom,
     createdTo,
+    sort,
     offset
   });
 
@@ -238,6 +264,7 @@ export default async function AdminOrdersPage({
     query,
     createdFrom: effectiveCreatedFrom,
     createdTo: effectiveCreatedTo,
+    sort,
     limit: PAGE_SIZE,
     offset
   });
@@ -297,6 +324,20 @@ export default async function AdminOrdersPage({
             className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
           />
         </label>
+        <label className="space-y-1">
+          <span className="text-xs text-muted-foreground">Сортировка</span>
+          <select
+            name="sort"
+            defaultValue={sort}
+            className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+          >
+            {sortFilters.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
         <div className="flex flex-wrap items-center gap-2 sm:col-span-4">
           <button
             type="submit"
@@ -305,7 +346,7 @@ export default async function AdminOrdersPage({
             Применить
           </button>
           <Link
-            href={buildOrdersHref({ status, paymentState })}
+            href={buildOrdersHref({ status, paymentState, sort })}
             className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-4 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
           >
             Сбросить
@@ -316,7 +357,8 @@ export default async function AdminOrdersPage({
               paymentState,
               query,
               createdFrom,
-              createdTo
+              createdTo,
+              sort
             })}
             className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-4 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
           >
@@ -355,6 +397,7 @@ export default async function AdminOrdersPage({
                 query,
                 createdFrom,
                 createdTo,
+                sort,
                 offset: 0
               })}
               className={[
@@ -382,6 +425,7 @@ export default async function AdminOrdersPage({
                 query,
                 createdFrom,
                 createdTo,
+                sort,
                 offset: 0
               })}
               className={[
@@ -456,30 +500,12 @@ export default async function AdminOrdersPage({
                   {order.cart.items.length}
                 </td>
                 <td className="px-4 py-3">
-                  {allowedManualStatuses.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
-                      {quickStatusActions
-                        .filter((action) => allowedManualStatuses.includes(action.value))
-                        .map((action) => (
-                          <form
-                            key={`${order.orderId}-${action.value}`}
-                            action={`/admin/orders/${encodeURIComponent(order.orderId)}/status`}
-                            method="post"
-                          >
-                            <input type="hidden" name="status" value={action.value} />
-                            <input type="hidden" name="return_to" value={currentOrdersHref} />
-                            <button
-                              type="submit"
-                              className="inline-flex h-7 items-center justify-center rounded-md border border-border/60 px-2.5 text-[11px] text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
-                            >
-                              {action.label}
-                            </button>
-                          </form>
-                        ))}
-                    </div>
-                  ) : (
-                    <span className="text-xs text-muted-foreground/70">—</span>
-                  )}
+                  <QuickActionForms
+                    formAction={`/admin/orders/${encodeURIComponent(order.orderId)}/status`}
+                    actions={quickStatusActions}
+                    allowedValues={allowedManualStatuses}
+                    hiddenFields={[{ name: "return_to", value: currentOrdersHref }]}
+                  />
                 </td>
               </tr>
             );
@@ -507,6 +533,7 @@ export default async function AdminOrdersPage({
               query,
               createdFrom,
               createdTo,
+              sort,
               offset: Math.max(0, response.offset - response.limit)
             })}
             className={[
@@ -525,6 +552,7 @@ export default async function AdminOrdersPage({
               query,
               createdFrom,
               createdTo,
+              sort,
               offset: nextOffset
             })}
             className={[

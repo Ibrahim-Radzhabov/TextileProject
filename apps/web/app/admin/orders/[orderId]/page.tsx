@@ -6,6 +6,7 @@ import {
   fetchWebhookAudit,
   type ManualOrderStatus,
   type OrderStatus,
+  type SortOrder,
   type StatusAuditActorType,
   type WebhookProcessingStatus
 } from "@/lib/api-client";
@@ -47,6 +48,11 @@ const statusAuditActorFilters: Array<{ label: string; value?: StatusAuditActorTy
   { label: "System", value: "system" }
 ];
 
+const sortFilters: Array<{ label: string; value: SortOrder }> = [
+  { label: "Новые сверху", value: "newest" },
+  { label: "Старые сверху", value: "oldest" }
+];
+
 function parseProcessingStatus(value: string | undefined): WebhookProcessingStatus | undefined {
   if (!value) {
     return undefined;
@@ -84,6 +90,14 @@ function parseStatusAuditActor(value: string | undefined): StatusAuditActorType 
     : undefined;
 }
 
+function parseSortOrder(value: string | undefined): SortOrder | undefined {
+  if (!value) {
+    return undefined;
+  }
+  const allowed: SortOrder[] = ["newest", "oldest"];
+  return allowed.includes(value as SortOrder) ? (value as SortOrder) : undefined;
+}
+
 function toPositiveInt(value: string | undefined, fallback: number): number {
   if (!value) {
     return fallback;
@@ -102,6 +116,7 @@ function buildOrderHref(options: {
   offset?: number;
   statusAuditTo?: OrderStatus;
   statusAuditActor?: StatusAuditActorType;
+  statusAuditSort?: SortOrder;
   statusAuditOffset?: number;
 }): string {
   const params = new URLSearchParams();
@@ -119,6 +134,9 @@ function buildOrderHref(options: {
   }
   if (options.statusAuditActor) {
     params.set("status_audit_actor", options.statusAuditActor);
+  }
+  if (options.statusAuditSort) {
+    params.set("status_audit_sort", options.statusAuditSort);
   }
   if (options.statusAuditOffset !== undefined && options.statusAuditOffset > 0) {
     params.set("status_audit_offset", String(options.statusAuditOffset));
@@ -154,12 +172,14 @@ export default async function AdminOrderDetailsPage({
     offset?: string;
     status_audit_to?: string;
     status_audit_actor?: string;
+    status_audit_sort?: string;
     status_audit_offset?: string;
   };
 }) {
   const processingStatus = parseProcessingStatus(searchParams?.processing_status);
   const statusAuditTo = parseOrderStatus(searchParams?.status_audit_to);
   const statusAuditActor = parseStatusAuditActor(searchParams?.status_audit_actor);
+  const statusAuditSort = parseSortOrder(searchParams?.status_audit_sort) ?? "newest";
   const actionError =
     typeof searchParams?.action_error === "string" && searchParams.action_error.trim().length > 0
       ? searchParams.action_error
@@ -181,7 +201,8 @@ export default async function AdminOrderDetailsPage({
         limit: STATUS_AUDIT_PAGE_SIZE,
         offset: statusAuditOffset,
         toStatus: statusAuditTo,
-        actorType: statusAuditActor
+        actorType: statusAuditActor,
+        sort: statusAuditSort
       })
     ]);
 
@@ -259,6 +280,7 @@ export default async function AdminOrderDetailsPage({
             <input type="hidden" name="offset" value={webhookOffset > 0 ? String(webhookOffset) : ""} />
             <input type="hidden" name="status_audit_to" value={statusAuditTo ?? ""} />
             <input type="hidden" name="status_audit_actor" value={statusAuditActor ?? ""} />
+            <input type="hidden" name="status_audit_sort" value={statusAuditSort} />
             <input
               type="hidden"
               name="status_audit_offset"
@@ -348,7 +370,22 @@ export default async function AdminOrderDetailsPage({
               </select>
             </label>
 
-            <div className="flex items-end gap-2 sm:col-span-2">
+            <label className="space-y-1">
+              <span className="text-xs text-muted-foreground">Сортировка</span>
+              <select
+                name="status_audit_sort"
+                defaultValue={statusAuditSort}
+                className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+              >
+                {sortFilters.map((filter) => (
+                  <option key={filter.value} value={filter.value}>
+                    {filter.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="flex items-end gap-2 sm:col-span-1">
               <button
                 type="submit"
                 className="inline-flex h-10 items-center justify-center rounded-lg border border-accent/60 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90"
@@ -418,6 +455,7 @@ export default async function AdminOrderDetailsPage({
                   offset: webhookOffset,
                   statusAuditTo,
                   statusAuditActor,
+                  statusAuditSort,
                   statusAuditOffset: Math.max(0, statusAudit.offset - statusAudit.limit)
                 })}
                 className={[
@@ -436,6 +474,7 @@ export default async function AdminOrderDetailsPage({
                   offset: webhookOffset,
                   statusAuditTo,
                   statusAuditActor,
+                  statusAuditSort,
                   statusAuditOffset: statusAuditNextOffset
                 })}
                 className={[
@@ -523,6 +562,7 @@ export default async function AdminOrderDetailsPage({
                       offset: 0,
                       statusAuditTo,
                       statusAuditActor,
+                      statusAuditSort,
                       statusAuditOffset
                     })}
                     className={[
@@ -602,6 +642,7 @@ export default async function AdminOrderDetailsPage({
                   offset: Math.max(0, audit.offset - audit.limit),
                   statusAuditTo,
                   statusAuditActor,
+                  statusAuditSort,
                   statusAuditOffset
                 })}
                 className={[
@@ -620,6 +661,7 @@ export default async function AdminOrderDetailsPage({
                   offset: webhookNextOffset,
                   statusAuditTo,
                   statusAuditActor,
+                  statusAuditSort,
                   statusAuditOffset
                 })}
                 className={[

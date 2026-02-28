@@ -308,6 +308,7 @@ export type OrderStatus =
   | "failed"
   | "cancelled";
 export type OrderPaymentState = "awaiting" | "paid" | "failed" | "cancelled";
+export type SortOrder = "newest" | "oldest";
 
 export type StoredOrder = {
   orderId: string;
@@ -564,6 +565,7 @@ export async function fetchOrders(options?: {
   query?: string;
   createdFrom?: string;
   createdTo?: string;
+  sort?: SortOrder;
   limit?: number;
   offset?: number;
 }): Promise<OrdersListResponse> {
@@ -582,6 +584,9 @@ export async function fetchOrders(options?: {
   }
   if (options?.createdTo) {
     params.set("created_to", options.createdTo);
+  }
+  if (options?.sort) {
+    params.set("sort", options.sort);
   }
   if (options?.limit !== undefined) {
     params.set("limit", String(options.limit));
@@ -637,6 +642,7 @@ export async function fetchOrderStatusAudit(params: {
   offset?: number;
   toStatus?: OrderStatus;
   actorType?: StatusAuditActorType;
+  sort?: SortOrder;
 }): Promise<OrderStatusAuditListResponse> {
   const query = new URLSearchParams();
   if (params.limit !== undefined) {
@@ -650,6 +656,9 @@ export async function fetchOrderStatusAudit(params: {
   }
   if (params.actorType) {
     query.set("actor_type", params.actorType);
+  }
+  if (params.sort) {
+    query.set("sort", params.sort);
   }
   const queryString = query.toString();
   const res = await fetch(

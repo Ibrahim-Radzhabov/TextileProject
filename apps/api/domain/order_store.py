@@ -356,6 +356,7 @@ class OrderStore:
         search_query: Optional[str],
         created_from_iso: Optional[str],
         created_to_exclusive_iso: Optional[str],
+        sort: Literal["newest", "oldest"] = "newest",
         limit: int,
         offset: int,
     ) -> tuple[list[dict[str, Any]], int]:
@@ -407,6 +408,7 @@ class OrderStore:
             params.append(created_to_exclusive_iso)
 
         where_sql = " AND ".join(where_parts)
+        sort_direction = "ASC" if sort == "oldest" else "DESC"
 
         with self._connect() as conn:
             count_row = conn.execute(
@@ -434,7 +436,7 @@ class OrderStore:
                     updated_at
                 FROM orders
                 WHERE {where_sql}
-                ORDER BY created_at DESC
+                ORDER BY created_at {sort_direction}, order_id {sort_direction}
                 LIMIT ? OFFSET ?
                 """,
                 [*params, limit, offset],
@@ -579,6 +581,7 @@ class OrderStore:
         client_id: str,
         to_status: Optional[str] = None,
         actor_type: Optional[str] = None,
+        sort: Literal["newest", "oldest"] = "newest",
         limit: int,
         offset: int,
     ) -> tuple[list[dict[str, Any]], int]:
@@ -594,6 +597,7 @@ class OrderStore:
             params.append(actor_type)
 
         where_sql = " AND ".join(where_parts)
+        sort_direction = "ASC" if sort == "oldest" else "DESC"
 
         with self._connect() as conn:
             count_row = conn.execute(
@@ -618,7 +622,7 @@ class OrderStore:
                     created_at
                 FROM order_status_audit
                 WHERE {where_sql}
-                ORDER BY created_at DESC
+                ORDER BY created_at {sort_direction}, id {sort_direction}
                 LIMIT ? OFFSET ?
                 """,
                 [*params, limit, offset],

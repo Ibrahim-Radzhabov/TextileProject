@@ -16,6 +16,7 @@ function buildOrderDetailsRedirectUrl(baseUrl: URL, options: {
   offset?: string | null;
   statusAuditTo?: string | null;
   statusAuditActor?: string | null;
+  statusAuditSort?: string | null;
   statusAuditOffset?: string | null;
   actionError?: string | null;
 }): URL {
@@ -31,6 +32,9 @@ function buildOrderDetailsRedirectUrl(baseUrl: URL, options: {
   }
   if (options.statusAuditActor) {
     redirect.searchParams.set("status_audit_actor", options.statusAuditActor);
+  }
+  if (options.statusAuditSort) {
+    redirect.searchParams.set("status_audit_sort", options.statusAuditSort);
   }
   if (options.statusAuditOffset) {
     redirect.searchParams.set("status_audit_offset", options.statusAuditOffset);
@@ -75,6 +79,7 @@ export async function POST(request: Request, { params }: RouteParams): Promise<N
   const offset = formData.get("offset");
   const statusAuditTo = formData.get("status_audit_to");
   const statusAuditActor = formData.get("status_audit_actor");
+  const statusAuditSort = formData.get("status_audit_sort");
   const statusAuditOffset = formData.get("status_audit_offset");
   const returnTo = resolveOrdersListReturnUrl(baseUrl, formData.get("return_to"));
   const reason = reasonRaw.length ? reasonRaw : undefined;
@@ -88,6 +93,7 @@ export async function POST(request: Request, { params }: RouteParams): Promise<N
       offset: typeof offset === "string" ? offset : null,
       statusAuditTo: typeof statusAuditTo === "string" ? statusAuditTo : null,
       statusAuditActor: typeof statusAuditActor === "string" ? statusAuditActor : null,
+      statusAuditSort: typeof statusAuditSort === "string" ? statusAuditSort : null,
       statusAuditOffset: typeof statusAuditOffset === "string" ? statusAuditOffset : null,
       actionError: "Выберите новый статус."
     });
@@ -122,6 +128,7 @@ export async function POST(request: Request, { params }: RouteParams): Promise<N
       offset: typeof offset === "string" ? offset : null,
       statusAuditTo: typeof statusAuditTo === "string" ? statusAuditTo : null,
       statusAuditActor: typeof statusAuditActor === "string" ? statusAuditActor : null,
+      statusAuditSort: typeof statusAuditSort === "string" ? statusAuditSort : null,
       statusAuditOffset: typeof statusAuditOffset === "string" ? statusAuditOffset : null,
       actionError: detail
     });
@@ -141,6 +148,7 @@ export async function POST(request: Request, { params }: RouteParams): Promise<N
     offset: typeof offset === "string" ? offset : null,
     statusAuditTo: typeof statusAuditTo === "string" ? statusAuditTo : null,
     statusAuditActor: typeof statusAuditActor === "string" ? statusAuditActor : null,
+    statusAuditSort: typeof statusAuditSort === "string" ? statusAuditSort : null,
     statusAuditOffset: typeof statusAuditOffset === "string" ? statusAuditOffset : null
   });
   return NextResponse.redirect(redirect, 303);

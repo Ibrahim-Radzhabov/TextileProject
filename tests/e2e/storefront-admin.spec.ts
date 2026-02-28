@@ -143,11 +143,14 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
 
   await loginToAdmin(page);
   await page.getByLabel(/Поиск/).fill(email);
+  await page.getByLabel("Сортировка").selectOption("oldest");
   await page.getByRole("button", { name: "Применить" }).click();
   await expect(page).toHaveURL(new RegExp(`q=${encodeURIComponent(email)}`));
+  await expect(page).toHaveURL(/sort=oldest/);
   const exportHref = await page.getByRole("link", { name: "Экспорт CSV" }).getAttribute("href");
   expect(exportHref).not.toBeNull();
   expect(exportHref).toContain(`/admin/orders/export?q=${encodeURIComponent(email)}`);
+  expect(exportHref).toContain("sort=oldest");
   const orderRow = page.locator("tr", { has: page.getByRole("link", { name: orderId }) });
 
   await orderRow.getByRole("button", { name: "В обработку" }).click();
@@ -162,9 +165,11 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   await expect(page.getByRole("heading", { name: new RegExp(`Заказ ${orderId}`) })).toBeVisible();
   await page.getByLabel("Статус назначения").selectOption("shipped");
   await page.getByLabel("Источник").selectOption("admin");
+  await page.getByLabel("Сортировка").selectOption("oldest");
   await page.getByRole("button", { name: "Применить фильтры" }).click();
   await expect(page).toHaveURL(/status_audit_to=shipped/);
   await expect(page).toHaveURL(/status_audit_actor=admin/);
+  await expect(page).toHaveURL(/status_audit_sort=oldest/);
   await expect(page.getByText("shipped").first()).toBeVisible();
 
   const paidOrdersResponse = await request.get(`${API_BASE_URL}/orders?payment_state=paid`);
@@ -175,7 +180,7 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   expect(paidOrdersPayload.items.some((item) => item.order_id === orderId)).toBeTruthy();
 
   const statusAuditResponse = await request.get(
-    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&limit=1&offset=0`
+    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&sort=newest&limit=1&offset=0`
   );
   expect(statusAuditResponse.ok()).toBeTruthy();
   const statusAuditPayload = (await statusAuditResponse.json()) as {
@@ -186,7 +191,7 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   expect(statusAuditPayload.items[0]?.actor_type).toBe("admin");
 
   const statusAuditSecondPageResponse = await request.get(
-    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&limit=1&offset=1`
+    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&sort=newest&limit=1&offset=1`
   );
   expect(statusAuditSecondPageResponse.ok()).toBeTruthy();
   const statusAuditSecondPagePayload = (await statusAuditSecondPageResponse.json()) as {
@@ -194,6 +199,17 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   };
   expect(statusAuditSecondPagePayload.items.length).toBeGreaterThan(0);
   expect(statusAuditSecondPagePayload.items[0]?.id).not.toBe(statusAuditPayload.items[0]?.id);
+
+  const statusAuditOldestResponse = await request.get(
+    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&sort=oldest&limit=1&offset=0`
+  );
+  expect(statusAuditOldestResponse.ok()).toBeTruthy();
+  const statusAuditOldestPayload = (await statusAuditOldestResponse.json()) as {
+    items: Array<{ id: number; to_status: string; actor_type: string }>;
+  };
+  expect(statusAuditOldestPayload.items.length).toBeGreaterThan(0);
+  expect(statusAuditOldestPayload.items[0]?.id).not.toBe(statusAuditPayload.items[0]?.id);
+  expect(statusAuditPayload.items[0]?.id).toBeGreaterThan(statusAuditOldestPayload.items[0]?.id);
 
   const shippedStatusAuditResponse = await request.get(
     `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit?actor_type=admin&to_status=shipped`
@@ -209,7 +225,7 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   ).toBeTruthy();
 
   const csvResponse = await request.get(
-    `${API_BASE_URL}/orders/export.csv?status=shipped&q=${encodeURIComponent(email)}`
+    `${API_BASE_URL}/orders/export.csv?status=shipped&q=${encodeURIComponent(email)}&sort=oldest`
   );
   expect(csvResponse.ok()).toBeTruthy();
   expect(csvResponse.headers()["content-type"]).toContain("text/csv");

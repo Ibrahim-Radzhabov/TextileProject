@@ -8,7 +8,7 @@ export async function GET(request: Request): Promise<NextResponse> {
   const incoming = new URL(request.url);
   const upstream = new URL("/orders/export.csv", resolveApiUrl());
 
-  const allowed = ["status", "payment_state", "q", "created_from", "created_to"];
+  const allowed = ["status", "payment_state", "q", "created_from", "created_to", "sort"];
   for (const key of allowed) {
     const value = incoming.searchParams.get(key);
     if (value) {

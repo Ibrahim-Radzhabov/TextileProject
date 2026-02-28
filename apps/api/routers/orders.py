@@ -31,6 +31,7 @@ OrderFilterStatus = Literal[
 OrderPaymentState = Literal["awaiting", "paid", "failed", "cancelled"]
 ManualOrderStatus = Literal["processing", "shipped", "cancelled"]
 OrderStatusAuditActorType = Literal["checkout", "webhook", "admin", "system"]
+SortOrder = Literal["newest", "oldest"]
 
 ALLOWED_MANUAL_TRANSITIONS: dict[str, set[str]] = {
     "pending": {"cancelled"},
@@ -80,6 +81,7 @@ def list_orders(
     q: Optional[str] = Query(default=None, min_length=1, max_length=200),
     created_from: Optional[date] = Query(default=None),
     created_to: Optional[date] = Query(default=None),
+    sort: SortOrder = Query(default="newest"),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ) -> StoredOrderListResponse:
@@ -101,6 +103,7 @@ def list_orders(
         search_query=normalized_query,
         created_from_iso=created_from_iso,
         created_to_exclusive_iso=created_to_exclusive_iso,
+        sort=sort,
         limit=limit,
         offset=offset,
     )
@@ -120,6 +123,7 @@ def export_orders_csv(
     q: Optional[str] = Query(default=None, min_length=1, max_length=200),
     created_from: Optional[date] = Query(default=None),
     created_to: Optional[date] = Query(default=None),
+    sort: SortOrder = Query(default="newest"),
 ) -> Response:
     if created_from and created_to and created_from > created_to:
         raise HTTPException(status_code=422, detail='"created_from" must be less than or equal to "created_to"')
@@ -148,6 +152,7 @@ def export_orders_csv(
             search_query=normalized_query,
             created_from_iso=created_from_iso,
             created_to_exclusive_iso=created_to_exclusive_iso,
+            sort=sort,
             limit=min(batch_size, remaining),
             offset=offset,
         )
@@ -259,6 +264,7 @@ def get_order_status_audit(
     order_id: str,
     to_status: Optional[OrderFilterStatus] = Query(default=None),
     actor_type: Optional[OrderStatusAuditActorType] = Query(default=None),
+    sort: SortOrder = Query(default="newest"),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ) -> OrderStatusAuditListResponse:
@@ -273,6 +279,7 @@ def get_order_status_audit(
         client_id=settings.client_id,
         to_status=to_status,
         actor_type=actor_type,
+        sort=sort,
         limit=limit,
         offset=offset,
     )

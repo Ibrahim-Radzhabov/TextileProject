@@ -10,3 +10,4 @@ export * from "./components/CartDrawer";
 export * from "./components/ProductGallery";
 export * from "./components/CatalogFilterSidebar";
 export * from "./components/CtaStrip";
+export * from "./components/QuickActionForms";
