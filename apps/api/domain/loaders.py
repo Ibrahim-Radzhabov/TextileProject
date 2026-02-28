@@ -23,6 +23,15 @@ class ClientConfigLoader:
         with path.open("r", encoding="utf-8") as f:
             return json.load(f)
 
+    def _write_json(self, name: str, payload: Dict[str, Any]) -> None:
+        path = self.client_dir / f"{name}.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = path.with_suffix(f"{path.suffix}.tmp")
+        with tmp_path.open("w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        tmp_path.replace(path)
+
     def load_shop(self) -> ShopConfig:
         data = self._read_json("shop")
         return ShopConfig.model_validate(data)
@@ -34,6 +43,10 @@ class ClientConfigLoader:
     def load_catalog(self) -> CatalogConfig:
         data = self._read_json("catalog")
         return CatalogConfig.model_validate(data)
+
+    def save_catalog(self, catalog: CatalogConfig) -> None:
+        payload = catalog.model_dump(mode="json", by_alias=True, exclude_none=True)
+        self._write_json("catalog", payload)
 
     def load_pages(self) -> list[PageConfig]:
         data = self._read_json("pages")

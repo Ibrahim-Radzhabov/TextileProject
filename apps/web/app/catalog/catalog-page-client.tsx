@@ -38,29 +38,35 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         </div>
       </header>
 
-      <Surface tone="ghost" className="rounded-2xl px-4 py-3">
-        <CatalogFilterSidebar
-          availableTags={allTags}
-          value={{ tags: tagsFilter }}
-          onChange={(next) => setTagsFilter(next.tags)}
-        />
-      </Surface>
-
-      {page.blocks.map((block) => {
-        if (block.type === "product-grid") {
-          return (
-            <ProductGrid
-              key={block.id}
-              title={block.title}
-              subtitle={block.subtitle}
-              products={filteredProducts}
-              onQuickAdd={(product) => addProduct(product.id)}
+      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
+        <div className="lg:sticky lg:top-20">
+          <Surface tone="ghost" className="rounded-2xl px-4 py-3">
+            <CatalogFilterSidebar
+              availableTags={allTags}
+              value={{ tags: tagsFilter }}
+              onChange={(next) => setTagsFilter(next.tags)}
             />
-          );
-        }
+          </Surface>
+        </div>
 
-        return renderNonProductGridBlock(block);
-      })}
+        <div className="space-y-7">
+          {page.blocks.map((block) => {
+            if (block.type === "product-grid") {
+              return (
+                <ProductGrid
+                  key={block.id}
+                  title={block.title}
+                  subtitle={block.subtitle}
+                  products={filteredProducts}
+                  onQuickAdd={(product) => addProduct(product.id)}
+                />
+              );
+            }
+
+            return renderNonProductGridBlock(block);
+          })}
+        </div>
+      </div>
     </div>
   );
 }

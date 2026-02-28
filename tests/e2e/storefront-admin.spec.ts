@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type APIRequestContext, type Page } from "@playwright/test";
 import { createHmac } from "node:crypto";
 
 const ADMIN_TOKEN = "e2e-admin";
@@ -17,6 +17,15 @@ async function loginToAdmin(page: Page) {
   await page.getByLabel("Admin token").fill(ADMIN_TOKEN);
   await page.getByRole("button", { name: "Войти" }).click();
   await expect(page).toHaveURL(/\/admin\/orders/);
+}
+
+async function cleanupProductById(request: APIRequestContext, productId: string) {
+  const response = await request.delete(`${API_BASE_URL}/catalog/products/${encodeURIComponent(productId)}`, {
+    headers: {
+      "x-admin-token": ADMIN_TOKEN
+    }
+  });
+  expect([200, 404]).toContain(response.status());
 }
 
 test("customer can checkout, then see order in admin", async ({ page, request }) => {
@@ -97,6 +106,84 @@ test("admin logout clears cookie and requires login again", async ({ page }) => 
 
   await page.goto("/admin/orders");
   await expect(page).toHaveURL(/\/admin\/login/);
+});
+
+test("admin can create, update and delete product in products panel", async ({ page, request }) => {
+  const unique = Date.now();
+  const productId = `e2e-product-${unique}`;
+  const productSlug = `e2e-product-${unique}`;
+  const initialName = `E2E Product ${unique}`;
+  const updatedName = `${initialName} Updated`;
+
+  await cleanupProductById(request, productId);
+
+  try {
+    await loginToAdmin(page);
+    await page.goto("/admin/products");
+    await expect(page.getByRole("heading", { name: "Товары" })).toBeVisible();
+
+    await page.getByRole("link", { name: "Добавить товар" }).click();
+    await expect(page.getByRole("heading", { name: "Новый товар" })).toBeVisible();
+
+    await page.locator('input[name="id"]').fill(productId);
+    await page.locator('input[name="slug"]').fill(productSlug);
+    await page.locator('input[name="name"]').fill(initialName);
+    await page.locator('input[name="price_amount"]').fill("199.99");
+    await page.locator('input[name="price_currency"]').fill("USD");
+    await page.locator('input[name="short_description"]').fill("E2E generated product");
+    await page.locator('input[name="media_url"]').fill("https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg");
+    await page.locator('input[name="media_alt"]').fill("E2E image");
+
+    await page.getByRole("button", { name: "Создать товар" }).click();
+    await expect(page).toHaveURL(/\/admin\/products/);
+    await expect(page.getByText("Товар создан.")).toBeVisible();
+
+    await page.getByLabel(/Поиск/).fill(productId);
+    await page.getByRole("button", { name: "Применить" }).click();
+    await expect(page).toHaveURL(new RegExp(`q=${encodeURIComponent(productId)}`));
+
+    const createdRow = page.locator("tr", { hasText: productId });
+    await expect(createdRow).toBeVisible();
+    await expect(createdRow).toContainText(initialName);
+
+    await createdRow.getByRole("link", { name: "Редактировать" }).click();
+    await expect(page.getByRole("heading", { name: new RegExp(`Редактирование ${productId}`) })).toBeVisible();
+
+    await page.locator('input[name="name"]').fill(updatedName);
+    await page.locator('input[name="price_amount"]').fill("249.99");
+    await page.getByRole("button", { name: "Сохранить изменения" }).click();
+
+    await expect(page).toHaveURL(/\/admin\/products/);
+    await expect(page.getByText("Товар обновлен.")).toBeVisible();
+    await page.getByLabel(/Поиск/).fill(productId);
+    await page.getByRole("button", { name: "Применить" }).click();
+    const updatedRow = page.locator("tr", { hasText: productId });
+    await expect(updatedRow).toBeVisible();
+    await expect(updatedRow).toContainText(updatedName);
+
+    const updatedProductResponse = await request.get(
+      `${API_BASE_URL}/catalog/products/${encodeURIComponent(productId)}`
+    );
+    expect(updatedProductResponse.ok()).toBeTruthy();
+    const updatedProductPayload = (await updatedProductResponse.json()) as {
+      id: string;
+      slug: string;
+      name: string;
+      price: { amount: number };
+    };
+    expect(updatedProductPayload.id).toBe(productId);
+    expect(updatedProductPayload.slug).toBe(productSlug);
+    expect(updatedProductPayload.name).toBe(updatedName);
+    expect(updatedProductPayload.price.amount).toBe(249.99);
+
+    const rowForDelete = page.locator("tr", { hasText: productId });
+    await expect(rowForDelete).toBeVisible();
+    await rowForDelete.getByRole("button", { name: "Удалить" }).click();
+    await expect(page.getByText("Товар удален.")).toBeVisible();
+    await expect(page.locator("tr", { hasText: productId })).toHaveCount(0);
+  } finally {
+    await cleanupProductById(request, productId);
+  }
 });
 
 test("admin can update status to shipped and export filtered CSV", async ({ page, request }) => {

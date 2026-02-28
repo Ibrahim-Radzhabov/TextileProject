@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     environment: str = "development"
     frontend_origin: Optional[str] = None
     cors_allow_origins: List[str] = []
+    admin_token: Optional[str] = None
 
     stripe_secret_key: Optional[str] = None
     stripe_webhook_secret: Optional[str] = None

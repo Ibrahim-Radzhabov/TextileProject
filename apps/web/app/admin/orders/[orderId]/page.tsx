@@ -211,14 +211,22 @@ export default async function AdminOrderDetailsPage({
             >
               ← К списку заказов
             </Link>
-            <form action="/admin/logout" method="post">
-              <button
-                type="submit"
-                className="rounded-lg border border-border/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+            <div className="flex items-center gap-2">
+              <Link
+                href="/admin/products"
+                className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
               >
-                Выйти
-              </button>
-            </form>
+                Товары
+              </Link>
+              <form action="/admin/logout" method="post">
+                <button
+                  type="submit"
+                  className="rounded-lg border border-border/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                >
+                  Выйти
+                </button>
+              </form>
+            </div>
           </div>
           <h1 className="break-all text-2xl font-semibold tracking-tight sm:text-3xl">Заказ {order.orderId}</h1>
         </header>

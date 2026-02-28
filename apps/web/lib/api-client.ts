@@ -487,8 +487,22 @@ export async function fetchCatalog(): Promise<CatalogConfig> {
   };
 }
 
+export async function fetchCatalogProductsAdmin(): Promise<Product[]> {
+  const res = await fetch(`${resolveApiUrl()}/catalog/products`, { cache: "no-store" });
+  const dto = await handleJson<{ products: ProductDto[] }>(res);
+  return dto.products.map((product) => normalizeProduct(product));
+}
+
 export async function fetchProduct(slug: string): Promise<Product> {
   const res = await fetch(`${resolveApiUrl()}/catalog/${slug}`);
+  const dto = await handleJson<ProductDto>(res);
+  return normalizeProduct(dto);
+}
+
+export async function fetchProductByIdAdmin(productId: string): Promise<Product> {
+  const res = await fetch(`${resolveApiUrl()}/catalog/products/${encodeURIComponent(productId)}`, {
+    cache: "no-store"
+  });
   const dto = await handleJson<ProductDto>(res);
   return normalizeProduct(dto);
 }

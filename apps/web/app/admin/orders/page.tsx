@@ -264,14 +264,22 @@ export default async function AdminOrdersPage({
       <header className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Заказы</h1>
-          <form action="/admin/logout" method="post">
-            <button
-              type="submit"
-              className="rounded-lg border border-border/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+          <div className="flex items-center gap-2">
+            <Link
+              href="/admin/products"
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
             >
-              Выйти
-            </button>
-          </form>
+              Товары
+            </Link>
+            <form action="/admin/logout" method="post">
+              <button
+                type="submit"
+                className="rounded-lg border border-border/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+              >
+                Выйти
+              </button>
+            </form>
+          </div>
         </div>
         <p className="text-sm text-muted-foreground">Текущий tenant: витрина активного клиента.</p>
       </header>
