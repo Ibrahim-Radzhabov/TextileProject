@@ -9,8 +9,7 @@ if [[ "${1:-}" == "--help" ]]; then
 Usage: scripts/stripe-smoke.sh
 
 Required setup:
-1) ./\.bin/stripe login
-2) Set STRIPE_SECRET_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID in env or infra/.env
+1) Set STRIPE_SECRET_KEY, TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID in env or infra/.env
 
 The script runs a real local smoke flow:
 checkout -> stripe trigger -> webhook -> order paid -> webhook audit check
@@ -38,6 +37,7 @@ SMOKE_RUN_DIR="${SMOKE_RUN_DIR:-/tmp/store-platform-stripe-smoke}"
 : "${STRIPE_SECRET_KEY:?Set STRIPE_SECRET_KEY in env or infra/.env}"
 : "${TELEGRAM_BOT_TOKEN:?Set TELEGRAM_BOT_TOKEN in env or infra/.env}"
 : "${TELEGRAM_CHAT_ID:?Set TELEGRAM_CHAT_ID in env or infra/.env}"
+STRIPE_CLI_API_KEY="${STRIPE_CLI_API_KEY:-$STRIPE_SECRET_KEY}"
 
 if [[ ! -x "$STRIPE_BIN" ]]; then
   echo "Stripe CLI not found at $STRIPE_BIN" >&2
@@ -75,16 +75,11 @@ cleanup() {
 trap cleanup EXIT
 
 echo "Starting Stripe listener..."
-"$STRIPE_BIN" listen --forward-to "${API_BASE_URL}/webhooks/stripe" --print-secret >"$LISTEN_LOG" 2>&1 &
+"$STRIPE_BIN" --api-key "$STRIPE_CLI_API_KEY" listen --forward-to "${API_BASE_URL}/webhooks/stripe" --print-secret >"$LISTEN_LOG" 2>&1 &
 LISTEN_PID="$!"
 
 WEBHOOK_SECRET=""
 for _ in {1..120}; do
-  if grep -q "You have not configured API keys yet" "$LISTEN_LOG" 2>/dev/null; then
-    echo "Stripe CLI is not authenticated. Run: ./.bin/stripe login" >&2
-    echo "Listener log: $LISTEN_LOG" >&2
-    exit 1
-  fi
   WEBHOOK_SECRET="$(grep -Eo 'whsec_[A-Za-z0-9]+' "$LISTEN_LOG" 2>/dev/null | head -n1 || true)"
   if [[ -n "$WEBHOOK_SECRET" ]]; then
     break
@@ -202,7 +197,7 @@ if [[ "$CHECKOUT_STATUS" == "redirect" && -n "$REDIRECT_URL" ]]; then
 fi
 
 echo "Triggering Stripe webhook event..."
-"$STRIPE_BIN" trigger checkout.session.async_payment_succeeded \
+"$STRIPE_BIN" --api-key "$STRIPE_CLI_API_KEY" trigger checkout.session.async_payment_succeeded \
   --override "checkout_session:metadata.order_id=${ORDER_ID}" >"$TRIGGER_LOG" 2>&1
 
 ORDER_STATUS=""

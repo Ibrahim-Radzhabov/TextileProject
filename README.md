@@ -136,7 +136,6 @@ Additional endpoints:
 From repo root:
 
 ```bash
-./.bin/stripe login
 pnpm stripe:smoke
 ```
 
@@ -145,6 +144,7 @@ Requirements:
 - `STRIPE_SECRET_KEY` must be set (env or `infra/.env`).
 - `TELEGRAM_BOT_TOKEN` and `TELEGRAM_CHAT_ID` must be set (env or `infra/.env`).
 - Local python env must exist at `.venv` with API dependencies installed.
+- Stripe CLI binary must be available at `./.bin/stripe` (the command uses `--api-key`, so interactive `stripe login` is not required).
 
 The smoke command runs an end-to-end local flow:
 
