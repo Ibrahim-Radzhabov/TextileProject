@@ -19,6 +19,18 @@ function getOrderStatusLabel(status: OrderStatus): { label: string; className: s
       className: "border-emerald-400/40 bg-emerald-500/10 text-emerald-300"
     };
   }
+  if (status === "processing") {
+    return {
+      label: "В обработке",
+      className: "border-sky-400/40 bg-sky-500/10 text-sky-300"
+    };
+  }
+  if (status === "shipped") {
+    return {
+      label: "Отправлен",
+      className: "border-indigo-400/40 bg-indigo-500/10 text-indigo-300"
+    };
+  }
   if (status === "failed") {
     return {
       label: "Ошибка оплаты",
@@ -84,6 +96,59 @@ function getOrderTimeline(order: Awaited<ReturnType<typeof fetchOrderById>>): Ti
         id: "processing",
         title: "Заказ передан в обработку",
         description: "Команда магазина начала подготовку вашего заказа.",
+        state: "current",
+        timestamp: updatedAt
+      }
+    ];
+  }
+
+  if (order.status === "processing") {
+    return [
+      createdStep,
+      {
+        id: "payment",
+        title: "Оплата подтверждена",
+        description: "Платеж успешно принят.",
+        state: "completed",
+        timestamp: updatedAt
+      },
+      {
+        id: "processing",
+        title: "Заказ в обработке",
+        description: "Мы собираем и подготавливаем ваш заказ к отправке.",
+        state: "current",
+        timestamp: updatedAt
+      },
+      {
+        id: "shipping",
+        title: "Ожидает отправки",
+        description: "Следующий этап — передача заказа в доставку.",
+        state: "upcoming"
+      }
+    ];
+  }
+
+  if (order.status === "shipped") {
+    return [
+      createdStep,
+      {
+        id: "payment",
+        title: "Оплата подтверждена",
+        description: "Платеж успешно принят.",
+        state: "completed",
+        timestamp: updatedAt
+      },
+      {
+        id: "processing",
+        title: "Заказ обработан",
+        description: "Заказ успешно собран и подготовлен к отправке.",
+        state: "completed",
+        timestamp: updatedAt
+      },
+      {
+        id: "shipping",
+        title: "Заказ отправлен",
+        description: "Заказ передан в доставку и находится в пути.",
         state: "current",
         timestamp: updatedAt
       }

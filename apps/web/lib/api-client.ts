@@ -89,7 +89,15 @@ type CheckoutCustomerDto = {
 type StoredOrderDto = {
   order_id: string;
   client_id: string;
-  status: "pending" | "redirect" | "confirmed" | "paid" | "failed" | "cancelled";
+  status:
+    | "pending"
+    | "redirect"
+    | "confirmed"
+    | "paid"
+    | "processing"
+    | "shipped"
+    | "failed"
+    | "cancelled";
   currency: string;
   amount: number;
   stripe_session_id?: string | null;
@@ -290,7 +298,15 @@ function normalizeCheckoutCustomer(dto: CheckoutCustomerDto): CheckoutPayload["c
   };
 }
 
-export type OrderStatus = "pending" | "redirect" | "confirmed" | "paid" | "failed" | "cancelled";
+export type OrderStatus =
+  | "pending"
+  | "redirect"
+  | "confirmed"
+  | "paid"
+  | "processing"
+  | "shipped"
+  | "failed"
+  | "cancelled";
 export type OrderPaymentState = "awaiting" | "paid" | "failed" | "cancelled";
 
 export type StoredOrder = {
@@ -339,6 +355,44 @@ export type StripeWebhookAuditListResponse = {
   offset: number;
 };
 
+export type ManualOrderStatus = "processing" | "shipped" | "cancelled";
+
+type OrderStatusAuditEntryDto = {
+  id: number;
+  order_id: string;
+  client_id: string;
+  from_status?: OrderStatus | null;
+  to_status: OrderStatus;
+  reason?: string | null;
+  actor_type: string;
+  created_at: string;
+};
+
+type OrderStatusAuditListResponseDto = {
+  items: OrderStatusAuditEntryDto[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
+export type OrderStatusAuditEntry = {
+  id: number;
+  orderId: string;
+  clientId: string;
+  fromStatus?: OrderStatus | null;
+  toStatus: OrderStatus;
+  reason?: string | null;
+  actorType: string;
+  createdAt: string;
+};
+
+export type OrderStatusAuditListResponse = {
+  items: OrderStatusAuditEntry[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
 function normalizeStoredOrder(dto: StoredOrderDto): StoredOrder {
   return {
     orderId: dto.order_id,
@@ -370,6 +424,19 @@ function normalizeStripeWebhookAuditEntry(dto: StripeWebhookAuditEntryDto): Stri
     errorText: dto.error_text ?? null,
     createdAt: dto.created_at,
     updatedAt: dto.updated_at
+  };
+}
+
+function normalizeOrderStatusAuditEntry(dto: OrderStatusAuditEntryDto): OrderStatusAuditEntry {
+  return {
+    id: dto.id,
+    orderId: dto.order_id,
+    clientId: dto.client_id,
+    fromStatus: dto.from_status ?? null,
+    toStatus: dto.to_status,
+    reason: dto.reason ?? null,
+    actorType: dto.actor_type,
+    createdAt: dto.created_at
   };
 }
 
@@ -542,6 +609,53 @@ export async function fetchOrderById(orderId: string): Promise<StoredOrder> {
   });
   const dto = await handleJson<StoredOrderDto>(res);
   return normalizeStoredOrder(dto);
+}
+
+export async function updateOrderStatus(params: {
+  orderId: string;
+  status: ManualOrderStatus;
+  reason?: string;
+}): Promise<StoredOrder> {
+  const res = await fetch(`${resolveApiUrl()}/orders/${encodeURIComponent(params.orderId)}/status`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      status: params.status,
+      reason: params.reason
+    })
+  });
+  const dto = await handleJson<StoredOrderDto>(res);
+  return normalizeStoredOrder(dto);
+}
+
+export async function fetchOrderStatusAudit(params: {
+  orderId: string;
+  limit?: number;
+  offset?: number;
+}): Promise<OrderStatusAuditListResponse> {
+  const query = new URLSearchParams();
+  if (params.limit !== undefined) {
+    query.set("limit", String(params.limit));
+  }
+  if (params.offset !== undefined) {
+    query.set("offset", String(params.offset));
+  }
+  const queryString = query.toString();
+  const res = await fetch(
+    `${resolveApiUrl()}/orders/${encodeURIComponent(params.orderId)}/status-audit${
+      queryString ? `?${queryString}` : ""
+    }`,
+    { cache: "no-store" }
+  );
+  const dto = await handleJson<OrderStatusAuditListResponseDto>(res);
+  return {
+    items: dto.items.map((item) => normalizeOrderStatusAuditEntry(item)),
+    total: dto.total,
+    limit: dto.limit,
+    offset: dto.offset
+  };
 }
 
 export async function fetchWebhookAudit(options?: {

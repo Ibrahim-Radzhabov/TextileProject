@@ -5,6 +5,18 @@ from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 
+OrderLifecycleStatus = Literal[
+    "pending",
+    "redirect",
+    "confirmed",
+    "paid",
+    "processing",
+    "shipped",
+    "failed",
+    "cancelled",
+]
+
+
 class Money(BaseModel):
     currency: str
     amount: float
@@ -212,7 +224,7 @@ class CheckoutResponse(BaseModel):
 class StoredOrder(BaseModel):
     order_id: str
     client_id: str
-    status: Literal["pending", "redirect", "confirmed", "paid", "failed", "cancelled"]
+    status: OrderLifecycleStatus
     currency: str
     amount: float
     stripe_session_id: Optional[str] = None
@@ -225,6 +237,29 @@ class StoredOrder(BaseModel):
 
 class StoredOrderListResponse(BaseModel):
     items: List[StoredOrder]
+    total: int
+    limit: int
+    offset: int
+
+
+class UpdateOrderStatusRequest(BaseModel):
+    status: Literal["processing", "shipped", "cancelled"]
+    reason: Optional[str] = Field(default=None, max_length=500)
+
+
+class OrderStatusAuditEntry(BaseModel):
+    id: int
+    order_id: str
+    client_id: str
+    from_status: Optional[OrderLifecycleStatus] = None
+    to_status: OrderLifecycleStatus
+    reason: Optional[str] = None
+    actor_type: str
+    created_at: str
+
+
+class OrderStatusAuditListResponse(BaseModel):
+    items: List[OrderStatusAuditEntry]
     total: int
     limit: int
     offset: int

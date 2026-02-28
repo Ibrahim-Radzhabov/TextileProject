@@ -2,7 +2,10 @@ import Link from "next/link";
 import {
   ApiError,
   fetchOrderById,
+  fetchOrderStatusAudit,
   fetchWebhookAudit,
+  type ManualOrderStatus,
+  type OrderStatus,
   type WebhookProcessingStatus
 } from "@/lib/api-client";
 
@@ -14,6 +17,12 @@ const auditFilters: Array<{ label: string; value?: WebhookProcessingStatus }> = 
   { label: "Processed", value: "processed" },
   { label: "Ignored", value: "ignored" },
   { label: "Failed", value: "failed" }
+];
+
+const manualStatusOptions: Array<{ label: string; value: ManualOrderStatus }> = [
+  { label: "В обработку", value: "processing" },
+  { label: "Отправлен", value: "shipped" },
+  { label: "Отменен", value: "cancelled" }
 ];
 
 function parseProcessingStatus(value: string | undefined): WebhookProcessingStatus | undefined {
@@ -40,6 +49,7 @@ function toPositiveInt(value: string | undefined, fallback: number): number {
 function buildOrderHref(options: {
   orderId: string;
   processingStatus?: WebhookProcessingStatus;
+  actionError?: string;
   offset?: number;
 }): string {
   const params = new URLSearchParams();
@@ -49,10 +59,27 @@ function buildOrderHref(options: {
   if (options.offset !== undefined && options.offset > 0) {
     params.set("offset", String(options.offset));
   }
+  if (options.actionError) {
+    params.set("action_error", options.actionError);
+  }
 
   const query = params.toString();
   const base = `/admin/orders/${encodeURIComponent(options.orderId)}`;
   return query ? `${base}?${query}` : base;
+}
+
+function getAllowedManualStatuses(currentStatus: OrderStatus): ManualOrderStatus[] {
+  const map: Record<OrderStatus, ManualOrderStatus[]> = {
+    pending: ["cancelled"],
+    redirect: ["cancelled"],
+    confirmed: ["processing", "cancelled"],
+    paid: ["processing", "shipped", "cancelled"],
+    processing: ["shipped", "cancelled"],
+    shipped: ["cancelled"],
+    failed: [],
+    cancelled: []
+  };
+  return map[currentStatus] ?? [];
 }
 
 export default async function AdminOrderDetailsPage({
@@ -62,26 +89,36 @@ export default async function AdminOrderDetailsPage({
   params: { orderId: string };
   searchParams?: {
     processing_status?: string;
+    action_error?: string;
     offset?: string;
   };
 }) {
   const processingStatus = parseProcessingStatus(searchParams?.processing_status);
+  const actionError =
+    typeof searchParams?.action_error === "string" && searchParams.action_error.trim().length > 0
+      ? searchParams.action_error
+      : null;
   const offset = toPositiveInt(searchParams?.offset, 0);
 
   try {
-    const [order, audit] = await Promise.all([
+    const [order, audit, statusAudit] = await Promise.all([
       fetchOrderById(params.orderId),
       fetchWebhookAudit({
         orderId: params.orderId,
         processingStatus,
         limit: AUDIT_PAGE_SIZE,
         offset
+      }),
+      fetchOrderStatusAudit({
+        orderId: params.orderId,
+        limit: 30
       })
     ]);
 
     const hasPrev = audit.offset > 0;
     const nextOffset = audit.offset + audit.limit;
     const hasNext = nextOffset < audit.total;
+    const allowedManualStatuses = getAllowedManualStatuses(order.status);
 
     return (
       <div className="space-y-6 pb-8">
@@ -104,6 +141,12 @@ export default async function AdminOrderDetailsPage({
           </div>
           <h1 className="break-all text-2xl font-semibold tracking-tight sm:text-3xl">Заказ {order.orderId}</h1>
         </header>
+
+        {actionError && (
+          <div className="rounded-lg border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+            {actionError}
+          </div>
+        )}
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <div className="rounded-xl border border-border/60 bg-card/40 px-4 py-3">
@@ -128,6 +171,104 @@ export default async function AdminOrderDetailsPage({
           <div className="rounded-xl border border-border/60 bg-card/40 px-4 py-3">
             <p className="text-xs text-muted-foreground">Клиент</p>
             <p className="mt-1 text-sm font-medium break-all">{order.customer.email}</p>
+          </div>
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-sm font-medium tracking-tight text-muted-foreground">Операции</h2>
+          <form
+            action={`/admin/orders/${encodeURIComponent(params.orderId)}/status`}
+            method="post"
+            className="grid gap-3 rounded-2xl border border-border/60 bg-card/40 px-4 py-4 sm:grid-cols-4"
+          >
+            <input type="hidden" name="processing_status" value={processingStatus ?? ""} />
+            <input type="hidden" name="offset" value={offset > 0 ? String(offset) : ""} />
+
+            <label className="space-y-1">
+              <span className="text-xs text-muted-foreground">Новый статус</span>
+              <select
+                name="status"
+                className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+                defaultValue=""
+                required
+              >
+                <option value="" disabled>
+                  Выберите действие
+                </option>
+                {manualStatusOptions
+                  .filter((option) => allowedManualStatuses.includes(option.value))
+                  .map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+              </select>
+            </label>
+
+            <label className="space-y-1 sm:col-span-2">
+              <span className="text-xs text-muted-foreground">Комментарий (опционально)</span>
+              <input
+                name="reason"
+                placeholder="Например, передано на склад"
+                className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+              />
+            </label>
+
+            <div className="flex items-end">
+              <button
+                type="submit"
+                className="inline-flex h-10 w-full items-center justify-center rounded-lg border border-accent/60 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-50"
+                disabled={allowedManualStatuses.length === 0}
+              >
+                Обновить статус
+              </button>
+            </div>
+          </form>
+          {allowedManualStatuses.length === 0 && (
+            <p className="text-xs text-muted-foreground">
+              Для текущего статуса нет доступных ручных переходов.
+            </p>
+          )}
+        </section>
+
+        <section className="space-y-3">
+          <h2 className="text-sm font-medium tracking-tight text-muted-foreground">История статусов</h2>
+          <div className="overflow-hidden rounded-2xl border border-border/60 bg-card/40">
+            <table className="w-full min-w-[760px] table-fixed border-collapse text-left text-sm">
+              <thead className="bg-muted/20 text-xs uppercase tracking-wide text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3">Когда</th>
+                  <th className="px-4 py-3">Откуда</th>
+                  <th className="px-4 py-3">Куда</th>
+                  <th className="px-4 py-3">Источник</th>
+                  <th className="px-4 py-3">Комментарий</th>
+                </tr>
+              </thead>
+              <tbody>
+                {statusAudit.items.map((entry) => (
+                  <tr key={entry.id} className="border-t border-border/50">
+                    <td className="px-4 py-3 text-xs text-muted-foreground">
+                      {new Date(entry.createdAt).toLocaleString()}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{entry.fromStatus ?? "—"}</td>
+                    <td className="px-4 py-3">
+                      <span className="rounded-full border border-border/60 px-2 py-0.5 text-xs">
+                        {entry.toStatus}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{entry.actorType}</td>
+                    <td className="px-4 py-3 text-xs text-muted-foreground">{entry.reason ?? "—"}</td>
+                  </tr>
+                ))}
+                {statusAudit.items.length === 0 && (
+                  <tr>
+                    <td className="px-4 py-8 text-center text-sm text-muted-foreground" colSpan={5}>
+                      История изменений статуса пока пустая.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </section>
 

@@ -99,6 +99,98 @@ test("admin logout clears cookie and requires login again", async ({ page }) => 
   await expect(page).toHaveURL(/\/admin\/login/);
 });
 
+test("admin can update status to shipped and export filtered CSV", async ({ page, request }) => {
+  const email = `status-e2e-${Date.now()}@example.com`;
+  const checkoutResponse = await request.post(`${API_BASE_URL}/checkout`, {
+    data: {
+      cart: {
+        items: [{ product_id: "p1", quantity: 1 }]
+      },
+      customer: {
+        email,
+        name: "Status E2E"
+      }
+    }
+  });
+  expect(checkoutResponse.ok()).toBeTruthy();
+  const checkoutPayload = (await checkoutResponse.json()) as { order_id: string };
+  const orderId = checkoutPayload.order_id;
+  expect(orderId).toBeTruthy();
+
+  const webhookPayload = JSON.stringify({
+    id: `evt_status_e2e_${Date.now()}`,
+    type: "checkout.session.async_payment_succeeded",
+    livemode: false,
+    account: null,
+    data: {
+      object: {
+        id: `cs_status_e2e_${Date.now()}`,
+        metadata: {
+          order_id: orderId
+        }
+      }
+    }
+  });
+  const webhookSignature = signStripePayload(webhookPayload, E2E_STRIPE_WEBHOOK_SECRET);
+  const webhookResponse = await request.post(`${API_BASE_URL}/webhooks/stripe`, {
+    data: webhookPayload,
+    headers: {
+      "content-type": "application/json",
+      "stripe-signature": webhookSignature
+    }
+  });
+  expect(webhookResponse.ok()).toBeTruthy();
+
+  await loginToAdmin(page);
+  await page.getByLabel(/Поиск/).fill(email);
+  await page.getByRole("button", { name: "Применить" }).click();
+  await expect(page).toHaveURL(new RegExp(`q=${encodeURIComponent(email)}`));
+  const exportHref = await page.getByRole("link", { name: "Экспорт CSV" }).getAttribute("href");
+  expect(exportHref).not.toBeNull();
+  expect(exportHref).toContain(`/admin/orders/export?q=${encodeURIComponent(email)}`);
+  await page.getByRole("link", { name: orderId }).click();
+
+  await expect(page.getByRole("heading", { name: new RegExp(`Заказ ${orderId}`) })).toBeVisible();
+  await page.getByLabel("Новый статус").selectOption("processing");
+  await page.getByLabel(/Комментарий/).fill("Передано на склад");
+  await page.getByRole("button", { name: "Обновить статус" }).click();
+  await expect(page.getByText("Передано на склад")).toBeVisible();
+
+  await page.getByLabel("Новый статус").selectOption("shipped");
+  await page.getByLabel(/Комментарий/).fill("Передано в доставку");
+  await page.getByRole("button", { name: "Обновить статус" }).click();
+  await expect(page.getByText("shipped").first()).toBeVisible();
+  await expect(page.getByText("Передано в доставку")).toBeVisible();
+
+  const paidOrdersResponse = await request.get(`${API_BASE_URL}/orders?payment_state=paid`);
+  expect(paidOrdersResponse.ok()).toBeTruthy();
+  const paidOrdersPayload = (await paidOrdersResponse.json()) as {
+    items: Array<{ order_id: string }>;
+  };
+  expect(paidOrdersPayload.items.some((item) => item.order_id === orderId)).toBeTruthy();
+
+  const statusAuditResponse = await request.get(
+    `${API_BASE_URL}/orders/${encodeURIComponent(orderId)}/status-audit`
+  );
+  expect(statusAuditResponse.ok()).toBeTruthy();
+  const statusAuditPayload = (await statusAuditResponse.json()) as {
+    items: Array<{ to_status: string; actor_type: string; reason: string | null }>;
+  };
+  expect(statusAuditPayload.items.some((item) => item.to_status === "processing")).toBeTruthy();
+  expect(statusAuditPayload.items.some((item) => item.to_status === "shipped")).toBeTruthy();
+  expect(statusAuditPayload.items.some((item) => item.actor_type === "admin")).toBeTruthy();
+
+  const csvResponse = await request.get(
+    `${API_BASE_URL}/orders/export.csv?status=shipped&q=${encodeURIComponent(email)}`
+  );
+  expect(csvResponse.ok()).toBeTruthy();
+  expect(csvResponse.headers()["content-type"]).toContain("text/csv");
+  const csvBody = await csvResponse.text();
+  expect(csvBody).toContain(orderId);
+  expect(csvBody).toContain("shipped");
+  expect(csvBody).toContain(email);
+});
+
 test("stripe webhook marks order as paid and appears in paid filters/audit", async ({ request }) => {
   const checkoutResponse = await request.post(`${API_BASE_URL}/checkout`, {
     data: {

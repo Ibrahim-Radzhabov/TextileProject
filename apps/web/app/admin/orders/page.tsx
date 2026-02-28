@@ -9,6 +9,8 @@ const statusFilters: Array<{ label: string; value?: OrderStatus }> = [
   { label: "Redirect", value: "redirect" },
   { label: "Confirmed", value: "confirmed" },
   { label: "Paid", value: "paid" },
+  { label: "Processing", value: "processing" },
+  { label: "Shipped", value: "shipped" },
   { label: "Failed", value: "failed" },
   { label: "Cancelled", value: "cancelled" }
 ];
@@ -36,7 +38,16 @@ function parseOrderStatus(value: string | undefined): OrderStatus | undefined {
   if (!value) {
     return undefined;
   }
-  const allowed: OrderStatus[] = ["pending", "redirect", "confirmed", "paid", "failed", "cancelled"];
+  const allowed: OrderStatus[] = [
+    "pending",
+    "redirect",
+    "confirmed",
+    "paid",
+    "processing",
+    "shipped",
+    "failed",
+    "cancelled"
+  ];
   return allowed.includes(value as OrderStatus) ? (value as OrderStatus) : undefined;
 }
 
@@ -105,7 +116,7 @@ function buildOrdersHref(options: {
 }
 
 function getPaymentBadge(status: OrderStatus): { label: string; className: string } {
-  if (status === "paid") {
+  if (status === "paid" || status === "processing" || status === "shipped") {
     return {
       label: "Оплачено",
       className: "border-emerald-400/40 bg-emerald-500/10 text-emerald-300"
@@ -127,6 +138,33 @@ function getPaymentBadge(status: OrderStatus): { label: string; className: strin
     label: "Ожидает оплаты",
     className: "border-amber-400/40 bg-amber-500/10 text-amber-300"
   };
+}
+
+function buildOrdersExportHref(options: {
+  status?: OrderStatus;
+  paymentState?: OrderPaymentState;
+  query?: string;
+  createdFrom?: string;
+  createdTo?: string;
+}): string {
+  const params = new URLSearchParams();
+  if (options.status) {
+    params.set("status", options.status);
+  }
+  if (options.paymentState) {
+    params.set("payment_state", options.paymentState);
+  }
+  if (options.query) {
+    params.set("q", options.query);
+  }
+  if (options.createdFrom) {
+    params.set("created_from", options.createdFrom);
+  }
+  if (options.createdTo) {
+    params.set("created_to", options.createdTo);
+  }
+  const query = params.toString();
+  return query ? `/admin/orders/export?${query}` : "/admin/orders/export";
 }
 
 export default async function AdminOrdersPage({
@@ -228,6 +266,18 @@ export default async function AdminOrdersPage({
             className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-4 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
           >
             Сбросить
+          </Link>
+          <Link
+            href={buildOrdersExportHref({
+              status,
+              paymentState,
+              query,
+              createdFrom,
+              createdTo
+            })}
+            className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-4 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+          >
+            Экспорт CSV
           </Link>
         </div>
       </form>

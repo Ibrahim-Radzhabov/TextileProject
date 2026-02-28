@@ -74,8 +74,11 @@ async def stripe_webhook(request: Request) -> dict:
         if order_id and next_status:
             store.update_order_status(
                 order_id=order_id,
+                client_id=settings.client_id,
                 status=next_status,
                 stripe_session_id=stripe_session_id,
+                reason=f"stripe_webhook:{event_type}",
+                actor_type="webhook",
             )
             logger.info(
                 "stripe_webhook_order_status_updated",

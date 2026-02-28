@@ -71,6 +71,20 @@ class OrderStore:
             )
             conn.execute(
                 """
+                CREATE TABLE IF NOT EXISTS order_status_audit (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    order_id TEXT NOT NULL,
+                    client_id TEXT NOT NULL,
+                    from_status TEXT,
+                    to_status TEXT NOT NULL,
+                    reason TEXT,
+                    actor_type TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
+            conn.execute(
+                """
                 CREATE TABLE IF NOT EXISTS stripe_webhook_audit (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     event_id TEXT NOT NULL,
@@ -105,6 +119,9 @@ class OrderStore:
             )
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_webhook_audit_client_created ON stripe_webhook_audit(client_id, created_at DESC)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_order_status_audit_client_order_created ON order_status_audit(client_id, order_id, created_at DESC)"
             )
 
     def _ensure_column(
@@ -197,6 +214,43 @@ class OrderStore:
         conn.execute("DROP TABLE stripe_webhook_audit")
         conn.execute("ALTER TABLE stripe_webhook_audit_next RENAME TO stripe_webhook_audit")
 
+    def _insert_order_status_audit(
+        self,
+        *,
+        conn: sqlite3.Connection,
+        order_id: str,
+        client_id: str,
+        from_status: Optional[str],
+        to_status: str,
+        reason: Optional[str],
+        actor_type: str,
+        created_at: Optional[str] = None,
+    ) -> None:
+        timestamp = created_at or datetime.now(timezone.utc).isoformat()
+        conn.execute(
+            """
+            INSERT INTO order_status_audit (
+                order_id,
+                client_id,
+                from_status,
+                to_status,
+                reason,
+                actor_type,
+                created_at
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            """,
+            (
+                order_id,
+                client_id,
+                from_status,
+                to_status,
+                reason,
+                actor_type,
+                timestamp,
+            ),
+        )
+
     def save_order(
         self,
         *,
@@ -242,6 +296,16 @@ class OrderStore:
                     now,
                     now,
                 ),
+            )
+            self._insert_order_status_audit(
+                conn=conn,
+                order_id=order_id,
+                client_id=client_id,
+                from_status=None,
+                to_status=status,
+                reason="order_created",
+                actor_type="checkout",
+                created_at=now,
             )
 
     def get_order(self, *, order_id: str, client_id: str) -> Optional[dict[str, Any]]:
@@ -309,8 +373,10 @@ class OrderStore:
                 where_parts.append(f"status IN ({placeholders})")
                 params.extend(awaiting_statuses)
             elif payment_state == "paid":
-                where_parts.append("status = ?")
-                params.append("paid")
+                paid_statuses = ("paid", "processing", "shipped")
+                placeholders = ", ".join(["?"] * len(paid_statuses))
+                where_parts.append(f"status IN ({placeholders})")
+                params.extend(paid_statuses)
             elif payment_state == "failed":
                 where_parts.append("status = ?")
                 params.append("failed")
@@ -397,29 +463,59 @@ class OrderStore:
         self,
         *,
         order_id: str,
+        client_id: str,
         status: str,
         stripe_session_id: Optional[str] = None,
-    ) -> None:
+        reason: Optional[str] = None,
+        actor_type: str = "system",
+    ) -> bool:
         now = datetime.now(timezone.utc).isoformat()
         with self._connect() as conn:
+            existing_row = conn.execute(
+                """
+                SELECT status
+                FROM orders
+                WHERE order_id = ? AND client_id = ?
+                """,
+                (order_id, client_id),
+            ).fetchone()
+
+            if existing_row is None:
+                return False
+
+            previous_status = existing_row["status"]
             if stripe_session_id:
                 conn.execute(
                     """
                     UPDATE orders
                     SET status = ?, stripe_session_id = ?, updated_at = ?
-                    WHERE order_id = ?
+                    WHERE order_id = ? AND client_id = ?
                     """,
-                    (status, stripe_session_id, now, order_id),
+                    (status, stripe_session_id, now, order_id, client_id),
                 )
             else:
                 conn.execute(
                     """
                     UPDATE orders
                     SET status = ?, updated_at = ?
-                    WHERE order_id = ?
+                    WHERE order_id = ? AND client_id = ?
                     """,
-                    (status, now, order_id),
+                    (status, now, order_id, client_id),
                 )
+
+            if previous_status != status:
+                self._insert_order_status_audit(
+                    conn=conn,
+                    order_id=order_id,
+                    client_id=client_id,
+                    from_status=previous_status,
+                    to_status=status,
+                    reason=reason,
+                    actor_type=actor_type,
+                    created_at=now,
+                )
+
+        return True
 
     def get_idempotency_record(
         self, *, client_id: str, idempotency_key: str
@@ -475,6 +571,59 @@ class OrderStore:
                     now,
                 ),
             )
+
+    def list_order_status_audit(
+        self,
+        *,
+        order_id: str,
+        client_id: str,
+        limit: int,
+        offset: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        with self._connect() as conn:
+            count_row = conn.execute(
+                """
+                SELECT COUNT(*) AS total
+                FROM order_status_audit
+                WHERE order_id = ? AND client_id = ?
+                """,
+                (order_id, client_id),
+            ).fetchone()
+
+            rows = conn.execute(
+                """
+                SELECT
+                    id,
+                    order_id,
+                    client_id,
+                    from_status,
+                    to_status,
+                    reason,
+                    actor_type,
+                    created_at
+                FROM order_status_audit
+                WHERE order_id = ? AND client_id = ?
+                ORDER BY created_at DESC
+                LIMIT ? OFFSET ?
+                """,
+                (order_id, client_id, limit, offset),
+            ).fetchall()
+
+        items = [
+            {
+                "id": row["id"],
+                "order_id": row["order_id"],
+                "client_id": row["client_id"],
+                "from_status": row["from_status"],
+                "to_status": row["to_status"],
+                "reason": row["reason"],
+                "actor_type": row["actor_type"],
+                "created_at": row["created_at"],
+            }
+            for row in rows
+        ]
+        total = int(count_row["total"]) if count_row else 0
+        return items, total
 
     def start_stripe_webhook_event(
         self,
