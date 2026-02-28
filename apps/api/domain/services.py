@@ -4,7 +4,7 @@ import hashlib
 import json
 import logging
 import uuid
-from typing import List, Literal, Optional
+from typing import Any, List, Literal, Optional
 
 import requests
 import stripe
@@ -147,13 +147,7 @@ def _hash_checkout_payload(payload: CheckoutRequest) -> str:
     return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
 
 
-def _send_telegram_notification(order_id: str, cart: Cart) -> None:
-    """
-    Fire-and-forget style Telegram notification for a new order.
-    Uses env vars if present, otherwise falls back to client config.
-    Any errors are swallowed to avoid breaking checkout flow.
-    """
-
+def _resolve_telegram_credentials() -> tuple[Optional[str], Optional[str]]:
     settings = get_settings()
     loader = get_loader()
     storefront = loader.load_storefront_config()
@@ -171,7 +165,39 @@ def _send_telegram_notification(order_id: str, cart: Cart) -> None:
         or _is_placeholder_secret(token)
         or _is_placeholder_secret(chat_id)
     ):
+        return None, None
+
+    return token, chat_id
+
+
+def _send_telegram_message(*, text: str, extra: dict[str, Any], event_name: str) -> None:
+    token, chat_id = _resolve_telegram_credentials()
+    if not token or not chat_id:
         return
+
+    url = f"https://api.telegram.org/bot{token}/sendMessage"
+    try:
+        requests.post(
+            url,
+            json={
+                "chat_id": chat_id,
+                "text": text,
+            },
+            timeout=5,
+        )
+        logger.info(event_name, extra=extra)
+    except Exception:
+        logger.exception(f"{event_name}_failed", extra=extra)
+
+
+def _send_telegram_checkout_notification(order_id: str, cart: Cart) -> None:
+    """
+    Fire-and-forget style Telegram notification for a new order.
+    Uses env vars if present, otherwise falls back to client config.
+    Any errors are swallowed to avoid breaking checkout flow.
+    """
+
+    settings = get_settings()
 
     total = cart.totals.grand_total
     lines_preview = []
@@ -191,30 +217,53 @@ def _send_telegram_notification(order_id: str, cart: Cart) -> None:
         ]
     )
 
-    url = f"https://api.telegram.org/bot{token}/sendMessage"
-    try:
-        requests.post(
-            url,
-            json={
-                "chat_id": chat_id,
-                "text": text,
-                "parse_mode": "HTML",
-            },
-            timeout=5,
-        )
-        logger.info(
-            "telegram_notification_sent",
-            extra={
-                "order_id": order_id,
-                "client_id": settings.client_id,
-                "currency": total.currency,
-                "amount": total.amount,
-            },
-        )
-    except Exception:
-        # Не ломаем checkout, если Telegram временно недоступен.
-        logger.exception("telegram_notification_failed", extra={"order_id": order_id})
-        return
+    _send_telegram_message(
+        text=text,
+        event_name="telegram_checkout_notification_sent",
+        extra={
+            "order_id": order_id,
+            "client_id": settings.client_id,
+            "currency": total.currency,
+            "amount": total.amount,
+        },
+    )
+
+
+def send_telegram_payment_notification(
+    *,
+    order_id: str,
+    amount: float,
+    currency: str,
+    customer_email: Optional[str],
+    stripe_session_id: Optional[str],
+) -> None:
+    """
+    Notify Telegram about successful Stripe payment confirmation.
+    This should be called from Stripe webhooks after order status becomes paid.
+    """
+
+    settings = get_settings()
+    lines = [
+        "✅ Оплата подтверждена (Stripe)",
+        f"ID заказа: {order_id}",
+        f"Сумма: {amount:.2f} {currency}",
+    ]
+    if customer_email:
+        lines.append(f"Клиент: {customer_email}")
+    if stripe_session_id:
+        lines.append(f"Stripe Session: {stripe_session_id}")
+
+    _send_telegram_message(
+        text="\n".join(lines),
+        event_name="telegram_payment_notification_sent",
+        extra={
+            "order_id": order_id,
+            "client_id": settings.client_id,
+            "currency": currency,
+            "amount": amount,
+            "stripe_session_id": stripe_session_id,
+        },
+    )
 
 
 def create_checkout(payload: CheckoutRequest, *, idempotency_key: Optional[str] = None) -> CheckoutResponse:
@@ -311,8 +360,10 @@ def create_checkout(payload: CheckoutRequest, *, idempotency_key: Optional[str] 
                 extra={"order_id": order_id, "client_id": settings.client_id},
             )
 
-    # Telegram-нотификация не должна ломать заказ.
-    _send_telegram_notification(order_id, cart)
+    # Для Stripe-сценария нотификацию отправляем после подтверждения оплаты в webhook.
+    # Для локального confirmed-потока отправляем сразу.
+    if status != "redirect":
+        _send_telegram_checkout_notification(order_id, cart)
 
     logger.info(
         "checkout_completed",

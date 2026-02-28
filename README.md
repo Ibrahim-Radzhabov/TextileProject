@@ -68,7 +68,7 @@ Core:
 Stripe:
 
 - `STRIPE_SECRET_KEY` — secret key for Stripe; if not set, backend falls back to `integrations.stripe.secretKey` from client config.
-- `STRIPE_WEBHOOK_SECRET` — optional webhook secret; reserved for future use in `/webhooks/stripe`.
+- `STRIPE_WEBHOOK_SECRET` — webhook secret for `/webhooks/stripe`; if not set, backend falls back to `integrations.stripe.webhookSecret`.
 
 Telegram:
 
@@ -114,21 +114,21 @@ The compose file wires:
   - recalculates cart totals,
   - persists order snapshot in SQLite,
   - supports idempotency via `Idempotency-Key` / `X-Idempotency-Key`,
-  - logs order metadata,
-  - sends Telegram notification (if configured).
+  - logs order metadata.
 - If Stripe is configured (env or `integrations.json`):
   - backend creates a Checkout Session,
   - returns `status: "redirect"` and `redirect_url` to the frontend,
-  - uses `FRONTEND_ORIGIN` (or `http://localhost:3000`) to build success/cancel URLs.
+  - uses `FRONTEND_ORIGIN` (or `http://localhost:3000`) to build success/cancel URLs,
+  - sets order status to `paid` only after verified webhook event.
 
-When Stripe is not configured or fails, checkout gracefully falls back to `status: "confirmed"` without redirects.
+When Stripe is not configured or fails, checkout gracefully falls back to `status: "confirmed"` without redirects and sends Telegram order notification (if configured).
 
 Additional endpoints:
 
 - `GET /orders?status=&limit=&offset=` — list persisted orders with status filter and pagination.
 - `GET /orders/{order_id}` — get persisted order details.
 - `GET /checkout/{order_id}` — fetch persisted order for current tenant.
-- `POST /webhooks/stripe` — verifies Stripe signature, deduplicates by (`event_id`, `livemode`, `account`, `client_id`) and updates order status (`paid` / `failed` / `cancelled`).
+- `POST /webhooks/stripe` — verifies Stripe signature, deduplicates by (`event_id`, `livemode`, `account`, `client_id`), updates order status (`paid` / `failed` / `cancelled`) and sends Telegram payment notification on `paid`.
 - `GET /webhooks/audit?order_id=&processing_status=&limit=&offset=` — list Stripe webhook audit records.
 
 ---

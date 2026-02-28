@@ -7,7 +7,7 @@ from fastapi import APIRouter, HTTPException, Query, Request
 from ..config import get_settings
 from ..domain.models import StripeWebhookAuditEntry, StripeWebhookAuditListResponse
 from ..domain.order_store import get_order_store
-from ..domain.services import resolve_stripe_webhook_secret
+from ..domain.services import resolve_stripe_webhook_secret, send_telegram_payment_notification
 
 router = APIRouter(prefix="/webhooks", tags=["webhooks"])
 logger = logging.getLogger("store_platform")
@@ -60,12 +60,17 @@ async def stripe_webhook(request: Request) -> dict:
         return {"received": True, "deduplicated": True}
 
     try:
+        payment_status = event_object.get("payment_status")
         status_by_event = {
-            "checkout.session.completed": "paid",
+            "checkout.session.async_payment_succeeded": "paid",
             "checkout.session.async_payment_failed": "failed",
             "checkout.session.expired": "cancelled",
         }
-        next_status = status_by_event.get(event_type)
+        if event_type == "checkout.session.completed":
+            next_status = "paid" if payment_status == "paid" else None
+        else:
+            next_status = status_by_event.get(event_type)
+
         if order_id and next_status:
             store.update_order_status(
                 order_id=order_id,
@@ -80,6 +85,17 @@ async def stripe_webhook(request: Request) -> dict:
                     "next_status": next_status,
                 },
             )
+            if next_status == "paid":
+                order = store.get_order(order_id=order_id, client_id=settings.client_id)
+                if order:
+                    customer = order.get("customer") or {}
+                    send_telegram_payment_notification(
+                        order_id=order_id,
+                        amount=float(order.get("amount", 0)),
+                        currency=str(order.get("currency", "USD")),
+                        customer_email=customer.get("email"),
+                        stripe_session_id=order.get("stripe_session_id"),
+                    )
 
         store.finish_stripe_webhook_event(
             event_id=event_id,
