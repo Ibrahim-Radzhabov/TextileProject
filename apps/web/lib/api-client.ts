@@ -1,6 +1,8 @@
 import type {
   Cart,
   CatalogConfig,
+  ManualOrderStatus as SharedManualOrderStatus,
+  OrderLifecycleStatus,
   Product,
   StorefrontConfig
 } from "@store-platform/shared-types";
@@ -298,15 +300,7 @@ function normalizeCheckoutCustomer(dto: CheckoutCustomerDto): CheckoutPayload["c
   };
 }
 
-export type OrderStatus =
-  | "pending"
-  | "redirect"
-  | "confirmed"
-  | "paid"
-  | "processing"
-  | "shipped"
-  | "failed"
-  | "cancelled";
+export type OrderStatus = OrderLifecycleStatus;
 export type OrderPaymentState = "awaiting" | "paid" | "failed" | "cancelled";
 export type SortOrder = "newest" | "oldest";
 
@@ -356,7 +350,7 @@ export type StripeWebhookAuditListResponse = {
   offset: number;
 };
 
-export type ManualOrderStatus = "processing" | "shipped" | "cancelled";
+export type ManualOrderStatus = SharedManualOrderStatus;
 export type StatusAuditActorType = "checkout" | "webhook" | "admin" | "system";
 
 type OrderStatusAuditEntryDto = {

@@ -13,9 +13,9 @@ export type QuickActionFormHiddenField = {
 export type QuickActionFormsProps = {
   formAction: string;
   actionFieldName?: string;
-  actions: QuickActionFormItem[];
-  allowedValues: string[];
-  hiddenFields?: QuickActionFormHiddenField[];
+  actions: readonly QuickActionFormItem[];
+  allowedValues: readonly string[];
+  hiddenFields?: readonly QuickActionFormHiddenField[];
   emptyLabel?: string;
   containerClassName?: string;
   buttonClassName?: string;

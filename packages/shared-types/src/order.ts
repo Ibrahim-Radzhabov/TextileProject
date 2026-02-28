@@ -1,6 +1,7 @@
 import type { CartTotals, CartItem } from "./cart";
+import type { OrderLifecycleStatus } from "./order-status-transitions";
 
-export type OrderStatus = "pending" | "paid" | "failed" | "cancelled";
+export type OrderStatus = OrderLifecycleStatus;
 
 export type Order = {
   id: string;
@@ -13,4 +14,3 @@ export type Order = {
   customerEmail: string;
   metadata?: Record<string, string | number | boolean>;
 };
-

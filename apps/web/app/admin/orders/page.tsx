@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { QuickActionForms } from "@store-platform/ui";
+import { getAllowedManualStatuses, type ManualOrderStatus } from "@store-platform/shared-types";
 import {
   fetchOrders,
-  type ManualOrderStatus,
   type OrderPaymentState,
   type OrderStatus,
   type SortOrder
@@ -168,20 +168,6 @@ function getPaymentBadge(status: OrderStatus): { label: string; className: strin
     label: "Ожидает оплаты",
     className: "border-amber-400/40 bg-amber-500/10 text-amber-300"
   };
-}
-
-function getAllowedManualStatuses(currentStatus: OrderStatus): ManualOrderStatus[] {
-  const map: Record<OrderStatus, ManualOrderStatus[]> = {
-    pending: ["cancelled"],
-    redirect: ["cancelled"],
-    confirmed: ["processing", "cancelled"],
-    paid: ["processing", "shipped", "cancelled"],
-    processing: ["shipped", "cancelled"],
-    shipped: ["cancelled"],
-    failed: [],
-    cancelled: []
-  };
-  return map[currentStatus] ?? [];
 }
 
 function buildOrdersExportHref(options: {

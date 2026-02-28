@@ -1,10 +1,10 @@
 import Link from "next/link";
+import { getAllowedManualStatuses, type ManualOrderStatus } from "@store-platform/shared-types";
 import {
   ApiError,
   fetchOrderById,
   fetchOrderStatusAudit,
   fetchWebhookAudit,
-  type ManualOrderStatus,
   type OrderStatus,
   type SortOrder,
   type StatusAuditActorType,
@@ -145,20 +145,6 @@ function buildOrderHref(options: {
   const query = params.toString();
   const base = `/admin/orders/${encodeURIComponent(options.orderId)}`;
   return query ? `${base}?${query}` : base;
-}
-
-function getAllowedManualStatuses(currentStatus: OrderStatus): ManualOrderStatus[] {
-  const map: Record<OrderStatus, ManualOrderStatus[]> = {
-    pending: ["cancelled"],
-    redirect: ["cancelled"],
-    confirmed: ["processing", "cancelled"],
-    paid: ["processing", "shipped", "cancelled"],
-    processing: ["shipped", "cancelled"],
-    shipped: ["cancelled"],
-    failed: [],
-    cancelled: []
-  };
-  return map[currentStatus] ?? [];
 }
 
 export default async function AdminOrderDetailsPage({

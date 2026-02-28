@@ -14,6 +14,7 @@ from ..domain.models import (
     UpdateOrderStatusRequest,
 )
 from ..domain.order_store import get_order_store
+from ..domain.order_transitions import get_allowed_manual_statuses
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -32,16 +33,6 @@ OrderPaymentState = Literal["awaiting", "paid", "failed", "cancelled"]
 ManualOrderStatus = Literal["processing", "shipped", "cancelled"]
 OrderStatusAuditActorType = Literal["checkout", "webhook", "admin", "system"]
 SortOrder = Literal["newest", "oldest"]
-
-ALLOWED_MANUAL_TRANSITIONS: dict[str, set[str]] = {
-    "pending": {"cancelled"},
-    "redirect": {"cancelled"},
-    "confirmed": {"processing", "cancelled"},
-    "paid": {"processing", "shipped", "cancelled"},
-    "processing": {"shipped", "cancelled"},
-    "shipped": {"cancelled"},
-}
-
 
 def _normalize_filters(
     *,
@@ -236,7 +227,7 @@ def update_order_status(order_id: str, payload: UpdateOrderStatusRequest) -> Sto
     if current_status == next_status:
         return StoredOrder.model_validate(order)
 
-    allowed_next_statuses = ALLOWED_MANUAL_TRANSITIONS.get(current_status, set())
+    allowed_next_statuses = get_allowed_manual_statuses(current_status)
     if next_status not in allowed_next_statuses:
         raise HTTPException(
             status_code=409,
