@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Offline</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        font-family: "Avenir Next", "SF Pro Display", "Segoe UI", sans-serif;
+        background:
+          radial-gradient(circle at 20% 10%, rgba(199, 139, 62, 0.3), transparent 42%),
+          radial-gradient(circle at 85% 5%, rgba(77, 182, 172, 0.25), transparent 44%),
+          linear-gradient(165deg, #070e1f, #0a1222);
+        color: #f4f1ea;
+        padding: 24px;
+      }
+
+      .panel {
+        width: min(460px, 100%);
+        border-radius: 28px;
+        border: 1px solid rgba(136, 154, 186, 0.48);
+        background: linear-gradient(150deg, rgba(16, 27, 50, 0.84), rgba(9, 17, 33, 0.94));
+        box-shadow: 0 24px 60px rgba(7, 14, 31, 0.42);
+        padding: 28px;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: clamp(28px, 5vw, 38px);
+        line-height: 1.08;
+        letter-spacing: -0.02em;
+      }
+
+      p {
+        margin: 0;
+        color: rgba(244, 241, 234, 0.82);
+        line-height: 1.6;
+      }
+
+      button {
+        margin-top: 22px;
+        border: 0;
+        border-radius: 999px;
+        padding: 11px 18px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #101b32;
+        background: linear-gradient(125deg, #d59a4c, #c78b3e);
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="panel">
+      <h1>Connection lost.</h1>
+      <p>
+        The storefront is offline right now. Reconnect to the network and reload
+        this page.
+      </p>
+      <button type="button" onclick="window.location.reload()">Reload</button>
+    </main>
+  </body>
+</html>

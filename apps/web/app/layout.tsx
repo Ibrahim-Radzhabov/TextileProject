@@ -1,10 +1,15 @@
 import "./globals.css";
+import type { Metadata, Viewport } from "next";
+import { cache } from "react";
 import type { ReactNode, CSSProperties } from "react";
 import type { ThemeConfig } from "@store-platform/shared-types";
 import { fetchStorefrontConfig } from "@/lib/api-client";
+import { PwaRegister } from "./pwa-register";
 import { StorefrontShell } from "./storefront-shell";
 
 export const dynamic = "force-dynamic";
+
+const getStorefrontConfig = cache(async () => fetchStorefrontConfig());
 
 function toRgbChannels(value: string): string {
   const raw = value.trim();
@@ -86,13 +91,65 @@ function themeToCssVars(theme: ThemeConfig): CSSProperties {
   } as CSSProperties;
 }
 
+function resolveShortName(shopName: string): string {
+  const normalized = shopName.trim();
+  if (normalized.length <= 20) {
+    return normalized;
+  }
+
+  return normalized.slice(0, 20).trimEnd();
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getStorefrontConfig();
+  const shortName = resolveShortName(config.shop.name);
+
+  return {
+    applicationName: config.shop.name,
+    title: {
+      default: config.seo.defaultTitle,
+      template: config.seo.titleTemplate
+    },
+    description: config.seo.description,
+    manifest: "/manifest.webmanifest",
+    appleWebApp: {
+      capable: true,
+      title: shortName,
+      statusBarStyle: "default"
+    },
+    icons: {
+      icon: [
+        { url: "/icons/icon-192.svg", type: "image/svg+xml", sizes: "192x192" },
+        { url: "/icons/icon-512.svg", type: "image/svg+xml", sizes: "512x512" }
+      ],
+      apple: [{ url: "/icons/apple-touch-icon.svg", type: "image/svg+xml", sizes: "180x180" }],
+      shortcut: [{ url: "/icons/icon-192.svg", type: "image/svg+xml", sizes: "192x192" }]
+    },
+    other: {
+      "mobile-web-app-capable": "yes"
+    }
+  };
+}
+
+export async function generateViewport(): Promise<Viewport> {
+  const config = await getStorefrontConfig();
+
+  return {
+    themeColor: config.theme.colors.background,
+    colorScheme: "dark",
+    width: "device-width",
+    initialScale: 1
+  };
+}
+
 export default async function RootLayout({ children }: { children: ReactNode }) {
-  const config = await fetchStorefrontConfig();
+  const config = await getStorefrontConfig();
   const themeStyle = themeToCssVars(config.theme);
 
   return (
     <html lang="en">
       <body style={themeStyle}>
+        <PwaRegister />
         <StorefrontShell config={config}>{children}</StorefrontShell>
       </body>
     </html>
