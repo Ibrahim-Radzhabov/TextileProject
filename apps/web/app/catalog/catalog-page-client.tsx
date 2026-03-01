@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion } from "framer-motion";
 import { Badge, CatalogFilterSidebar, ProductGrid, Surface } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
@@ -13,6 +14,25 @@ type CatalogPageClientProps = {
 };
 
 type CatalogSort = "recommended" | "price_asc" | "price_desc" | "name_asc" | "name_desc";
+
+const sortOptions: Array<{ value: CatalogSort; label: string }> = [
+  { value: "recommended", label: "Рекомендовано" },
+  { value: "price_asc", label: "Цена ↑" },
+  { value: "price_desc", label: "Цена ↓" },
+  { value: "name_asc", label: "Название A-Z" },
+  { value: "name_desc", label: "Название Z-A" }
+];
+
+function formatMoney(amount: number | null, currency: string): string {
+  if (amount === null) {
+    return "—";
+  }
+
+  return amount.toLocaleString(undefined, {
+    style: "currency",
+    currency
+  });
+}
 
 export function CatalogPageClient({ page, products, allTags }: CatalogPageClientProps) {
   const { addProduct } = useCartStore();
@@ -47,29 +67,74 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     });
   }, [products, sort, tagsFilter]);
 
+  const selectedCount = tagsFilter.length;
+  const featuredCount = useMemo(
+    () => filteredProducts.filter((product) => product.isFeatured).length,
+    [filteredProducts]
+  );
+
+  const firstRichText = page.blocks.find((block) => block.type === "rich-text");
+  const priceRange = useMemo(() => {
+    if (!filteredProducts.length) {
+      return { min: null, max: null };
+    }
+
+    let min = filteredProducts[0].price.amount;
+    let max = filteredProducts[0].price.amount;
+
+    for (const product of filteredProducts) {
+      const amount = product.price.amount;
+      if (amount < min) {
+        min = amount;
+      }
+      if (amount > max) {
+        max = amount;
+      }
+    }
+
+    return { min, max };
+  }, [filteredProducts]);
+
+  const currency = filteredProducts[0]?.price.currency ?? products[0]?.price.currency ?? "USD";
+
+  const toggleTag = (tag: string) => {
+    setTagsFilter((prev) => (prev.includes(tag) ? prev.filter((entry) => entry !== tag) : [...prev, tag]));
+  };
+
   return (
     <div className="min-h-0 space-y-7 pb-8">
-      <header className="space-y-3">
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{page.title}</h1>
-        <div className="premium-divider" />
-        <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-          <Badge tone="muted">Всего: {products.length}</Badge>
-          <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
-          <label className="ml-auto flex items-center gap-2">
-            <span className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Сортировка</span>
-            <select
-              aria-label="Сортировка каталога"
-              value={sort}
-              onChange={(event) => setSort(event.target.value as CatalogSort)}
-              className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
-            >
-              <option value="recommended">Рекомендовано</option>
-              <option value="price_asc">Цена ↑</option>
-              <option value="price_desc">Цена ↓</option>
-              <option value="name_asc">Название A-Z</option>
-              <option value="name_desc">Название Z-A</option>
-            </select>
-          </label>
+      <header className="relative overflow-hidden rounded-3xl border border-border/60 bg-surface-strong px-5 py-6 sm:px-7 sm:py-7">
+        <div className="pointer-events-none absolute inset-0 opacity-75">
+          <div className="absolute -left-10 top-[-4rem] h-56 w-56 rounded-full bg-accent/20 blur-3xl" />
+          <div className="absolute right-[-2rem] bottom-[-4rem] h-56 w-56 rounded-full bg-foreground/10 blur-3xl" />
+        </div>
+
+        <div className="relative space-y-4">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{page.title}</h1>
+            {firstRichText?.type === "rich-text" && (
+              <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+                {firstRichText.content}
+              </p>
+            )}
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-border/55 bg-card/35 px-3 py-3">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Товаров</p>
+              <p className="mt-1 text-2xl font-semibold tracking-tight">{filteredProducts.length}</p>
+            </div>
+            <div className="rounded-2xl border border-border/55 bg-card/35 px-3 py-3">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Featured</p>
+              <p className="mt-1 text-2xl font-semibold tracking-tight">{featuredCount}</p>
+            </div>
+            <div className="rounded-2xl border border-border/55 bg-card/35 px-3 py-3">
+              <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Диапазон цен</p>
+              <p className="mt-1 text-sm font-medium text-foreground">
+                {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
+              </p>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -84,17 +149,94 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
           </Surface>
         </div>
 
-        <div className="space-y-7">
+        <div className="space-y-6">
+          <div className="rounded-2xl border border-border/60 bg-card/35 px-4 py-4">
+            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+              <Badge tone="muted">Всего: {products.length}</Badge>
+              <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
+              {selectedCount > 0 && <Badge tone="accent">Тегов: {selectedCount}</Badge>}
+            </div>
+
+            <div className="mt-3 space-y-3">
+              <div className="flex flex-wrap gap-2">
+                {sortOptions.map((option) => {
+                  const active = sort === option.value;
+                  return (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() => setSort(option.value)}
+                      className={[
+                        "rounded-full border px-3 py-1 text-[11px] transition-colors",
+                        active
+                          ? "border-accent/70 bg-accent/15 text-foreground"
+                          : "border-border/60 text-muted-foreground hover:border-accent/45 hover:text-foreground"
+                      ].join(" ")}
+                    >
+                      {option.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <label className="flex items-center gap-2 lg:hidden">
+                <span className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Сортировка</span>
+                <select
+                  aria-label="Сортировка каталога"
+                  value={sort}
+                  onChange={(event) => setSort(event.target.value as CatalogSort)}
+                  className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
+                >
+                  {sortOptions.map((option) => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  ))}
+                </select>
+              </label>
+
+              {allTags.length > 0 && (
+                <div className="flex flex-wrap gap-1.5">
+                  {allTags.slice(0, 12).map((tag) => {
+                    const active = tagsFilter.includes(tag);
+                    return (
+                      <button
+                        key={tag}
+                        type="button"
+                        onClick={() => toggleTag(tag)}
+                        className={[
+                          "rounded-md border px-2 py-1 text-[11px] transition-colors",
+                          active
+                            ? "border-accent/65 bg-accent-soft/30 text-foreground"
+                            : "border-border/60 text-muted-foreground hover:border-accent/45 hover:text-foreground"
+                        ].join(" ")}
+                      >
+                        #{tag}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+
           {page.blocks.map((block) => {
             if (block.type === "product-grid") {
               return (
-                <ProductGrid
+                <motion.section
                   key={block.id}
-                  title={block.title}
-                  subtitle={block.subtitle}
-                  products={filteredProducts}
-                  onQuickAdd={(product) => addProduct(product.id)}
-                />
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.25 }}
+                  className="rounded-2xl border border-border/55 bg-surface-soft/70 px-4 py-5 sm:px-5"
+                >
+                  <ProductGrid
+                    title={block.title}
+                    subtitle={block.subtitle}
+                    products={filteredProducts}
+                    onQuickAdd={(product) => addProduct(product.id)}
+                  />
+                </motion.section>
               );
             }
 

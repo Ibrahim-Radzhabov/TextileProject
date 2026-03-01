@@ -110,12 +110,25 @@ export default function CheckoutPage() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-5"
       >
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Оформление заказа</h1>
-          <p className="mt-1 text-sm text-muted-foreground">
-            Контакты и адрес. В корзине {itemCount} поз.
-          </p>
-        </div>
+        <Surface tone="elevated" className="relative overflow-hidden px-4 py-5 sm:px-5 sm:py-6">
+          <div className="pointer-events-none absolute inset-0 opacity-70">
+            <div className="absolute -left-8 top-[-4rem] h-48 w-48 rounded-full bg-accent/20 blur-3xl" />
+            <div className="absolute -right-8 bottom-[-4rem] h-48 w-48 rounded-full bg-foreground/10 blur-3xl" />
+          </div>
+          <div className="relative z-10 space-y-3">
+            <div>
+              <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Оформление заказа</h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Контакты и адрес. В корзине {itemCount} поз.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+              <span className="rounded-full border border-border/55 bg-card/35 px-2.5 py-1">Безопасная оплата</span>
+              <span className="rounded-full border border-border/55 bg-card/35 px-2.5 py-1">Статус заказа по email</span>
+              <span className="rounded-full border border-border/55 bg-card/35 px-2.5 py-1">Быстрый checkout</span>
+            </div>
+          </div>
+        </Surface>
 
         {error && (
           <motion.div
@@ -142,7 +155,7 @@ export default function CheckoutPage() {
         )}
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-          <Surface tone="subtle" className="space-y-4 px-4 py-4">
+          <Surface tone="subtle" className="space-y-4 rounded-2xl px-4 py-4">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Контакт</p>
             <div className="space-y-4">
               <div className="space-y-1">
@@ -176,7 +189,7 @@ export default function CheckoutPage() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Surface tone="subtle" className="space-y-4 px-4 py-4">
+          <Surface tone="subtle" className="space-y-4 rounded-2xl px-4 py-4">
             <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Адрес доставки</p>
             <div className="space-y-4">
               <div className="space-y-1">
@@ -254,7 +267,7 @@ export default function CheckoutPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.06 }}
       >
-        <Surface tone="subtle" className="h-fit space-y-4 px-4 py-4 md:sticky md:top-24">
+        <Surface tone="subtle" className="h-fit space-y-4 rounded-2xl px-4 py-4 md:sticky md:top-24">
           <div className="flex items-center justify-between">
             <span className="text-xs font-medium text-muted-foreground">Итого</span>
             <span className="text-sm font-semibold">{totalFormatted}</span>

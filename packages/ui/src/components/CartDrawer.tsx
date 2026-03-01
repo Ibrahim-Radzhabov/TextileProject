@@ -64,7 +64,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             onClick={onClose}
           />
           <motion.aside
-            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-md flex-col border-l border-border/60 bg-background/95 shadow-floating backdrop-blur-2xl"
+            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col border-l border-border/60 bg-background/95 shadow-floating backdrop-blur-2xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -79,6 +79,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     {itemsCount > 0 ? `${itemsCount} поз. в заказе` : "Добавьте товары для оформления"}
                   </p>
                 </div>
+                <span className="rounded-full border border-border/50 bg-card/45 px-2 py-1 text-[11px] text-muted-foreground">
+                  {itemsCount}
+                </span>
                 <button
                   type="button"
                   onClick={onClose}
@@ -223,6 +226,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               >
                 Продолжить покупки
               </button>
+              <p className="mb-2 text-center text-[11px] text-muted-foreground">Позиции и сумма обновляются автоматически</p>
               <Button
                 fullWidth
                 disabled={!hasItems || isUpdating}
