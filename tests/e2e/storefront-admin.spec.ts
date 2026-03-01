@@ -481,4 +481,35 @@ test("pwa metrics endpoint stores install events and supports admin filters", as
   };
   expect(dateRangePayload.total).toBeGreaterThan(0);
   expect(dateRangePayload.items.some((item) => item.path === trackedPath)).toBeTruthy();
+
+  const dailyResponse = await request.get(
+    `${API_BASE_URL}/metrics/pwa-install-events/daily?path_prefix=${encodeURIComponent(trackedPath)}&date_from=${todayIso}&date_to=${todayIso}`,
+    {
+      headers: {
+        "x-admin-token": ADMIN_TOKEN
+      }
+    }
+  );
+  expect(dailyResponse.ok()).toBeTruthy();
+  const dailyPayload = (await dailyResponse.json()) as {
+    items: Array<{ date: string; prompt_available: number; total: number }>;
+  };
+  expect(dailyPayload.items.length).toBeGreaterThan(0);
+  expect(
+    dailyPayload.items.some((item) => item.date === todayIso && item.prompt_available > 0 && item.total > 0)
+  ).toBeTruthy();
+
+  const exportResponse = await request.get(
+    `${API_BASE_URL}/metrics/pwa-install-events/export.csv?metric=prompt_available&path_prefix=${encodeURIComponent(trackedPath)}&date_from=${todayIso}&date_to=${todayIso}&sort=newest`,
+    {
+      headers: {
+        "x-admin-token": ADMIN_TOKEN
+      }
+    }
+  );
+  expect(exportResponse.ok()).toBeTruthy();
+  expect(exportResponse.headers()["content-type"]).toContain("text/csv");
+  const exportBody = await exportResponse.text();
+  expect(exportBody).toContain("prompt_available");
+  expect(exportBody).toContain(trackedPath);
 });

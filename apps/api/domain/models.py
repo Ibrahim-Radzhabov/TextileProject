@@ -328,3 +328,19 @@ class PwaInstallEventListResponse(BaseModel):
     total: int
     limit: int
     offset: int
+
+
+class PwaInstallDailySummaryEntry(BaseModel):
+    date: str
+    prompt_available: int
+    ios_hint_shown: int
+    prompt_opened: int
+    installed: int
+    prompt_accepted: int
+    prompt_dismissed: int
+    banner_dismissed: int
+    total: int
+
+
+class PwaInstallDailySummaryResponse(BaseModel):
+    items: List[PwaInstallDailySummaryEntry]

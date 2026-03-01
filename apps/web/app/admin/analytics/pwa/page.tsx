@@ -1,12 +1,18 @@
 import Link from "next/link";
 import {
+  fetchPwaInstallDailySummary,
   fetchPwaInstallEvents,
+  type PwaInstallDailySummaryEntry,
   type PwaInstallEvent,
   type SortOrder
 } from "@/lib/api-client";
 import type { PwaInstallMetric } from "@store-platform/shared-types";
 
 const PAGE_SIZE = 30;
+const CHART_WIDTH = 720;
+const CHART_HEIGHT = 220;
+const CHART_PADDING_X = 26;
+const CHART_PADDING_Y = 22;
 
 const funnelMetrics: PwaInstallMetric[] = [
   "prompt_available",
@@ -28,6 +34,12 @@ const metricLabels: Record<PwaInstallMetric, string> = {
 const sortFilters: Array<{ label: string; value: SortOrder }> = [
   { label: "Новые сверху", value: "newest" },
   { label: "Старые сверху", value: "oldest" }
+];
+
+const datePresets: Array<{ label: string; daysBack: number }> = [
+  { label: "Сегодня", daysBack: 0 },
+  { label: "7 дней", daysBack: 6 },
+  { label: "30 дней", daysBack: 29 }
 ];
 
 function parseMetric(value: string | undefined): PwaInstallMetric | undefined {
@@ -117,6 +129,33 @@ function buildAnalyticsHref(options: {
   return query ? `/admin/analytics/pwa?${query}` : "/admin/analytics/pwa";
 }
 
+function buildPwaExportHref(options: {
+  metric?: PwaInstallMetric;
+  pathPrefix?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  sort?: SortOrder;
+}): string {
+  const params = new URLSearchParams();
+  if (options.metric) {
+    params.set("metric", options.metric);
+  }
+  if (options.pathPrefix) {
+    params.set("path_prefix", options.pathPrefix);
+  }
+  if (options.dateFrom) {
+    params.set("date_from", options.dateFrom);
+  }
+  if (options.dateTo) {
+    params.set("date_to", options.dateTo);
+  }
+  if (options.sort && options.sort !== "newest") {
+    params.set("sort", options.sort);
+  }
+  const query = params.toString();
+  return query ? `/admin/analytics/pwa/export?${query}` : "/admin/analytics/pwa/export";
+}
+
 function formatPercent(value: number | null): string {
   if (value === null || !Number.isFinite(value)) {
     return "—";
@@ -153,6 +192,73 @@ function formatEventTime(value: string): string {
     dateStyle: "medium",
     timeStyle: "short"
   });
+}
+
+function formatDayLabel(value: string): string {
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  if (Number.isNaN(parsed.getTime())) {
+    return value;
+  }
+  return parsed.toLocaleDateString("ru-RU", {
+    day: "2-digit",
+    month: "short"
+  });
+}
+
+function toIsoDate(value: Date): string {
+  return value.toISOString().slice(0, 10);
+}
+
+function buildPresetRange(daysBack: number): { dateFrom: string; dateTo: string } {
+  const now = new Date();
+  const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  const start = new Date(end);
+  start.setUTCDate(start.getUTCDate() - daysBack);
+  return {
+    dateFrom: toIsoDate(start),
+    dateTo: toIsoDate(end)
+  };
+}
+
+function downsampleDailySeries(
+  items: PwaInstallDailySummaryEntry[],
+  maxPoints: number
+): PwaInstallDailySummaryEntry[] {
+  if (items.length <= maxPoints) {
+    return items;
+  }
+  const stride = Math.ceil(items.length / maxPoints);
+  const sampled = items.filter((_, index) => index % stride === 0);
+  return sampled.slice(-maxPoints);
+}
+
+function getChartPoint(
+  index: number,
+  pointsCount: number,
+  value: number,
+  maxValue: number
+): { x: number; y: number } {
+  const innerWidth = CHART_WIDTH - CHART_PADDING_X * 2;
+  const innerHeight = CHART_HEIGHT - CHART_PADDING_Y * 2;
+  const safeMax = Math.max(1, maxValue);
+  const x =
+    pointsCount <= 1
+      ? CHART_WIDTH / 2
+      : CHART_PADDING_X + (innerWidth / (pointsCount - 1)) * index;
+  const y = CHART_HEIGHT - CHART_PADDING_Y - (value / safeMax) * innerHeight;
+  return { x, y };
+}
+
+function buildLinePoints(values: number[], maxValue: number): string {
+  if (!values.length) {
+    return "";
+  }
+  return values
+    .map((value, index) => {
+      const point = getChartPoint(index, values.length, value, maxValue);
+      return `${point.x.toFixed(2)},${point.y.toFixed(2)}`;
+    })
+    .join(" ");
 }
 
 function renderEventRow(item: PwaInstallEvent) {
@@ -206,7 +312,20 @@ export default async function AdminPwaAnalyticsPage({
     offset
   });
 
-  const [eventsResponse, ...funnelResponses] = await Promise.all([
+  const exportHref = buildPwaExportHref({
+    metric,
+    pathPrefix,
+    dateFrom: effectiveDateFrom,
+    dateTo: effectiveDateTo,
+    sort
+  });
+
+  const quickDateRanges = datePresets.map((preset) => ({
+    ...preset,
+    ...buildPresetRange(preset.daysBack)
+  }));
+
+  const [eventsResponse, dailyResponse, ...funnelResponses] = await Promise.all([
     fetchPwaInstallEvents({
       metric,
       pathPrefix,
@@ -215,6 +334,11 @@ export default async function AdminPwaAnalyticsPage({
       sort,
       limit: PAGE_SIZE,
       offset
+    }),
+    fetchPwaInstallDailySummary({
+      pathPrefix,
+      dateFrom: effectiveDateFrom,
+      dateTo: effectiveDateTo
     }),
     ...funnelMetrics.map((funnelMetric) =>
       fetchPwaInstallEvents({
@@ -249,6 +373,15 @@ export default async function AdminPwaAnalyticsPage({
   const promptAccepted = funnelTotals.prompt_accepted;
   const installed = funnelTotals.installed;
 
+  const dailySeries = downsampleDailySeries(dailyResponse.items, 48);
+  const dailyPromptAvailable = dailySeries.map((item) => item.promptAvailable);
+  const dailyInstalled = dailySeries.map((item) => item.installed);
+  const maxDailyValue = Math.max(1, ...dailyPromptAvailable, ...dailyInstalled);
+  const promptAvailableLinePoints = buildLinePoints(dailyPromptAvailable, maxDailyValue);
+  const installedLinePoints = buildLinePoints(dailyInstalled, maxDailyValue);
+  const dailyStart = dailySeries[0]?.date;
+  const dailyEnd = dailySeries[dailySeries.length - 1]?.date;
+
   const hasPrev = eventsResponse.offset > 0;
   const nextOffset = eventsResponse.offset + eventsResponse.limit;
   const hasNext = nextOffset < eventsResponse.total;
@@ -259,6 +392,12 @@ export default async function AdminPwaAnalyticsPage({
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">PWA Analytics</h1>
           <div className="flex items-center gap-2">
+            <Link
+              href={exportHref}
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+            >
+              Экспорт CSV
+            </Link>
             <Link
               href="/admin/orders"
               className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
@@ -352,7 +491,7 @@ export default async function AdminPwaAnalyticsPage({
           </select>
         </label>
 
-        <div className="sm:col-span-3 flex flex-wrap items-end gap-2">
+        <div className="flex flex-wrap items-end gap-2 sm:col-span-3">
           <button
             type="submit"
             className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
@@ -365,6 +504,33 @@ export default async function AdminPwaAnalyticsPage({
           >
             Сбросить
           </Link>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 border-t border-border/40 pt-2 sm:col-span-5">
+          <span className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground">Быстрый диапазон</span>
+          {quickDateRanges.map((preset) => {
+            const isActive = dateFrom === preset.dateFrom && dateTo === preset.dateTo;
+            return (
+              <Link
+                key={preset.label}
+                href={buildAnalyticsHref({
+                  metric,
+                  pathPrefix,
+                  dateFrom: preset.dateFrom,
+                  dateTo: preset.dateTo,
+                  sort,
+                  offset: 0
+                })}
+                className={`inline-flex h-8 items-center justify-center rounded-lg border px-2 text-[11px] transition-colors ${
+                  isActive
+                    ? "border-accent/70 bg-accent/15 text-foreground"
+                    : "border-border/60 text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                }`}
+              >
+                {preset.label}
+              </Link>
+            );
+          })}
         </div>
       </form>
 
@@ -396,10 +562,129 @@ export default async function AdminPwaAnalyticsPage({
         <article className="rounded-2xl border border-border/60 bg-surface-strong px-4 py-3">
           <p className="text-xs text-muted-foreground">installed</p>
           <p className="mt-1 text-2xl font-semibold text-emerald-300">{installed}</p>
-          <p className="text-xs text-muted-foreground">
-            Итого: {formatPercent(ratio(installed, promptAvailable))}
-          </p>
+          <p className="text-xs text-muted-foreground">Итого: {formatPercent(ratio(installed, promptAvailable))}</p>
         </article>
+      </section>
+
+      <section className="rounded-2xl border border-border/60 bg-surface-soft p-4">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <h2 className="text-lg font-semibold tracking-tight">Динамика по дням</h2>
+          <span className="text-xs text-muted-foreground">{dailySeries.length} точек</span>
+        </div>
+        <p className="mt-1 text-xs text-muted-foreground">
+          Сравнение prompt_available и installed в выбранном диапазоне.
+        </p>
+
+        {dailySeries.length > 0 ? (
+          <>
+            <div className="mt-4 overflow-x-auto">
+              <div className="min-w-[740px] rounded-xl border border-border/60 bg-surface-strong/60 p-3">
+                <svg viewBox={`0 0 ${CHART_WIDTH} ${CHART_HEIGHT}`} className="h-56 w-full" role="img">
+                  {[0.25, 0.5, 0.75, 1].map((fraction) => {
+                    const y =
+                      CHART_HEIGHT -
+                      CHART_PADDING_Y -
+                      (CHART_HEIGHT - CHART_PADDING_Y * 2) * fraction;
+                    return (
+                      <line
+                        key={fraction}
+                        x1={CHART_PADDING_X}
+                        y1={y}
+                        x2={CHART_WIDTH - CHART_PADDING_X}
+                        y2={y}
+                        stroke="currentColor"
+                        className="text-border/50"
+                        strokeWidth="1"
+                      />
+                    );
+                  })}
+                  <line
+                    x1={CHART_PADDING_X}
+                    y1={CHART_HEIGHT - CHART_PADDING_Y}
+                    x2={CHART_WIDTH - CHART_PADDING_X}
+                    y2={CHART_HEIGHT - CHART_PADDING_Y}
+                    stroke="currentColor"
+                    className="text-border/70"
+                    strokeWidth="1"
+                  />
+
+                  <polyline
+                    points={promptAvailableLinePoints}
+                    fill="none"
+                    stroke="currentColor"
+                    className="text-amber-300"
+                    strokeWidth="2.2"
+                  />
+                  <polyline
+                    points={installedLinePoints}
+                    fill="none"
+                    stroke="currentColor"
+                    className="text-emerald-300"
+                    strokeWidth="2.2"
+                  />
+
+                  {dailySeries.map((item, index) => {
+                    const availablePoint = getChartPoint(
+                      index,
+                      dailySeries.length,
+                      item.promptAvailable,
+                      maxDailyValue
+                    );
+                    const installedPoint = getChartPoint(
+                      index,
+                      dailySeries.length,
+                      item.installed,
+                      maxDailyValue
+                    );
+                    return (
+                      <g key={item.date}>
+                        <circle
+                          cx={availablePoint.x}
+                          cy={availablePoint.y}
+                          r="2.6"
+                          fill="currentColor"
+                          className="text-amber-300"
+                        />
+                        <circle
+                          cx={installedPoint.x}
+                          cy={installedPoint.y}
+                          r="2.6"
+                          fill="currentColor"
+                          className="text-emerald-300"
+                        />
+                      </g>
+                    );
+                  })}
+                </svg>
+              </div>
+            </div>
+
+            <div className="mt-3 flex items-center justify-between text-[11px] text-muted-foreground">
+              <span>{dailyStart ? formatDayLabel(dailyStart) : "—"}</span>
+              <span>Максимум: {maxDailyValue}</span>
+              <span>{dailyEnd ? formatDayLabel(dailyEnd) : "—"}</span>
+            </div>
+
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+              <div className="rounded-xl border border-border/50 bg-surface-strong px-3 py-2">
+                <p className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground">prompt_available</p>
+                <p className="mt-1 text-lg font-semibold text-amber-200">
+                  {dailySeries.reduce((sum, item) => sum + item.promptAvailable, 0)}
+                </p>
+              </div>
+              <div className="rounded-xl border border-border/50 bg-surface-strong px-3 py-2">
+                <p className="text-[11px] uppercase tracking-[0.08em] text-muted-foreground">installed</p>
+                <p className="mt-1 text-lg font-semibold text-emerald-300">
+                  {dailySeries.reduce((sum, item) => sum + item.installed, 0)}
+                </p>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="mt-4 rounded-xl border border-border/50 bg-surface-strong px-3 py-3 text-sm text-muted-foreground">
+            Нет данных для графика по текущим фильтрам.
+          </div>
+        )}
       </section>
 
       <section className="space-y-2">
@@ -474,8 +759,7 @@ export default async function AdminPwaAnalyticsPage({
       </section>
 
       <div className="rounded-xl border border-border/50 bg-surface-soft px-3 py-2 text-xs text-muted-foreground">
-        Перmalink фильтра:{" "}
-        <span className="font-mono text-[11px] text-foreground">{currentHref}</span>
+        Перmalink фильтра: <span className="font-mono text-[11px] text-foreground">{currentHref}</span>
       </div>
     </div>
   );

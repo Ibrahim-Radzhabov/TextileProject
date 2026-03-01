@@ -943,6 +943,59 @@ class OrderStore:
         total = int(count_row["total"]) if count_row else 0
         return items, total
 
+    def list_pwa_install_daily_summary(
+        self,
+        *,
+        client_id: str,
+        metric: Optional[str],
+        path_prefix: Optional[str],
+        since_iso: Optional[str],
+        until_iso: Optional[str],
+    ) -> list[dict[str, Any]]:
+        where_parts = ["client_id = ?"]
+        params: list[Any] = [client_id]
+
+        if metric:
+            where_parts.append("metric = ?")
+            params.append(metric)
+
+        if path_prefix:
+            where_parts.append("path LIKE ?")
+            params.append(f"{path_prefix}%")
+
+        if since_iso:
+            where_parts.append("event_timestamp >= ?")
+            params.append(since_iso)
+
+        if until_iso:
+            where_parts.append("event_timestamp < ?")
+            params.append(until_iso)
+
+        where_sql = " AND ".join(where_parts)
+        with self._connect() as conn:
+            rows = conn.execute(
+                f"""
+                SELECT
+                    substr(event_timestamp, 1, 10) AS event_date,
+                    metric,
+                    COUNT(*) AS total
+                FROM pwa_install_events
+                WHERE {where_sql}
+                GROUP BY event_date, metric
+                ORDER BY event_date ASC, metric ASC
+                """,
+                params,
+            ).fetchall()
+
+        return [
+            {
+                "event_date": row["event_date"],
+                "metric": row["metric"],
+                "total": int(row["total"]),
+            }
+            for row in rows
+        ]
+
 
 @lru_cache(maxsize=1)
 def get_order_store() -> OrderStore:

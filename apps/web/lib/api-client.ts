@@ -174,6 +174,22 @@ type PwaInstallEventListResponseDto = {
   offset: number;
 };
 
+type PwaInstallDailySummaryEntryDto = {
+  date: string;
+  prompt_available: number;
+  ios_hint_shown: number;
+  prompt_opened: number;
+  installed: number;
+  prompt_accepted: number;
+  prompt_dismissed: number;
+  banner_dismissed: number;
+  total: number;
+};
+
+type PwaInstallDailySummaryResponseDto = {
+  items: PwaInstallDailySummaryEntryDto[];
+};
+
 type StorefrontConfigDto = Omit<StorefrontConfig, "shop" | "catalog" | "integrations"> & {
   shop: {
     id: string;
@@ -407,6 +423,22 @@ export type PwaInstallEventListResponse = {
   offset: number;
 };
 
+export type PwaInstallDailySummaryEntry = {
+  date: string;
+  promptAvailable: number;
+  iosHintShown: number;
+  promptOpened: number;
+  installed: number;
+  promptAccepted: number;
+  promptDismissed: number;
+  bannerDismissed: number;
+  total: number;
+};
+
+export type PwaInstallDailySummaryResponse = {
+  items: PwaInstallDailySummaryEntry[];
+};
+
 export type ManualOrderStatus = SharedManualOrderStatus;
 export type StatusAuditActorType = "checkout" | "webhook" | "admin" | "system";
 
@@ -504,6 +536,22 @@ function normalizePwaInstallEvent(dto: PwaInstallEventDto): PwaInstallEvent {
     sourceIp: dto.source_ip ?? null,
     eventTimestamp: dto.event_timestamp,
     createdAt: dto.created_at
+  };
+}
+
+function normalizePwaInstallDailySummaryEntry(
+  dto: PwaInstallDailySummaryEntryDto
+): PwaInstallDailySummaryEntry {
+  return {
+    date: dto.date,
+    promptAvailable: dto.prompt_available,
+    iosHintShown: dto.ios_hint_shown,
+    promptOpened: dto.prompt_opened,
+    installed: dto.installed,
+    promptAccepted: dto.prompt_accepted,
+    promptDismissed: dto.prompt_dismissed,
+    bannerDismissed: dto.banner_dismissed,
+    total: dto.total
   };
 }
 
@@ -836,5 +884,40 @@ export async function fetchPwaInstallEvents(options?: {
     total: dto.total,
     limit: dto.limit,
     offset: dto.offset
+  };
+}
+
+export async function fetchPwaInstallDailySummary(options?: {
+  metric?: PwaInstallMetric;
+  pathPrefix?: string;
+  dateFrom?: string;
+  dateTo?: string;
+}): Promise<PwaInstallDailySummaryResponse> {
+  const params = new URLSearchParams();
+  if (options?.metric) {
+    params.set("metric", options.metric);
+  }
+  if (options?.pathPrefix) {
+    params.set("path_prefix", options.pathPrefix);
+  }
+  if (options?.dateFrom) {
+    params.set("date_from", options.dateFrom);
+  }
+  if (options?.dateTo) {
+    params.set("date_to", options.dateTo);
+  }
+
+  const query = params.toString();
+  const res = await fetch(
+    `${resolveApiUrl()}/metrics/pwa-install-events/daily${query ? `?${query}` : ""}`,
+    {
+      cache: "no-store",
+      headers: resolveAdminHeaders()
+    }
+  );
+  const dto = await handleJson<PwaInstallDailySummaryResponseDto>(res);
+
+  return {
+    items: dto.items.map((item) => normalizePwaInstallDailySummaryEntry(item))
   };
 }

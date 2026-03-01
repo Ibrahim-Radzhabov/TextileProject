@@ -132,6 +132,8 @@ Additional endpoints:
 - `GET /webhooks/audit?order_id=&processing_status=&limit=&offset=` — list Stripe webhook audit records.
 - `POST /metrics/pwa-install-events` — ingest storefront PWA install telemetry (`prompt_available`, `prompt_accepted`, `installed`, etc.).
 - `GET /metrics/pwa-install-events?metric=&path_prefix=&date_from=&date_to=&sort=&limit=&offset=` — admin-scoped list of PWA install telemetry.
+- `GET /metrics/pwa-install-events/daily?metric=&path_prefix=&date_from=&date_to=` — admin-scoped daily aggregation for analytics charts.
+- `GET /metrics/pwa-install-events/export.csv?metric=&path_prefix=&date_from=&date_to=&sort=` — admin-scoped CSV export for filtered telemetry.
 
 ### Real Stripe smoke check (CLI)
 
