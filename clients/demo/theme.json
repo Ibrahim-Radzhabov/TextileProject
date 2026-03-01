@@ -1,18 +1,18 @@
 {
   "id": "demo-theme",
-  "name": "Noir Textile",
+  "name": "Atelier Drapes",
   "colors": {
-    "background": "#0A0A0A",
-    "foreground": "#F3F4F6",
-    "muted": "rgba(255,255,255,0.08)",
-    "mutedForeground": "rgba(255,255,255,0.5)",
-    "accent": "#8F97A8",
-    "accentSoft": "rgba(143,151,168,0.18)",
-    "border": "rgba(255,255,255,0.12)",
-    "input": "rgba(18,18,18,0.94)",
-    "ring": "rgba(255,255,255,0.32)",
-    "card": "rgba(18,18,18,0.92)",
-    "cardForeground": "#F3F4F6"
+    "background": "#F6F1EA",
+    "foreground": "#1F1A15",
+    "muted": "rgba(66,51,34,0.1)",
+    "mutedForeground": "rgba(58,45,31,0.58)",
+    "accent": "#8F6A48",
+    "accentSoft": "rgba(143,106,72,0.18)",
+    "border": "rgba(77,57,36,0.2)",
+    "input": "rgba(255,252,247,0.9)",
+    "ring": "rgba(143,106,72,0.38)",
+    "card": "rgba(255,250,244,0.88)",
+    "cardForeground": "#1F1A15"
   },
   "radii": {
     "xl": 12,
@@ -21,9 +21,9 @@
     "sm": 6
   },
   "shadows": {
-    "soft": "0 14px 34px rgba(0,0,0,0.28)",
-    "softSubtle": "0 8px 20px rgba(0,0,0,0.2)",
-    "ring": "0 0 0 1px rgba(255,255,255,0.14)"
+    "soft": "0 20px 48px rgba(89, 67, 43, 0.18)",
+    "softSubtle": "0 12px 30px rgba(89, 67, 43, 0.12)",
+    "ring": "0 0 0 1px rgba(143,106,72,0.18)"
   },
   "typography": {
     "fontSans": "Soehne, Manrope, Avenir Next, SF Pro Display, sans-serif",
@@ -31,11 +31,48 @@
     "scaleRatio": 1.18
   },
   "gradients": {
-    "hero": "radial-gradient(circle at 8% 0%, rgba(255,255,255,0.06), transparent 40%), radial-gradient(circle at 90% 12%, rgba(255,255,255,0.05), transparent 44%), linear-gradient(160deg, rgba(10,10,10,1), rgba(12,12,12,1))",
-    "surface": "linear-gradient(150deg, rgba(20,20,20,0.92), rgba(15,15,15,0.96))"
+    "hero": "radial-gradient(circle at 14% 4%, rgba(199,162,126,0.28), transparent 40%), radial-gradient(circle at 88% 10%, rgba(230,213,191,0.34), transparent 45%), linear-gradient(160deg, rgba(246,241,234,1), rgba(236,226,214,1))",
+    "surface": "linear-gradient(150deg, rgba(255,250,244,0.88), rgba(247,240,232,0.94))"
   },
-  "defaultVariant": "noir",
+  "defaultVariant": "atelier",
   "variants": [
+    {
+      "id": "atelier",
+      "name": "Atelier",
+      "colors": {
+        "background": "#F6F1EA",
+        "foreground": "#1F1A15",
+        "muted": "rgba(66,51,34,0.1)",
+        "mutedForeground": "rgba(58,45,31,0.58)",
+        "accent": "#8F6A48",
+        "accentSoft": "rgba(143,106,72,0.18)",
+        "border": "rgba(77,57,36,0.2)",
+        "input": "rgba(255,252,247,0.9)",
+        "ring": "rgba(143,106,72,0.38)",
+        "card": "rgba(255,250,244,0.88)",
+        "cardForeground": "#1F1A15"
+      },
+      "radii": {
+        "xl": 12,
+        "lg": 10,
+        "md": 8,
+        "sm": 6
+      },
+      "shadows": {
+        "soft": "0 20px 48px rgba(89, 67, 43, 0.18)",
+        "softSubtle": "0 12px 30px rgba(89, 67, 43, 0.12)",
+        "ring": "0 0 0 1px rgba(143,106,72,0.18)"
+      },
+      "typography": {
+        "fontSans": "Soehne, Manrope, Avenir Next, SF Pro Display, sans-serif",
+        "baseFontSize": 16,
+        "scaleRatio": 1.17
+      },
+      "gradients": {
+        "hero": "radial-gradient(circle at 14% 4%, rgba(199,162,126,0.28), transparent 40%), radial-gradient(circle at 88% 10%, rgba(230,213,191,0.34), transparent 45%), linear-gradient(160deg, rgba(246,241,234,1), rgba(236,226,214,1))",
+        "surface": "linear-gradient(150deg, rgba(255,250,244,0.88), rgba(247,240,232,0.94))"
+      }
+    },
     {
       "id": "noir",
       "name": "Noir",

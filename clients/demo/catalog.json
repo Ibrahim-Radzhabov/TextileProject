@@ -2,37 +2,159 @@
   "products": [
     {
       "id": "p1",
-      "slug": "textured-wool-coat",
-      "name": "Textured Wool Coat",
-      "shortDescription": "Тактильный, архитектурный силуэт для повседневного ритма.",
-      "price": { "currency": "USD", "amount": 420 },
+      "slug": "linen-blackout-drape",
+      "name": "Linen Blackout Drape",
+      "description": "Плотная льняная портьера для полного затемнения спальни или кино-зоны.",
+      "shortDescription": "Плотный лен blackout с мягкой архитектурной драпировкой.",
+      "price": {
+        "currency": "USD",
+        "amount": 189.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 229.0
+      },
+      "badges": [
+        {
+          "id": "b1",
+          "label": "New",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "blackout",
+        "linen",
+        "bedroom"
+      ],
       "media": [
         {
           "id": "m1",
-          "url": "https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg",
-          "alt": "Textured Wool Coat"
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Linen blackout drape"
         }
       ],
-      "badges": [{ "id": "b1", "label": "New", "tone": "accent" }],
-      "tags": ["featured"],
-      "isFeatured": true
+      "isFeatured": true,
+      "metadata": {
+        "Light control": "95-100%",
+        "Fabric": "Linen blend",
+        "Width panel": "150 cm",
+        "Care": "Dry clean"
+      }
     },
     {
       "id": "p2",
-      "slug": "minimal-cotton-shirt",
-      "name": "Minimal Cotton Shirt",
-      "shortDescription": "Чистые линии, мягкий хлопок, идеальная посадка.",
-      "price": { "currency": "USD", "amount": 140 },
+      "slug": "airy-voile-tulle",
+      "name": "Airy Voile Tulle",
+      "description": "Полупрозрачный тюль для дневного света и приватности без утяжеления интерьера.",
+      "shortDescription": "Воздушный тюль voile с мягким рассеиванием света.",
+      "price": {
+        "currency": "USD",
+        "amount": 74.0
+      },
+      "badges": [
+        {
+          "id": "b2",
+          "label": "Essential",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "featured",
+        "tulle",
+        "sheer",
+        "living-room"
+      ],
       "media": [
         {
           "id": "m2",
-          "url": "https://images.pexels.com/photos/7671169/pexels-photo-7671169.jpeg",
-          "alt": "Minimal Cotton Shirt"
+          "url": "/demo/airy-voile-tulle.svg",
+          "alt": "Airy voile tulle"
         }
       ],
-      "badges": [{ "id": "b2", "label": "Essential", "tone": "neutral" }],
-      "tags": ["featured"],
-      "isFeatured": true
+      "isFeatured": true,
+      "metadata": {
+        "Light control": "40-55%",
+        "Fabric": "Voile",
+        "Width panel": "300 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p3",
+      "slug": "jacquard-day-night-set",
+      "name": "Jacquard Day-Night Set",
+      "description": "Двухслойный комплект: полупрозрачный слой днем и более плотный для вечерней приватности.",
+      "shortDescription": "Day-night комплект для гибкого сценария освещения.",
+      "price": {
+        "currency": "USD",
+        "amount": 239.0
+      },
+      "badges": [
+        {
+          "id": "b3",
+          "label": "Best Seller",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "jacquard",
+        "day-night",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "m3",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Jacquard day-night curtain set"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Light control": "60-95%",
+        "Fabric": "Jacquard + voile",
+        "Width panel": "200 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p4",
+      "slug": "ripple-fold-sheer",
+      "name": "Ripple Fold Sheer",
+      "description": "Современный ripple fold с ровной волной по всей ширине, идеален для панорамных окон.",
+      "shortDescription": "Ровная волна и легкая полупрозрачность для современного интерьера.",
+      "price": {
+        "currency": "USD",
+        "amount": 128.0
+      },
+      "badges": [
+        {
+          "id": "b4",
+          "label": "Studio Pick",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "sheer",
+        "ripple-fold",
+        "minimal",
+        "office"
+      ],
+      "media": [
+        {
+          "id": "m4",
+          "url": "/demo/ripple-fold-sheer.svg",
+          "alt": "Ripple fold sheer curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "35-45%",
+        "Fabric": "Poly sheer",
+        "Width panel": "320 cm",
+        "Care": "Machine 30C"
+      }
     }
   ]
 }

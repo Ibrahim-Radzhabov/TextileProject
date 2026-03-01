@@ -38,7 +38,7 @@ export const TopNav: React.FC<TopNavProps> = ({
       <div className="flex min-w-0 flex-col">
         <span className="truncate text-sm font-medium leading-tight tracking-tight text-foreground">{shopName}</span>
         <span className="ui-kicker">
-          Quiet Commerce
+          Window Textiles
         </span>
       </div>
     </div>

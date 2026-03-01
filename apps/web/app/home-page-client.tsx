@@ -284,15 +284,15 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
         <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6 sm:py-7">
           <div className="relative z-10 space-y-3">
             <div className="space-y-1.5">
-              <p className="ui-kicker">Storefront direction</p>
-              <h2 className="ui-title text-xl sm:text-2xl">Editorial</h2>
+              <p className="ui-kicker">Collection focus</p>
+              <h2 className="ui-title text-xl sm:text-2xl">Curtains and Tulle</h2>
               <p className="ui-subtle max-w-xl text-sm sm:text-base">
-                Единый визуальный язык для витрины: строгая типографика, воздух и premium-ритм.
+                Витрина построена вокруг оконного текстиля: светопропускание, фактуры и интерьерные сценарии.
               </p>
             </div>
             <div className="flex flex-wrap gap-2">
-              <Badge tone="accent">Editorial locked</Badge>
-              <Badge tone="muted">Home + Catalog + Product + Checkout</Badge>
+              <Badge tone="accent">Textile mode</Badge>
+              <Badge tone="muted">Curtains, sheers, blackout</Badge>
             </div>
           </div>
         </Surface>

@@ -1,0 +1,21 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="600" y1="0" x2="600" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F7F4EE"/>
+      <stop offset="1" stop-color="#DDD4C8"/>
+    </linearGradient>
+    <linearGradient id="ripple" x1="0" y1="0" x2="0" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.78"/>
+      <stop offset="1" stop-color="#F0E9DD" stop-opacity="0.42"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <rect x="110" y="140" width="980" height="1220" rx="24" fill="#FFFFFF" fill-opacity="0.34" stroke="#C3B49E" stroke-opacity="0.42"/>
+  <path d="M160 140C230 250 230 1250 160 1360H290C360 1250 360 250 290 140H160Z" fill="url(#ripple)"/>
+  <path d="M300 140C370 250 370 1250 300 1360H430C500 1250 500 250 430 140H300Z" fill="url(#ripple)"/>
+  <path d="M440 140C510 250 510 1250 440 1360H570C640 1250 640 250 570 140H440Z" fill="url(#ripple)"/>
+  <path d="M580 140C650 250 650 1250 580 1360H710C780 1250 780 250 710 140H580Z" fill="url(#ripple)"/>
+  <path d="M720 140C790 250 790 1250 720 1360H850C920 1250 920 250 850 140H720Z" fill="url(#ripple)"/>
+  <path d="M860 140C930 250 930 1250 860 1360H990C1060 1250 1060 250 990 140H860Z" fill="url(#ripple)"/>
+  <rect x="190" y="180" width="820" height="70" rx="10" fill="#E7DCCB" fill-opacity="0.55"/>
+</svg>

@@ -1,0 +1,19 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EDE5D8"/>
+      <stop offset="1" stop-color="#CEB89C"/>
+    </linearGradient>
+    <pattern id="jacquard" width="42" height="42" patternUnits="userSpaceOnUse">
+      <rect width="42" height="42" fill="#9A7C5D"/>
+      <path d="M0 21H42M21 0V42" stroke="#B69877" stroke-opacity="0.35"/>
+      <circle cx="21" cy="21" r="6" fill="#C9AF93" fill-opacity="0.35"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <rect x="120" y="120" width="960" height="1260" rx="24" fill="#F1E6D8" stroke="#A98A69" stroke-opacity="0.45"/>
+  <rect x="170" y="140" width="400" height="1220" rx="16" fill="url(#jacquard)"/>
+  <rect x="580" y="140" width="450" height="1220" rx="16" fill="#FFFFFF" fill-opacity="0.46"/>
+  <path d="M620 140C680 240 680 1260 620 1360H760C820 1260 820 240 760 140H620Z" fill="#FFFFFF" fill-opacity="0.62"/>
+  <path d="M780 140C840 240 840 1260 780 1360H920C980 1260 980 240 920 140H780Z" fill="#FFFFFF" fill-opacity="0.56"/>
+</svg>
