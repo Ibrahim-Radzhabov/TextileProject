@@ -6,11 +6,17 @@ const SERVICE_WORKER_PATH = "/sw.js";
 
 export function PwaRegister() {
   useEffect(() => {
-    if (process.env.NODE_ENV !== "production") {
+    if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
       return;
     }
 
-    if (typeof window === "undefined" || !("serviceWorker" in navigator)) {
+    if (process.env.NODE_ENV !== "production") {
+      // In local dev we aggressively remove stale production SW registrations,
+      // otherwise old offline fallback may keep intercepting requests.
+      void navigator.serviceWorker
+        .getRegistrations()
+        .then((registrations) => Promise.all(registrations.map((registration) => registration.unregister())))
+        .catch(() => undefined);
       return;
     }
 
