@@ -64,6 +64,8 @@ Core:
 - `FRONTEND_ORIGIN` / `frontend_origin` — origin of the web app, used for CORS and Stripe redirect URLs.
 - `ADMIN_TOKEN` — optional token for protecting `/admin/*` pages in web middleware.
   - If set, open `/admin/login`, enter the token and middleware will store an httpOnly cookie for `/admin`.
+- `NEXT_PUBLIC_HOME_CONCEPT` — optional home page visual preset (`aurora`, `editorial`, `mono`).
+  - You can override it per-request via `/?concept=aurora|editorial|mono`.
 
 Stripe:
 
