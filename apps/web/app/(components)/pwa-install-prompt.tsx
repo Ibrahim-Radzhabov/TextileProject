@@ -4,111 +4,23 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Button } from "@store-platform/ui";
-
-type BeforeInstallPromptEvent = Event & {
-  prompt: () => Promise<void>;
-  userChoice: Promise<{ outcome: "accepted" | "dismissed"; platform: string }>;
-};
-
-type PromptMode = "native" | "ios";
-
-const STORAGE_KEY_DISMISSED = "store-platform:pwa-install-dismissed";
-const STORAGE_KEY_INSTALLED = "store-platform:pwa-install-installed";
-const TRACK_EVENT_NAME = "store-platform:pwa-install";
-const INSTALL_TRACK_ENDPOINT = process.env.NEXT_PUBLIC_PWA_TRACK_URL;
-
-function canUseLocalStorage(): boolean {
-  return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
-}
-
-function readStorageFlag(key: string): boolean {
-  if (!canUseLocalStorage()) {
-    return false;
-  }
-
-  try {
-    return window.localStorage.getItem(key) === "1";
-  } catch {
-    return false;
-  }
-}
-
-function writeStorageFlag(key: string): void {
-  if (!canUseLocalStorage()) {
-    return;
-  }
-
-  try {
-    window.localStorage.setItem(key, "1");
-  } catch {
-    // No-op: best effort persistence.
-  }
-}
-
-function isStandaloneMode(): boolean {
-  if (typeof window === "undefined") {
-    return false;
-  }
-
-  const displayModeStandalone = window.matchMedia("(display-mode: standalone)").matches;
-  const iosStandalone = Boolean((window.navigator as Navigator & { standalone?: boolean }).standalone);
-  return displayModeStandalone || iosStandalone;
-}
-
-function isIosSafari(): boolean {
-  if (typeof navigator === "undefined") {
-    return false;
-  }
-
-  const ua = navigator.userAgent;
-  const iosDevice = /iP(ad|hone|od)/i.test(ua);
-  const webkit = /WebKit/i.test(ua);
-  const excluded = /CriOS|FxiOS|OPiOS|EdgiOS/i.test(ua);
-  return iosDevice && webkit && !excluded;
-}
-
-function trackInstallMetric(metric: string): void {
-  if (typeof window === "undefined") {
-    return;
-  }
-
-  const payload = {
-    metric,
-    path: window.location.pathname,
-    timestamp: new Date().toISOString()
-  };
-
-  window.dispatchEvent(
-    new CustomEvent(TRACK_EVENT_NAME, {
-      detail: payload
-    })
-  );
-
-  if (!INSTALL_TRACK_ENDPOINT) {
-    return;
-  }
-
-  const body = JSON.stringify(payload);
-
-  if (navigator.sendBeacon) {
-    navigator.sendBeacon(INSTALL_TRACK_ENDPOINT, body);
-    return;
-  }
-
-  void fetch(INSTALL_TRACK_ENDPOINT, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body,
-    keepalive: true
-  }).catch(() => {
-    // No-op: tracking should not affect UX.
-  });
-}
+import type { PwaInstallMetric } from "@store-platform/shared-types";
+import {
+  type BeforeInstallPromptEvent,
+  type PwaPromptMode,
+  PWA_DISMISSED_STORAGE_KEY,
+  PWA_INSTALLED_STORAGE_KEY,
+  isIosSafari,
+  isStandaloneMode,
+  readPwaStorageFlag,
+  trackPwaInstallMetric,
+  writePwaStorageFlag
+} from "@/lib/pwa-install";
 
 export function PwaInstallPrompt() {
   const pathname = usePathname();
   const [visible, setVisible] = useState(false);
-  const [mode, setMode] = useState<PromptMode | null>(null);
+  const [mode, setMode] = useState<PwaPromptMode | null>(null);
   const [promptEvent, setPromptEvent] = useState<BeforeInstallPromptEvent | null>(null);
 
   const isAdminArea = useMemo(() => pathname.startsWith("/admin"), [pathname]);
@@ -118,7 +30,11 @@ export function PwaInstallPrompt() {
       return;
     }
 
-    if (isStandaloneMode() || readStorageFlag(STORAGE_KEY_INSTALLED) || readStorageFlag(STORAGE_KEY_DISMISSED)) {
+    if (
+      isStandaloneMode() ||
+      readPwaStorageFlag(PWA_INSTALLED_STORAGE_KEY) ||
+      readPwaStorageFlag(PWA_DISMISSED_STORAGE_KEY)
+    ) {
       return;
     }
 
@@ -128,14 +44,14 @@ export function PwaInstallPrompt() {
       setPromptEvent(installEvent);
       setMode("native");
       setVisible(true);
-      trackInstallMetric("prompt_available");
+      trackPwaInstallMetric("prompt_available");
     };
 
     const handleAppInstalled = () => {
-      writeStorageFlag(STORAGE_KEY_INSTALLED);
+      writePwaStorageFlag(PWA_INSTALLED_STORAGE_KEY);
       setVisible(false);
       setPromptEvent(null);
-      trackInstallMetric("installed");
+      trackPwaInstallMetric("installed");
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
@@ -145,7 +61,7 @@ export function PwaInstallPrompt() {
     if (isIosSafari()) {
       setMode("ios");
       setVisible(true);
-      trackInstallMetric("ios_hint_shown");
+      trackPwaInstallMetric("ios_hint_shown");
     }
 
     return () => {
@@ -158,10 +74,10 @@ export function PwaInstallPrompt() {
     return null;
   }
 
-  const closePrompt = (metric: string) => {
-    writeStorageFlag(STORAGE_KEY_DISMISSED);
+  const closePrompt = (metric: PwaInstallMetric) => {
+    writePwaStorageFlag(PWA_DISMISSED_STORAGE_KEY);
     setVisible(false);
-    trackInstallMetric(metric);
+    trackPwaInstallMetric(metric);
   };
 
   const onInstallClick = async () => {
@@ -169,7 +85,7 @@ export function PwaInstallPrompt() {
       return;
     }
 
-    trackInstallMetric("prompt_opened");
+    trackPwaInstallMetric("prompt_opened");
     await promptEvent.prompt();
     const choice = await promptEvent.userChoice.catch(() => null);
     if (!choice) {
@@ -177,14 +93,14 @@ export function PwaInstallPrompt() {
     }
 
     if (choice.outcome === "accepted") {
-      writeStorageFlag(STORAGE_KEY_INSTALLED);
+      writePwaStorageFlag(PWA_INSTALLED_STORAGE_KEY);
       setVisible(false);
       setPromptEvent(null);
-      trackInstallMetric("prompt_accepted");
+      trackPwaInstallMetric("prompt_accepted");
       return;
     }
 
-    trackInstallMetric("prompt_dismissed");
+    trackPwaInstallMetric("prompt_dismissed");
   };
 
   return (

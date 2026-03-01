@@ -23,7 +23,7 @@ export default defineConfig({
   webServer: [
     {
       command:
-        "CLIENT_ID=demo FRONTEND_ORIGIN=http://127.0.0.1:3000 STRIPE_WEBHOOK_SECRET=whsec_e2e_test ORDER_DB_PATH=/tmp/store-platform-e2e.sqlite3 .venv/bin/uvicorn apps.api.main:app --host 127.0.0.1 --port 8000",
+        "CLIENT_ID=demo FRONTEND_ORIGIN=http://127.0.0.1:3000 ADMIN_TOKEN=e2e-admin STRIPE_WEBHOOK_SECRET=whsec_e2e_test ORDER_DB_PATH=/tmp/store-platform-e2e.sqlite3 .venv/bin/uvicorn apps.api.main:app --host 127.0.0.1 --port 8000",
       url: `${API_URL}/health`,
       reuseExistingServer: !process.env.CI
     },

@@ -420,3 +420,48 @@ test("stripe webhook marks order as paid and appears in paid filters/audit", asy
   expect(webhookAuditPayload.items[0]?.processing_status).toBe("processed");
   expect(webhookAuditPayload.items[0]?.order_status).toBe("paid");
 });
+
+test("pwa metrics endpoint stores install events and supports admin filters", async ({ request }) => {
+  const pathSuffix = Date.now();
+  const trackedPath = `/e2e/pwa-metrics-${pathSuffix}`;
+  const eventTimestamp = new Date().toISOString();
+
+  const trackResponse = await request.post(`${API_BASE_URL}/metrics/pwa-install-events`, {
+    data: {
+      metric: "prompt_available",
+      path: trackedPath,
+      timestamp: eventTimestamp,
+      source: "web"
+    }
+  });
+  expect(trackResponse.status()).toBe(202);
+  expect((await trackResponse.json()) as { ok: boolean }).toEqual({ ok: true });
+
+  const unauthorizedListResponse = await request.get(
+    `${API_BASE_URL}/metrics/pwa-install-events?path_prefix=${encodeURIComponent(trackedPath)}`
+  );
+  expect(unauthorizedListResponse.status()).toBe(401);
+
+  const listResponse = await request.get(
+    `${API_BASE_URL}/metrics/pwa-install-events?metric=prompt_available&path_prefix=${encodeURIComponent(trackedPath)}&sort=newest&limit=5&offset=0`,
+    {
+      headers: {
+        "x-admin-token": ADMIN_TOKEN
+      }
+    }
+  );
+  expect(listResponse.ok()).toBeTruthy();
+  const listPayload = (await listResponse.json()) as {
+    items: Array<{ metric: string; path: string; source: string }>;
+    total: number;
+  };
+  expect(listPayload.total).toBeGreaterThan(0);
+  expect(
+    listPayload.items.some(
+      (item) =>
+        item.metric === "prompt_available" &&
+        item.path === trackedPath &&
+        item.source === "web"
+    )
+  ).toBeTruthy();
+});

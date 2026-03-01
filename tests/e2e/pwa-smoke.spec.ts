@@ -81,6 +81,7 @@ test("pwa install banner appears on beforeinstallprompt and can be dismissed", a
     window.dispatchEvent(syntheticPrompt);
   });
 
+  await expect(page.getByRole("button", { name: "Установить приложение" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "Установите витрину на экран" })).toBeVisible();
   await page.getByRole("button", { name: "Позже" }).click();
   await expect(page.getByRole("heading", { level: 2, name: "Установите витрину на экран" })).toHaveCount(0);

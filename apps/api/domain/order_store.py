@@ -104,6 +104,21 @@ class OrderStore:
                 )
                 """
             )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS pwa_install_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    client_id TEXT NOT NULL,
+                    metric TEXT NOT NULL,
+                    path TEXT NOT NULL,
+                    source TEXT NOT NULL DEFAULT 'web',
+                    user_agent TEXT,
+                    source_ip TEXT,
+                    event_timestamp TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
             self._ensure_column(
                 conn=conn,
                 table_name="stripe_webhook_audit",
@@ -122,6 +137,12 @@ class OrderStore:
             )
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_order_status_audit_client_order_created ON order_status_audit(client_id, order_id, created_at DESC)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_pwa_install_events_client_created ON pwa_install_events(client_id, created_at DESC)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_pwa_install_events_client_metric_created ON pwa_install_events(client_id, metric, created_at DESC)"
             )
 
     def _ensure_column(
@@ -797,6 +818,121 @@ class OrderStore:
                 "error_text": row["error_text"],
                 "created_at": row["created_at"],
                 "updated_at": row["updated_at"],
+            }
+            for row in rows
+        ]
+        total = int(count_row["total"]) if count_row else 0
+        return items, total
+
+    def record_pwa_install_event(
+        self,
+        *,
+        client_id: str,
+        metric: str,
+        path: str,
+        source: str,
+        event_timestamp: str,
+        user_agent: Optional[str],
+        source_ip: Optional[str],
+    ) -> None:
+        now = datetime.now(timezone.utc).isoformat()
+        with self._connect() as conn:
+            conn.execute(
+                """
+                INSERT INTO pwa_install_events (
+                    client_id,
+                    metric,
+                    path,
+                    source,
+                    user_agent,
+                    source_ip,
+                    event_timestamp,
+                    created_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    client_id,
+                    metric,
+                    path,
+                    source,
+                    user_agent,
+                    source_ip,
+                    event_timestamp,
+                    now,
+                ),
+            )
+
+    def list_pwa_install_events(
+        self,
+        *,
+        client_id: str,
+        metric: Optional[str],
+        path_prefix: Optional[str],
+        since_iso: Optional[str],
+        sort: Literal["newest", "oldest"],
+        limit: int,
+        offset: int,
+    ) -> tuple[list[dict[str, Any]], int]:
+        where_parts = ["client_id = ?"]
+        params: list[Any] = [client_id]
+
+        if metric:
+            where_parts.append("metric = ?")
+            params.append(metric)
+
+        if path_prefix:
+            where_parts.append("path LIKE ?")
+            params.append(f"{path_prefix}%")
+
+        if since_iso:
+            where_parts.append("event_timestamp >= ?")
+            params.append(since_iso)
+
+        where_sql = " AND ".join(where_parts)
+        sort_direction = "ASC" if sort == "oldest" else "DESC"
+
+        with self._connect() as conn:
+            count_row = conn.execute(
+                f"""
+                SELECT COUNT(*) AS total
+                FROM pwa_install_events
+                WHERE {where_sql}
+                """,
+                params,
+            ).fetchone()
+
+            rows = conn.execute(
+                f"""
+                SELECT
+                    id,
+                    client_id,
+                    metric,
+                    path,
+                    source,
+                    user_agent,
+                    source_ip,
+                    event_timestamp,
+                    created_at
+                FROM pwa_install_events
+                WHERE {where_sql}
+                ORDER BY event_timestamp {sort_direction}, id {sort_direction}
+                LIMIT ? OFFSET ?
+                """,
+                [*params, limit, offset],
+            ).fetchall()
+
+        items = [
+            {
+                "id": row["id"],
+                "client_id": row["client_id"],
+                "metric": row["metric"],
+                "path": row["path"],
+                "source": row["source"],
+                "user_agent": row["user_agent"],
+                "source_ip": row["source_ip"],
+                "event_timestamp": row["event_timestamp"],
+                "created_at": row["created_at"],
             }
             for row in rows
         ]

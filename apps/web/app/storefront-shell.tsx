@@ -7,6 +7,7 @@ import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
+import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
 
 type StorefrontShellProps = {
   children: ReactNode;
@@ -53,6 +54,7 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
             leftHref="/"
             rightSlot={
               <>
+                <PwaInstallNavButton />
                 <Button variant="ghost" size="sm" asChild>
                   <Link href="/order-status">Статус заказа</Link>
                 </Button>

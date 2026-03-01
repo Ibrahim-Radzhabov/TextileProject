@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from datetime import datetime
 from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
@@ -285,6 +286,45 @@ class StripeWebhookAuditEntry(BaseModel):
 
 class StripeWebhookAuditListResponse(BaseModel):
     items: List[StripeWebhookAuditEntry]
+    total: int
+    limit: int
+    offset: int
+
+
+PwaInstallMetric = Literal[
+    "prompt_available",
+    "ios_hint_shown",
+    "prompt_opened",
+    "installed",
+    "prompt_accepted",
+    "prompt_dismissed",
+    "banner_dismissed",
+]
+
+PwaInstallSource = Literal["web"]
+
+
+class PwaInstallEventRequest(BaseModel):
+    metric: PwaInstallMetric
+    path: str = Field(min_length=1, max_length=300)
+    timestamp: datetime
+    source: PwaInstallSource = "web"
+
+
+class PwaInstallEventEntry(BaseModel):
+    id: int
+    client_id: str
+    metric: PwaInstallMetric
+    path: str
+    source: PwaInstallSource
+    user_agent: Optional[str] = None
+    source_ip: Optional[str] = None
+    event_timestamp: str
+    created_at: str
+
+
+class PwaInstallEventListResponse(BaseModel):
+    items: List[PwaInstallEventEntry]
     total: int
     limit: int
     offset: int
