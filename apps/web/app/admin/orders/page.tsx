@@ -22,12 +22,19 @@ const statusFilters: Array<{ label: string; value?: OrderStatus }> = [
   { label: "Cancelled", value: "cancelled" }
 ];
 
-const paymentFilters: Array<{ label: string; value?: OrderPaymentState }> = [
-  { label: "Все оплаты" },
-  { label: "Ожидают оплаты", value: "awaiting" },
-  { label: "Оплаченные", value: "paid" },
-  { label: "Failed", value: "failed" },
-  { label: "Cancelled", value: "cancelled" }
+type PaymentPresetKey = OrderPaymentState | "all";
+
+const paymentFilters: Array<{
+  key: PaymentPresetKey;
+  label: string;
+  value?: OrderPaymentState;
+  description: string;
+}> = [
+  { key: "all", label: "Все оплаты", description: "Все состояния оплаты" },
+  { key: "awaiting", label: "Ожидают оплаты", value: "awaiting", description: "Заказы до подтверждения оплаты" },
+  { key: "paid", label: "Оплаченные", value: "paid", description: "Оплата подтверждена" },
+  { key: "failed", label: "Failed", value: "failed", description: "Платеж завершился ошибкой" },
+  { key: "cancelled", label: "Cancelled", value: "cancelled", description: "Оплата отменена" }
 ];
 
 const quickStatusActions: Array<{ label: string; value: ManualOrderStatus }> = [
@@ -244,15 +251,40 @@ export default async function AdminOrdersPage({
     offset
   });
 
-  const response = await fetchOrders({
+  const sharedFilters = {
     status,
-    paymentState,
     query,
     createdFrom: effectiveCreatedFrom,
     createdTo: effectiveCreatedTo,
-    sort,
-    limit: PAGE_SIZE,
-    offset
+    sort
+  };
+
+  const [response, ...paymentTotalsResponses] = await Promise.all([
+    fetchOrders({
+      ...sharedFilters,
+      paymentState,
+      limit: PAGE_SIZE,
+      offset
+    }),
+    ...paymentFilters.map((filter) =>
+      fetchOrders({
+        ...sharedFilters,
+        paymentState: filter.value,
+        limit: 1,
+        offset: 0
+      })
+    )
+  ]);
+
+  const paymentTotals = paymentFilters.reduce<Record<PaymentPresetKey, number>>((acc, filter, index) => {
+    acc[filter.key] = paymentTotalsResponses[index]?.total ?? 0;
+    return acc;
+  }, {
+    all: 0,
+    awaiting: 0,
+    paid: 0,
+    failed: 0,
+    cancelled: 0
   });
 
   const hasPrev = response.offset > 0;
@@ -289,6 +321,41 @@ export default async function AdminOrdersPage({
         </div>
         <p className="text-sm text-muted-foreground">Текущий tenant: витрина активного клиента.</p>
       </header>
+
+      <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+        {paymentFilters.map((filter) => {
+          const active = filter.value === paymentState || (!filter.value && !paymentState);
+          return (
+            <Link
+              key={filter.key}
+              href={buildOrdersHref({
+                status,
+                paymentState: filter.value,
+                query,
+                createdFrom,
+                createdTo,
+                sort,
+                offset: 0
+              })}
+              className={[
+                "rounded-2xl border px-4 py-3 transition-colors",
+                active
+                  ? "border-accent/70 bg-accent/10"
+                  : "border-border/60 bg-surface-soft hover:border-accent/50"
+              ].join(" ")}
+            >
+              <p className="text-xs text-muted-foreground">{filter.label}</p>
+              <p
+                data-testid={`payment-preset-${filter.key}-count`}
+                className="mt-1 text-2xl font-semibold tracking-tight"
+              >
+                {paymentTotals[filter.key]}
+              </p>
+              <p className="mt-1 text-[11px] text-muted-foreground">{filter.description}</p>
+            </Link>
+          );
+        })}
+      </section>
 
       <form
         method="get"
@@ -394,34 +461,6 @@ export default async function AdminOrdersPage({
               href={buildOrdersHref({
                 status: filter.value,
                 paymentState,
-                query,
-                createdFrom,
-                createdTo,
-                sort,
-                offset: 0
-              })}
-              className={[
-                "rounded-full border px-3 py-1 text-xs transition-colors",
-                active
-                  ? "border-accent bg-accent text-white"
-                  : "border-border/60 bg-card/40 text-muted-foreground hover:border-accent/50 hover:text-foreground"
-              ].join(" ")}
-            >
-              {filter.label}
-            </Link>
-          );
-        })}
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {paymentFilters.map((filter) => {
-          const active = filter.value === paymentState || (!filter.value && !paymentState);
-          return (
-            <Link
-              key={filter.label}
-              href={buildOrdersHref({
-                status,
-                paymentState: filter.value,
                 query,
                 createdFrom,
                 createdTo,

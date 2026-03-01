@@ -267,6 +267,11 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   await page.getByRole("button", { name: "Применить" }).click();
   await expect(page).toHaveURL(new RegExp(`q=${encodeURIComponent(email)}`));
   await expect(page).toHaveURL(/sort=oldest/);
+  await expect(page.getByTestId("payment-preset-all-count")).toHaveText("1");
+  await expect(page.getByTestId("payment-preset-awaiting-count")).toHaveText("0");
+  await expect(page.getByTestId("payment-preset-paid-count")).toHaveText("1");
+  await expect(page.getByTestId("payment-preset-failed-count")).toHaveText("0");
+  await expect(page.getByTestId("payment-preset-cancelled-count")).toHaveText("0");
   const exportHref = await page.getByRole("link", { name: "Экспорт CSV" }).getAttribute("href");
   expect(exportHref).not.toBeNull();
   expect(exportHref).toContain(`/admin/orders/export?q=${encodeURIComponent(email)}`);
