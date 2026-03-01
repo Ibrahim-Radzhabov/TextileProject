@@ -3,6 +3,7 @@ import type {
   CatalogConfig,
   ManualOrderStatus as SharedManualOrderStatus,
   OrderLifecycleStatus,
+  PwaInstallMetric,
   Product,
   StorefrontConfig
 } from "@store-platform/shared-types";
@@ -12,6 +13,16 @@ const INTERNAL_API_URL = process.env.STORE_API_URL ?? PUBLIC_API_URL;
 
 function resolveApiUrl(): string {
   return typeof window === "undefined" ? INTERNAL_API_URL : PUBLIC_API_URL;
+}
+
+function resolveAdminHeaders(): HeadersInit {
+  const token = process.env.ADMIN_TOKEN?.trim();
+  if (!token) {
+    return {};
+  }
+  return {
+    "x-admin-token": token
+  };
 }
 
 type MoneyDto = {
@@ -139,6 +150,25 @@ type StripeWebhookAuditEntryDto = {
 
 type StripeWebhookAuditListResponseDto = {
   items: StripeWebhookAuditEntryDto[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
+type PwaInstallEventDto = {
+  id: number;
+  client_id: string;
+  metric: PwaInstallMetric;
+  path: string;
+  source: "web";
+  user_agent?: string | null;
+  source_ip?: string | null;
+  event_timestamp: string;
+  created_at: string;
+};
+
+type PwaInstallEventListResponseDto = {
+  items: PwaInstallEventDto[];
   total: number;
   limit: number;
   offset: number;
@@ -356,6 +386,27 @@ export type StripeWebhookAuditListResponse = {
   offset: number;
 };
 
+export type PwaInstallSource = "web";
+
+export type PwaInstallEvent = {
+  id: number;
+  clientId: string;
+  metric: PwaInstallMetric;
+  path: string;
+  source: PwaInstallSource;
+  userAgent?: string | null;
+  sourceIp?: string | null;
+  eventTimestamp: string;
+  createdAt: string;
+};
+
+export type PwaInstallEventListResponse = {
+  items: PwaInstallEvent[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
 export type ManualOrderStatus = SharedManualOrderStatus;
 export type StatusAuditActorType = "checkout" | "webhook" | "admin" | "system";
 
@@ -438,6 +489,20 @@ function normalizeOrderStatusAuditEntry(dto: OrderStatusAuditEntryDto): OrderSta
     toStatus: dto.to_status,
     reason: dto.reason ?? null,
     actorType: dto.actor_type,
+    createdAt: dto.created_at
+  };
+}
+
+function normalizePwaInstallEvent(dto: PwaInstallEventDto): PwaInstallEvent {
+  return {
+    id: dto.id,
+    clientId: dto.client_id,
+    metric: dto.metric,
+    path: dto.path,
+    source: dto.source,
+    userAgent: dto.user_agent ?? null,
+    sourceIp: dto.source_ip ?? null,
+    eventTimestamp: dto.event_timestamp,
     createdAt: dto.created_at
   };
 }
@@ -718,6 +783,56 @@ export async function fetchWebhookAudit(options?: {
 
   return {
     items: dto.items.map((item) => normalizeStripeWebhookAuditEntry(item)),
+    total: dto.total,
+    limit: dto.limit,
+    offset: dto.offset
+  };
+}
+
+export async function fetchPwaInstallEvents(options?: {
+  metric?: PwaInstallMetric;
+  pathPrefix?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  sort?: SortOrder;
+  limit?: number;
+  offset?: number;
+}): Promise<PwaInstallEventListResponse> {
+  const params = new URLSearchParams();
+  if (options?.metric) {
+    params.set("metric", options.metric);
+  }
+  if (options?.pathPrefix) {
+    params.set("path_prefix", options.pathPrefix);
+  }
+  if (options?.dateFrom) {
+    params.set("date_from", options.dateFrom);
+  }
+  if (options?.dateTo) {
+    params.set("date_to", options.dateTo);
+  }
+  if (options?.sort) {
+    params.set("sort", options.sort);
+  }
+  if (options?.limit !== undefined) {
+    params.set("limit", String(options.limit));
+  }
+  if (options?.offset !== undefined) {
+    params.set("offset", String(options.offset));
+  }
+
+  const query = params.toString();
+  const res = await fetch(
+    `${resolveApiUrl()}/metrics/pwa-install-events${query ? `?${query}` : ""}`,
+    {
+      cache: "no-store",
+      headers: resolveAdminHeaders()
+    }
+  );
+  const dto = await handleJson<PwaInstallEventListResponseDto>(res);
+
+  return {
+    items: dto.items.map((item) => normalizePwaInstallEvent(item)),
     total: dto.total,
     limit: dto.limit,
     offset: dto.offset

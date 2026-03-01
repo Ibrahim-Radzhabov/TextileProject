@@ -131,7 +131,7 @@ Additional endpoints:
 - `POST /webhooks/stripe` — verifies Stripe signature, deduplicates by (`event_id`, `livemode`, `account`, `client_id`), updates order status (`paid` / `failed` / `cancelled`) and sends Telegram payment notification on `paid`.
 - `GET /webhooks/audit?order_id=&processing_status=&limit=&offset=` — list Stripe webhook audit records.
 - `POST /metrics/pwa-install-events` — ingest storefront PWA install telemetry (`prompt_available`, `prompt_accepted`, `installed`, etc.).
-- `GET /metrics/pwa-install-events?metric=&path_prefix=&since=&sort=&limit=&offset=` — admin-scoped list of PWA install telemetry.
+- `GET /metrics/pwa-install-events?metric=&path_prefix=&date_from=&date_to=&sort=&limit=&offset=` — admin-scoped list of PWA install telemetry.
 
 ### Real Stripe smoke check (CLI)
 

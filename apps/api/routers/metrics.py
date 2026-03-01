@@ -1,7 +1,7 @@
-from datetime import datetime, timezone
+from datetime import date, datetime, time, timedelta, timezone
 from typing import Literal, Optional
 
-from fastapi import APIRouter, Depends, Query, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
 
 from ..config import get_settings
 from ..domain.models import (
@@ -79,21 +79,34 @@ def collect_pwa_install_event(payload: PwaInstallEventRequest, request: Request)
 def list_pwa_install_events(
     metric: Optional[PwaInstallMetric] = Query(default=None),
     path_prefix: Optional[str] = Query(default=None, min_length=1, max_length=200),
-    since: Optional[datetime] = Query(default=None),
+    date_from: Optional[date] = Query(default=None),
+    date_to: Optional[date] = Query(default=None),
     sort: SortOrder = Query(default="newest"),
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ) -> PwaInstallEventListResponse:
+    if date_from and date_to and date_from > date_to:
+        raise HTTPException(
+            status_code=422,
+            detail='"date_from" must be less than or equal to "date_to"',
+        )
+
     settings = get_settings()
     store = get_order_store()
 
-    normalized_since = _normalize_iso_timestamp(since) if since else None
+    normalized_since = None
+    normalized_until = None
+    if date_from:
+        normalized_since = datetime.combine(date_from, time.min, tzinfo=timezone.utc).isoformat()
+    if date_to:
+        normalized_until = datetime.combine(date_to + timedelta(days=1), time.min, tzinfo=timezone.utc).isoformat()
 
     items, total = store.list_pwa_install_events(
         client_id=settings.client_id,
         metric=metric,
         path_prefix=path_prefix,
         since_iso=normalized_since,
+        until_iso=normalized_until,
         sort=sort,
         limit=limit,
         offset=offset,

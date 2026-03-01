@@ -870,6 +870,7 @@ class OrderStore:
         metric: Optional[str],
         path_prefix: Optional[str],
         since_iso: Optional[str],
+        until_iso: Optional[str],
         sort: Literal["newest", "oldest"],
         limit: int,
         offset: int,
@@ -888,6 +889,9 @@ class OrderStore:
         if since_iso:
             where_parts.append("event_timestamp >= ?")
             params.append(since_iso)
+        if until_iso:
+            where_parts.append("event_timestamp < ?")
+            params.append(until_iso)
 
         where_sql = " AND ".join(where_parts)
         sort_direction = "ASC" if sort == "oldest" else "DESC"

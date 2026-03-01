@@ -233,6 +233,12 @@ export default async function AdminProductsPage({
           </div>
           <div className="flex items-center gap-2">
             <Link
+              href="/admin/analytics/pwa"
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+            >
+              PWA
+            </Link>
+            <Link
               href="/admin/orders"
               className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
             >

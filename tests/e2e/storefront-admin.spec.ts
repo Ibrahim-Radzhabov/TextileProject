@@ -425,6 +425,7 @@ test("pwa metrics endpoint stores install events and supports admin filters", as
   const pathSuffix = Date.now();
   const trackedPath = `/e2e/pwa-metrics-${pathSuffix}`;
   const eventTimestamp = new Date().toISOString();
+  const todayIso = eventTimestamp.slice(0, 10);
 
   const trackResponse = await request.post(`${API_BASE_URL}/metrics/pwa-install-events`, {
     data: {
@@ -464,4 +465,20 @@ test("pwa metrics endpoint stores install events and supports admin filters", as
         item.source === "web"
     )
   ).toBeTruthy();
+
+  const dateRangeResponse = await request.get(
+    `${API_BASE_URL}/metrics/pwa-install-events?path_prefix=${encodeURIComponent(trackedPath)}&date_from=${todayIso}&date_to=${todayIso}&sort=newest&limit=5&offset=0`,
+    {
+      headers: {
+        "x-admin-token": ADMIN_TOKEN
+      }
+    }
+  );
+  expect(dateRangeResponse.ok()).toBeTruthy();
+  const dateRangePayload = (await dateRangeResponse.json()) as {
+    items: Array<{ path: string }>;
+    total: number;
+  };
+  expect(dateRangePayload.total).toBeGreaterThan(0);
+  expect(dateRangePayload.items.some((item) => item.path === trackedPath)).toBeTruthy();
 });
