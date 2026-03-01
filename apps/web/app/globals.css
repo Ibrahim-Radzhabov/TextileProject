@@ -74,6 +74,13 @@ body {
   font-weight: 400;
 }
 
+.ui-title-display {
+  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  letter-spacing: -0.035em;
+  font-weight: 350;
+  text-wrap: balance;
+}
+
 .premium-divider {
   height: 1px;
   width: 100%;

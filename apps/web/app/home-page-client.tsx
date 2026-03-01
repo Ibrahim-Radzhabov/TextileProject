@@ -124,7 +124,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="ui-title-serif text-balance text-[clamp(2.4rem,5.8vw,4.8rem)] leading-[0.98] text-foreground"
+            className="ui-title-display text-[clamp(2.4rem,5.8vw,4.8rem)] leading-[0.98] text-foreground"
           >
             {block.title}
           </motion.h1>
@@ -178,7 +178,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
           </div>
           <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-3">
-            <p className="ui-kicker">Price Range</p>
+            <p className="ui-kicker">Budget Range</p>
             <p className="mt-1 text-sm text-foreground">
               {formatPrice(stats.minPrice, currency)} - {formatPrice(stats.maxPrice, currency)}
             </p>

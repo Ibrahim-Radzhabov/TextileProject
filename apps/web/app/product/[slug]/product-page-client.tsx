@@ -29,6 +29,13 @@ function normalizeMetaLabel(label: string): string {
     .replace(/\b\w/g, (char) => char.toUpperCase());
 }
 
+function normalizeMetaKey(label: string): string {
+  return label
+    .replace(/[_-]+/g, " ")
+    .trim()
+    .toLowerCase();
+}
+
 export function ProductPageClient({
   product,
   related,
@@ -66,6 +73,37 @@ export function ProductPageClient({
         })),
     [product.metadata]
   );
+  const metadataLookup = useMemo(() => {
+    const lookup = new Map<string, string>();
+    for (const [key, value] of Object.entries(product.metadata ?? {})) {
+      if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+        lookup.set(normalizeMetaKey(key), String(value));
+      }
+    }
+    return lookup;
+  }, [product.metadata]);
+  const fabricMeta = metadataLookup.get("fabric") ?? metadataLookup.get("ткань") ?? null;
+  const lightControlMeta = metadataLookup.get("light control") ?? metadataLookup.get("затемнение") ?? null;
+  const panelWidthMeta = metadataLookup.get("width panel") ?? metadataLookup.get("ширина панели") ?? null;
+  const panelWidthCm = useMemo(() => {
+    if (!panelWidthMeta) {
+      return null;
+    }
+
+    const match = panelWidthMeta.replace(",", ".").match(/(\d+(?:\.\d+)?)/);
+    if (!match) {
+      return null;
+    }
+
+    const parsed = Number.parseFloat(match[1]);
+    return Number.isFinite(parsed) ? parsed : null;
+  }, [panelWidthMeta]);
+  const exampleCorniceWidthCm = 250;
+  const recommendedTotalWidthCm = Math.round(exampleCorniceWidthCm * 2);
+  const recommendedPanels =
+    panelWidthCm && panelWidthCm > 0
+      ? Math.max(2, Math.ceil(recommendedTotalWidthCm / panelWidthCm))
+      : null;
 
   const productPageLead = productPageTexts[0]?.content;
   const productPageSupport = productPageTexts.slice(1);
@@ -180,6 +218,24 @@ export function ProductPageClient({
                     {isAdding || isPricing ? "Добавление..." : "Добавить в корзину"}
                   </Button>
                 </motion.div>
+              </div>
+
+              <div className="space-y-3 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
+                <div className="space-y-1">
+                  <p className="ui-kicker">Подбор размера и плотности</p>
+                  <p className="text-sm font-medium tracking-tight">Гайд для окна и карниза</p>
+                </div>
+                <ul className="space-y-1.5 text-xs leading-relaxed text-muted-foreground">
+                  <li>Полнота складок: ориентир 1.8x-2.2x от ширины карниза.</li>
+                  {panelWidthMeta && <li>Ширина одной панели: {panelWidthMeta}.</li>}
+                  {lightControlMeta && <li>Уровень затемнения: {lightControlMeta}.</li>}
+                  {fabricMeta && <li>Фактура: {fabricMeta}.</li>}
+                  {recommendedPanels && (
+                    <li>
+                      Пример: для карниза {exampleCorniceWidthCm} см обычно нужно около {recommendedPanels} панелей.
+                    </li>
+                  )}
+                </ul>
               </div>
 
               {metadataEntries.length > 0 && (

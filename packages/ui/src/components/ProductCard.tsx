@@ -19,6 +19,33 @@ function formatMoney(amount: number, currency: string): string {
   });
 }
 
+function resolveMetadataValue(product: Product, preferredKeys: string[]): string | null {
+  const metadata = product.metadata;
+  if (!metadata) {
+    return null;
+  }
+
+  const normalizedToOriginal = new Map<string, string>();
+  for (const key of Object.keys(metadata)) {
+    normalizedToOriginal.set(key.toLowerCase().trim(), key);
+  }
+
+  for (const preferredKey of preferredKeys) {
+    const original = normalizedToOriginal.get(preferredKey.toLowerCase().trim());
+    if (!original) {
+      continue;
+    }
+
+    const rawValue = metadata[original];
+    if (rawValue === undefined || rawValue === null) {
+      continue;
+    }
+    return String(rawValue);
+  }
+
+  return null;
+}
+
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd }) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const primaryImage = product.media[0];
@@ -27,6 +54,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
     product.compareAtPrice &&
     product.compareAtPrice.currency === product.price.currency &&
     product.compareAtPrice.amount > product.price.amount;
+  const lightControl = resolveMetadataValue(product, ["Light control", "Затемнение"]);
+  const fabric = resolveMetadataValue(product, ["Fabric", "Ткань", "Материал"]);
+  const roomTag = (product.tags ?? []).find((tag) =>
+    ["bedroom", "living-room", "office", "kids"].includes(tag)
+  );
 
   const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
     const root = rootRef.current;
@@ -79,6 +111,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
                 className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.04]"
               />
             )}
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background/48 via-background/20 to-transparent" />
           </div>
 
           {product.badges && product.badges.length > 0 && (
@@ -88,6 +121,26 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
                   {badge.label}
                 </Badge>
               ))}
+            </div>
+          )}
+
+          {(lightControl || fabric || roomTag) && (
+            <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[18] flex flex-wrap gap-1.5">
+              {lightControl && (
+                <span className="rounded-full border border-border/50 bg-card/78 px-2 py-0.5 text-[10px] text-muted-foreground backdrop-blur-sm">
+                  Light {lightControl}
+                </span>
+              )}
+              {fabric && (
+                <span className="rounded-full border border-border/50 bg-card/78 px-2 py-0.5 text-[10px] text-muted-foreground backdrop-blur-sm">
+                  {fabric}
+                </span>
+              )}
+              {roomTag && (
+                <span className="rounded-full border border-border/50 bg-card/78 px-2 py-0.5 text-[10px] text-muted-foreground backdrop-blur-sm">
+                  {roomTag.replace(/-/g, " ")}
+                </span>
+              )}
             </div>
           )}
 
@@ -116,10 +169,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
         </div>
 
         <div className="relative z-20 flex flex-1 flex-col gap-3 px-4 py-4">
-          <div className="space-y-1">
-            <p className="line-clamp-1 text-sm font-medium tracking-tight">{product.name}</p>
+          <div className="space-y-1.5">
+            <p className="line-clamp-1 text-[15px] font-medium tracking-tight">{product.name}</p>
             {product.shortDescription && (
               <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{product.shortDescription}</p>
+            )}
+            {(fabric || lightControl) && (
+              <p className="ui-kicker">
+                {fabric ? `${fabric} • ` : ""}
+                {lightControl ? `${lightControl} light control` : ""}
+              </p>
             )}
           </div>
 
