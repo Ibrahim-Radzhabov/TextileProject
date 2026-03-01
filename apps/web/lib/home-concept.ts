@@ -1,4 +1,4 @@
-export const homeConcepts = ["aurora", "editorial", "mono"] as const;
+export const homeConcepts = ["editorial"] as const;
 
 export type HomeConcept = (typeof homeConcepts)[number];
 
@@ -9,5 +9,5 @@ export function resolveHomeConcept(value: string | null | undefined): HomeConcep
   if (normalized && homeConceptSet.has(normalized)) {
     return normalized as HomeConcept;
   }
-  return "aurora";
+  return "editorial";
 }
