@@ -36,8 +36,8 @@ export const TopNav: React.FC<TopNavProps> = ({
         )}
       </div>
       <div className="flex min-w-0 flex-col">
-        <span className="truncate text-sm font-semibold leading-tight tracking-tight text-foreground">{shopName}</span>
-        <span className="text-[11px] font-normal uppercase tracking-[0.14em] text-muted-foreground">
+        <span className="truncate text-sm font-medium leading-tight tracking-tight text-foreground">{shopName}</span>
+        <span className="ui-kicker">
           Quiet Commerce
         </span>
       </div>

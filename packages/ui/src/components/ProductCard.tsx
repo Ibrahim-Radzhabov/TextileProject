@@ -125,7 +125,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
 
           <div className="mt-auto flex items-end justify-between gap-2">
             <div className="space-y-0.5">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Price</p>
+              <p className="ui-kicker">Price</p>
               <p className="text-sm font-semibold text-foreground">
                 {formatMoney(product.price.amount, product.price.currency)}
               </p>

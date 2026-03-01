@@ -106,9 +106,9 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
       <header className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-6 sm:px-7 sm:py-7">
         <div className="relative space-y-4">
           <div className="space-y-2">
-            <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{page.title}</h1>
+            <h1 className="ui-title text-3xl sm:text-4xl">{page.title}</h1>
             {firstRichText?.type === "rich-text" && (
-              <p className="max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-base">
+              <p className="ui-subtle max-w-2xl text-sm leading-relaxed sm:text-base">
                 {firstRichText.content}
               </p>
             )}
@@ -116,15 +116,15 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
 
           <div className="grid gap-3 sm:grid-cols-3">
             <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Товаров</p>
+              <p className="ui-kicker">Товаров</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">{filteredProducts.length}</p>
             </div>
             <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Featured</p>
+              <p className="ui-kicker">Featured</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">{featuredCount}</p>
             </div>
             <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
-              <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Диапазон цен</p>
+              <p className="ui-kicker">Диапазон цен</p>
               <p className="mt-1 text-sm font-medium text-foreground">
                 {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
               </p>
@@ -175,12 +175,12 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
               </div>
 
               <label className="flex items-center gap-2 lg:hidden">
-                <span className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Сортировка</span>
+                <span className="ui-kicker">Сортировка</span>
                 <select
                   aria-label="Сортировка каталога"
                   value={sort}
                   onChange={(event) => setSort(event.target.value as CatalogSort)}
-                    className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
+                  className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-border/80 focus:ring-1 focus:ring-ring/70"
                 >
                   {sortOptions.map((option) => (
                     <option key={option.value} value={option.value}>

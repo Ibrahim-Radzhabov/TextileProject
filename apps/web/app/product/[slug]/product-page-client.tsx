@@ -107,8 +107,8 @@ export function ProductPageClient({
 
           {product.description && (
             <Surface tone="subtle" className="space-y-2 rounded-xl px-5 py-5 sm:px-6">
-              <p className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Описание</p>
-              <p className="text-sm leading-relaxed text-muted-foreground">{product.description}</p>
+              <p className="ui-kicker">Описание</p>
+              <p className="ui-subtle text-sm leading-relaxed">{product.description}</p>
             </Surface>
           )}
         </motion.div>
@@ -129,14 +129,14 @@ export function ProductPageClient({
                   ))}
                 </div>
 
-                <h1 className="text-3xl font-medium tracking-tight sm:text-4xl">{product.name}</h1>
+                <h1 className="ui-title-serif text-3xl sm:text-4xl">{product.name}</h1>
 
                 {product.shortDescription && (
-                  <p className="text-sm leading-relaxed text-muted-foreground sm:text-base">{product.shortDescription}</p>
+                  <p className="ui-subtle text-sm leading-relaxed sm:text-base">{product.shortDescription}</p>
                 )}
 
                 {productPageLead && (
-                  <p className="rounded-xl border border-border/45 bg-card/52 px-4 py-3 text-sm leading-relaxed text-muted-foreground">
+                  <p className="ui-subtle rounded-xl border border-border/45 bg-card/52 px-4 py-3 text-sm leading-relaxed">
                     {productPageLead}
                   </p>
                 )}
@@ -145,7 +145,7 @@ export function ProductPageClient({
               <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Цена</p>
+                    <p className="ui-kicker">Цена</p>
                     <div className="mt-1 flex items-center gap-2">
                       <span className="text-2xl font-medium tracking-tight">{priceFormatted}</span>
                       {discountPercent && discountPercent > 0 && <Badge tone="muted">-{discountPercent}%</Badge>}
@@ -189,7 +189,7 @@ export function ProductPageClient({
                       key={entry.key}
                       className="rounded-xl border border-border/45 bg-card/55 px-3 py-2.5"
                     >
-                      <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">{entry.label}</p>
+                      <p className="ui-kicker">{entry.label}</p>
                       <p className="mt-1 text-xs font-medium text-foreground">{entry.value}</p>
                     </div>
                   ))}
@@ -199,7 +199,7 @@ export function ProductPageClient({
               {productPageSupport.length > 0 && (
                 <div className="space-y-2 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
                   {productPageSupport.map((text) => (
-                    <p key={text.id} className="text-xs leading-relaxed text-muted-foreground sm:text-sm">
+                    <p key={text.id} className="ui-subtle text-xs leading-relaxed sm:text-sm">
                       {text.content}
                     </p>
                   ))}
@@ -213,7 +213,7 @@ export function ProductPageClient({
       {related.length > 0 && (
         <section className="space-y-4">
           <div className="flex items-baseline justify-between gap-2">
-            <h2 className="text-sm font-medium tracking-tight text-muted-foreground">С этим сочетается</h2>
+            <h2 className="ui-kicker">С этим сочетается</h2>
           </div>
           <div className="flex gap-4 overflow-x-auto pb-2">
             {related.map((candidate) => (

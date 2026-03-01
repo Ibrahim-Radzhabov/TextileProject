@@ -113,15 +113,15 @@ export default function CheckoutPage() {
         <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
           <div className="relative z-10 space-y-3">
             <div>
-              <h1 className="text-2xl font-medium tracking-tight sm:text-3xl">Оформление заказа</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
+              <h1 className="ui-title text-2xl sm:text-3xl">Оформление заказа</h1>
+              <p className="ui-subtle mt-1 text-sm">
                 Контакты и адрес. В корзине {itemCount} поз.
               </p>
             </div>
-            <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-              <span className="rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1 font-semibold uppercase tracking-[0.05em]">Безопасная оплата</span>
-              <span className="rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1 font-semibold uppercase tracking-[0.05em]">Статус заказа</span>
-              <span className="rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1 font-semibold uppercase tracking-[0.05em]">Fast checkout</span>
+            <div className="flex flex-wrap gap-2">
+              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Безопасная оплата</span>
+              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Статус заказа</span>
+              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Fast checkout</span>
             </div>
           </div>
         </Surface>
@@ -152,7 +152,7 @@ export default function CheckoutPage() {
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
           <Surface tone="subtle" className="space-y-4 rounded-xl px-5 py-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Контакт</p>
+            <p className="ui-kicker">Контакт</p>
             <div className="space-y-4">
               <div className="space-y-1">
                 <label htmlFor="checkout-email" className="text-xs font-medium text-muted-foreground">
@@ -186,7 +186,7 @@ export default function CheckoutPage() {
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <Surface tone="subtle" className="space-y-4 rounded-xl px-5 py-5">
-            <p className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Адрес доставки</p>
+            <p className="ui-kicker">Адрес доставки</p>
             <div className="space-y-4">
               <div className="space-y-1">
                 <label htmlFor="checkout-address-line1" className="text-xs font-medium text-muted-foreground">
@@ -265,7 +265,7 @@ export default function CheckoutPage() {
       >
         <Surface tone="subtle" className="h-fit space-y-4 rounded-xl px-4 py-4 md:sticky md:top-24">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Итого</span>
+            <span className="ui-kicker">Итого</span>
             <span className="text-sm font-semibold">{totalFormatted}</span>
           </div>
 
