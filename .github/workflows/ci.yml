@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9.12.0
+
+      - name: Install JS dependencies
+        run: corepack pnpm install --frozen-lockfile
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install API dependencies
+        run: |
+          python -m venv .venv
+          .venv/bin/pip install --upgrade pip
+          .venv/bin/pip install -r apps/api/requirements.txt
+
+      - name: Install Playwright browsers
+        run: corepack pnpm e2e:install
+
+      - name: Build
+        run: corepack pnpm build
+
+      - name: E2E
+        run: corepack pnpm e2e
+
+      - name: Lighthouse PWA
+        run: corepack pnpm pwa:lighthouse
