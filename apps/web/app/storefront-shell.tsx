@@ -68,7 +68,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId }: Stor
                 >
                   Корзина
                   {itemCount > 0 && (
-                    <span className="ml-2 rounded-full bg-accent-soft px-2 py-0.5 text-[11px]">
+                    <span className="ml-2 rounded-full border border-border/55 bg-card/60 px-2 py-0.5 text-[11px] text-muted-foreground">
                       {itemCount}
                     </span>
                   )}

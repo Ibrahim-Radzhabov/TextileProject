@@ -102,13 +102,13 @@ export default function CheckoutPage() {
     }) ?? "—";
 
   return (
-    <div className="grid gap-6 pb-8 sm:gap-8 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+    <div className="grid gap-6 pb-10 sm:gap-8 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
       <motion.form
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5"
+        className="space-y-6"
       >
         <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
           <div className="relative z-10 space-y-3">
@@ -263,7 +263,7 @@ export default function CheckoutPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.06 }}
       >
-        <Surface tone="subtle" className="h-fit space-y-4 rounded-xl px-4 py-4 md:sticky md:top-24">
+        <Surface tone="subtle" className="h-fit space-y-4 rounded-xl px-4 py-4 sm:px-5 md:sticky md:top-24">
           <div className="flex items-center justify-between">
             <span className="ui-kicker">Итого</span>
             <span className="text-sm font-semibold">{totalFormatted}</span>

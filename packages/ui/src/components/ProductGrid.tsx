@@ -17,14 +17,14 @@ const containerVariants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.04,
+      staggerChildren: 0.05,
       delayChildren: 0.02
     }
   }
 };
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 10 },
+  hidden: { opacity: 0, y: 8 },
   visible: { opacity: 1, y: 0 }
 };
 
@@ -37,10 +37,10 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   const isEmpty = products.length === 0;
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-5 sm:space-y-6">
       {(title || subtitle) && (
-        <div className="space-y-2.5">
-          {title && <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>}
+        <div className="space-y-3">
+          {title && <h2 className="text-2xl font-semibold tracking-tight sm:text-[2rem]">{title}</h2>}
           {subtitle && (
             <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">{subtitle}</p>
           )}
@@ -54,7 +54,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         />
       ) : (
         <motion.div
-          className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 sm:gap-6"
+          className="grid auto-rows-fr grid-cols-[repeat(auto-fit,minmax(228px,1fr))] gap-4 sm:gap-5 lg:gap-6"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

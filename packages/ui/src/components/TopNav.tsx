@@ -61,7 +61,11 @@ export const TopNav: React.FC<TopNavProps> = ({
       ) : (
         leftContent
       )}
-      {rightSlot && <div className="flex shrink-0 items-center gap-2.5 text-sm">{rightSlot}</div>}
+      {rightSlot && (
+        <div className="flex min-w-0 flex-wrap items-center justify-end gap-2 text-sm sm:flex-nowrap sm:gap-2.5">
+          {rightSlot}
+        </div>
+      )}
     </motion.header>
   );
 };

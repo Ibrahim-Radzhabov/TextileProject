@@ -102,8 +102,8 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   };
 
   return (
-    <div className="min-h-0 space-y-7 pb-8">
-      <header className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-6 sm:px-7 sm:py-7">
+    <div className="min-h-0 space-y-8 pb-10">
+      <header className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-6 sm:px-7 sm:py-8">
         <div className="relative space-y-4">
           <div className="space-y-2">
             <h1 className="ui-title text-3xl sm:text-4xl">{page.title}</h1>
@@ -133,8 +133,8 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         </div>
       </header>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
-        <div className="lg:sticky lg:top-20">
+      <div className="grid gap-7 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
+        <div className="lg:sticky lg:top-24">
           <Surface tone="ghost" className="rounded-xl px-4 py-3">
             <CatalogFilterSidebar
               availableTags={allTags}
@@ -144,8 +144,8 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
           </Surface>
         </div>
 
-        <div className="space-y-6">
-          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-4">
+        <div className="space-y-7">
+          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-4 sm:px-5">
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <Badge tone="muted">Всего: {products.length}</Badge>
               <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
@@ -223,7 +223,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="rounded-xl border border-border/45 bg-card/72 px-4 py-5 sm:px-5"
+                  className="rounded-xl border border-border/45 bg-card/72 px-5 py-6 sm:px-6"
                 >
                   <ProductGrid
                     title={block.title}

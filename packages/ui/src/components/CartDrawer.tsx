@@ -64,33 +64,36 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             onClick={onClose}
           />
           <motion.aside
-            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col border-l border-border/45 bg-background/95 backdrop-blur-xl"
+            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-[32rem] flex-col border-l border-border/45 bg-background/95 backdrop-blur-xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
           >
-            <div className="relative shrink-0 overflow-hidden border-b border-border/60 px-4 py-4 sm:px-5">
-              <div className="relative z-10 flex items-center justify-between">
-                <div>
+            <div className="relative shrink-0 overflow-hidden border-b border-border/60 px-4 py-4 sm:px-5 sm:py-5">
+              <div className="relative z-10 flex items-start justify-between gap-3">
+                <div className="space-y-0.5">
+                  <p className="ui-kicker">Order preview</p>
                   <h2 className="text-sm font-medium tracking-tight">Корзина</h2>
-                  <p className="mt-0.5 text-[11px] text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     {itemsCount > 0 ? `${itemsCount} поз. в заказе` : "Добавьте товары для оформления"}
                   </p>
                 </div>
-                <span className="rounded-full border border-border/50 bg-card/45 px-2 py-1 text-[11px] text-muted-foreground">
-                  {itemsCount}
-                </span>
-                <button
-                  type="button"
-                  onClick={onClose}
-                  className="rounded-lg px-2 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
-                >
-                  Закрыть
-                </button>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-border/50 bg-card/45 px-2 text-[11px] font-medium text-muted-foreground">
+                    {itemsCount}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={onClose}
+                    className="rounded-lg border border-border/55 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-border/75 hover:text-foreground"
+                  >
+                    Закрыть
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5">
+            <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5 sm:py-5">
               {error && (
                 <motion.div
                   initial={{ opacity: 0, y: -4 }}
@@ -105,28 +108,28 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   {Array.from({ length: 3 }).map((_, index) => (
                     <div
                       key={index}
-                      className="skeleton-shimmer h-[88px] rounded-2xl border border-border/55 bg-muted/25"
+                      className="skeleton-shimmer h-[92px] rounded-xl border border-border/55 bg-muted/25"
                     />
                   ))}
                 </div>
               )}
               {!hasItems && !isUpdating && (
-                <Surface tone="subtle" className="relative overflow-hidden px-4 py-8 text-center">
-                  <div className="relative z-10 mx-auto flex max-w-[240px] flex-col items-center gap-3">
+                <Surface tone="subtle" className="relative overflow-hidden px-5 py-9 text-center">
+                  <div className="relative z-10 mx-auto flex max-w-[250px] flex-col items-center gap-3">
                     <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-border/45 bg-card/55">
-                      <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                      <span className="ui-kicker">
                         Cart
                       </span>
                     </div>
                     <p className="text-sm font-medium">Корзина пуста</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs leading-relaxed text-muted-foreground">
                       Добавьте товары из каталога. Здесь появятся позиции, сумма и оформление.
                     </p>
                   </div>
                 </Surface>
               )}
               {hasItems && cart && (
-                <div className="space-y-3">
+                <div className="space-y-3.5">
                   <AnimatePresence mode="sync">
                     {cart.items.map((item, index) => (
                       <motion.div
@@ -138,7 +141,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         exit="exit"
                         layout
                       >
-                        <Surface tone="subtle" className="flex items-center gap-3 px-3 py-3">
+                        <Surface tone="subtle" className="flex items-center gap-3.5 px-3.5 py-3.5 sm:px-4">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={item.productSnapshot.media[0]?.url}
@@ -146,7 +149,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             className="h-14 w-14 shrink-0 rounded-xl object-cover"
                           />
                           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                            <p className="truncate text-xs font-medium">{item.productSnapshot.name}</p>
+                            <p className="truncate text-sm font-medium tracking-tight">{item.productSnapshot.name}</p>
                             <p className="text-[11px] text-muted-foreground">
                               {formatMoney(item.unitPrice.amount, item.unitPrice.currency)}
                             </p>
@@ -178,7 +181,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               </button>
                             </div>
                           </div>
-                          <div className="shrink-0 text-xs font-medium">
+                          <div className="shrink-0 text-xs font-medium tracking-tight">
                             {formatMoney(item.lineTotal.amount, item.lineTotal.currency)}
                           </div>
                         </Surface>
@@ -188,9 +191,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
               )}
             </div>
-            <div className="shrink-0 border-t border-border/60 px-4 py-4 sm:px-5">
+            <div className="shrink-0 border-t border-border/60 px-4 py-4 sm:px-5 sm:py-5">
               {cart && (
-                <div className="mb-3 space-y-2 rounded-xl border border-border/55 bg-card/35 px-3 py-2.5">
+                <div className="mb-4 space-y-2.5 rounded-xl border border-border/55 bg-card/35 px-3.5 py-3">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                     <span>Товаров</span>
                     <span>{itemsCount}</span>
@@ -220,11 +223,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="mb-2 w-full rounded-lg border border-border/55 px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+                className="mb-2.5 h-9 w-full rounded-lg border border-border/55 px-3 text-xs text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
               >
                 Продолжить покупки
               </button>
-              <p className="mb-2 text-center text-[11px] text-muted-foreground">Позиции и сумма обновляются автоматически</p>
+              <p className="mb-2.5 text-center text-[11px] text-muted-foreground">
+                Позиции и сумма обновляются автоматически
+              </p>
               <Button
                 fullWidth
                 disabled={!hasItems || isUpdating}

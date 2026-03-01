@@ -95,18 +95,18 @@ export function ProductPageClient({
   };
 
   return (
-    <div className="space-y-10 pb-8">
-      <div className="grid gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
+    <div className="space-y-10 pb-10">
+      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="space-y-4"
+          className="space-y-5"
         >
           <ProductGallery media={product.media} />
 
           {product.description && (
-            <Surface tone="subtle" className="space-y-2 rounded-xl px-5 py-5 sm:px-6">
+            <Surface tone="subtle" className="space-y-2 rounded-xl px-5 py-6 sm:px-6">
               <p className="ui-kicker">Описание</p>
               <p className="ui-subtle text-sm leading-relaxed">{product.description}</p>
             </Surface>
@@ -117,9 +117,9 @@ export function ProductPageClient({
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, delay: 0.04 }}
-          className="space-y-5 md:sticky md:top-20 md:self-start"
+          className="space-y-6 md:sticky md:top-24 md:self-start"
         >
-          <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6">
+          <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
             <div className="relative z-10 space-y-5">
               <header className="space-y-3">
                 <div className="flex flex-wrap gap-2">

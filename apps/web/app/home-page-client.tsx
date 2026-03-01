@@ -279,9 +279,9 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const currency = products[0]?.price.currency ?? "USD";
 
   return (
-    <div className="space-y-10 lg:space-y-12 home-concept-editorial">
-      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-        <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
+    <div className="home-concept-editorial space-y-9 sm:space-y-10 lg:space-y-12">
+      <section className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6 sm:py-7">
           <div className="relative z-10 space-y-3">
             <div className="space-y-1.5">
               <p className="ui-kicker">Storefront direction</p>
@@ -297,16 +297,16 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
           </div>
         </Surface>
 
-        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-          <Surface tone="subtle" className="rounded-xl px-3 py-3">
+        <div className="grid gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-1">
+          <Surface tone="subtle" className="rounded-xl px-4 py-3">
             <p className="ui-kicker">Products</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.totalProducts}</p>
           </Surface>
-          <Surface tone="subtle" className="rounded-xl px-3 py-3">
+          <Surface tone="subtle" className="rounded-xl px-4 py-3">
             <p className="ui-kicker">Featured</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
           </Surface>
-          <Surface tone="subtle" className="rounded-xl px-3 py-3">
+          <Surface tone="subtle" className="rounded-xl px-4 py-3">
             <p className="ui-kicker">Tags</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.tagsCount}</p>
           </Surface>
