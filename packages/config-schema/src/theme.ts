@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const themeSchema = z.object({
+const themeTokensSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   colors: z.object({
@@ -38,5 +38,11 @@ export const themeSchema = z.object({
   })
 });
 
-export type ThemeConfigInput = z.infer<typeof themeSchema>;
+export const themeVariantSchema = themeTokensSchema;
 
+export const themeSchema = themeTokensSchema.extend({
+  defaultVariant: z.string().min(1).optional(),
+  variants: z.array(themeVariantSchema).min(1).optional()
+});
+
+export type ThemeConfigInput = z.infer<typeof themeSchema>;

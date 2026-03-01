@@ -90,14 +90,76 @@ class ShopConfig(BaseModel):
         populate_by_name = True
 
 
+class ThemeColors(BaseModel):
+    background: str
+    foreground: str
+    muted: str
+    muted_foreground: str = Field(alias="mutedForeground")
+    accent: str
+    accent_soft: str = Field(alias="accentSoft")
+    border: str
+    input: str
+    ring: str
+    card: str
+    card_foreground: str = Field(alias="cardForeground")
+
+    class Config:
+        populate_by_name = True
+
+
+class ThemeRadii(BaseModel):
+    xl: float
+    lg: float
+    md: float
+    sm: float
+
+
+class ThemeShadows(BaseModel):
+    soft: str
+    soft_subtle: str = Field(alias="softSubtle")
+    ring: str
+
+    class Config:
+        populate_by_name = True
+
+
+class ThemeTypography(BaseModel):
+    font_sans: str = Field(alias="fontSans")
+    base_font_size: float = Field(alias="baseFontSize")
+    scale_ratio: float = Field(alias="scaleRatio")
+
+    class Config:
+        populate_by_name = True
+
+
+class ThemeGradients(BaseModel):
+    hero: str
+    surface: str
+
+
+class ThemeVariant(BaseModel):
+    id: str
+    name: str
+    colors: ThemeColors
+    radii: ThemeRadii
+    shadows: ThemeShadows
+    typography: ThemeTypography
+    gradients: ThemeGradients
+
+
 class ThemeConfig(BaseModel):
     id: str
     name: str
-    colors: Dict[str, str]
-    radii: Dict[str, float]
-    shadows: Dict[str, str]
-    typography: Dict[str, Any]
-    gradients: Dict[str, str]
+    colors: ThemeColors
+    radii: ThemeRadii
+    shadows: ThemeShadows
+    typography: ThemeTypography
+    gradients: ThemeGradients
+    default_variant: Optional[str] = Field(default=None, alias="defaultVariant")
+    variants: Optional[List[ThemeVariant]] = None
+
+    class Config:
+        populate_by_name = True
 
 
 class SeoConfig(BaseModel):

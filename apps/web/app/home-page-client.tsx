@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { CtaStrip, EmptyState, Hero, ProductCard, ProductGrid } from "@store-platform/ui";
+import { Badge, CtaStrip, EmptyState, Hero, ProductCard, ProductGrid, Surface } from "@store-platform/ui";
 import type {
   CtaStripBlock,
   HeroBlock,
@@ -28,6 +28,30 @@ type HomeStats = {
   minPrice: number | null;
   maxPrice: number | null;
 };
+
+type ConceptMeta = {
+  id: HomeConcept;
+  label: string;
+  summary: string;
+};
+
+const conceptOptions: ConceptMeta[] = [
+  {
+    id: "aurora",
+    label: "Aurora",
+    summary: "Glassy gradients and soft glow."
+  },
+  {
+    id: "editorial",
+    label: "Editorial",
+    summary: "Linear rhythm and premium typography."
+  },
+  {
+    id: "mono",
+    label: "Mono",
+    summary: "Structured grid and minimal contrast."
+  }
+];
 
 const containerVariants = {
   hidden: {},
@@ -342,14 +366,21 @@ function renderProductGridBlock(
       <section
         key={block.id}
         id={block.id === "home-featured" ? "featured" : undefined}
-        className="scroll-mt-24 space-y-4"
+        className="scroll-mt-24"
       >
-        <ProductGrid
-          title={block.title}
-          subtitle={block.subtitle}
-          products={visibleProducts}
-          onQuickAdd={onQuickAdd}
-        />
+        <Surface tone="subtle" className="space-y-5 rounded-3xl px-4 py-5 sm:px-5 sm:py-6">
+          <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            <Badge tone="muted">Drop</Badge>
+            <Badge tone="accent">Items: {visibleProducts.length}</Badge>
+            {block.subtitle && <span className="text-xs text-muted-foreground">{block.subtitle}</span>}
+          </div>
+          <ProductGrid
+            title={block.title}
+            subtitle={undefined}
+            products={visibleProducts}
+            onQuickAdd={onQuickAdd}
+          />
+        </Surface>
       </section>
     );
   }
@@ -469,53 +500,66 @@ export function HomePageClient({ homePage, products, concept }: HomePageClientPr
   const { addProduct } = useCartStore();
   const stats = useMemo(() => resolveHomeStats(products), [products]);
   const currency = products[0]?.price.currency ?? "USD";
+  const activeConcept = conceptOptions.find((option) => option.id === concept) ?? conceptOptions[0];
 
   return (
     <div
       className={[
-        "space-y-12 lg:space-y-14",
+        "space-y-10 lg:space-y-12",
         concept === "editorial" ? "home-concept-editorial" : "",
         concept === "mono" ? "home-concept-mono" : ""
       ]
         .filter(Boolean)
         .join(" ")}
     >
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Home concept</span>
-        <a
-          href="/?concept=aurora"
-          className={[
-            "rounded-full border px-2.5 py-1 text-[11px] transition-colors",
-            concept === "aurora"
-              ? "border-accent/70 bg-accent/10 text-foreground"
-              : "border-border/60 text-muted-foreground hover:border-accent/50 hover:text-foreground"
-          ].join(" ")}
-        >
-          Aurora
-        </a>
-        <a
-          href="/?concept=editorial"
-          className={[
-            "rounded-full border px-2.5 py-1 text-[11px] transition-colors",
-            concept === "editorial"
-              ? "border-accent/70 bg-accent/10 text-foreground"
-              : "border-border/60 text-muted-foreground hover:border-accent/50 hover:text-foreground"
-          ].join(" ")}
-        >
-          Editorial
-        </a>
-        <a
-          href="/?concept=mono"
-          className={[
-            "rounded-full border px-2.5 py-1 text-[11px] transition-colors",
-            concept === "mono"
-              ? "border-accent/70 bg-accent/10 text-foreground"
-              : "border-border/60 text-muted-foreground hover:border-accent/50 hover:text-foreground"
-          ].join(" ")}
-        >
-          Mono
-        </a>
-      </div>
+      <section className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <Surface tone="elevated" className="relative overflow-hidden px-4 py-5 sm:px-5">
+          <div className="pointer-events-none absolute inset-0 opacity-75">
+            <div className="absolute -left-8 top-[-4rem] h-44 w-44 rounded-full bg-accent/20 blur-3xl" />
+            <div className="absolute right-[-4rem] bottom-[-4rem] h-52 w-52 rounded-full bg-foreground/10 blur-3xl" />
+          </div>
+          <div className="relative z-10 space-y-3">
+            <div className="space-y-1.5">
+              <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Storefront direction</p>
+              <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">{activeConcept.label}</h2>
+              <p className="max-w-xl text-sm text-muted-foreground sm:text-base">{activeConcept.summary}</p>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {conceptOptions.map((option) => (
+                <a
+                  key={option.id}
+                  href={`/?concept=${option.id}`}
+                  className={[
+                    "rounded-full border px-3 py-1 text-[11px] transition-colors",
+                    concept === option.id
+                      ? "border-accent/70 bg-accent/12 text-foreground"
+                      : "border-border/60 text-muted-foreground hover:border-accent/50 hover:text-foreground"
+                  ].join(" ")}
+                >
+                  {option.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </Surface>
+
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+          <Surface tone="subtle" className="rounded-2xl px-3 py-3">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Products</p>
+            <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.totalProducts}</p>
+          </Surface>
+          <Surface tone="subtle" className="rounded-2xl px-3 py-3">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Featured</p>
+            <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
+          </Surface>
+          <Surface tone="subtle" className="rounded-2xl px-3 py-3">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Price Range</p>
+            <p className="mt-1 text-sm font-medium text-foreground">
+              {formatPrice(stats.minPrice, currency)} - {formatPrice(stats.maxPrice, currency)}
+            </p>
+          </Surface>
+        </div>
+      </section>
 
       {homePage.blocks.map((block) =>
         renderBlock(block, concept, stats, currency, products, (product) => addProduct(product.id))

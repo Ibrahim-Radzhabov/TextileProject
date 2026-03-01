@@ -31,7 +31,7 @@ export type ThemeTypography = {
   scaleRatio: number;
 };
 
-export type ThemeConfig = {
+export type ThemeTokens = {
   id: string;
   name: string;
   colors: ThemeColors;
@@ -44,3 +44,9 @@ export type ThemeConfig = {
   };
 };
 
+export type ThemeVariant = ThemeTokens;
+
+export type ThemeConfig = ThemeTokens & {
+  defaultVariant?: string;
+  variants?: ThemeVariant[];
+};

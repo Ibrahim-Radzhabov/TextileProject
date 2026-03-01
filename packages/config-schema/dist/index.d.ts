@@ -129,6 +129,173 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         hero: string;
         surface: string;
     }>;
+} & {
+    defaultVariant: import("zod").ZodOptional<import("zod").ZodString>;
+    variants: import("zod").ZodOptional<import("zod").ZodArray<import("zod").ZodObject<{
+        id: import("zod").ZodString;
+        name: import("zod").ZodString;
+        colors: import("zod").ZodObject<{
+            background: import("zod").ZodString;
+            foreground: import("zod").ZodString;
+            muted: import("zod").ZodString;
+            mutedForeground: import("zod").ZodString;
+            accent: import("zod").ZodString;
+            accentSoft: import("zod").ZodString;
+            border: import("zod").ZodString;
+            input: import("zod").ZodString;
+            ring: import("zod").ZodString;
+            card: import("zod").ZodString;
+            cardForeground: import("zod").ZodString;
+        }, "strip", import("zod").ZodTypeAny, {
+            accent: string;
+            background: string;
+            foreground: string;
+            muted: string;
+            mutedForeground: string;
+            accentSoft: string;
+            border: string;
+            input: string;
+            ring: string;
+            card: string;
+            cardForeground: string;
+        }, {
+            accent: string;
+            background: string;
+            foreground: string;
+            muted: string;
+            mutedForeground: string;
+            accentSoft: string;
+            border: string;
+            input: string;
+            ring: string;
+            card: string;
+            cardForeground: string;
+        }>;
+        radii: import("zod").ZodObject<{
+            xl: import("zod").ZodNumber;
+            lg: import("zod").ZodNumber;
+            md: import("zod").ZodNumber;
+            sm: import("zod").ZodNumber;
+        }, "strip", import("zod").ZodTypeAny, {
+            xl: number;
+            lg: number;
+            md: number;
+            sm: number;
+        }, {
+            xl: number;
+            lg: number;
+            md: number;
+            sm: number;
+        }>;
+        shadows: import("zod").ZodObject<{
+            soft: import("zod").ZodString;
+            softSubtle: import("zod").ZodString;
+            ring: import("zod").ZodString;
+        }, "strip", import("zod").ZodTypeAny, {
+            ring: string;
+            soft: string;
+            softSubtle: string;
+        }, {
+            ring: string;
+            soft: string;
+            softSubtle: string;
+        }>;
+        typography: import("zod").ZodObject<{
+            fontSans: import("zod").ZodString;
+            baseFontSize: import("zod").ZodNumber;
+            scaleRatio: import("zod").ZodNumber;
+        }, "strip", import("zod").ZodTypeAny, {
+            fontSans: string;
+            baseFontSize: number;
+            scaleRatio: number;
+        }, {
+            fontSans: string;
+            baseFontSize: number;
+            scaleRatio: number;
+        }>;
+        gradients: import("zod").ZodObject<{
+            hero: import("zod").ZodString;
+            surface: import("zod").ZodString;
+        }, "strip", import("zod").ZodTypeAny, {
+            hero: string;
+            surface: string;
+        }, {
+            hero: string;
+            surface: string;
+        }>;
+    }, "strip", import("zod").ZodTypeAny, {
+        id: string;
+        name: string;
+        colors: {
+            accent: string;
+            background: string;
+            foreground: string;
+            muted: string;
+            mutedForeground: string;
+            accentSoft: string;
+            border: string;
+            input: string;
+            ring: string;
+            card: string;
+            cardForeground: string;
+        };
+        radii: {
+            xl: number;
+            lg: number;
+            md: number;
+            sm: number;
+        };
+        shadows: {
+            ring: string;
+            soft: string;
+            softSubtle: string;
+        };
+        typography: {
+            fontSans: string;
+            baseFontSize: number;
+            scaleRatio: number;
+        };
+        gradients: {
+            hero: string;
+            surface: string;
+        };
+    }, {
+        id: string;
+        name: string;
+        colors: {
+            accent: string;
+            background: string;
+            foreground: string;
+            muted: string;
+            mutedForeground: string;
+            accentSoft: string;
+            border: string;
+            input: string;
+            ring: string;
+            card: string;
+            cardForeground: string;
+        };
+        radii: {
+            xl: number;
+            lg: number;
+            md: number;
+            sm: number;
+        };
+        shadows: {
+            ring: string;
+            soft: string;
+            softSubtle: string;
+        };
+        typography: {
+            fontSans: string;
+            baseFontSize: number;
+            scaleRatio: number;
+        };
+        gradients: {
+            hero: string;
+            surface: string;
+        };
+    }>, "many">>;
 }, "strip", import("zod").ZodTypeAny, {
     id: string;
     name: string;
@@ -165,6 +332,44 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         hero: string;
         surface: string;
     };
+    defaultVariant?: string | undefined;
+    variants?: {
+        id: string;
+        name: string;
+        colors: {
+            accent: string;
+            background: string;
+            foreground: string;
+            muted: string;
+            mutedForeground: string;
+            accentSoft: string;
+            border: string;
+            input: string;
+            ring: string;
+            card: string;
+            cardForeground: string;
+        };
+        radii: {
+            xl: number;
+            lg: number;
+            md: number;
+            sm: number;
+        };
+        shadows: {
+            ring: string;
+            soft: string;
+            softSubtle: string;
+        };
+        typography: {
+            fontSans: string;
+            baseFontSize: number;
+            scaleRatio: number;
+        };
+        gradients: {
+            hero: string;
+            surface: string;
+        };
+    }[] | undefined;
 }, {
     id: string;
     name: string;
@@ -201,6 +406,44 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         hero: string;
         surface: string;
     };
+    defaultVariant?: string | undefined;
+    variants?: {
+        id: string;
+        name: string;
+        colors: {
+            accent: string;
+            background: string;
+            foreground: string;
+            muted: string;
+            mutedForeground: string;
+            accentSoft: string;
+            border: string;
+            input: string;
+            ring: string;
+            card: string;
+            cardForeground: string;
+        };
+        radii: {
+            xl: number;
+            lg: number;
+            md: number;
+            sm: number;
+        };
+        shadows: {
+            ring: string;
+            soft: string;
+            softSubtle: string;
+        };
+        typography: {
+            fontSans: string;
+            baseFontSize: number;
+            scaleRatio: number;
+        };
+        gradients: {
+            hero: string;
+            surface: string;
+        };
+    }[] | undefined;
 }>>, import("zod").ZodObject<{
     products: import("zod").ZodArray<import("zod").ZodObject<{
         id: import("zod").ZodString;

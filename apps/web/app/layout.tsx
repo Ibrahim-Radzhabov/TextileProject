@@ -2,8 +2,14 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { cache } from "react";
 import type { ReactNode, CSSProperties } from "react";
+import { cookies } from "next/headers";
 import type { ThemeConfig } from "@store-platform/shared-types";
 import { fetchStorefrontConfig } from "@/lib/api-client";
+import {
+  resolveThemeByVariantId,
+  resolveThemeVariantId,
+  THEME_VARIANT_COOKIE
+} from "@/lib/theme-variants";
 import { PwaRegister } from "./pwa-register";
 import { StorefrontShell } from "./storefront-shell";
 
@@ -133,9 +139,14 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export async function generateViewport(): Promise<Viewport> {
   const config = await getStorefrontConfig();
+  const cookieStore = cookies();
+  const activeTheme = resolveThemeByVariantId(
+    config.theme,
+    cookieStore.get(THEME_VARIANT_COOKIE)?.value
+  );
 
   return {
-    themeColor: config.theme.colors.background,
+    themeColor: activeTheme.colors.background,
     colorScheme: "dark",
     width: "device-width",
     initialScale: 1
@@ -144,13 +155,21 @@ export async function generateViewport(): Promise<Viewport> {
 
 export default async function RootLayout({ children }: { children: ReactNode }) {
   const config = await getStorefrontConfig();
-  const themeStyle = themeToCssVars(config.theme);
+  const cookieStore = cookies();
+  const activeThemeVariantId = resolveThemeVariantId(
+    config.theme,
+    cookieStore.get(THEME_VARIANT_COOKIE)?.value
+  );
+  const activeTheme = resolveThemeByVariantId(config.theme, activeThemeVariantId);
+  const themeStyle = themeToCssVars(activeTheme);
 
   return (
     <html lang="en">
       <body style={themeStyle}>
         <PwaRegister />
-        <StorefrontShell config={config}>{children}</StorefrontShell>
+        <StorefrontShell config={config} activeThemeVariantId={activeThemeVariantId}>
+          {children}
+        </StorefrontShell>
       </body>
     </html>
   );
