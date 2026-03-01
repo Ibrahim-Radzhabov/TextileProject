@@ -29,7 +29,7 @@ export default defineConfig({
     },
     {
       command:
-        "STORE_API_URL=http://127.0.0.1:8000 NEXT_PUBLIC_STORE_API_URL=http://127.0.0.1:8000 ADMIN_TOKEN=e2e-admin corepack pnpm --dir apps/web build && STORE_API_URL=http://127.0.0.1:8000 NEXT_PUBLIC_STORE_API_URL=http://127.0.0.1:8000 ADMIN_TOKEN=e2e-admin HOSTNAME=127.0.0.1 PORT=3000 node apps/web/.next/standalone/apps/web/server.js",
+        "STORE_API_URL=http://127.0.0.1:8000 NEXT_PUBLIC_STORE_API_URL=http://127.0.0.1:8000 ADMIN_TOKEN=e2e-admin corepack pnpm --dir apps/web build && cp -R apps/web/.next/static apps/web/.next/standalone/apps/web/.next/static && cp -R apps/web/public apps/web/.next/standalone/apps/web/public && STORE_API_URL=http://127.0.0.1:8000 NEXT_PUBLIC_STORE_API_URL=http://127.0.0.1:8000 ADMIN_TOKEN=e2e-admin HOSTNAME=127.0.0.1 PORT=3000 node apps/web/.next/standalone/apps/web/server.js",
       url: BASE_URL,
       reuseExistingServer: !process.env.CI
     }

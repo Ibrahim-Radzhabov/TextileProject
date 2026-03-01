@@ -6,6 +6,7 @@ import Link from "next/link";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
+import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 
 type StorefrontShellProps = {
   children: ReactNode;
@@ -98,6 +99,7 @@ export function StorefrontShell({ children, config }: StorefrontShellProps) {
           window.location.href = "/checkout";
         }}
       />
+      <PwaInstallPrompt />
     </>
   );
 }
