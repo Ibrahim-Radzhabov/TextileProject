@@ -155,6 +155,774 @@
         "Width panel": "320 cm",
         "Care": "Machine 30C"
       }
+    },
+    {
+      "id": "p5",
+      "slug": "velvet-theater-blackout",
+      "name": "Velvet Theater Blackout",
+      "description": "Бархатные портьеры для глубокой затемняющей сцены и мягкой акустики гостиной.",
+      "shortDescription": "Плотный velvet blackout для домашнего кино и уюта вечером.",
+      "price": {
+        "currency": "USD",
+        "amount": 212.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 249.0
+      },
+      "badges": [
+        {
+          "id": "b5",
+          "label": "Premium",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "blackout",
+        "velvet",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "m5",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Velvet theater blackout curtain"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Light control": "98-100%",
+        "Fabric": "Velvet",
+        "Width panel": "140 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p6",
+      "slug": "linen-sheer-sand",
+      "name": "Linen Sheer Sand",
+      "description": "Легкий льняной тюль песочного тона для мягкого естественного света.",
+      "shortDescription": "Теплый полупрозрачный лен для спокойной спальни.",
+      "price": {
+        "currency": "USD",
+        "amount": 89.0
+      },
+      "badges": [
+        {
+          "id": "b6",
+          "label": "Natural",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "tulle",
+        "sheer",
+        "linen",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "m6",
+          "url": "/demo/airy-voile-tulle.svg",
+          "alt": "Linen sheer sand tulle"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "35-50%",
+        "Fabric": "Linen voile",
+        "Width panel": "280 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p7",
+      "slug": "acoustic-weave-drape",
+      "name": "Acoustic Weave Drape",
+      "description": "Плотное плетение снижает эхо и добавляет приватность в рабочем пространстве.",
+      "shortDescription": "Фактурная драпировка с акцентом на акустический комфорт.",
+      "price": {
+        "currency": "USD",
+        "amount": 176.0
+      },
+      "badges": [
+        {
+          "id": "b7",
+          "label": "Acoustic",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "acoustic",
+        "drape",
+        "office",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m7",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Acoustic weave drape"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "80-90%",
+        "Fabric": "Dense weave",
+        "Width panel": "150 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p8",
+      "slug": "pearl-voile-double-width",
+      "name": "Pearl Voile Double Width",
+      "description": "Тюль двойной ширины для панорамных окон без лишних стыков.",
+      "shortDescription": "Широкий voile с ровными мягкими складками.",
+      "price": {
+        "currency": "USD",
+        "amount": 102.0
+      },
+      "badges": [
+        {
+          "id": "b8",
+          "label": "Wide",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "tulle",
+        "sheer",
+        "living-room",
+        "wide"
+      ],
+      "media": [
+        {
+          "id": "m8",
+          "url": "/demo/airy-voile-tulle.svg",
+          "alt": "Pearl voile double width tulle"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "40-55%",
+        "Fabric": "Voile",
+        "Width panel": "320 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p9",
+      "slug": "thermal-dimout-curtain",
+      "name": "Thermal Dimout Curtain",
+      "description": "Dimout портьера с термослоем для комфортной температуры в спальне.",
+      "shortDescription": "Теплосбережение и мягкое затемнение для ежедневного режима.",
+      "price": {
+        "currency": "USD",
+        "amount": 158.0
+      },
+      "badges": [
+        {
+          "id": "b9",
+          "label": "Thermal",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "dimout",
+        "thermal",
+        "bedroom",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m9",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Thermal dimout curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "75-85%",
+        "Fabric": "Thermal blend",
+        "Width panel": "145 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p10",
+      "slug": "cotton-slub-cafe-curtain",
+      "name": "Cotton Slub Cafe Curtain",
+      "description": "Короткая текстурная штора для кухни и утреннего мягкого света.",
+      "shortDescription": "Легкий slub cotton для уютной кухни и breakfast-зоны.",
+      "price": {
+        "currency": "USD",
+        "amount": 68.0
+      },
+      "badges": [
+        {
+          "id": "b10",
+          "label": "Daily",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "cotton",
+        "cafe",
+        "kitchen",
+        "sheer"
+      ],
+      "media": [
+        {
+          "id": "m10",
+          "url": "/demo/airy-voile-tulle.svg",
+          "alt": "Cotton slub cafe curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "30-45%",
+        "Fabric": "Cotton slub",
+        "Width panel": "180 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p11",
+      "slug": "velvet-pleat-set",
+      "name": "Velvet Pleat Set",
+      "description": "Комплект из плотных портьер и дополнительного легкого слоя для day-night сценария.",
+      "shortDescription": "Двухслойный бархатный сет с аккуратной складкой.",
+      "price": {
+        "currency": "USD",
+        "amount": 264.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 299.0
+      },
+      "badges": [
+        {
+          "id": "b11",
+          "label": "Top Pick",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "velvet",
+        "day-night",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "m11",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Velvet pleat set"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Light control": "65-100%",
+        "Fabric": "Velvet + voile",
+        "Width panel": "150 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p12",
+      "slug": "soft-mesh-tulle-white",
+      "name": "Soft Mesh Tulle White",
+      "description": "Мягкая сетчатая структура для детской и гостевой комнаты с деликатным светом.",
+      "shortDescription": "Нежный mesh-тюль для дневного света и приватности.",
+      "price": {
+        "currency": "USD",
+        "amount": 54.0
+      },
+      "badges": [
+        {
+          "id": "b12",
+          "label": "Light",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "tulle",
+        "sheer",
+        "kids",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m12",
+          "url": "/demo/airy-voile-tulle.svg",
+          "alt": "Soft mesh tulle white"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "25-40%",
+        "Fabric": "Mesh tulle",
+        "Width panel": "300 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p13",
+      "slug": "natural-flax-curtain",
+      "name": "Natural Flax Curtain",
+      "description": "Портьера из льняного микса с теплым натуральным оттенком для спокойного интерьера.",
+      "shortDescription": "Натуральная фактура и мягкое движение ткани.",
+      "price": {
+        "currency": "USD",
+        "amount": 144.0
+      },
+      "badges": [
+        {
+          "id": "b13",
+          "label": "Organic Tone",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "linen",
+        "drape",
+        "living-room",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m13",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Natural flax curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "55-70%",
+        "Fabric": "Flax blend",
+        "Width panel": "150 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p14",
+      "slug": "mocha-blackout-panel",
+      "name": "Mocha Blackout Panel",
+      "description": "Однотонная blackout-панель с плотным полотном для спокойного сна.",
+      "shortDescription": "Надежное затемнение в кофейном оттенке.",
+      "price": {
+        "currency": "USD",
+        "amount": 171.0
+      },
+      "badges": [
+        {
+          "id": "b14",
+          "label": "Sleep",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "blackout",
+        "bedroom",
+        "minimal",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m14",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Mocha blackout panel"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "95-100%",
+        "Fabric": "Poly blackout",
+        "Width panel": "140 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p15",
+      "slug": "herringbone-drape-duo",
+      "name": "Herringbone Drape Duo",
+      "description": "Фактурный herringbone рисунок для живой, но сдержанной интерьерной подачи.",
+      "shortDescription": "Глубокий рисунок и выразительные складки.",
+      "price": {
+        "currency": "USD",
+        "amount": 198.0
+      },
+      "badges": [
+        {
+          "id": "b15",
+          "label": "Best Seller",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "jacquard",
+        "living-room",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m15",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Herringbone drape duo"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Light control": "70-85%",
+        "Fabric": "Jacquard weave",
+        "Width panel": "160 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p16",
+      "slug": "ivory-ripple-track-sheer",
+      "name": "Ivory Ripple Track Sheer",
+      "description": "Ровный ripple track для современной гостиной и панорамного света.",
+      "shortDescription": "Изящная волна и прозрачная фактура.",
+      "price": {
+        "currency": "USD",
+        "amount": 118.0
+      },
+      "badges": [
+        {
+          "id": "b16",
+          "label": "Modern",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "sheer",
+        "ripple-fold",
+        "office",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "m16",
+          "url": "/demo/ripple-fold-sheer.svg",
+          "alt": "Ivory ripple track sheer"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "30-45%",
+        "Fabric": "Sheer poly",
+        "Width panel": "320 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p17",
+      "slug": "sandstone-roman-curtain",
+      "name": "Sandstone Roman Curtain",
+      "description": "Римская штора с чистой геометрией для кабинета и небольших окон.",
+      "shortDescription": "Лаконичная форма и теплый sandstone оттенок.",
+      "price": {
+        "currency": "USD",
+        "amount": 134.0
+      },
+      "badges": [
+        {
+          "id": "b17",
+          "label": "Roman",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "roman",
+        "minimal",
+        "office",
+        "linen"
+      ],
+      "media": [
+        {
+          "id": "m17",
+          "url": "/demo/ripple-fold-sheer.svg",
+          "alt": "Sandstone roman curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "60-75%",
+        "Fabric": "Linen blend",
+        "Width panel": "120 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p18",
+      "slug": "noise-shield-curtain",
+      "name": "Noise Shield Curtain",
+      "description": "Усиленная плотность ткани для спальни у активной улицы и лучшей приватности.",
+      "shortDescription": "Плотный acoustic blackout для тихого сна.",
+      "price": {
+        "currency": "USD",
+        "amount": 205.0
+      },
+      "badges": [
+        {
+          "id": "b18",
+          "label": "Quiet",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "acoustic",
+        "blackout",
+        "bedroom",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m18",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Noise shield curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "95-100%",
+        "Fabric": "Acoustic weave",
+        "Width panel": "145 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p19",
+      "slug": "olive-linen-blend-set",
+      "name": "Olive Linen Blend Set",
+      "description": "Мягкий оливковый тон и натуральная фактура для светлой гостиной.",
+      "shortDescription": "Теплый льняной сет для живого интерьерного акцента.",
+      "price": {
+        "currency": "USD",
+        "amount": 167.0
+      },
+      "badges": [
+        {
+          "id": "b19",
+          "label": "Interior Pick",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "linen",
+        "living-room",
+        "drape",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m19",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Olive linen blend set"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "55-70%",
+        "Fabric": "Linen blend",
+        "Width panel": "150 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p20",
+      "slug": "cloud-sheer-layer",
+      "name": "Cloud Sheer Layer",
+      "description": "Невесомый слой тюля для второго ряда штор и мягкого рассеивания света.",
+      "shortDescription": "Легкий второй слой для day-to-evening сценария.",
+      "price": {
+        "currency": "USD",
+        "amount": 76.0
+      },
+      "badges": [
+        {
+          "id": "b20",
+          "label": "Layering",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "tulle",
+        "sheer",
+        "bedroom",
+        "day-night"
+      ],
+      "media": [
+        {
+          "id": "m20",
+          "url": "/demo/airy-voile-tulle.svg",
+          "alt": "Cloud sheer layer"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "20-35%",
+        "Fabric": "Soft voile",
+        "Width panel": "300 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p21",
+      "slug": "sunset-jacquard-panel",
+      "name": "Sunset Jacquard Panel",
+      "description": "Жаккардовая панель с теплым переходом оттенков для акцентной стены с окном.",
+      "shortDescription": "Мягкий sunset-оттенок и выразительный рисунок.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "badges": [
+        {
+          "id": "b21",
+          "label": "Pattern",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "jacquard",
+        "living-room",
+        "drape",
+        "accent"
+      ],
+      "media": [
+        {
+          "id": "m21",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Sunset jacquard panel"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "65-80%",
+        "Fabric": "Jacquard",
+        "Width panel": "155 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p22",
+      "slug": "dual-track-daylight-kit",
+      "name": "Dual Track Daylight Kit",
+      "description": "Готовый комплект для двухрядного карниза: тюль + плотный слой.",
+      "shortDescription": "Быстрый старт для day-night оформления окна.",
+      "price": {
+        "currency": "USD",
+        "amount": 222.0
+      },
+      "badges": [
+        {
+          "id": "b22",
+          "label": "Bundle",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "day-night",
+        "living-room",
+        "set"
+      ],
+      "media": [
+        {
+          "id": "m22",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Dual track daylight kit"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Light control": "40-95%",
+        "Fabric": "Voile + dimout",
+        "Width panel": "200 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p23",
+      "slug": "studio-dimout-office",
+      "name": "Studio Dimout Office",
+      "description": "Сдержанная офисная портьера для контроля бликов и комфортной работы у окна.",
+      "shortDescription": "Dimout для кабинета и рабочих пространств.",
+      "price": {
+        "currency": "USD",
+        "amount": 139.0
+      },
+      "badges": [
+        {
+          "id": "b23",
+          "label": "Office",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "dimout",
+        "office",
+        "minimal",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m23",
+          "url": "/demo/ripple-fold-sheer.svg",
+          "alt": "Studio dimout office curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "70-85%",
+        "Fabric": "Dimout poly",
+        "Width panel": "150 cm",
+        "Care": "Machine 30C"
+      }
+    },
+    {
+      "id": "p24",
+      "slug": "kids-room-soft-blackout",
+      "name": "Kids Room Soft Blackout",
+      "description": "Мягкое blackout-полотно для детской: дневной сон, вечерний режим и приватность.",
+      "shortDescription": "Спокойный световой режим для детской комнаты.",
+      "price": {
+        "currency": "USD",
+        "amount": 129.0
+      },
+      "badges": [
+        {
+          "id": "b24",
+          "label": "Family",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "blackout",
+        "kids",
+        "bedroom",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m24",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Kids room soft blackout curtain"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Light control": "90-98%",
+        "Fabric": "Soft blackout",
+        "Width panel": "140 cm",
+        "Care": "Machine 30C"
+      }
     }
   ]
 }
