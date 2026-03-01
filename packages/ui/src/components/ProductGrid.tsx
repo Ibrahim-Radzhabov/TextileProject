@@ -37,9 +37,9 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   const isEmpty = products.length === 0;
 
   return (
-    <section className="space-y-5">
+    <section className="space-y-6">
       {(title || subtitle) && (
-        <div className="space-y-2">
+        <div className="space-y-2.5">
           {title && <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{title}</h2>}
           {subtitle && (
             <p className="max-w-2xl text-sm text-muted-foreground sm:text-base">{subtitle}</p>
@@ -54,7 +54,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         />
       ) : (
         <motion.div
-          className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 sm:gap-5"
+          className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-4 sm:gap-6"
           variants={containerVariants}
           initial="hidden"
           animate="visible"

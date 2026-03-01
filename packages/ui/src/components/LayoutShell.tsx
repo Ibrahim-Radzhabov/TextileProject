@@ -23,7 +23,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
           >
             <Surface
               tone="elevated"
-              className="flex items-center justify-between rounded-2xl px-4 py-3 lg:px-5"
+              className="flex items-center justify-between rounded-xl px-4 py-3 lg:px-5"
             >
               {topNav}
             </Surface>
@@ -39,7 +39,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15, duration: 0.2 }}
           >
-            <Surface tone="ghost" className="rounded-2xl px-4 py-3 lg:px-5">
+            <Surface tone="ghost" className="rounded-xl px-4 py-3 lg:px-5">
               {footer}
             </Surface>
           </motion.div>

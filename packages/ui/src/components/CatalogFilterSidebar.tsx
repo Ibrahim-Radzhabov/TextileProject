@@ -46,15 +46,15 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
   const clearTags = () => onChange({ ...value, tags: [] });
 
   const renderPanelContent = () => (
-    <Surface tone="elevated" className="space-y-4 rounded-2xl px-4 py-4">
+    <Surface tone="elevated" className="space-y-4 rounded-xl px-4 py-4">
       <div className="space-y-1">
-        <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">
           Фильтры каталога
         </p>
         <div className="premium-divider" />
       </div>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-xs font-medium uppercase tracking-[0.14em] text-muted-foreground">
+        <span className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">
           Теги
         </span>
         <div className="flex items-center gap-2">
@@ -79,10 +79,10 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
               type="button"
               onClick={() => toggleTag(tag)}
               className={[
-                "rounded-pill border px-3 py-1 text-[11px] transition-all duration-[var(--motion-fast)]",
+                "rounded-[10px] border px-3 py-1 text-[11px] transition-all duration-[var(--motion-fast)]",
                 active
-                  ? "border-accent/60 bg-accent-soft/35 text-accent-contrast shadow-glow"
-                  : "border-border/55 bg-card/55 text-muted-foreground hover:border-accent/40 hover:text-foreground"
+                  ? "border-border/80 bg-card/78 text-foreground"
+                  : "border-border/55 bg-card/55 text-muted-foreground hover:border-border/75 hover:text-foreground"
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -103,7 +103,7 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-3 lg:hidden">
-        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+        <p className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">
           Фильтры каталога
         </p>
         <Button size="sm" variant="secondary" onClick={() => setOpen((v) => !v)}>
@@ -132,14 +132,14 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
               onClick={() => setOpen(false)}
             />
             <motion.aside
-              className="fixed inset-y-0 left-0 z-50 w-[88vw] max-w-xs border-r border-border/60 bg-background/95 px-3 py-4 shadow-floating backdrop-blur-2xl lg:hidden"
+              className="fixed inset-y-0 left-0 z-50 w-[88vw] max-w-xs border-r border-border/45 bg-background/95 px-3 py-4 backdrop-blur-xl lg:hidden"
               initial={{ x: "-100%" }}
               animate={{ x: 0 }}
               exit={{ x: "-100%" }}
               transition={{ type: "spring", stiffness: 260, damping: 28 }}
             >
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Фильтры</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Фильтры</p>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}

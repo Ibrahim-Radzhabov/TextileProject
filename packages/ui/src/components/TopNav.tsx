@@ -21,13 +21,13 @@ export const TopNav: React.FC<TopNavProps> = ({
 }) => {
   const leftContent = (
     <div className="flex items-center gap-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-border/70 bg-surface-soft shadow-soft-subtle backdrop-blur-sm">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border border-border/45 bg-card/75 backdrop-blur-sm">
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={logo.src}
             alt={logo.alt}
-            className="h-7 w-7 rounded-xl object-cover"
+            className="h-7 w-7 rounded-[8px] object-cover"
           />
         ) : (
           <span className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">

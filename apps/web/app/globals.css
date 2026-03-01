@@ -18,16 +18,13 @@ body {
 }
 
 .glass-panel {
-  @apply border border-border/65 bg-surface-soft shadow-soft-subtle backdrop-blur-2xl;
-  background-image: var(--gradient-surface);
-  box-shadow: var(--shadow-soft-subtle), var(--shadow-inset-soft);
+  @apply border border-border/45 bg-card/80 backdrop-blur-xl;
+  box-shadow: 0 1px 0 rgb(var(--color-foreground) / 0.04);
 }
 
 .glass-panel-strong {
-  @apply border shadow-floating backdrop-blur-2xl;
-  border-color: var(--surface-border-strong);
-  background: var(--surface-bg-strong);
-  box-shadow: var(--shadow-floating), var(--shadow-inset-soft);
+  @apply border border-border/45 bg-card/90 backdrop-blur-xl;
+  box-shadow: 0 1px 0 rgb(var(--color-foreground) / 0.06);
 }
 
 .premium-gradient {
@@ -36,7 +33,10 @@ body {
 
 .page-shell {
   @apply relative min-h-screen;
-  background-image: var(--gradient-page);
+  background-image:
+    radial-gradient(circle at 0% 0%, rgb(var(--color-foreground) / 0.02), transparent 36%),
+    radial-gradient(circle at 100% 0%, rgb(var(--color-foreground) / 0.02), transparent 34%),
+    var(--gradient-page);
 }
 
 .page-shell::before {
@@ -44,23 +44,11 @@ body {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  background-image:
-    linear-gradient(to right, rgb(var(--color-foreground) / 0.03) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(var(--color-foreground) / 0.03) 1px, transparent 1px);
-  background-size: 42px 42px;
-  mask-image: radial-gradient(ellipse at center, black 48%, transparent 100%);
+  background: linear-gradient(180deg, rgb(var(--color-background) / 0.15), rgb(var(--color-background) / 0.68));
 }
 
 .text-hero {
-  background-image: linear-gradient(
-    120deg,
-    rgb(var(--color-foreground) / 0.98),
-    rgb(var(--color-foreground) / 0.78) 36%,
-    rgb(var(--color-accent) / 0.92)
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: rgb(var(--color-foreground) / 0.96);
 }
 
 .premium-divider {
@@ -69,9 +57,9 @@ body {
   background-image: linear-gradient(
     90deg,
     transparent,
-    rgb(var(--color-border) / 0.8) 18%,
-    rgb(var(--color-accent) / 0.45) 50%,
-    rgb(var(--color-border) / 0.8) 82%,
+    rgb(var(--color-border) / 0.88) 20%,
+    rgb(var(--color-border) / 0.58) 50%,
+    rgb(var(--color-border) / 0.88) 80%,
     transparent
   );
 }
@@ -110,30 +98,60 @@ body {
   content: "";
   pointer-events: none;
   position: absolute;
-  inset: -10px 0 auto 0;
-  height: 260px;
-  border-radius: 28px;
+  inset: -8px 0 auto 0;
+  height: 180px;
+  border-radius: 14px;
   background-image:
-    radial-gradient(circle at 6% 10%, rgb(var(--color-accent) / 0.14), transparent 56%),
-    radial-gradient(circle at 90% 28%, rgb(var(--color-foreground) / 0.1), transparent 60%);
-  filter: blur(14px);
+    radial-gradient(circle at 8% 8%, rgb(var(--color-foreground) / 0.05), transparent 55%),
+    radial-gradient(circle at 92% 20%, rgb(var(--color-foreground) / 0.04), transparent 58%);
+  filter: blur(10px);
   z-index: -1;
 }
 
-.home-concept-mono {
-  position: relative;
-}
-
-.home-concept-mono::before {
+.page-shell::after {
   content: "";
   pointer-events: none;
   position: absolute;
   inset: 0;
-  border-radius: 28px;
-  background-image:
-    linear-gradient(to right, rgb(var(--color-border) / 0.2) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(var(--color-border) / 0.2) 1px, transparent 1px);
-  background-size: 28px 28px;
-  mask-image: radial-gradient(circle at center, black 28%, transparent 100%);
-  opacity: 0.25;
+  opacity: 0.025;
+  mix-blend-mode: soft-light;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23fff' fill-opacity='.7'%3E%3Ccircle cx='8' cy='16' r='1'/%3E%3Ccircle cx='64' cy='24' r='1'/%3E%3Ccircle cx='104' cy='80' r='1'/%3E%3Ccircle cx='28' cy='96' r='1'/%3E%3Ccircle cx='88' cy='52' r='1'/%3E%3C/g%3E%3C/svg%3E");
+}
+
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight-card::after {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity var(--motion-fast) ease;
+  background: radial-gradient(
+    220px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
+    rgb(var(--color-foreground) / 0.12),
+    transparent 70%
+  );
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-card:hover::after {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .spotlight-card::after,
+  .skeleton-shimmer::after {
+    transition: none;
+    animation: none;
+  }
 }

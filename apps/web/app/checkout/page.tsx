@@ -17,7 +17,7 @@ const checkoutSchema = z.object({
   addressLine1: z.string().min(4, "Укажите улицу и дом"),
   addressCity: z.string().min(2, "Укажите город"),
   addressCountry: z.string().min(2, "Укажите страну"),
-  postalCode: z.string().min(2, "Укажите индекс"),
+  postalCode: z.string().min(2, "Укажите индекс")
 });
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
@@ -29,7 +29,7 @@ function createIdempotencyKey(): string {
 function formatMoney(amount: number, currency: string): string {
   return amount.toLocaleString(undefined, {
     style: "currency",
-    currency,
+    currency
   });
 }
 
@@ -45,7 +45,7 @@ export default function CheckoutPage() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors }
   } = useForm<CheckoutFormValues>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -54,8 +54,8 @@ export default function CheckoutPage() {
       addressLine1: "",
       addressCity: "",
       addressCountry: "",
-      postalCode: "",
-    },
+      postalCode: ""
+    }
   });
 
   const onSubmit = async (values: CheckoutFormValues) => {
@@ -72,10 +72,10 @@ export default function CheckoutPage() {
         cart: {
           items: lines.map((line) => ({
             productId: line.productId,
-            quantity: line.quantity,
-          })),
+            quantity: line.quantity
+          }))
         },
-        customer: values,
+        customer: values
       });
       if (res.status === "redirect" && res.redirectUrl) {
         window.location.href = res.redirectUrl;
@@ -98,7 +98,7 @@ export default function CheckoutPage() {
   const totalFormatted =
     cart?.totals.grandTotal.amount.toLocaleString(undefined, {
       style: "currency",
-      currency: cart.totals.grandTotal.currency,
+      currency: cart.totals.grandTotal.currency
     }) ?? "—";
 
   return (
@@ -110,22 +110,18 @@ export default function CheckoutPage() {
         onSubmit={handleSubmit(onSubmit)}
         className="space-y-5"
       >
-        <Surface tone="elevated" className="relative overflow-hidden px-4 py-5 sm:px-5 sm:py-6">
-          <div className="pointer-events-none absolute inset-0 opacity-70">
-            <div className="absolute -left-8 top-[-4rem] h-48 w-48 rounded-full bg-accent/20 blur-3xl" />
-            <div className="absolute -right-8 bottom-[-4rem] h-48 w-48 rounded-full bg-foreground/10 blur-3xl" />
-          </div>
+        <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
           <div className="relative z-10 space-y-3">
             <div>
-              <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">Оформление заказа</h1>
+              <h1 className="text-2xl font-medium tracking-tight sm:text-3xl">Оформление заказа</h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Контакты и адрес. В корзине {itemCount} поз.
               </p>
             </div>
             <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground">
-              <span className="rounded-full border border-border/55 bg-card/35 px-2.5 py-1">Безопасная оплата</span>
-              <span className="rounded-full border border-border/55 bg-card/35 px-2.5 py-1">Статус заказа по email</span>
-              <span className="rounded-full border border-border/55 bg-card/35 px-2.5 py-1">Быстрый checkout</span>
+              <span className="rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1 font-semibold uppercase tracking-[0.05em]">Безопасная оплата</span>
+              <span className="rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1 font-semibold uppercase tracking-[0.05em]">Статус заказа</span>
+              <span className="rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1 font-semibold uppercase tracking-[0.05em]">Fast checkout</span>
             </div>
           </div>
         </Surface>
@@ -155,8 +151,8 @@ export default function CheckoutPage() {
         )}
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-          <Surface tone="subtle" className="space-y-4 rounded-2xl px-4 py-4">
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Контакт</p>
+          <Surface tone="subtle" className="space-y-4 rounded-xl px-5 py-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Контакт</p>
             <div className="space-y-4">
               <div className="space-y-1">
                 <label htmlFor="checkout-email" className="text-xs font-medium text-muted-foreground">
@@ -166,7 +162,7 @@ export default function CheckoutPage() {
                   id="checkout-email"
                   type="email"
                   autoComplete="email"
-                  className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("email")}
                 />
                 {errors.email && <p className="text-xs text-red-400">{errors.email.message}</p>}
@@ -179,7 +175,7 @@ export default function CheckoutPage() {
                   id="checkout-name"
                   type="text"
                   autoComplete="name"
-                  className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("name")}
                 />
                 {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
@@ -189,8 +185,8 @@ export default function CheckoutPage() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Surface tone="subtle" className="space-y-4 rounded-2xl px-4 py-4">
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Адрес доставки</p>
+          <Surface tone="subtle" className="space-y-4 rounded-xl px-5 py-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Адрес доставки</p>
             <div className="space-y-4">
               <div className="space-y-1">
                 <label htmlFor="checkout-address-line1" className="text-xs font-medium text-muted-foreground">
@@ -200,7 +196,7 @@ export default function CheckoutPage() {
                   id="checkout-address-line1"
                   type="text"
                   autoComplete="address-line1"
-                  className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("addressLine1")}
                 />
                 {errors.addressLine1 && <p className="text-xs text-red-400">{errors.addressLine1.message}</p>}
@@ -214,7 +210,7 @@ export default function CheckoutPage() {
                     id="checkout-city"
                     type="text"
                     autoComplete="address-level2"
-                    className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+                    className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                     {...register("addressCity")}
                   />
                   {errors.addressCity && <p className="text-xs text-red-400">{errors.addressCity.message}</p>}
@@ -227,7 +223,7 @@ export default function CheckoutPage() {
                     id="checkout-postal-code"
                     type="text"
                     autoComplete="postal-code"
-                    className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+                    className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                     {...register("postalCode")}
                   />
                   {errors.postalCode && <p className="text-xs text-red-400">{errors.postalCode.message}</p>}
@@ -241,7 +237,7 @@ export default function CheckoutPage() {
                   id="checkout-country"
                   type="text"
                   autoComplete="country-name"
-                  className="h-10 w-full rounded-lg border border-border/60 bg-input px-3 text-sm outline-none transition-colors focus:border-accent focus:ring-1 focus:ring-ring"
+                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("addressCountry")}
                 />
                 {errors.addressCountry && <p className="text-xs text-red-400">{errors.addressCountry.message}</p>}
@@ -267,15 +263,15 @@ export default function CheckoutPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.06 }}
       >
-        <Surface tone="subtle" className="h-fit space-y-4 rounded-2xl px-4 py-4 md:sticky md:top-24">
+        <Surface tone="subtle" className="h-fit space-y-4 rounded-xl px-4 py-4 md:sticky md:top-24">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-medium text-muted-foreground">Итого</span>
+            <span className="text-xs font-semibold uppercase tracking-[0.05em] text-muted-foreground">Итого</span>
             <span className="text-sm font-semibold">{totalFormatted}</span>
           </div>
 
           <div className="space-y-2">
             {cart?.items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between gap-2 rounded-lg border border-border/55 px-3 py-2">
+              <div key={item.id} className="flex items-center justify-between gap-2 rounded-[10px] border border-border/45 px-3 py-2">
                 <div className="min-w-0">
                   <p className="truncate text-xs font-medium">{item.productSnapshot.name}</p>
                   <p className="text-[11px] text-muted-foreground">x{item.quantity}</p>
@@ -295,7 +291,7 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          <div className="rounded-lg border border-border/55 bg-card/35 px-3 py-2 text-xs text-muted-foreground">
+          <div className="rounded-[10px] border border-border/45 bg-card/45 px-3 py-2 text-xs text-muted-foreground">
             Оплата безопасна. Подтверждение и трекинг придут на email.
           </div>
         </Surface>

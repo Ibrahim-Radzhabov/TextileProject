@@ -15,7 +15,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media }) => {
 
   return (
     <div className="space-y-3">
-      <Surface className="relative overflow-hidden rounded-3xl border border-border/70 bg-card/80">
+      <Surface className="relative overflow-hidden rounded-xl border border-border/45 bg-card/82">
         {active && (
           // eslint-disable-next-line @next/next/no-img-element
           <motion.img
@@ -36,11 +36,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media }) => {
               key={item.id}
               type="button"
               onClick={() => setActiveId(item.id)}
-              className={[
-                "relative h-16 w-20 flex-none overflow-hidden rounded-2xl border transition-all",
+            className={[
+                "relative h-16 w-20 flex-none overflow-hidden rounded-[10px] border transition-all",
                 active?.id === item.id
-                  ? "border-accent shadow-soft-subtle"
-                  : "border-border/50 hover:border-accent-soft"
+                  ? "border-border/75 bg-card/80"
+                  : "border-border/45 hover:border-border/75"
               ]
                 .filter(Boolean)
                 .join(" ")}

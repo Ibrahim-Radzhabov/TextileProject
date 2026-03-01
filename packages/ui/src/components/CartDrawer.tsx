@@ -64,14 +64,13 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             onClick={onClose}
           />
           <motion.aside
-            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col border-l border-border/60 bg-background/95 shadow-floating backdrop-blur-2xl"
+            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-lg flex-col border-l border-border/45 bg-background/95 backdrop-blur-xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
           >
             <div className="relative shrink-0 overflow-hidden border-b border-border/60 px-4 py-4 sm:px-5">
-              <div className="pointer-events-none absolute inset-0 bg-[var(--gradient-accent-soft)] opacity-15" />
               <div className="relative z-10 flex items-center justify-between">
                 <div>
                   <h2 className="text-sm font-medium tracking-tight">Корзина</h2>
@@ -113,9 +112,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               )}
               {!hasItems && !isUpdating && (
                 <Surface tone="subtle" className="relative overflow-hidden px-4 py-8 text-center">
-                  <div className="pointer-events-none absolute inset-0 bg-[var(--gradient-accent-soft)] opacity-20" />
                   <div className="relative z-10 mx-auto flex max-w-[240px] flex-col items-center gap-3">
-                    <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-border/55 bg-surface-soft shadow-soft-subtle">
+                    <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-border/45 bg-card/55">
                       <span className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                         Cart
                       </span>
@@ -155,7 +153,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                             <div className="mt-1 flex items-center gap-1.5 text-[11px]">
                               <button
                                 type="button"
-                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
                                 onClick={() => onDecrement?.(item.productId)}
                                 disabled={isUpdating}
                               >
@@ -164,7 +162,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               <span className="min-w-4 text-center text-muted-foreground">{item.quantity}</span>
                               <button
                                 type="button"
-                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
                                 onClick={() => onIncrement?.(item.productId)}
                                 disabled={isUpdating}
                               >
@@ -222,7 +220,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="mb-2 w-full rounded-lg border border-border/55 px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+                className="mb-2 w-full rounded-lg border border-border/55 px-3 py-2 text-xs text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
               >
                 Продолжить покупки
               </button>

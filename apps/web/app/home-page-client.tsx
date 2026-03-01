@@ -101,8 +101,8 @@ function formatPrice(amount: number | null, currency: string): string {
 
 function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): JSX.Element {
   return (
-    <section key={block.id} className="relative overflow-hidden rounded-[30px] border border-border/60 bg-surface-strong px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
-      <div className="pointer-events-none absolute inset-0 opacity-80">
+    <section key={block.id} className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+      <div className="pointer-events-none absolute inset-0 opacity-55">
         <div className="absolute left-0 top-0 h-full w-px bg-border/60" />
         <div className="absolute right-0 top-0 h-full w-px bg-border/60" />
         <div className="absolute left-0 top-[62px] h-px w-full bg-border/60" />
@@ -124,7 +124,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="text-balance text-[clamp(2.4rem,5.8vw,4.8rem)] font-semibold leading-[0.98] tracking-[-0.04em] text-foreground"
+            className="text-balance font-serif text-[clamp(2.4rem,5.8vw,4.8rem)] font-normal leading-[0.98] tracking-[-0.03em] text-foreground"
           >
             {block.title}
           </motion.h1>
@@ -147,7 +147,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             {block.primaryCta && (
               <a
                 href={block.primaryCta.href}
-                className="inline-flex h-10 items-center justify-center rounded-full border border-accent/55 bg-accent px-5 text-sm font-medium text-accent-contrast transition-colors hover:bg-accent/90"
+                className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/92"
               >
                 {block.primaryCta.label}
               </a>
@@ -155,7 +155,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             {block.secondaryCta && (
               <a
                 href={block.secondaryCta.href}
-                className="inline-flex h-10 items-center justify-center rounded-full border border-border/70 bg-card/35 px-5 text-sm text-muted-foreground transition-colors hover:border-accent/45 hover:text-foreground"
+                className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/60 bg-card/55 px-5 text-sm text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
               >
                 {block.secondaryCta.label}
               </a>
@@ -169,16 +169,16 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
           transition={{ duration: 0.5, delay: 0.2 }}
           className="grid gap-3"
         >
-          <div className="rounded-2xl border border-border/65 bg-card/45 px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Products</p>
+          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Products</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.totalProducts}</p>
           </div>
-          <div className="rounded-2xl border border-border/65 bg-card/45 px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Featured</p>
+          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Featured</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
           </div>
-          <div className="rounded-2xl border border-border/65 bg-card/45 px-4 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Price Range</p>
+          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Price Range</p>
             <p className="mt-1 text-sm text-foreground">
               {formatPrice(stats.minPrice, currency)} - {formatPrice(stats.maxPrice, currency)}
             </p>
@@ -191,7 +191,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
 
 function renderRichTextBlock(block: RichTextBlock): JSX.Element {
   return (
-    <section key={block.id} className="rounded-2xl border border-border/60 bg-surface-soft px-5 py-4">
+    <section key={block.id} className="rounded-xl border border-border/45 bg-card/72 px-6 py-5">
       <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground sm:text-base">{block.content}</p>
     </section>
   );
@@ -214,7 +214,7 @@ function renderProductGridBlock(
     >
       {(block.title || block.subtitle) && (
         <header className="space-y-2">
-          {block.title && <h2 className="text-2xl font-semibold tracking-tight sm:text-3xl">{block.title}</h2>}
+          {block.title && <h2 className="text-2xl font-medium tracking-tight sm:text-3xl">{block.title}</h2>}
           {block.subtitle && <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">{block.subtitle}</p>}
           <div className="premium-divider" />
         </header>
@@ -281,15 +281,11 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   return (
     <div className="space-y-10 lg:space-y-12 home-concept-editorial">
       <section className="grid gap-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-        <Surface tone="elevated" className="relative overflow-hidden px-4 py-5 sm:px-5">
-          <div className="pointer-events-none absolute inset-0 opacity-75">
-            <div className="absolute -left-8 top-[-4rem] h-44 w-44 rounded-full bg-accent/20 blur-3xl" />
-            <div className="absolute right-[-4rem] bottom-[-4rem] h-52 w-52 rounded-full bg-foreground/10 blur-3xl" />
-          </div>
+        <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
           <div className="relative z-10 space-y-3">
             <div className="space-y-1.5">
               <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">Storefront direction</p>
-              <h2 className="text-xl font-semibold tracking-tight sm:text-2xl">Editorial</h2>
+              <h2 className="text-xl font-medium tracking-tight sm:text-2xl">Editorial</h2>
               <p className="max-w-xl text-sm text-muted-foreground sm:text-base">
                 Единый визуальный язык для витрины: строгая типографика, воздух и premium-ритм.
               </p>
@@ -302,16 +298,16 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
         </Surface>
 
         <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
-          <Surface tone="subtle" className="rounded-2xl px-3 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Products</p>
+          <Surface tone="subtle" className="rounded-xl px-3 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Products</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.totalProducts}</p>
           </Surface>
-          <Surface tone="subtle" className="rounded-2xl px-3 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Featured</p>
+          <Surface tone="subtle" className="rounded-xl px-3 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Featured</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
           </Surface>
-          <Surface tone="subtle" className="rounded-2xl px-3 py-3">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Tags</p>
+          <Surface tone="subtle" className="rounded-xl px-3 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Tags</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.tagsCount}</p>
           </Surface>
         </div>

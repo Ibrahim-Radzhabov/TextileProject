@@ -103,12 +103,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
 
   return (
     <div className="min-h-0 space-y-7 pb-8">
-      <header className="relative overflow-hidden rounded-3xl border border-border/60 bg-surface-strong px-5 py-6 sm:px-7 sm:py-7">
-        <div className="pointer-events-none absolute inset-0 opacity-75">
-          <div className="absolute -left-10 top-[-4rem] h-56 w-56 rounded-full bg-accent/20 blur-3xl" />
-          <div className="absolute right-[-2rem] bottom-[-4rem] h-56 w-56 rounded-full bg-foreground/10 blur-3xl" />
-        </div>
-
+      <header className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-6 sm:px-7 sm:py-7">
         <div className="relative space-y-4">
           <div className="space-y-2">
             <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{page.title}</h1>
@@ -120,16 +115,16 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
           </div>
 
           <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-border/55 bg-card/35 px-3 py-3">
-              <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Товаров</p>
+            <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Товаров</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">{filteredProducts.length}</p>
             </div>
-            <div className="rounded-2xl border border-border/55 bg-card/35 px-3 py-3">
-              <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Featured</p>
+            <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Featured</p>
               <p className="mt-1 text-2xl font-semibold tracking-tight">{featuredCount}</p>
             </div>
-            <div className="rounded-2xl border border-border/55 bg-card/35 px-3 py-3">
-              <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Диапазон цен</p>
+            <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.05em] text-muted-foreground">Диапазон цен</p>
               <p className="mt-1 text-sm font-medium text-foreground">
                 {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
               </p>
@@ -140,7 +135,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
 
       <div className="grid gap-6 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
         <div className="lg:sticky lg:top-20">
-          <Surface tone="ghost" className="rounded-2xl px-4 py-3">
+          <Surface tone="ghost" className="rounded-xl px-4 py-3">
             <CatalogFilterSidebar
               availableTags={allTags}
               value={{ tags: tagsFilter }}
@@ -150,7 +145,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         </div>
 
         <div className="space-y-6">
-          <div className="rounded-2xl border border-border/60 bg-card/35 px-4 py-4">
+          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-4">
             <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <Badge tone="muted">Всего: {products.length}</Badge>
               <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
@@ -167,10 +162,10 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                       type="button"
                       onClick={() => setSort(option.value)}
                       className={[
-                        "rounded-full border px-3 py-1 text-[11px] transition-colors",
+                        "rounded-[10px] border px-3 py-1 text-[11px] transition-colors",
                         active
-                          ? "border-accent/70 bg-accent/15 text-foreground"
-                          : "border-border/60 text-muted-foreground hover:border-accent/45 hover:text-foreground"
+                          ? "border-border/75 bg-card/75 text-foreground"
+                          : "border-border/55 text-muted-foreground hover:border-border/75 hover:text-foreground"
                       ].join(" ")}
                     >
                       {option.label}
@@ -185,7 +180,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   aria-label="Сортировка каталога"
                   value={sort}
                   onChange={(event) => setSort(event.target.value as CatalogSort)}
-                  className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
+                    className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
                 >
                   {sortOptions.map((option) => (
                     <option key={option.value} value={option.value}>
@@ -207,8 +202,8 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                         className={[
                           "rounded-md border px-2 py-1 text-[11px] transition-colors",
                           active
-                            ? "border-accent/65 bg-accent-soft/30 text-foreground"
-                            : "border-border/60 text-muted-foreground hover:border-accent/45 hover:text-foreground"
+                            ? "border-border/75 bg-card/75 text-foreground"
+                            : "border-border/55 text-muted-foreground hover:border-border/75 hover:text-foreground"
                         ].join(" ")}
                       >
                         #{tag}
@@ -228,7 +223,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.25 }}
-                  className="rounded-2xl border border-border/55 bg-surface-soft/70 px-4 py-5 sm:px-5"
+                  className="rounded-xl border border-border/45 bg-card/72 px-4 py-5 sm:px-5"
                 >
                   <ProductGrid
                     title={block.title}
