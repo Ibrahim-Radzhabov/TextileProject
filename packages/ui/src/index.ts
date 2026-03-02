@@ -8,6 +8,7 @@ export * from "./components/EmptyState";
 export * from "./components/LayoutShell";
 export * from "./components/TopNav";
 export * from "./components/Hero";
+export * from "./components/HeroMedia";
 export * from "./components/ProductCard";
 export * from "./components/ProductGrid";
 export * from "./components/CartDrawer";

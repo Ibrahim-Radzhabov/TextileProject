@@ -17,7 +17,10 @@
           "mobileSrc": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
           "poster": "/demo/linen-blackout-drape.svg",
           "alt": "Мягкая драпировка ткани у окна",
-          "overlayOpacity": 0.64
+          "overlayOpacity": 0.18,
+          "overlayPreset": "editorial",
+          "objectPosition": "68% 46%",
+          "mobileObjectPosition": "72% 44%"
         },
         "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
         "secondaryCta": { "label": "Смотреть коллекцию", "href": "#featured" }
@@ -34,7 +37,9 @@
           "type": "image",
           "src": "/demo/jacquard-day-night-set.svg",
           "alt": "Двухслойная day-night композиция для окна",
-          "overlayOpacity": 0.2
+          "overlayOpacity": 0.2,
+          "objectPosition": "center center",
+          "mobileObjectPosition": "center center"
         },
         "cta": {
           "label": "Смотреть day-night",

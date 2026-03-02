@@ -3,20 +3,14 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import { Button } from "./Button";
+import { HeroMedia, type HeroMediaConfig } from "./HeroMedia";
 import { Surface } from "./Surface";
 
 export type HeroProps = {
   eyebrow?: string;
   title: string;
   subtitle?: string;
-  media?: {
-    type: "image" | "video";
-    src: string;
-    mobileSrc?: string;
-    poster?: string;
-    alt?: string;
-    overlayOpacity?: number;
-  };
+  media?: HeroMediaConfig;
   primaryCta?: {
     label: string;
     href: string;
@@ -35,43 +29,13 @@ export const Hero: React.FC<HeroProps> = ({
   primaryCta,
   secondaryCta
 }) => {
-  const overlayOpacity = media?.overlayOpacity ?? 0.48;
-
   return (
     <section className="relative isolate overflow-hidden">
       <Surface
         tone="elevated"
         className="relative grid gap-8 overflow-hidden rounded-xl px-6 py-8 sm:px-8 sm:py-10 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-10 lg:px-10"
       >
-        {media && (
-          <div className="pointer-events-none absolute inset-0">
-            {media.type === "video" ? (
-              <video
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="metadata"
-                poster={media.poster}
-                className="h-full w-full object-cover"
-              >
-                {media.mobileSrc && <source src={media.mobileSrc} media="(max-width: 768px)" />}
-                <source src={media.src} />
-              </video>
-            ) : (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={media.mobileSrc ?? media.src}
-                alt={media.alt ?? title}
-                className="h-full w-full object-cover"
-              />
-            )}
-            <div
-              className="absolute inset-0 bg-background"
-              style={{ opacity: overlayOpacity }}
-            />
-          </div>
-        )}
+        {media && <HeroMedia media={media} title={title} defaultOverlayOpacity={0.48} />}
         <div className="relative z-10 max-w-2xl space-y-6">
           {eyebrow && (
             <motion.p

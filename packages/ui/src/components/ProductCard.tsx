@@ -48,6 +48,9 @@ function resolveMetadataValue(product: Product, preferredKeys: string[]): string
 
 export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd }) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
+  const spotlightRectRef = React.useRef<DOMRect | null>(null);
+  const spotlightFrameRef = React.useRef<number | null>(null);
+  const spotlightPositionRef = React.useRef({ x: 0, y: 0 });
   const primaryImage = product.media[0];
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
   const hasComparePrice =
@@ -60,18 +63,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
     ["bedroom", "living-room", "office", "kids"].includes(tag)
   );
 
-  const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
+  const flushSpotlightPosition = () => {
     const root = rootRef.current;
     if (!root) {
+      spotlightFrameRef.current = null;
       return;
     }
 
-    const rect = root.getBoundingClientRect();
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    root.style.setProperty("--spotlight-x", `${spotlightPositionRef.current.x}px`);
+    root.style.setProperty("--spotlight-y", `${spotlightPositionRef.current.y}px`);
+    spotlightFrameRef.current = null;
+  };
 
-    root.style.setProperty("--spotlight-x", `${x}px`);
-    root.style.setProperty("--spotlight-y", `${y}px`);
+  const handlePointerEnter = (event: React.MouseEvent<HTMLDivElement>) => {
+    spotlightRectRef.current = event.currentTarget.getBoundingClientRect();
+  };
+
+  const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
+    const rect = spotlightRectRef.current ?? event.currentTarget.getBoundingClientRect();
+    spotlightRectRef.current = rect;
+    spotlightPositionRef.current = {
+      x: event.clientX - rect.left,
+      y: event.clientY - rect.top
+    };
+
+    if (spotlightFrameRef.current === null) {
+      spotlightFrameRef.current = window.requestAnimationFrame(flushSpotlightPosition);
+    }
   };
 
   const handlePointerLeave = () => {
@@ -82,13 +100,27 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
 
     root.style.setProperty("--spotlight-x", "50%");
     root.style.setProperty("--spotlight-y", "50%");
+    spotlightRectRef.current = null;
+    if (spotlightFrameRef.current !== null) {
+      window.cancelAnimationFrame(spotlightFrameRef.current);
+      spotlightFrameRef.current = null;
+    }
   };
+
+  React.useEffect(() => {
+    return () => {
+      if (spotlightFrameRef.current !== null) {
+        window.cancelAnimationFrame(spotlightFrameRef.current);
+      }
+    };
+  }, []);
 
   return (
     <motion.div
       ref={rootRef}
       whileHover={{ y: -2 }}
       transition={{ type: "spring", stiffness: 220, damping: 26 }}
+      onMouseEnter={handlePointerEnter}
       onMouseMove={handlePointerMove}
       onMouseLeave={handlePointerLeave}
       className="group spotlight-card h-full"

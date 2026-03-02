@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Badge, CtaStrip, EmptyState, ProductCard, Surface } from "@store-platform/ui";
+import { CtaStrip, EmptyState, HeroMedia, ProductCard } from "@store-platform/ui";
 import type {
   CtaStripBlock,
   HeroBlock,
@@ -100,44 +100,42 @@ function formatPrice(amount: number | null, currency: string): string {
   });
 }
 
+function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast"): string {
+  if (preset === "contrast") {
+    return "bg-[linear-gradient(92deg,rgba(10,10,10,0.78)_0%,rgba(10,10,10,0.46)_42%,rgba(10,10,10,0.14)_64%,rgba(10,10,10,0.52)_100%)]";
+  }
+
+  if (preset === "balanced") {
+    return "bg-[linear-gradient(92deg,rgba(10,10,10,0.62)_0%,rgba(10,10,10,0.32)_38%,rgba(10,10,10,0.08)_63%,rgba(10,10,10,0.4)_100%)]";
+  }
+
+  return "bg-[linear-gradient(92deg,rgba(10,10,10,0.7)_0%,rgba(10,10,10,0.38)_40%,rgba(10,10,10,0.1)_62%,rgba(10,10,10,0.46)_100%)]";
+}
+
 function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): JSX.Element {
-  const overlayOpacity = block.media?.overlayOpacity ?? 0.52;
+  const heroOverlayClass = resolveHeroOverlayClass(block.media?.overlayPreset);
 
   return (
-    <section key={block.id} className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+    <section key={block.id} className="relative isolate overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
       {block.media && (
-        <div className="pointer-events-none absolute inset-0">
-          {block.media.type === "video" ? (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster={block.media.poster}
-              className="h-full w-full object-cover"
-            >
-              {block.media.mobileSrc && <source src={block.media.mobileSrc} media="(max-width: 768px)" />}
-              <source src={block.media.src} />
-            </video>
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={block.media.mobileSrc ?? block.media.src}
-              alt={block.media.alt ?? block.title}
-              className="h-full w-full object-cover"
-            />
-          )}
-          <div className="absolute inset-0 bg-background" style={{ opacity: overlayOpacity }} />
-        </div>
+        <HeroMedia
+          media={block.media}
+          title={block.title}
+          defaultOverlayOpacity={0.18}
+          overlayClassName="bg-background"
+        />
       )}
-      <div className="pointer-events-none absolute inset-0 opacity-55">
+      <div className="pointer-events-none absolute inset-0 z-[1]">
+        <div className={`absolute inset-0 ${heroOverlayClass}`} />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.12)_0%,rgba(10,10,10,0.06)_36%,rgba(10,10,10,0.3)_100%)]" />
+      </div>
+      <div className="pointer-events-none absolute inset-0 opacity-45">
         <div className="absolute left-0 top-0 h-full w-px bg-border/60" />
         <div className="absolute right-0 top-0 h-full w-px bg-border/60" />
         <div className="absolute left-0 top-[62px] h-px w-full bg-border/60" />
       </div>
 
-      <div className="relative z-10 grid gap-7 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-10">
+      <div className="relative z-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-10">
         <div className="space-y-5">
           {block.eyebrow && (
             <motion.p
@@ -153,7 +151,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="ui-title-display text-[clamp(2.4rem,5.8vw,4.8rem)] leading-[0.98] text-foreground"
+            className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,4.8rem)] leading-[0.98] text-foreground drop-shadow-[0_3px_16px_rgba(0,0,0,0.18)]"
           >
             {block.title}
           </motion.h1>
@@ -162,7 +160,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-            className="ui-subtle max-w-2xl text-base leading-relaxed sm:text-lg"
+              className="ui-subtle max-w-2xl text-base leading-relaxed text-foreground/85 drop-shadow-[0_2px_12px_rgba(0,0,0,0.14)] sm:text-lg"
           >
             {block.subtitle}
           </motion.p>
@@ -196,17 +194,17 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="grid gap-3"
+          className="grid grid-cols-1 gap-2 border-t border-border/35 pt-3 sm:grid-cols-3 sm:gap-3 lg:grid-cols-1 lg:gap-3 lg:border-none lg:pt-0"
         >
-          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-3">
+          <div className="rounded-xl border border-border/45 bg-card/62 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
             <p className="ui-kicker">Products</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.totalProducts}</p>
           </div>
-          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-3">
+          <div className="rounded-xl border border-border/45 bg-card/62 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
             <p className="ui-kicker">Featured</p>
             <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
           </div>
-          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-3">
+          <div className="rounded-xl border border-border/45 bg-card/62 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
             <p className="ui-kicker">Budget Range</p>
             <p className="mt-1 text-sm text-foreground">
               {formatPrice(stats.minPrice, currency)} - {formatPrice(stats.maxPrice, currency)}
@@ -221,7 +219,6 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
 function renderMediaFeatureBlock(block: MediaFeatureBlock): JSX.Element {
   const textSideClass = block.align === "right" ? "lg:order-2" : "lg:order-1";
   const mediaSideClass = block.align === "right" ? "lg:order-1" : "lg:order-2";
-  const overlayOpacity = block.media.overlayOpacity ?? 0.2;
 
   return (
     <section
@@ -243,28 +240,12 @@ function renderMediaFeatureBlock(block: MediaFeatureBlock): JSX.Element {
         )}
       </div>
       <div className={`relative overflow-hidden rounded-xl border border-border/40 ${mediaSideClass}`}>
-        {block.media.type === "video" ? (
-          <video
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={block.media.poster}
-            className="h-full min-h-[280px] w-full object-cover"
-          >
-            {block.media.mobileSrc && <source src={block.media.mobileSrc} media="(max-width: 768px)" />}
-            <source src={block.media.src} />
-          </video>
-        ) : (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={block.media.mobileSrc ?? block.media.src}
-            alt={block.media.alt ?? block.title}
-            className="h-full min-h-[280px] w-full object-cover"
-          />
-        )}
-        <div className="absolute inset-0 bg-background" style={{ opacity: overlayOpacity }} />
+        <HeroMedia
+          media={block.media}
+          title={block.title}
+          assetClassName="h-full min-h-[280px] w-full object-cover"
+          defaultOverlayOpacity={0.2}
+        />
       </div>
     </section>
   );
@@ -365,39 +346,6 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
 
   return (
     <div className="home-concept-editorial space-y-9 sm:space-y-10 lg:space-y-12">
-      <section className="grid gap-5 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
-        <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6 sm:py-7">
-          <div className="relative z-10 space-y-3">
-            <div className="space-y-1.5">
-              <p className="ui-kicker">Collection focus</p>
-              <h2 className="ui-title text-xl sm:text-2xl">Curtains and Tulle</h2>
-              <p className="ui-subtle max-w-xl text-sm sm:text-base">
-                Витрина построена вокруг оконного текстиля: светопропускание, фактуры и интерьерные сценарии.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Badge tone="accent">Textile mode</Badge>
-              <Badge tone="muted">Curtains, sheers, blackout</Badge>
-            </div>
-          </div>
-        </Surface>
-
-        <div className="grid gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-1">
-          <Surface tone="subtle" className="rounded-xl px-4 py-3">
-            <p className="ui-kicker">Products</p>
-            <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.totalProducts}</p>
-          </Surface>
-          <Surface tone="subtle" className="rounded-xl px-4 py-3">
-            <p className="ui-kicker">Featured</p>
-            <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
-          </Surface>
-          <Surface tone="subtle" className="rounded-xl px-4 py-3">
-            <p className="ui-kicker">Tags</p>
-            <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.tagsCount}</p>
-          </Surface>
-        </div>
-      </section>
-
       {homePage.blocks.map((block) =>
         renderBlock(block, stats, currency, products, (product) => addProduct(product.id))
       )}

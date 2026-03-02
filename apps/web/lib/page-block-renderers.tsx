@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { CtaStrip, Hero } from "@store-platform/ui";
+import { CtaStrip, Hero, HeroMedia } from "@store-platform/ui";
 import type { PageBlock } from "@store-platform/shared-types";
 
 export function renderNonProductGridBlock(block: PageBlock): ReactNode {
@@ -20,7 +20,6 @@ export function renderNonProductGridBlock(block: PageBlock): ReactNode {
   if (block.type === "media-feature") {
     const textSideClass = block.align === "right" ? "lg:order-2" : "lg:order-1";
     const mediaSideClass = block.align === "right" ? "lg:order-1" : "lg:order-2";
-    const overlayOpacity = block.media.overlayOpacity ?? 0.22;
 
     return (
       <section
@@ -42,28 +41,12 @@ export function renderNonProductGridBlock(block: PageBlock): ReactNode {
           )}
         </div>
         <div className={`relative overflow-hidden rounded-xl border border-border/40 ${mediaSideClass}`}>
-          {block.media.type === "video" ? (
-            <video
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster={block.media.poster}
-              className="h-full min-h-[260px] w-full object-cover"
-            >
-              {block.media.mobileSrc && <source src={block.media.mobileSrc} media="(max-width: 768px)" />}
-              <source src={block.media.src} />
-            </video>
-          ) : (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={block.media.mobileSrc ?? block.media.src}
-              alt={block.media.alt ?? block.title}
-              className="h-full min-h-[260px] w-full object-cover"
-            />
-          )}
-          <div className="absolute inset-0 bg-background" style={{ opacity: overlayOpacity }} />
+          <HeroMedia
+            media={block.media}
+            title={block.title}
+            assetClassName="h-full min-h-[260px] w-full object-cover"
+            defaultOverlayOpacity={0.22}
+          />
         </div>
       </section>
     );

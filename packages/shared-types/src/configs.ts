@@ -62,6 +62,9 @@ export type HeroBlock = PageBlockBase & {
     poster?: string;
     alt?: string;
     overlayOpacity?: number;
+    overlayPreset?: "editorial" | "balanced" | "contrast";
+    objectPosition?: string;
+    mobileObjectPosition?: string;
   };
   primaryCta?: {
     label: string;
@@ -87,6 +90,8 @@ export type MediaFeatureBlock = PageBlockBase & {
     poster?: string;
     alt?: string;
     overlayOpacity?: number;
+    objectPosition?: string;
+    mobileObjectPosition?: string;
   };
   cta?: {
     label: string;

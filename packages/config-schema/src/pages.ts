@@ -14,7 +14,10 @@ const heroMediaSchema = z
     mobileSrc: hrefSchema.optional(),
     poster: hrefSchema.optional(),
     alt: z.string().min(1).optional(),
-    overlayOpacity: z.number().min(0).max(0.9).optional()
+    overlayOpacity: z.number().min(0).max(0.9).optional(),
+    overlayPreset: z.enum(["editorial", "balanced", "contrast"]).optional(),
+    objectPosition: z.string().min(1).optional(),
+    mobileObjectPosition: z.string().min(1).optional()
   })
   .superRefine((media, ctx) => {
     if (media.type === "video" && !media.poster) {
