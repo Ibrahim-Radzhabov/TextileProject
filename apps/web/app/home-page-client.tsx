@@ -6,6 +6,7 @@ import { Badge, CtaStrip, EmptyState, ProductCard, Surface } from "@store-platfo
 import type {
   CtaStripBlock,
   HeroBlock,
+  MediaFeatureBlock,
   PageBlock,
   PageConfig,
   Product,
@@ -100,15 +101,43 @@ function formatPrice(amount: number | null, currency: string): string {
 }
 
 function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): JSX.Element {
+  const overlayOpacity = block.media?.overlayOpacity ?? 0.52;
+
   return (
     <section key={block.id} className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+      {block.media && (
+        <div className="pointer-events-none absolute inset-0">
+          {block.media.type === "video" ? (
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster={block.media.poster}
+              className="h-full w-full object-cover"
+            >
+              {block.media.mobileSrc && <source src={block.media.mobileSrc} media="(max-width: 768px)" />}
+              <source src={block.media.src} />
+            </video>
+          ) : (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={block.media.mobileSrc ?? block.media.src}
+              alt={block.media.alt ?? block.title}
+              className="h-full w-full object-cover"
+            />
+          )}
+          <div className="absolute inset-0 bg-background" style={{ opacity: overlayOpacity }} />
+        </div>
+      )}
       <div className="pointer-events-none absolute inset-0 opacity-55">
         <div className="absolute left-0 top-0 h-full w-px bg-border/60" />
         <div className="absolute right-0 top-0 h-full w-px bg-border/60" />
         <div className="absolute left-0 top-[62px] h-px w-full bg-border/60" />
       </div>
 
-      <div className="relative grid gap-7 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-10">
+      <div className="relative z-10 grid gap-7 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-10">
         <div className="space-y-5">
           {block.eyebrow && (
             <motion.p
@@ -189,6 +218,58 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
   );
 }
 
+function renderMediaFeatureBlock(block: MediaFeatureBlock): JSX.Element {
+  const textSideClass = block.align === "right" ? "lg:order-2" : "lg:order-1";
+  const mediaSideClass = block.align === "right" ? "lg:order-1" : "lg:order-2";
+  const overlayOpacity = block.media.overlayOpacity ?? 0.2;
+
+  return (
+    <section
+      key={block.id}
+      className="grid gap-4 overflow-hidden rounded-xl border border-border/45 bg-card/78 p-4 sm:p-5 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]"
+    >
+      <div className={`space-y-3 sm:space-y-4 ${textSideClass}`}>
+        {block.eyebrow && <p className="ui-kicker">{block.eyebrow}</p>}
+        <h2 className="ui-title-display text-[clamp(1.8rem,3.6vw,3rem)] leading-[1.02]">{block.title}</h2>
+        {block.subtitle && <p className="text-sm font-medium text-foreground/90 sm:text-base">{block.subtitle}</p>}
+        {block.body && <p className="ui-subtle max-w-xl text-sm leading-relaxed sm:text-base">{block.body}</p>}
+        {block.cta && (
+          <a
+            href={block.cta.href}
+            className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-card/65 px-4 text-sm text-foreground transition-colors hover:border-border/90"
+          >
+            {block.cta.label}
+          </a>
+        )}
+      </div>
+      <div className={`relative overflow-hidden rounded-xl border border-border/40 ${mediaSideClass}`}>
+        {block.media.type === "video" ? (
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            poster={block.media.poster}
+            className="h-full min-h-[280px] w-full object-cover"
+          >
+            {block.media.mobileSrc && <source src={block.media.mobileSrc} media="(max-width: 768px)" />}
+            <source src={block.media.src} />
+          </video>
+        ) : (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={block.media.mobileSrc ?? block.media.src}
+            alt={block.media.alt ?? block.title}
+            className="h-full min-h-[280px] w-full object-cover"
+          />
+        )}
+        <div className="absolute inset-0 bg-background" style={{ opacity: overlayOpacity }} />
+      </div>
+    </section>
+  );
+}
+
 function renderRichTextBlock(block: RichTextBlock): JSX.Element {
   return (
     <section key={block.id} className="rounded-xl border border-border/45 bg-card/72 px-6 py-5">
@@ -260,6 +341,10 @@ function renderBlock(
 
   if (block.type === "product-grid") {
     return renderProductGridBlock(block, filterProducts(products, block), onQuickAdd);
+  }
+
+  if (block.type === "media-feature") {
+    return renderMediaFeatureBlock(block);
   }
 
   if (block.type === "rich-text") {

@@ -11,8 +11,35 @@
         "eyebrow": "Window textiles",
         "title": "Тихий люкс для штор и тюля.",
         "subtitle": "Воздушные тюли, плотные портьеры и выверенные фактуры для спокойного света в интерьере.",
+        "media": {
+          "type": "video",
+          "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+          "mobileSrc": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
+          "poster": "/demo/linen-blackout-drape.svg",
+          "alt": "Мягкая драпировка ткани у окна",
+          "overlayOpacity": 0.64
+        },
         "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
         "secondaryCta": { "label": "Смотреть коллекцию", "href": "#featured" }
+      },
+      {
+        "id": "hero-story-privacy",
+        "type": "media-feature",
+        "eyebrow": "Editorial selection",
+        "title": "Daylight by day, privacy by evening.",
+        "subtitle": "Собирайте двухслойные сцены из тюля и плотной портьеры под ваш режим дня.",
+        "body": "Сначала мягкий свет для дневной глубины интерьера, затем плотность и приватность для вечера. Такой подход работает как базовый гардероб для окна.",
+        "align": "right",
+        "media": {
+          "type": "image",
+          "src": "/demo/jacquard-day-night-set.svg",
+          "alt": "Двухслойная day-night композиция для окна",
+          "overlayOpacity": 0.2
+        },
+        "cta": {
+          "label": "Смотреть day-night",
+          "href": "/catalog"
+        }
       },
       {
         "id": "home-featured",
@@ -21,6 +48,22 @@
         "subtitle": "Сцены для дневного света, приватности и мягкой акустики комнаты.",
         "layout": "auto-fit",
         "filter": { "featured": true }
+      },
+      {
+        "id": "home-blackout",
+        "type": "product-grid",
+        "title": "Blackout Focus",
+        "subtitle": "Плотные решения для спальни, детской и домашнего кино.",
+        "layout": "auto-fit",
+        "filter": { "tags": ["blackout"] }
+      },
+      {
+        "id": "home-sheer",
+        "type": "product-grid",
+        "title": "Sheer and Tulle",
+        "subtitle": "Воздушные ткани для мягкого дневного света и легкой приватности.",
+        "layout": "auto-fit",
+        "filter": { "tags": ["sheer", "tulle"] }
       }
     ]
   },

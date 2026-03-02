@@ -40,6 +40,7 @@ export type IntegrationsConfig = {
 export type PageBlockType =
   | "hero"
   | "product-grid"
+  | "media-feature"
   | "featured-row"
   | "rich-text"
   | "cta-strip";
@@ -54,11 +55,40 @@ export type HeroBlock = PageBlockBase & {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  media?: {
+    type: "image" | "video";
+    src: string;
+    mobileSrc?: string;
+    poster?: string;
+    alt?: string;
+    overlayOpacity?: number;
+  };
   primaryCta?: {
     label: string;
     href: string;
   };
   secondaryCta?: {
+    label: string;
+    href: string;
+  };
+};
+
+export type MediaFeatureBlock = PageBlockBase & {
+  type: "media-feature";
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  body?: string;
+  align?: "left" | "right";
+  media: {
+    type: "image" | "video";
+    src: string;
+    mobileSrc?: string;
+    poster?: string;
+    alt?: string;
+    overlayOpacity?: number;
+  };
+  cta?: {
     label: string;
     href: string;
   };
@@ -86,7 +116,12 @@ export type CtaStripBlock = PageBlockBase & {
   href: string;
 };
 
-export type PageBlock = HeroBlock | ProductGridBlock | RichTextBlock | CtaStripBlock;
+export type PageBlock =
+  | HeroBlock
+  | ProductGridBlock
+  | MediaFeatureBlock
+  | RichTextBlock
+  | CtaStripBlock;
 
 export type PageConfig = {
   id: string;
@@ -108,4 +143,3 @@ export type StorefrontConfig = {
   catalog: CatalogConfig;
   integrations: IntegrationsConfig;
 };
-

@@ -206,11 +206,23 @@ class HeroBlock(PageBlockBase):
     eyebrow: Optional[str] = None
     title: str
     subtitle: Optional[str] = None
+    media: Optional[Dict[str, Any]] = None
     primary_cta: Optional[Dict[str, str]] = Field(default=None, alias="primaryCta")
     secondary_cta: Optional[Dict[str, str]] = Field(default=None, alias="secondaryCta")
 
     class Config:
         populate_by_name = True
+
+
+class MediaFeatureBlock(PageBlockBase):
+    type: Literal["media-feature"]
+    eyebrow: Optional[str] = None
+    title: str
+    subtitle: Optional[str] = None
+    body: Optional[str] = None
+    align: Optional[Literal["left", "right"]] = None
+    media: Dict[str, Any]
+    cta: Optional[Dict[str, str]] = None
 
 
 class ProductGridBlock(PageBlockBase):
@@ -232,7 +244,7 @@ class CtaStripBlock(PageBlockBase):
     href: str
 
 
-PageBlock = HeroBlock | ProductGridBlock | RichTextBlock | CtaStripBlock
+PageBlock = HeroBlock | MediaFeatureBlock | ProductGridBlock | RichTextBlock | CtaStripBlock
 
 
 class PageConfig(BaseModel):

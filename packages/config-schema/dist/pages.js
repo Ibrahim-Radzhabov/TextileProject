@@ -5,12 +5,31 @@ const hrefSchema = z
     .refine((value) => /^(\/|#|https?:\/\/)/.test(value), {
     message: "href must start with '/', '#', or 'http(s)://'"
 });
+const heroMediaSchema = z
+    .object({
+    type: z.enum(["image", "video"]),
+    src: hrefSchema,
+    mobileSrc: hrefSchema.optional(),
+    poster: hrefSchema.optional(),
+    alt: z.string().min(1).optional(),
+    overlayOpacity: z.number().min(0).max(0.9).optional()
+})
+    .superRefine((media, ctx) => {
+    if (media.type === "video" && !media.poster) {
+        ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            message: "video media requires poster",
+            path: ["poster"]
+        });
+    }
+});
 const heroBlock = z.object({
     id: z.string().min(1),
     type: z.literal("hero"),
     eyebrow: z.string().optional(),
     title: z.string().min(1),
     subtitle: z.string().optional(),
+    media: heroMediaSchema.optional(),
     primaryCta: z
         .object({
         label: z.string().min(1),
@@ -18,6 +37,22 @@ const heroBlock = z.object({
     })
         .optional(),
     secondaryCta: z
+        .object({
+        label: z.string().min(1),
+        href: hrefSchema
+    })
+        .optional()
+});
+const mediaFeatureBlock = z.object({
+    id: z.string().min(1),
+    type: z.literal("media-feature"),
+    eyebrow: z.string().optional(),
+    title: z.string().min(1),
+    subtitle: z.string().optional(),
+    body: z.string().optional(),
+    align: z.enum(["left", "right"]).optional(),
+    media: heroMediaSchema,
+    cta: z
         .object({
         label: z.string().min(1),
         href: hrefSchema
@@ -50,6 +85,7 @@ const ctaStripBlock = z.object({
 });
 export const pageBlockSchema = z.discriminatedUnion("type", [
     heroBlock,
+    mediaFeatureBlock,
     productGridBlock,
     richTextBlock,
     ctaStripBlock

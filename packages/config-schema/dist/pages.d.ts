@@ -5,6 +5,42 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
     eyebrow: z.ZodOptional<z.ZodString>;
     title: z.ZodString;
     subtitle: z.ZodOptional<z.ZodString>;
+    media: z.ZodOptional<z.ZodEffects<z.ZodObject<{
+        type: z.ZodEnum<["image", "video"]>;
+        src: z.ZodEffects<z.ZodString, string, string>;
+        mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+        poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+        alt: z.ZodOptional<z.ZodString>;
+        overlayOpacity: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }>, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }>>;
     primaryCta: z.ZodOptional<z.ZodObject<{
         label: z.ZodString;
         href: z.ZodEffects<z.ZodString, string, string>;
@@ -29,6 +65,14 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
     type: "hero";
     id: string;
     title: string;
+    media?: {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    } | undefined;
     eyebrow?: string | undefined;
     subtitle?: string | undefined;
     primaryCta?: {
@@ -43,6 +87,14 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
     type: "hero";
     id: string;
     title: string;
+    media?: {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    } | undefined;
     eyebrow?: string | undefined;
     subtitle?: string | undefined;
     primaryCta?: {
@@ -50,6 +102,100 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
         href: string;
     } | undefined;
     secondaryCta?: {
+        label: string;
+        href: string;
+    } | undefined;
+}>, z.ZodObject<{
+    id: z.ZodString;
+    type: z.ZodLiteral<"media-feature">;
+    eyebrow: z.ZodOptional<z.ZodString>;
+    title: z.ZodString;
+    subtitle: z.ZodOptional<z.ZodString>;
+    body: z.ZodOptional<z.ZodString>;
+    align: z.ZodOptional<z.ZodEnum<["left", "right"]>>;
+    media: z.ZodEffects<z.ZodObject<{
+        type: z.ZodEnum<["image", "video"]>;
+        src: z.ZodEffects<z.ZodString, string, string>;
+        mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+        poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+        alt: z.ZodOptional<z.ZodString>;
+        overlayOpacity: z.ZodOptional<z.ZodNumber>;
+    }, "strip", z.ZodTypeAny, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }>, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }, {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    }>;
+    cta: z.ZodOptional<z.ZodObject<{
+        label: z.ZodString;
+        href: z.ZodEffects<z.ZodString, string, string>;
+    }, "strip", z.ZodTypeAny, {
+        label: string;
+        href: string;
+    }, {
+        label: string;
+        href: string;
+    }>>;
+}, "strip", z.ZodTypeAny, {
+    type: "media-feature";
+    id: string;
+    media: {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    };
+    title: string;
+    eyebrow?: string | undefined;
+    subtitle?: string | undefined;
+    body?: string | undefined;
+    align?: "left" | "right" | undefined;
+    cta?: {
+        label: string;
+        href: string;
+    } | undefined;
+}, {
+    type: "media-feature";
+    id: string;
+    media: {
+        type: "image" | "video";
+        src: string;
+        alt?: string | undefined;
+        mobileSrc?: string | undefined;
+        poster?: string | undefined;
+        overlayOpacity?: number | undefined;
+    };
+    title: string;
+    eyebrow?: string | undefined;
+    subtitle?: string | undefined;
+    body?: string | undefined;
+    align?: "left" | "right" | undefined;
+    cta?: {
         label: string;
         href: string;
     } | undefined;
@@ -128,6 +274,42 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         eyebrow: z.ZodOptional<z.ZodString>;
         title: z.ZodString;
         subtitle: z.ZodOptional<z.ZodString>;
+        media: z.ZodOptional<z.ZodEffects<z.ZodObject<{
+            type: z.ZodEnum<["image", "video"]>;
+            src: z.ZodEffects<z.ZodString, string, string>;
+            mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            alt: z.ZodOptional<z.ZodString>;
+            overlayOpacity: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>>;
         primaryCta: z.ZodOptional<z.ZodObject<{
             label: z.ZodString;
             href: z.ZodEffects<z.ZodString, string, string>;
@@ -152,6 +334,14 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -166,6 +356,14 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -173,6 +371,100 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    }>, z.ZodObject<{
+        id: z.ZodString;
+        type: z.ZodLiteral<"media-feature">;
+        eyebrow: z.ZodOptional<z.ZodString>;
+        title: z.ZodString;
+        subtitle: z.ZodOptional<z.ZodString>;
+        body: z.ZodOptional<z.ZodString>;
+        align: z.ZodOptional<z.ZodEnum<["left", "right"]>>;
+        media: z.ZodEffects<z.ZodObject<{
+            type: z.ZodEnum<["image", "video"]>;
+            src: z.ZodEffects<z.ZodString, string, string>;
+            mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            alt: z.ZodOptional<z.ZodString>;
+            overlayOpacity: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>;
+        cta: z.ZodOptional<z.ZodObject<{
+            label: z.ZodString;
+            href: z.ZodEffects<z.ZodString, string, string>;
+        }, "strip", z.ZodTypeAny, {
+            label: string;
+            href: string;
+        }, {
+            label: string;
+            href: string;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    }, {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -249,6 +541,14 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -256,6 +556,26 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -288,6 +608,14 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -295,6 +623,26 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -327,6 +675,14 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -334,6 +690,26 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -366,6 +742,14 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -373,6 +757,26 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -408,6 +812,42 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         eyebrow: z.ZodOptional<z.ZodString>;
         title: z.ZodString;
         subtitle: z.ZodOptional<z.ZodString>;
+        media: z.ZodOptional<z.ZodEffects<z.ZodObject<{
+            type: z.ZodEnum<["image", "video"]>;
+            src: z.ZodEffects<z.ZodString, string, string>;
+            mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            alt: z.ZodOptional<z.ZodString>;
+            overlayOpacity: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>>;
         primaryCta: z.ZodOptional<z.ZodObject<{
             label: z.ZodString;
             href: z.ZodEffects<z.ZodString, string, string>;
@@ -432,6 +872,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -446,6 +894,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -453,6 +909,100 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    }>, z.ZodObject<{
+        id: z.ZodString;
+        type: z.ZodLiteral<"media-feature">;
+        eyebrow: z.ZodOptional<z.ZodString>;
+        title: z.ZodString;
+        subtitle: z.ZodOptional<z.ZodString>;
+        body: z.ZodOptional<z.ZodString>;
+        align: z.ZodOptional<z.ZodEnum<["left", "right"]>>;
+        media: z.ZodEffects<z.ZodObject<{
+            type: z.ZodEnum<["image", "video"]>;
+            src: z.ZodEffects<z.ZodString, string, string>;
+            mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            alt: z.ZodOptional<z.ZodString>;
+            overlayOpacity: z.ZodOptional<z.ZodNumber>;
+        }, "strip", z.ZodTypeAny, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>;
+        cta: z.ZodOptional<z.ZodObject<{
+            label: z.ZodString;
+            href: z.ZodEffects<z.ZodString, string, string>;
+        }, "strip", z.ZodTypeAny, {
+            label: string;
+            href: string;
+        }, {
+            label: string;
+            href: string;
+        }>>;
+    }, "strip", z.ZodTypeAny, {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    }, {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -529,6 +1079,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -536,6 +1094,26 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -568,6 +1146,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -575,6 +1161,26 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -607,6 +1213,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -614,6 +1228,26 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -646,6 +1280,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -653,6 +1295,26 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -685,6 +1347,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -692,6 +1362,26 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -724,6 +1414,14 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -731,6 +1429,26 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;

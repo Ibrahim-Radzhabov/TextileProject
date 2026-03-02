@@ -634,6 +634,42 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         eyebrow: import("zod").ZodOptional<import("zod").ZodString>;
         title: import("zod").ZodString;
         subtitle: import("zod").ZodOptional<import("zod").ZodString>;
+        media: import("zod").ZodOptional<import("zod").ZodEffects<import("zod").ZodObject<{
+            type: import("zod").ZodEnum<["image", "video"]>;
+            src: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+            mobileSrc: import("zod").ZodOptional<import("zod").ZodEffects<import("zod").ZodString, string, string>>;
+            poster: import("zod").ZodOptional<import("zod").ZodEffects<import("zod").ZodString, string, string>>;
+            alt: import("zod").ZodOptional<import("zod").ZodString>;
+            overlayOpacity: import("zod").ZodOptional<import("zod").ZodNumber>;
+        }, "strip", import("zod").ZodTypeAny, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>>;
         primaryCta: import("zod").ZodOptional<import("zod").ZodObject<{
             label: import("zod").ZodString;
             href: import("zod").ZodEffects<import("zod").ZodString, string, string>;
@@ -658,6 +694,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -672,6 +716,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -679,6 +731,100 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    }>, import("zod").ZodObject<{
+        id: import("zod").ZodString;
+        type: import("zod").ZodLiteral<"media-feature">;
+        eyebrow: import("zod").ZodOptional<import("zod").ZodString>;
+        title: import("zod").ZodString;
+        subtitle: import("zod").ZodOptional<import("zod").ZodString>;
+        body: import("zod").ZodOptional<import("zod").ZodString>;
+        align: import("zod").ZodOptional<import("zod").ZodEnum<["left", "right"]>>;
+        media: import("zod").ZodEffects<import("zod").ZodObject<{
+            type: import("zod").ZodEnum<["image", "video"]>;
+            src: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+            mobileSrc: import("zod").ZodOptional<import("zod").ZodEffects<import("zod").ZodString, string, string>>;
+            poster: import("zod").ZodOptional<import("zod").ZodEffects<import("zod").ZodString, string, string>>;
+            alt: import("zod").ZodOptional<import("zod").ZodString>;
+            overlayOpacity: import("zod").ZodOptional<import("zod").ZodNumber>;
+        }, "strip", import("zod").ZodTypeAny, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        }>;
+        cta: import("zod").ZodOptional<import("zod").ZodObject<{
+            label: import("zod").ZodString;
+            href: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+        }, "strip", import("zod").ZodTypeAny, {
+            label: string;
+            href: string;
+        }, {
+            label: string;
+            href: string;
+        }>>;
+    }, "strip", import("zod").ZodTypeAny, {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    }, {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -755,6 +901,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -762,6 +916,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -794,6 +968,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -801,6 +983,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -833,6 +1035,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -840,6 +1050,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -872,6 +1102,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -879,6 +1117,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -911,6 +1169,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -918,6 +1184,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
@@ -950,6 +1236,14 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         type: "hero";
         id: string;
         title: string;
+        media?: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        } | undefined;
         eyebrow?: string | undefined;
         subtitle?: string | undefined;
         primaryCta?: {
@@ -957,6 +1251,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             href: string;
         } | undefined;
         secondaryCta?: {
+            label: string;
+            href: string;
+        } | undefined;
+    } | {
+        type: "media-feature";
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+        };
+        title: string;
+        eyebrow?: string | undefined;
+        subtitle?: string | undefined;
+        body?: string | undefined;
+        align?: "left" | "right" | undefined;
+        cta?: {
             label: string;
             href: string;
         } | undefined;
