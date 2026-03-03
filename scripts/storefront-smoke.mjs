@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import { spawn } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import process from "node:process";
 import { chromium } from "@playwright/test";
@@ -13,6 +13,11 @@ const baseUrl = `http://${host}:${webPort}`;
 const apiUrl = `http://${host}:${apiPort}`;
 const artifactDir = process.env.SMOKE_ARTIFACT_DIR ?? "artifacts/storefront-smoke";
 const shouldSkipBuild = process.env.SMOKE_SKIP_BUILD === "1";
+const standaloneServerPath = "apps/web/.next/standalone/apps/web/server.js";
+const standaloneNextStaticPath = "apps/web/.next/standalone/apps/web/.next/static";
+const standalonePublicPath = "apps/web/.next/standalone/apps/web/public";
+const sourceNextStaticPath = "apps/web/.next/static";
+const sourcePublicPath = "apps/web/public";
 
 const routeChecks = [
   { path: "/", expectedStatus: 200 },
@@ -194,6 +199,19 @@ async function runViewportQa() {
   }
 }
 
+function prepareStandaloneAssets() {
+  if (!existsSync(sourceNextStaticPath)) {
+    throw new Error(`Missing Next.js static assets at ${sourceNextStaticPath}`);
+  }
+
+  mkdirSync("apps/web/.next/standalone/apps/web/.next", { recursive: true });
+  cpSync(sourceNextStaticPath, standaloneNextStaticPath, { recursive: true, force: true });
+
+  if (existsSync(sourcePublicPath)) {
+    cpSync(sourcePublicPath, standalonePublicPath, { recursive: true, force: true });
+  }
+}
+
 async function main() {
   let apiProcess;
   let webProcess;
@@ -227,11 +245,16 @@ async function main() {
       PORT: String(webPort)
     };
 
-    webProcess = startProcess(
-      "corepack",
-      ["pnpm", "--filter", "web", "start", "--hostname", host, "--port", String(webPort)],
-      { env: webEnv }
-    );
+    if (existsSync(standaloneServerPath)) {
+      prepareStandaloneAssets();
+      webProcess = startProcess("node", [standaloneServerPath], { env: webEnv });
+    } else {
+      webProcess = startProcess(
+        "corepack",
+        ["pnpm", "--filter", "web", "start", "--hostname", host, "--port", String(webPort)],
+        { env: webEnv }
+      );
+    }
     await waitForStatus(`${baseUrl}/`, [200], 90000);
 
     for (const route of routeChecks) {

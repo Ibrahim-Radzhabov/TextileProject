@@ -158,7 +158,7 @@
   - No `metadataBase property ... not set` warning during storefront navigation.
 
 ### 12) Storefront viewport regression QA
-- Status: `completed` (unified `smoke:storefront` script + CI step; automated headless pass for `390/768/1024/1280` on home/catalog/product/checkout).
+- Status: `completed` (unified `smoke:storefront` script + CI step; standalone runtime parity with copied `static/public`; automated headless pass for `390/768/1024/1280` on home/catalog/product/checkout).
 - Files:
   - `scripts/storefront-smoke.mjs`
   - `.github/workflows/ci.yml`
