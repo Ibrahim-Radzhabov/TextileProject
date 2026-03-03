@@ -119,7 +119,7 @@
   - No awkward loop reset feeling.
 
 ### 9) Shared element transitions (grid -> PDP)
-- Status: `in_progress` (reintroduced behind `NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1`; default `off` for stable mainline behavior).
+- Status: `completed` (reintroduced behind `NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1`; default `off`, rollout via `make dev-web-demo` / explicit env).
 - Files:
   - `packages/ui/src/components/ProductCard.tsx`
   - `packages/ui/src/components/ProductGrid.tsx`
@@ -187,3 +187,5 @@
   - `make dev-api`
 - Web (second terminal):
   - `CLIENT_ID=demo STORE_API_URL=http://127.0.0.1:8000 NEXT_PUBLIC_STORE_API_URL=http://127.0.0.1:8000 ADMIN_TOKEN=admin123 make dev-web`
+  - `CLIENT_ID=demo STORE_API_URL=http://127.0.0.1:8000 NEXT_PUBLIC_STORE_API_URL=http://127.0.0.1:8000 NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1 ADMIN_TOKEN=admin123 make dev-web`
+  - or: `make dev-web-demo`

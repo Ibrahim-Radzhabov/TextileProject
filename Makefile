@@ -15,14 +15,16 @@ CLIENT_ID ?= demo
 STORE_API_URL ?= http://127.0.0.1:8000
 NEXT_PUBLIC_STORE_API_URL ?= http://127.0.0.1:8000
 ADMIN_TOKEN ?= e2e-admin
+NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION ?= 0
 
-.PHONY: help install install-web install-api dev-api dev-web dev build e2e
+.PHONY: help install install-web install-api dev-api dev-web dev-web-demo dev build e2e
 
 help:
 	@echo "Targets:"
 	@echo "  make install      - install pnpm deps + python venv deps"
 	@echo "  make dev-api      - run FastAPI on $(API_HOST):$(API_PORT)"
 	@echo "  make dev-web      - run Next.js on :$(WEB_PORT)"
+	@echo "  make dev-web-demo - run Next.js with shared transitions enabled"
 	@echo "  make dev          - run api + web together"
 	@echo "  make build        - run monorepo build"
 	@echo "  make e2e          - run Playwright e2e"
@@ -58,8 +60,12 @@ dev-web:
 	CLIENT_ID="$(CLIENT_ID)" \
 	STORE_API_URL="$(STORE_API_URL)" \
 	NEXT_PUBLIC_STORE_API_URL="$(NEXT_PUBLIC_STORE_API_URL)" \
+	NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION="$(NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION)" \
 	ADMIN_TOKEN="$(ADMIN_TOKEN)" \
 	$(PNPM) --filter web dev --hostname $(WEB_HOST) --port $(WEB_PORT)
+
+dev-web-demo: NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1
+dev-web-demo: dev-web
 
 dev:
 	@set -euo pipefail; \

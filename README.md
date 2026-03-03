@@ -66,6 +66,9 @@ Core:
   - If set, open `/admin/login`, enter the token and middleware will store an httpOnly cookie for `/admin`.
 - `NEXT_PUBLIC_HOME_CONCEPT` — optional home page visual preset (`aurora`, `editorial`, `mono`).
   - You can override it per-request via `/?concept=aurora|editorial|mono`.
+- `NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION` — optional storefront flag for shared element transition from catalog cards to PDP.
+  - `0` (default): transition is disabled.
+  - `1`: transition is enabled.
 
 Stripe:
 
