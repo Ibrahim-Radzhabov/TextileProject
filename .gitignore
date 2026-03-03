@@ -30,6 +30,7 @@ apps/api/data/
 # Playwright
 playwright-report/
 test-results/
+artifacts/
 
 # Local env files
 infra/.env

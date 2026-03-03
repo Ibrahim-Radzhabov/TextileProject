@@ -45,6 +45,9 @@ jobs:
       - name: Build
         run: corepack pnpm build
 
+      - name: Storefront smoke
+        run: SMOKE_SKIP_BUILD=1 corepack pnpm smoke:storefront
+
       - name: E2E
         run: corepack pnpm e2e
 

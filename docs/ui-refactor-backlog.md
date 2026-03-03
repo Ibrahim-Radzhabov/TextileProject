@@ -155,9 +155,10 @@
   - No `metadataBase property ... not set` warning during storefront navigation.
 
 ### 12) Storefront viewport regression QA
-- Status: `completed` (automated headless pass for `390/768/1024/1280` on home/catalog/product/checkout).
+- Status: `completed` (unified `smoke:storefront` script + CI step; automated headless pass for `390/768/1024/1280` on home/catalog/product/checkout).
 - Files:
-  - `apps/web/app/**/*`
+  - `scripts/storefront-smoke.mjs`
+  - `.github/workflows/ci.yml`
 - Goal:
   - Confirm no layout drift, overflow, or runtime errors on target storefront breakpoints.
 - Acceptance:
@@ -165,6 +166,7 @@
 
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
+- `corepack pnpm smoke:storefront` passes.
 - Open storefront at `http://127.0.0.1:3000`.
 - Verify viewports: `390`, `768`, `1024`, `1280`.
 - Hero checks:
