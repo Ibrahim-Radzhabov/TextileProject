@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Separate caches to prevent dev runtime corruption after production builds.
+  distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
   reactStrictMode: true,
   output: "standalone",
   async headers() {

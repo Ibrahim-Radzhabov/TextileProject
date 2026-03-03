@@ -131,12 +131,14 @@
   - Transition feels coherent and not distracting.
 
 ### 10) Remove customer account-like entry points
-- Status: `completed` (theme switcher + order-status nav removed; `/order-status` now redirects to home; checkout success points back to catalog/home).
+- Status: `completed` (theme switcher + order-status nav removed; `/order-status` now redirects to home; checkout success points back to catalog/home; dead storefront helper components removed).
 - Files:
   - `apps/web/app/storefront-shell.tsx`
   - `apps/web/app/order-status/page.tsx`
   - `apps/web/app/checkout/success/page.tsx`
   - `apps/web/app/checkout/page.tsx`
+  - `apps/web/app/(components)/order-status-lookup-card.tsx`
+  - `apps/web/app/(components)/theme-demo-switcher.tsx`
 - Goal:
   - Keep storefront focused on catalog/checkout only (no user cabinet flow).
 - Acceptance:
