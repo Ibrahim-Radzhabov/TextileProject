@@ -42,7 +42,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         />
       ) : (
         <motion.div
-          className="grid auto-rows-fr grid-cols-[repeat(auto-fit,minmax(228px,1fr))] gap-4 sm:gap-5 lg:gap-6"
+          className="grid auto-rows-fr grid-cols-2 gap-3 sm:grid-cols-[repeat(auto-fit,minmax(210px,1fr))] sm:gap-4 lg:gap-5"
           variants={gridContainerVariants}
           initial="hidden"
           animate="visible"

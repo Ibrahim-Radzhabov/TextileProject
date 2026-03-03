@@ -144,7 +144,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             className="absolute inset-0 z-10 rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           />
 
-          <div className="aspect-[4/5] overflow-hidden bg-card/20">
+          <div className="aspect-[5/6] overflow-hidden bg-card/20 sm:aspect-[4/5]">
             {primaryImage && (
               <>
                 {enableSharedTransition ? (
@@ -166,12 +166,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 )}
               </>
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background/48 via-background/20 to-transparent" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/48 via-background/20 to-transparent sm:h-28" />
           </div>
 
           {onQuickAdd && (
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 translate-y-2 px-3 pb-3 opacity-0 transition-all duration-[var(--motion-normal)] ease-out motion-reduce:transition-none group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
-              <div className="pointer-events-auto rounded-[10px] border border-border/35 bg-card/66 p-2 backdrop-blur-sm">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 translate-y-2 px-2 pb-2 opacity-0 transition-all duration-[var(--motion-normal)] ease-out motion-reduce:transition-none sm:px-3 sm:pb-3 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
+              <div className="pointer-events-auto rounded-[10px] border border-border/35 bg-card/66 p-1.5 backdrop-blur-sm sm:p-2">
                 <div className="grid grid-cols-2 gap-2">
                   <a
                     href={productHref}
@@ -194,8 +194,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
 
-        <div className="relative z-20 flex flex-1 flex-col gap-3 px-1 pb-1 pt-3 sm:px-2">
-          <div className="space-y-1.5">
+        <div className="relative z-20 flex flex-1 flex-col gap-2.5 px-0.5 pb-0.5 pt-2.5 sm:gap-3 sm:px-2 sm:pb-1 sm:pt-3">
+          <div className="space-y-1 sm:space-y-1.5">
             {(roomTag || (product.badges && product.badges[0]?.label)) && (
               <p className="ui-kicker">
                 {product.badges && product.badges[0]?.label ? product.badges[0].label : roomTag?.replace(/-/g, " ")}
@@ -205,19 +205,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <motion.p
                 layoutId={sharedTitleLayoutId}
                 id={titleId}
-                className="ui-title line-clamp-1 text-[15px]"
+                className="ui-title line-clamp-1 text-[14px] sm:text-[15px]"
                 transition={springSharedElement}
               >
                 {product.name}
               </motion.p>
             ) : (
-              <p id={titleId} className="ui-title line-clamp-1 text-[15px]">{product.name}</p>
+              <p id={titleId} className="ui-title line-clamp-1 text-[14px] sm:text-[15px]">{product.name}</p>
             )}
             {product.shortDescription && (
-              <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground/95">{product.shortDescription}</p>
+              <p className="hidden text-xs leading-relaxed text-muted-foreground/95 sm:line-clamp-2">{product.shortDescription}</p>
             )}
             {(fabric || lightControl || roomTag) && (
-              <p className="ui-kicker text-[10px]">
+              <p className="ui-kicker text-[9px] sm:text-[10px]">
                 {roomTag ? `${roomTag.replace(/-/g, " ")} • ` : ""}
                 {fabric ? `${fabric} • ` : ""}
                 {lightControl ? `${lightControl} light control` : ""}
