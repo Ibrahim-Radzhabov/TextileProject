@@ -6,9 +6,9 @@ export type SurfaceProps = React.HTMLAttributes<HTMLDivElement> & {
 
 const toneClasses: Record<NonNullable<SurfaceProps["tone"]>, string> = {
   default: "glass-panel",
-  subtle: "border border-border/45 bg-card/78 backdrop-blur-lg",
+  subtle: "border border-border/32 bg-card/82 backdrop-blur-lg",
   elevated: "glass-panel-strong",
-  ghost: "border border-border/35 bg-card/62 backdrop-blur-md"
+  ghost: "border border-border/22 bg-card/64 backdrop-blur-md"
 };
 
 export const Surface: React.FC<SurfaceProps> = ({ tone = "default", className, ...props }) => {

@@ -18,13 +18,13 @@ body {
 }
 
 .glass-panel {
-  @apply border border-border/45 bg-card/80 backdrop-blur-xl;
-  box-shadow: 0 1px 0 rgb(var(--color-foreground) / 0.04);
+  @apply border border-border/30 bg-card/80 backdrop-blur-lg;
+  box-shadow: 0 8px 24px rgb(var(--color-foreground) / 0.04);
 }
 
 .glass-panel-strong {
   @apply border border-border/45 bg-card/90 backdrop-blur-xl;
-  box-shadow: 0 1px 0 rgb(var(--color-foreground) / 0.06);
+  box-shadow: 0 14px 34px rgb(var(--color-foreground) / 0.08);
 }
 
 .premium-gradient {
@@ -33,10 +33,7 @@ body {
 
 .page-shell {
   @apply relative min-h-screen;
-  background-image:
-    radial-gradient(circle at 0% 0%, rgb(var(--color-foreground) / 0.02), transparent 36%),
-    radial-gradient(circle at 100% 0%, rgb(var(--color-foreground) / 0.02), transparent 34%),
-    var(--gradient-page);
+  background-image: var(--gradient-page);
 }
 
 .page-shell::before {
@@ -44,7 +41,7 @@ body {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgb(var(--color-background) / 0.15), rgb(var(--color-background) / 0.68));
+  background: linear-gradient(180deg, rgb(var(--color-background) / 0.08), rgb(var(--color-background) / 0.58));
 }
 
 .text-hero {
@@ -52,64 +49,75 @@ body {
 }
 
 .ui-kicker {
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 560;
+  letter-spacing: 0.065em;
   text-transform: uppercase;
-  line-height: 1.35;
-  color: rgb(var(--color-muted-foreground) / 0.9);
-}
-
-.ui-subtle {
-  color: rgb(var(--color-muted-foreground) / 0.88);
-  line-height: 1.62;
-}
-
-.ui-body {
-  font-size: clamp(1rem, 0.98rem + 0.24vw, 1.12rem);
-  line-height: 1.62;
-  color: rgb(var(--color-muted-foreground) / 0.9);
-}
-
-.ui-meta {
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  line-height: 1.28;
   color: rgb(var(--color-muted-foreground) / 0.82);
 }
 
+.ui-label {
+  font-size: 12px;
+  font-weight: 540;
+  letter-spacing: 0.015em;
+  line-height: 1.35;
+  color: rgb(var(--color-muted-foreground) / 0.88);
+}
+
+.ui-subtle {
+  color: rgb(var(--color-muted-foreground) / 0.78);
+  line-height: 1.56;
+}
+
+.ui-body {
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.1rem);
+  line-height: 1.55;
+  color: rgb(var(--color-muted-foreground) / 0.92);
+}
+
+.ui-meta {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+  color: rgb(var(--color-muted-foreground) / 0.74);
+}
+
 .ui-title {
-  letter-spacing: -0.03em;
-  line-height: 1.08;
-  font-weight: 530;
+  letter-spacing: -0.02em;
+  line-height: 1.06;
+  font-weight: 510;
 }
 
 .ui-title-serif {
   font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   font-weight: 400;
 }
 
 .ui-title-display {
   font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
-  letter-spacing: -0.04em;
+  letter-spacing: -0.03em;
   font-weight: 400;
-  line-height: 0.97;
+  line-height: 0.96;
   text-wrap: balance;
+}
+
+.ui-h1 {
+  font-size: clamp(2.4rem, 5.1vw, 4.5rem);
+  line-height: 0.95;
+}
+
+.ui-h2 {
+  font-size: clamp(1.85rem, 3.1vw, 3rem);
+  line-height: 0.98;
 }
 
 .premium-divider {
   height: 1px;
   width: 100%;
-  background-image: linear-gradient(
-    90deg,
-    transparent,
-    rgb(var(--color-border) / 0.88) 20%,
-    rgb(var(--color-border) / 0.58) 50%,
-    rgb(var(--color-border) / 0.88) 80%,
-    transparent
-  );
+  background-image: linear-gradient(90deg, transparent, rgb(var(--color-border) / 0.64), transparent);
 }
 
 .skeleton-shimmer {
@@ -147,12 +155,12 @@ body {
   pointer-events: none;
   position: absolute;
   inset: -8px 0 auto 0;
-  height: 180px;
+  height: 150px;
   border-radius: 14px;
   background-image:
-    radial-gradient(circle at 8% 8%, rgb(var(--color-foreground) / 0.05), transparent 55%),
-    radial-gradient(circle at 92% 20%, rgb(var(--color-foreground) / 0.04), transparent 58%);
-  filter: blur(6px);
+    radial-gradient(circle at 8% 8%, rgb(var(--color-foreground) / 0.02), transparent 55%),
+    radial-gradient(circle at 92% 20%, rgb(var(--color-foreground) / 0.015), transparent 58%);
+  filter: blur(10px);
   z-index: -1;
 }
 
@@ -161,10 +169,8 @@ body {
   pointer-events: none;
   position: absolute;
   inset: 0;
-  opacity: 0.018;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='%23fff' fill-opacity='.7'%3E%3Ccircle cx='8' cy='16' r='1'/%3E%3Ccircle cx='64' cy='24' r='1'/%3E%3Ccircle cx='104' cy='80' r='1'/%3E%3Ccircle cx='28' cy='96' r='1'/%3E%3Ccircle cx='88' cy='52' r='1'/%3E%3C/g%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 120px 120px;
+  opacity: 0.008;
+  background-image: linear-gradient(0deg, rgb(var(--color-foreground) / 0.08), transparent 24%);
 }
 
 .spotlight-card {

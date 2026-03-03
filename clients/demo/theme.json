@@ -2,37 +2,37 @@
   "id": "demo-theme",
   "name": "Atelier Drapes",
   "colors": {
-    "background": "#F6F1EA",
-    "foreground": "#1F1A15",
-    "muted": "rgba(66,51,34,0.1)",
-    "mutedForeground": "rgba(58,45,31,0.58)",
-    "accent": "#8F6A48",
-    "accentSoft": "rgba(143,106,72,0.18)",
-    "border": "rgba(77,57,36,0.2)",
-    "input": "rgba(255,252,247,0.9)",
-    "ring": "rgba(143,106,72,0.38)",
-    "card": "rgba(255,250,244,0.88)",
-    "cardForeground": "#1F1A15"
+    "background": "#F3F0EC",
+    "foreground": "#211C16",
+    "muted": "rgba(74,62,49,0.08)",
+    "mutedForeground": "rgba(66,56,45,0.62)",
+    "accent": "#8E7A62",
+    "accentSoft": "rgba(142,122,98,0.16)",
+    "border": "rgba(72,60,47,0.16)",
+    "input": "rgba(255,252,248,0.92)",
+    "ring": "rgba(142,122,98,0.34)",
+    "card": "rgba(255,252,248,0.9)",
+    "cardForeground": "#211C16"
   },
   "radii": {
-    "xl": 12,
-    "lg": 10,
-    "md": 8,
-    "sm": 6
+    "xl": 10,
+    "lg": 8,
+    "md": 6,
+    "sm": 4
   },
   "shadows": {
-    "soft": "0 20px 48px rgba(89, 67, 43, 0.18)",
-    "softSubtle": "0 12px 30px rgba(89, 67, 43, 0.12)",
-    "ring": "0 0 0 1px rgba(143,106,72,0.18)"
+    "soft": "0 18px 42px rgba(58, 47, 37, 0.12)",
+    "softSubtle": "0 10px 24px rgba(58, 47, 37, 0.08)",
+    "ring": "0 0 0 1px rgba(142,122,98,0.16)"
   },
   "typography": {
-    "fontSans": "Soehne, Manrope, Avenir Next, SF Pro Display, sans-serif",
+    "fontSans": "Manrope, SF Pro Display, Segoe UI, sans-serif",
     "baseFontSize": 16,
-    "scaleRatio": 1.18
+    "scaleRatio": 1.16
   },
   "gradients": {
-    "hero": "radial-gradient(circle at 14% 4%, rgba(199,162,126,0.28), transparent 40%), radial-gradient(circle at 88% 10%, rgba(230,213,191,0.34), transparent 45%), linear-gradient(160deg, rgba(246,241,234,1), rgba(236,226,214,1))",
-    "surface": "linear-gradient(150deg, rgba(255,250,244,0.88), rgba(247,240,232,0.94))"
+    "hero": "linear-gradient(180deg, rgba(243,240,236,1), rgba(238,233,227,1))",
+    "surface": "linear-gradient(150deg, rgba(255,252,248,0.9), rgba(249,243,236,0.92))"
   },
   "defaultVariant": "atelier",
   "variants": [
@@ -40,37 +40,37 @@
       "id": "atelier",
       "name": "Atelier",
       "colors": {
-        "background": "#F6F1EA",
-        "foreground": "#1F1A15",
-        "muted": "rgba(66,51,34,0.1)",
-        "mutedForeground": "rgba(58,45,31,0.58)",
-        "accent": "#8F6A48",
-        "accentSoft": "rgba(143,106,72,0.18)",
-        "border": "rgba(77,57,36,0.2)",
-        "input": "rgba(255,252,247,0.9)",
-        "ring": "rgba(143,106,72,0.38)",
-        "card": "rgba(255,250,244,0.88)",
-        "cardForeground": "#1F1A15"
+        "background": "#F3F0EC",
+        "foreground": "#211C16",
+        "muted": "rgba(74,62,49,0.08)",
+        "mutedForeground": "rgba(66,56,45,0.62)",
+        "accent": "#8E7A62",
+        "accentSoft": "rgba(142,122,98,0.16)",
+        "border": "rgba(72,60,47,0.16)",
+        "input": "rgba(255,252,248,0.92)",
+        "ring": "rgba(142,122,98,0.34)",
+        "card": "rgba(255,252,248,0.9)",
+        "cardForeground": "#211C16"
       },
       "radii": {
-        "xl": 12,
-        "lg": 10,
-        "md": 8,
-        "sm": 6
+        "xl": 10,
+        "lg": 8,
+        "md": 6,
+        "sm": 4
       },
       "shadows": {
-        "soft": "0 20px 48px rgba(89, 67, 43, 0.18)",
-        "softSubtle": "0 12px 30px rgba(89, 67, 43, 0.12)",
-        "ring": "0 0 0 1px rgba(143,106,72,0.18)"
+        "soft": "0 18px 42px rgba(58, 47, 37, 0.12)",
+        "softSubtle": "0 10px 24px rgba(58, 47, 37, 0.08)",
+        "ring": "0 0 0 1px rgba(142,122,98,0.16)"
       },
       "typography": {
-        "fontSans": "Soehne, Manrope, Avenir Next, SF Pro Display, sans-serif",
+        "fontSans": "Manrope, SF Pro Display, Segoe UI, sans-serif",
         "baseFontSize": 16,
-        "scaleRatio": 1.17
+        "scaleRatio": 1.16
       },
       "gradients": {
-        "hero": "radial-gradient(circle at 14% 4%, rgba(199,162,126,0.28), transparent 40%), radial-gradient(circle at 88% 10%, rgba(230,213,191,0.34), transparent 45%), linear-gradient(160deg, rgba(246,241,234,1), rgba(236,226,214,1))",
-        "surface": "linear-gradient(150deg, rgba(255,250,244,0.88), rgba(247,240,232,0.94))"
+        "hero": "linear-gradient(180deg, rgba(243,240,236,1), rgba(238,233,227,1))",
+        "surface": "linear-gradient(150deg, rgba(255,252,248,0.9), rgba(249,243,236,0.92))"
       }
     },
     {

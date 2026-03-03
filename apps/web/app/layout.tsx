@@ -182,7 +182,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const themeStyle = themeToCssVars(activeTheme);
 
   return (
-    <html lang="en">
+    <html lang="ru">
       <body style={themeStyle}>
         <PwaRegister />
         <StorefrontShell config={config} activeThemeVariantId={activeThemeVariantId}>
