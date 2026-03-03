@@ -36,14 +36,14 @@
         ],
         "media": {
           "type": "video",
-          "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-          "mobileSrc": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",
-          "poster": "/demo/linen-blackout-drape.svg",
+          "src": "https://pixabay.com/videos/download/video-128321_large.mp4?attachment",
+          "mobileSrc": "https://pixabay.com/videos/download/video-128321_tiny.mp4?attachment",
+          "poster": "/demo/ripple-fold-sheer.svg",
           "alt": "Мягкая драпировка ткани у окна",
           "overlayOpacity": 0.18,
           "overlayPreset": "editorial",
-          "objectPosition": "68% 46%",
-          "mobileObjectPosition": "72% 44%"
+          "objectPosition": "78% 50%",
+          "mobileObjectPosition": "66% 42%"
         },
         "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
         "secondaryCta": { "label": "Смотреть коллекцию", "href": "#featured" }

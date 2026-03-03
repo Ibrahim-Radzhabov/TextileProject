@@ -106,9 +106,10 @@
 ## P2 (Polish, 2-3 days)
 
 ### 8) Hero media quality pipeline
+- Status: `completed` (textile-oriented desktop/mobile video sources configured via page config + local poster fallback + local asset drop-in folder).
 - Files:
   - `clients/demo/pages.json`
-  - `apps/web/public/...` (if local media assets are added)
+  - `apps/web/public/demo/hero/README.md`
 - Goal:
   - Replace demo flower clip with textile-specific loop.
   - Add mobile-specific crop/focal composition.
