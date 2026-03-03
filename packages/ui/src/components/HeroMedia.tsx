@@ -36,12 +36,8 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   overlayClassName,
   defaultOverlayOpacity = 0.5
 }) => {
-  const containerRef = React.useRef<HTMLDivElement>(null);
-  const videoRef = React.useRef<HTMLVideoElement>(null);
   const [videoFailed, setVideoFailed] = React.useState(false);
-  const [videoReady, setVideoReady] = React.useState(false);
   const [preferImage, setPreferImage] = React.useState(false);
-  const [isVisible, setIsVisible] = React.useState(true);
   const [isNarrowViewport, setIsNarrowViewport] = React.useState(false);
 
   React.useEffect(() => {
@@ -49,21 +45,8 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
       return;
     }
 
-    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const computePreference = () => {
-      const nav = navigator as NavigatorWithConnection;
-      return motionQuery.matches || Boolean(nav.connection?.saveData);
-    };
-
-    const updatePreference = () => {
-      setPreferImage(computePreference());
-    };
-
-    updatePreference();
-    motionQuery.addEventListener("change", updatePreference);
-    return () => {
-      motionQuery.removeEventListener("change", updatePreference);
-    };
+    const nav = navigator as NavigatorWithConnection;
+    setPreferImage(Boolean(nav.connection?.saveData));
   }, []);
 
   React.useEffect(() => {
@@ -83,24 +66,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
     };
   }, []);
 
-  React.useEffect(() => {
-    const node = containerRef.current;
-    if (!node || typeof window === "undefined") {
-      return;
-    }
-
-    const observer = new window.IntersectionObserver(
-      (entries) => {
-        setIsVisible(entries[0]?.isIntersecting ?? true);
-      },
-      { threshold: 0.2, rootMargin: "100px 0px" }
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  const shouldRenderVideo = media.type === "video" && !preferImage && !videoFailed;
+  const shouldRenderVideo = media.type === "video" && !preferImage;
   const overlayOpacity = media.overlayOpacity ?? defaultOverlayOpacity;
   const mergedAssetClassName = [assetClassName ?? "h-full w-full object-cover"].join(" ").trim();
   const assetStyle = {
@@ -115,71 +81,51 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   ].join(" ").trim();
 
   React.useEffect(() => {
-    if (!shouldRenderVideo || videoReady) {
-      return;
-    }
-
-    const timeout = window.setTimeout(() => {
-      setVideoFailed(true);
-    }, 8000);
-
-    return () => {
-      window.clearTimeout(timeout);
-    };
-  }, [shouldRenderVideo, videoReady]);
-
-  React.useEffect(() => {
-    if (!shouldRenderVideo) {
-      return;
-    }
-
-    const video = videoRef.current;
-    if (!video) {
-      return;
-    }
-
-    if (!isVisible) {
-      if (!video.paused) {
-        video.pause();
-      }
-      return;
-    }
-
-    const playAttempt = video.play();
-    if (playAttempt && typeof playAttempt.catch === "function") {
-      playAttempt.catch(() => {
-        setVideoFailed(true);
-      });
-    }
-  }, [isVisible, shouldRenderVideo]);
+    setVideoFailed(false);
+  }, [media.type, media.src, media.mobileSrc, media.poster]);
 
   const fallbackSrc = media.type === "video" ? media.poster ?? media.src : media.src;
   const fallbackAlt = media.alt ?? title;
 
   return (
     <div
-      ref={containerRef}
       className={["pointer-events-none absolute inset-0", className ?? ""].join(" ").trim()}
     >
       {shouldRenderVideo ? (
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          poster={media.poster}
-          className={mergedAssetClassName}
-          style={assetStyle}
-          onCanPlay={() => setVideoReady(true)}
-          onError={() => setVideoFailed(true)}
-          onStalled={() => setVideoFailed(true)}
-          onAbort={() => setVideoFailed(true)}
-        >
-          {media.mobileSrc && <source src={media.mobileSrc} media="(max-width: 768px)" />}
-          <source src={media.src} />
-        </video>
+        <>
+          <video
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster={media.poster}
+            className={[
+              mergedAssetClassName,
+              "transition-opacity duration-300",
+              videoFailed ? "opacity-0" : "opacity-100"
+            ].join(" ")}
+            style={assetStyle}
+            onCanPlay={() => setVideoFailed(false)}
+            onLoadedData={() => setVideoFailed(false)}
+            onError={() => setVideoFailed(true)}
+          >
+            {media.mobileSrc && <source src={media.mobileSrc} media="(max-width: 768px)" />}
+            <source src={media.src} />
+          </video>
+          {videoFailed && (
+            <picture>
+              {media.mobileSrc && <source srcSet={media.mobileSrc} media="(max-width: 768px)" />}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={fallbackSrc}
+                alt={fallbackAlt}
+                className={mergedAssetClassName}
+                style={assetStyle}
+              />
+            </picture>
+          )}
+        </>
       ) : (
         <picture>
           {media.mobileSrc && <source srcSet={media.mobileSrc} media="(max-width: 768px)" />}

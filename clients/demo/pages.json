@@ -36,8 +36,8 @@
         ],
         "media": {
           "type": "video",
-          "src": "https://pixabay.com/videos/download/video-128321_large.mp4?attachment",
-          "mobileSrc": "https://pixabay.com/videos/download/video-128321_tiny.mp4?attachment",
+          "src": "/demo/hero/3051489-sd_960_540_25fps.mp4",
+          "mobileSrc": "/demo/hero/3051489-sd_960_540_25fps.mp4",
           "poster": "/demo/ripple-fold-sheer.svg",
           "alt": "Мягкая драпировка ткани у окна",
           "overlayOpacity": 0.18,
