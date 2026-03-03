@@ -173,32 +173,6 @@ body {
   background-image: linear-gradient(0deg, rgb(var(--color-foreground) / 0.08), transparent 24%);
 }
 
-.spotlight-card {
-  position: relative;
-  overflow: hidden;
-}
-
-.spotlight-card::after {
-  content: "";
-  pointer-events: none;
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity var(--motion-fast) ease;
-  background: radial-gradient(
-    220px circle at var(--spotlight-x, 50%) var(--spotlight-y, 50%),
-    rgb(var(--color-foreground) / 0.12),
-    transparent 70%
-  );
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .spotlight-card:hover::after {
-    opacity: 1;
-  }
-}
-
 @media (max-width: 1024px), (hover: none) {
   .page-shell::after {
     display: none;
@@ -210,7 +184,6 @@ body {
     scroll-behavior: auto;
   }
 
-  .spotlight-card::after,
   .skeleton-shimmer::after {
     transition: none;
     animation: none;

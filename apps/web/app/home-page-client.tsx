@@ -334,7 +334,7 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
 
   return (
-    <div className="home-concept-editorial space-y-9 sm:space-y-10 lg:space-y-12">
+    <div className="home-concept-editorial space-y-8 sm:space-y-9 lg:space-y-11">
       {homePage.blocks.map((block) =>
         renderBlock(
           block,
