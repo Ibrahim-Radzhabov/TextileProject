@@ -50,17 +50,39 @@ export type PageBlockBase = {
   type: PageBlockType;
 };
 
-export type HeroBlock = PageBlockBase & {
-  type: "hero";
+export type HeroQuickLink = {
+  label: string;
+  subtitle?: string;
+  href: string;
+};
+
+export type HeroCta = {
+  label: string;
+  href: string;
+};
+
+export type HeroContent = {
   eyebrow?: string;
   title: string;
   subtitle?: string;
   trustLine?: string;
-  quickLinks?: {
-    label: string;
-    subtitle?: string;
-    href: string;
-  }[];
+  quickLinks?: HeroQuickLink[];
+  primaryCta?: HeroCta;
+  secondaryCta?: HeroCta;
+};
+
+export type HeroBlock = PageBlockBase & {
+  type: "hero";
+  // Preferred format: keep textual/call-to-action content together.
+  content?: HeroContent;
+  // Controls where textual hero content is rendered.
+  contentPlacement?: "overlay" | "below";
+  // Legacy fields kept for backward compatibility with old page configs.
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  trustLine?: string;
+  quickLinks?: HeroQuickLink[];
   media?: {
     type: "image" | "video";
     src: string;
@@ -72,14 +94,8 @@ export type HeroBlock = PageBlockBase & {
     objectPosition?: string;
     mobileObjectPosition?: string;
   };
-  primaryCta?: {
-    label: string;
-    href: string;
-  };
-  secondaryCta?: {
-    label: string;
-    href: string;
-  };
+  primaryCta?: HeroCta;
+  secondaryCta?: HeroCta;
 };
 
 export type MediaFeatureBlock = PageBlockBase & {

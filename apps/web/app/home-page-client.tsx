@@ -28,6 +28,18 @@ type HomePageClientProps = {
   products: Product[];
 };
 
+function resolveHeroContent(block: HeroBlock) {
+  return {
+    eyebrow: block.content?.eyebrow ?? block.eyebrow,
+    title: block.content?.title ?? block.title ?? "",
+    subtitle: block.content?.subtitle ?? block.subtitle,
+    trustLine: block.content?.trustLine ?? block.trustLine,
+    quickLinks: block.content?.quickLinks ?? block.quickLinks ?? [],
+    primaryCta: block.content?.primaryCta ?? block.primaryCta,
+    secondaryCta: block.content?.secondaryCta ?? block.secondaryCta
+  };
+}
+
 function filterProducts(products: Product[], block: ProductGridBlock): Product[] {
   return products.filter((product) => {
     if (block.filter?.featured && !product.isFeatured) {
@@ -58,8 +70,135 @@ function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast")
 }
 
 function renderHeroBlock(block: HeroBlock): JSX.Element {
+  const content = resolveHeroContent(block);
+  const contentPlacement = block.contentPlacement ?? "overlay";
   const heroOverlayClass = resolveHeroOverlayClass(block.media?.overlayPreset);
-  const heroQuickLinks = block.quickLinks?.slice(0, 4) ?? [];
+  const heroQuickLinks = content.quickLinks.slice(0, 4);
+  const hasTextContent = Boolean(
+    content.eyebrow ||
+      content.title ||
+      content.subtitle ||
+      content.primaryCta ||
+      content.secondaryCta ||
+      content.trustLine
+  );
+  const hasContentPanel = hasTextContent || heroQuickLinks.length > 0;
+
+  if (contentPlacement === "below") {
+    return (
+      <section key={block.id} className="space-y-4 sm:space-y-5">
+        <section className="relative isolate overflow-hidden rounded-[1.75rem] bg-card/40">
+          {block.media && (
+            <HeroMedia
+              media={block.media}
+              title={content.title}
+              defaultOverlayOpacity={0.1}
+              overlayClassName="bg-background/16"
+            />
+          )}
+          <div className="pointer-events-none absolute inset-0 z-[1]">
+            <div className={`absolute inset-0 ${heroOverlayClass}`} />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.18)_0%,rgba(10,10,10,0.08)_45%,rgba(10,10,10,0.28)_100%)]" />
+          </div>
+          <div className="relative z-10 min-h-[420px] sm:min-h-[520px] lg:min-h-[640px]" />
+        </section>
+
+        {hasContentPanel && (
+          <section className="grid gap-4 rounded-[1.5rem] border border-border/45 bg-card/78 p-5 sm:p-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,0.3fr)] lg:gap-6 lg:p-7">
+            <div className="space-y-4 sm:space-y-5">
+              {content.eyebrow && (
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={transitionQuick}
+                  className="inline-flex rounded-full border border-border/55 bg-card/58 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.07em] text-muted-foreground"
+                >
+                  {content.eyebrow}
+                </motion.p>
+              )}
+              {content.title && (
+                <motion.h1
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...transitionStandard, delay: 0.03 }}
+                  className="ui-title-display text-[clamp(2rem,5vw,4.1rem)] leading-[0.98] text-foreground"
+                >
+                  {content.title}
+                </motion.h1>
+              )}
+              {content.subtitle && (
+                <motion.p
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...transitionStandard, delay: 0.08 }}
+                  className="ui-body max-w-3xl text-foreground/86"
+                >
+                  {content.subtitle}
+                </motion.p>
+              )}
+              {(content.primaryCta || content.secondaryCta) && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...transitionQuick, delay: 0.12 }}
+                  className="flex flex-wrap items-center gap-3"
+                >
+                  {content.primaryCta && (
+                    <a
+                      href={content.primaryCta.href}
+                      className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/92"
+                    >
+                      {content.primaryCta.label}
+                    </a>
+                  )}
+                  {content.secondaryCta && (
+                    <a
+                      href={content.secondaryCta.href}
+                      className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/60 bg-card/70 px-5 text-sm text-foreground/92 transition-colors hover:border-border/85 hover:bg-card/86"
+                    >
+                      {content.secondaryCta.label}
+                    </a>
+                  )}
+                </motion.div>
+              )}
+              {content.trustLine && (
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...transitionQuick, delay: 0.16 }}
+                  className="text-xs uppercase tracking-[0.06em] text-muted-foreground/88 sm:text-[13px]"
+                >
+                  {content.trustLine}
+                </motion.p>
+              )}
+            </div>
+
+            {heroQuickLinks.length > 0 && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...transitionQuick, delay: 0.18 }}
+                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1"
+              >
+                {heroQuickLinks.map((link) => (
+                  <a
+                    key={link.label}
+                    href={link.href}
+                    className="group rounded-2xl border border-border/45 bg-card/62 p-4 text-foreground transition-colors hover:border-border/72 hover:bg-card/82"
+                  >
+                    <p className="text-sm font-medium tracking-[0.01em] text-foreground/96">{link.label}</p>
+                    {link.subtitle && (
+                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground/88">{link.subtitle}</p>
+                    )}
+                  </a>
+                ))}
+              </motion.div>
+            )}
+          </section>
+        )}
+      </section>
+    );
+  }
 
   return (
     <section
@@ -69,7 +208,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
       {block.media && (
         <HeroMedia
           media={block.media}
-          title={block.title}
+          title={content.title}
           defaultOverlayOpacity={0.1}
           overlayClassName="bg-background/20"
         />
@@ -81,32 +220,34 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
 
       <div className="relative z-10 grid gap-6 lg:min-h-[640px] lg:grid-cols-[minmax(0,0.72fr)_minmax(0,0.28fr)] lg:items-end">
         <div className="max-w-3xl space-y-5 lg:space-y-6">
-          {block.eyebrow && (
+          {content.eyebrow && (
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={transitionQuick}
               className="inline-flex rounded-full border border-white/50 bg-black/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.07em] text-white"
             >
-              {block.eyebrow}
+              {content.eyebrow}
             </motion.p>
           )}
-          <motion.h1
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...transitionStandard, delay: 0.05 }}
-            className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,5.2rem)] leading-[0.96] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.34)]"
-          >
-            {block.title}
-          </motion.h1>
-          {block.subtitle && (
+          {content.title && (
+            <motion.h1
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ ...transitionStandard, delay: 0.05 }}
+              className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,5.2rem)] leading-[0.96] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.34)]"
+            >
+              {content.title}
+            </motion.h1>
+          )}
+          {content.subtitle && (
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...transitionStandard, delay: 0.1 }}
               className="ui-body max-w-2xl text-white/88 drop-shadow-[0_2px_14px_rgba(0,0,0,0.3)]"
             >
-              {block.subtitle}
+              {content.subtitle}
             </motion.p>
           )}
           <motion.div
@@ -115,31 +256,31 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             transition={{ ...transitionQuick, delay: 0.15 }}
             className="flex flex-wrap items-center gap-3"
           >
-            {block.primaryCta && (
+            {content.primaryCta && (
               <a
-                href={block.primaryCta.href}
+                href={content.primaryCta.href}
                 className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/92"
               >
-                {block.primaryCta.label}
+                {content.primaryCta.label}
               </a>
             )}
-            {block.secondaryCta && (
+            {content.secondaryCta && (
               <a
-                href={block.secondaryCta.href}
+                href={content.secondaryCta.href}
                 className="inline-flex h-10 items-center justify-center rounded-[10px] border border-white/40 bg-white/20 px-5 text-sm text-white/95 transition-colors hover:border-white/60 hover:bg-white/25"
               >
-                {block.secondaryCta.label}
+                {content.secondaryCta.label}
               </a>
             )}
           </motion.div>
-          {block.trustLine && (
+          {content.trustLine && (
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ ...transitionQuick, delay: 0.2 }}
               className="text-xs uppercase tracking-[0.06em] text-white/82 sm:text-[13px]"
             >
-              {block.trustLine}
+              {content.trustLine}
             </motion.p>
           )}
         </div>
@@ -248,11 +389,10 @@ function renderProductGridBlock(
           initial="hidden"
           animate="visible"
         >
-          {visibleProducts.map((product, index) => (
+          {visibleProducts.map((product) => (
             <motion.div
               key={product.id}
               variants={gridItemVariants}
-              className={index === 0 ? "sm:col-span-2 xl:col-span-2" : undefined}
             >
               <ProductCard product={product} onQuickAdd={onQuickAdd} />
             </motion.div>

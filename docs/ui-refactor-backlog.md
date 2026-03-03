@@ -106,10 +106,14 @@
 ## P2 (Polish, 2-3 days)
 
 ### 8) Hero media quality pipeline
-- Status: `completed` (textile-oriented desktop/mobile video sources configured via page config + local poster fallback + playback stability fix in HeroMedia).
+- Status: `completed` (textile-oriented desktop/mobile video sources configured via page config + local poster fallback + playback stability fix in HeroMedia + hero textual content moved into config-driven block under video via `contentPlacement: below`).
 - Files:
   - `clients/demo/pages.json`
+  - `apps/web/app/home-page-client.tsx`
   - `packages/ui/src/components/HeroMedia.tsx`
+  - `packages/shared-types/src/configs.ts`
+  - `packages/config-schema/src/pages.ts`
+  - `apps/api/domain/models.py`
   - `apps/web/public/demo/hero/README.md`
 - Goal:
   - Replace demo flower clip with textile-specific loop.

@@ -26,11 +26,39 @@ const heroMediaSchema = z
         });
     }
 });
+const heroContentSchema = z.object({
+    eyebrow: z.string().optional(),
+    title: z.string().min(1),
+    subtitle: z.string().optional(),
+    trustLine: z.string().min(1).optional(),
+    quickLinks: z
+        .array(z.object({
+        label: z.string().min(1),
+        subtitle: z.string().optional(),
+        href: hrefSchema
+    }))
+        .max(6)
+        .optional(),
+    primaryCta: z
+        .object({
+        label: z.string().min(1),
+        href: hrefSchema
+    })
+        .optional(),
+    secondaryCta: z
+        .object({
+        label: z.string().min(1),
+        href: hrefSchema
+    })
+        .optional()
+});
 const heroBlock = z.object({
     id: z.string().min(1),
     type: z.literal("hero"),
+    content: heroContentSchema.optional(),
+    contentPlacement: z.enum(["overlay", "below"]).optional(),
     eyebrow: z.string().optional(),
-    title: z.string().min(1),
+    title: z.string().min(1).optional(),
     subtitle: z.string().optional(),
     trustLine: z.string().min(1).optional(),
     quickLinks: z
@@ -120,6 +148,13 @@ export const pageSchema = z.object({
             });
         }
         blockIds.add(block.id);
+        if (block.type === "hero" && !block.content?.title && !block.title) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "hero block requires title in content.title (or legacy title)",
+                path: ["blocks", index, "content", "title"]
+            });
+        }
     }
     if (page.kind === "home") {
         if (page.slug !== "/") {

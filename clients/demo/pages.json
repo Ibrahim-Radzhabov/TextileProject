@@ -8,32 +8,37 @@
       {
         "id": "hero-main",
         "type": "hero",
-        "eyebrow": "Window textiles",
-        "title": "Тихий люкс для штор и тюля.",
-        "subtitle": "Воздушные тюли, плотные портьеры и выверенные фактуры для спокойного света в интерьере.",
-        "trustLine": "Образцы тканей • Быстрый подбор • Консультация по свету",
-        "quickLinks": [
-          {
-            "label": "По комнате",
-            "subtitle": "Гостиная, спальня, детская",
-            "href": "/catalog?view=room"
-          },
-          {
-            "label": "По светопропусканию",
-            "subtitle": "Sheer, dimout, blackout",
-            "href": "/catalog?view=light"
-          },
-          {
-            "label": "По фактуре",
-            "subtitle": "Лен, жаккард, вельвет",
-            "href": "/catalog?view=texture"
-          },
-          {
-            "label": "Готовые наборы",
-            "subtitle": "Day-night сцены для окна",
-            "href": "/catalog?view=kits"
-          }
-        ],
+        "contentPlacement": "below",
+        "content": {
+          "eyebrow": "Window textiles",
+          "title": "Тихий люкс для штор и тюля.",
+          "subtitle": "Воздушные тюли, плотные портьеры и выверенные фактуры для спокойного света в интерьере.",
+          "trustLine": "Образцы тканей • Быстрый подбор • Консультация по свету",
+          "quickLinks": [
+            {
+              "label": "По комнате",
+              "subtitle": "Гостиная, спальня, детская",
+              "href": "/catalog?view=room"
+            },
+            {
+              "label": "По светопропусканию",
+              "subtitle": "Sheer, dimout, blackout",
+              "href": "/catalog?view=light"
+            },
+            {
+              "label": "По фактуре",
+              "subtitle": "Лен, жаккард, вельвет",
+              "href": "/catalog?view=texture"
+            },
+            {
+              "label": "Готовые наборы",
+              "subtitle": "Day-night сцены для окна",
+              "href": "/catalog?view=kits"
+            }
+          ],
+          "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
+          "secondaryCta": { "label": "Смотреть коллекцию", "href": "#featured" }
+        },
         "media": {
           "type": "video",
           "src": "/demo/hero/3051489-sd_960_540_25fps.mp4",
@@ -44,9 +49,7 @@
           "overlayPreset": "editorial",
           "objectPosition": "78% 50%",
           "mobileObjectPosition": "66% 42%"
-        },
-        "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
-        "secondaryCta": { "label": "Смотреть коллекцию", "href": "#featured" }
+        }
       },
       {
         "id": "hero-story-privacy",

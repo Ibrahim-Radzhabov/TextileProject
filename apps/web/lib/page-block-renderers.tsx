@@ -4,15 +4,20 @@ import type { PageBlock } from "@store-platform/shared-types";
 
 export function renderNonProductGridBlock(block: PageBlock): ReactNode {
   if (block.type === "hero") {
+    const heroTitle = block.content?.title ?? block.title;
+    if (!heroTitle) {
+      return null;
+    }
+
     return (
       <Hero
         key={block.id}
-        eyebrow={block.eyebrow}
-        title={block.title}
-        subtitle={block.subtitle}
+        eyebrow={block.content?.eyebrow ?? block.eyebrow}
+        title={heroTitle}
+        subtitle={block.content?.subtitle ?? block.subtitle}
         media={block.media}
-        primaryCta={block.primaryCta}
-        secondaryCta={block.secondaryCta}
+        primaryCta={block.content?.primaryCta ?? block.primaryCta}
+        secondaryCta={block.content?.secondaryCta ?? block.secondaryCta}
       />
     );
   }

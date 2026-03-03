@@ -631,8 +631,84 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     blocks: import("zod").ZodArray<import("zod").ZodDiscriminatedUnion<"type", [import("zod").ZodObject<{
         id: import("zod").ZodString;
         type: import("zod").ZodLiteral<"hero">;
+        content: import("zod").ZodOptional<import("zod").ZodObject<{
+            eyebrow: import("zod").ZodOptional<import("zod").ZodString>;
+            title: import("zod").ZodString;
+            subtitle: import("zod").ZodOptional<import("zod").ZodString>;
+            trustLine: import("zod").ZodOptional<import("zod").ZodString>;
+            quickLinks: import("zod").ZodOptional<import("zod").ZodArray<import("zod").ZodObject<{
+                label: import("zod").ZodString;
+                subtitle: import("zod").ZodOptional<import("zod").ZodString>;
+                href: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+            }, "strip", import("zod").ZodTypeAny, {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }, {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }>, "many">>;
+            primaryCta: import("zod").ZodOptional<import("zod").ZodObject<{
+                label: import("zod").ZodString;
+                href: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+            }, "strip", import("zod").ZodTypeAny, {
+                label: string;
+                href: string;
+            }, {
+                label: string;
+                href: string;
+            }>>;
+            secondaryCta: import("zod").ZodOptional<import("zod").ZodObject<{
+                label: import("zod").ZodString;
+                href: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+            }, "strip", import("zod").ZodTypeAny, {
+                label: string;
+                href: string;
+            }, {
+                label: string;
+                href: string;
+            }>>;
+        }, "strip", import("zod").ZodTypeAny, {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        }, {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        }>>;
+        contentPlacement: import("zod").ZodOptional<import("zod").ZodEnum<["overlay", "below"]>>;
         eyebrow: import("zod").ZodOptional<import("zod").ZodString>;
-        title: import("zod").ZodString;
+        title: import("zod").ZodOptional<import("zod").ZodString>;
         subtitle: import("zod").ZodOptional<import("zod").ZodString>;
         trustLine: import("zod").ZodOptional<import("zod").ZodString>;
         quickLinks: import("zod").ZodOptional<import("zod").ZodArray<import("zod").ZodObject<{
@@ -722,7 +798,6 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     }, "strip", import("zod").ZodTypeAny, {
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -735,6 +810,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -750,10 +826,29 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     }, {
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -766,6 +861,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -781,6 +877,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     }>, import("zod").ZodObject<{
         id: import("zod").ZodString;
         type: import("zod").ZodLiteral<"media-feature">;
@@ -968,7 +1084,6 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     blocks: ({
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -981,6 +1096,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -996,6 +1112,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1047,7 +1183,6 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     blocks: ({
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -1060,6 +1195,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -1075,6 +1211,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1126,7 +1282,6 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     blocks: ({
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -1139,6 +1294,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -1154,6 +1310,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1205,7 +1381,6 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     blocks: ({
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -1218,6 +1393,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -1233,6 +1409,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1284,7 +1480,6 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     blocks: ({
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -1297,6 +1492,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -1312,6 +1508,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1363,7 +1579,6 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
     blocks: ({
         type: "hero";
         id: string;
-        title: string;
         media?: {
             type: "image" | "video";
             src: string;
@@ -1376,6 +1591,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             mobileObjectPosition?: string | undefined;
         } | undefined;
         eyebrow?: string | undefined;
+        title?: string | undefined;
         subtitle?: string | undefined;
         trustLine?: string | undefined;
         quickLinks?: {
@@ -1391,6 +1607,26 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             label: string;
             href: string;
         } | undefined;
+        content?: {
+            title: string;
+            eyebrow?: string | undefined;
+            subtitle?: string | undefined;
+            trustLine?: string | undefined;
+            quickLinks?: {
+                label: string;
+                href: string;
+                subtitle?: string | undefined;
+            }[] | undefined;
+            primaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+            secondaryCta?: {
+                label: string;
+                href: string;
+            } | undefined;
+        } | undefined;
+        contentPlacement?: "overlay" | "below" | undefined;
     } | {
         type: "media-feature";
         id: string;

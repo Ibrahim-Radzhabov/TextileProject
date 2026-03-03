@@ -207,10 +207,27 @@ class HeroQuickLink(BaseModel):
     href: str
 
 
+class HeroContent(BaseModel):
+    title: str
+    eyebrow: Optional[str] = None
+    subtitle: Optional[str] = None
+    trust_line: Optional[str] = Field(default=None, alias="trustLine")
+    quick_links: Optional[List[HeroQuickLink]] = Field(default=None, alias="quickLinks")
+    primary_cta: Optional[Dict[str, str]] = Field(default=None, alias="primaryCta")
+    secondary_cta: Optional[Dict[str, str]] = Field(default=None, alias="secondaryCta")
+
+    class Config:
+        populate_by_name = True
+
+
 class HeroBlock(PageBlockBase):
     type: Literal["hero"]
+    content: Optional[HeroContent] = None
+    content_placement: Optional[Literal["overlay", "below"]] = Field(
+        default=None, alias="contentPlacement"
+    )
     eyebrow: Optional[str] = None
-    title: str
+    title: Optional[str] = None
     subtitle: Optional[str] = None
     trust_line: Optional[str] = Field(default=None, alias="trustLine")
     quick_links: Optional[List[HeroQuickLink]] = Field(default=None, alias="quickLinks")
