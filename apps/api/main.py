@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from .config import get_settings
-from .routers import cart, catalog, checkout, storefront, webhooks, metrics, orders
+from .routers import cart, catalog, checkout, favorites, storefront, webhooks, metrics, orders
 
 
 def create_app() -> FastAPI:
@@ -27,6 +27,7 @@ def create_app() -> FastAPI:
     app.include_router(catalog.router)
     app.include_router(cart.router)
     app.include_router(checkout.router)
+    app.include_router(favorites.router)
     app.include_router(orders.router)
     app.include_router(webhooks.router)
     app.include_router(metrics.router)

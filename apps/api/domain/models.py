@@ -443,3 +443,43 @@ class PwaInstallDailySummaryEntry(BaseModel):
 
 class PwaInstallDailySummaryResponse(BaseModel):
     items: List[PwaInstallDailySummaryEntry]
+
+
+FavoritesMetric = Literal[
+    "favorites_opened",
+    "favorite_added",
+    "favorite_removed",
+    "favorites_cleared",
+    "favorites_synced_pull",
+    "favorites_synced_push",
+]
+
+FavoritesEventSource = Literal["web"]
+
+
+class FavoritesEventRequest(BaseModel):
+    metric: FavoritesMetric
+    path: str = Field(min_length=1, max_length=300)
+    timestamp: datetime
+    sync_id: str = Field(alias="syncId", min_length=1, max_length=120)
+    product_id: Optional[str] = Field(default=None, alias="productId", min_length=1, max_length=200)
+    source: FavoritesEventSource = "web"
+
+    class Config:
+        populate_by_name = True
+
+
+class FavoritesSyncPayload(BaseModel):
+    product_ids: List[str] = Field(default_factory=list, alias="productIds")
+
+    class Config:
+        populate_by_name = True
+
+
+class FavoritesSyncResponse(BaseModel):
+    sync_id: str = Field(alias="syncId")
+    product_ids: List[str] = Field(alias="productIds")
+    updated_at: str = Field(alias="updatedAt")
+
+    class Config:
+        populate_by_name = True

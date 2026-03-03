@@ -7,6 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 
 from ..config import get_settings
 from ..domain.models import (
+    FavoritesEventRequest,
     PwaInstallDailySummaryEntry,
     PwaInstallDailySummaryResponse,
     PwaInstallEventEntry,
@@ -110,6 +111,29 @@ def collect_pwa_install_event(payload: PwaInstallEventRequest, request: Request)
         client_id=settings.client_id,
         metric=payload.metric,
         path=payload.path,
+        source=payload.source,
+        event_timestamp=_normalize_iso_timestamp(payload.timestamp),
+        user_agent=normalized_user_agent,
+        source_ip=source_ip,
+    )
+    return {"ok": True}
+
+
+@router.post("/metrics/favorites-events", status_code=202)
+def collect_favorites_event(payload: FavoritesEventRequest, request: Request) -> dict[str, bool]:
+    settings = get_settings()
+    store = get_order_store()
+
+    user_agent = request.headers.get("user-agent")
+    normalized_user_agent = user_agent[:700] if user_agent else None
+    source_ip = _resolve_source_ip(request)
+
+    store.record_favorites_event(
+        client_id=settings.client_id,
+        sync_id=payload.sync_id,
+        metric=payload.metric,
+        path=payload.path,
+        product_id=payload.product_id,
         source=payload.source,
         event_timestamp=_normalize_iso_timestamp(payload.timestamp),
         user_agent=normalized_user_agent,

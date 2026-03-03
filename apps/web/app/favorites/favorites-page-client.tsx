@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { Button, ProductGrid, Surface } from "@store-platform/ui";
 import type { Product } from "@store-platform/shared-types";
+import { trackFavoritesMetric } from "@/lib/api-client";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
@@ -17,6 +18,8 @@ export function FavoritesPageClient({ products }: FavoritesPageClientProps) {
   const favoriteProductIds = useFavoritesStore((state) => state.productIds);
   const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
   const clearFavorites = useFavoritesStore((state) => state.clearFavorites);
+  const syncId = useFavoritesStore((state) => state.syncId);
+  const initSync = useFavoritesStore((state) => state.initSync);
 
   const favorites = useMemo(() => {
     const byId = new Map(products.map((product) => [product.id, product]));
@@ -24,6 +27,18 @@ export function FavoritesPageClient({ products }: FavoritesPageClientProps) {
       .map((productId) => byId.get(productId))
       .filter((product): product is Product => Boolean(product));
   }, [favoriteProductIds, products]);
+
+  useEffect(() => {
+    void initSync();
+  }, [initSync]);
+
+  useEffect(() => {
+    trackFavoritesMetric({
+      metric: "favorites_opened",
+      path: "/favorites",
+      syncId
+    });
+  }, [syncId]);
 
   if (favorites.length === 0) {
     return (

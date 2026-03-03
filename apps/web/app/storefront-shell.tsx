@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { useEffect, type ReactNode } from "react";
 import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { LayoutGroup } from "framer-motion";
@@ -37,10 +37,15 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     removeProduct
   } = useCartStore();
   const favoriteItemCount = useFavoritesStore((state) => state.productIds.length);
+  const initFavoritesSync = useFavoritesStore((state) => state.initSync);
   const itemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
   const isAdminArea = pathname.startsWith("/admin");
   const isCheckoutFlow = pathname.startsWith("/checkout");
   const showMobileBottomNav = !isAdminArea && !isCheckoutFlow;
+
+  useEffect(() => {
+    void initFavoritesSync();
+  }, [initFavoritesSync]);
 
   return (
     <>

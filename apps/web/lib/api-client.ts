@@ -15,6 +15,21 @@ function resolveApiUrl(): string {
   return typeof window === "undefined" ? INTERNAL_API_URL : PUBLIC_API_URL;
 }
 
+function resolveFavoritesSyncUrl(syncId: string): string {
+  const params = new URLSearchParams({ sync_id: syncId });
+  if (typeof window !== "undefined") {
+    return `/api/favorites/sync?${params.toString()}`;
+  }
+  return `${resolveApiUrl()}/favorites/sync?${params.toString()}`;
+}
+
+function resolveFavoritesMetricsUrl(): string {
+  if (typeof window !== "undefined") {
+    return "/api/metrics/favorites-events";
+  }
+  return `${resolveApiUrl()}/metrics/favorites-events`;
+}
+
 function resolveAdminHeaders(): HeadersInit {
   const token = process.env.ADMIN_TOKEN?.trim();
   if (!token) {
@@ -188,6 +203,15 @@ type PwaInstallDailySummaryEntryDto = {
 
 type PwaInstallDailySummaryResponseDto = {
   items: PwaInstallDailySummaryEntryDto[];
+};
+
+type FavoritesSyncResponseDto = {
+  sync_id?: string;
+  syncId?: string;
+  product_ids?: string[];
+  productIds?: string[];
+  updated_at?: string;
+  updatedAt?: string;
 };
 
 type StorefrontConfigDto = Omit<StorefrontConfig, "shop" | "catalog" | "integrations"> & {
@@ -439,6 +463,20 @@ export type PwaInstallDailySummaryResponse = {
   items: PwaInstallDailySummaryEntry[];
 };
 
+export type FavoritesMetric =
+  | "favorites_opened"
+  | "favorite_added"
+  | "favorite_removed"
+  | "favorites_cleared"
+  | "favorites_synced_pull"
+  | "favorites_synced_push";
+
+export type FavoritesSyncSnapshot = {
+  syncId: string;
+  productIds: string[];
+  updatedAt: string;
+};
+
 export type ManualOrderStatus = SharedManualOrderStatus;
 export type StatusAuditActorType = "checkout" | "webhook" | "admin" | "system";
 
@@ -552,6 +590,18 @@ function normalizePwaInstallDailySummaryEntry(
     promptDismissed: dto.prompt_dismissed,
     bannerDismissed: dto.banner_dismissed,
     total: dto.total
+  };
+}
+
+function normalizeFavoritesSyncSnapshot(dto: FavoritesSyncResponseDto): FavoritesSyncSnapshot {
+  const syncId = dto.syncId ?? dto.sync_id;
+  const productIds = dto.productIds ?? dto.product_ids;
+  const updatedAt = dto.updatedAt ?? dto.updated_at;
+
+  return {
+    syncId: getRequired(syncId, "favorites.syncId"),
+    productIds: Array.isArray(productIds) ? productIds.map((value) => String(value)) : [],
+    updatedAt: getRequired(updatedAt, "favorites.updatedAt")
   };
 }
 
@@ -920,4 +970,69 @@ export async function fetchPwaInstallDailySummary(options?: {
   return {
     items: dto.items.map((item) => normalizePwaInstallDailySummaryEntry(item))
   };
+}
+
+export async function fetchFavoritesSnapshot(syncId: string): Promise<FavoritesSyncSnapshot> {
+  const res = await fetch(resolveFavoritesSyncUrl(syncId), {
+    cache: "no-store"
+  });
+  const dto = await handleJson<FavoritesSyncResponseDto>(res);
+  return normalizeFavoritesSyncSnapshot(dto);
+}
+
+export async function saveFavoritesSnapshot(
+  syncId: string,
+  productIds: string[]
+): Promise<FavoritesSyncSnapshot> {
+  const res = await fetch(resolveFavoritesSyncUrl(syncId), {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      productIds
+    })
+  });
+  const dto = await handleJson<FavoritesSyncResponseDto>(res);
+  return normalizeFavoritesSyncSnapshot(dto);
+}
+
+export function trackFavoritesMetric(params: {
+  metric: FavoritesMetric;
+  path: string;
+  syncId: string;
+  productId?: string;
+  timestamp?: string;
+}): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+
+  const endpoint = resolveFavoritesMetricsUrl();
+  const payload = {
+    metric: params.metric,
+    path: params.path,
+    syncId: params.syncId,
+    productId: params.productId,
+    timestamp: params.timestamp ?? new Date().toISOString(),
+    source: "web" as const
+  };
+
+  const body = JSON.stringify(payload);
+  if (navigator.sendBeacon) {
+    const blob = new Blob([body], { type: "application/json" });
+    navigator.sendBeacon(endpoint, blob);
+    return;
+  }
+
+  void fetch(endpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body,
+    keepalive: true
+  }).catch(() => {
+    // Best effort metrics.
+  });
 }

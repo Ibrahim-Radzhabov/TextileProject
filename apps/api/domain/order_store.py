@@ -119,6 +119,35 @@ class OrderStore:
                 )
                 """
             )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS favorites_sync_state (
+                    client_id TEXT NOT NULL,
+                    sync_id TEXT NOT NULL,
+                    product_ids_json TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    updated_at TEXT NOT NULL,
+                    PRIMARY KEY (client_id, sync_id)
+                )
+                """
+            )
+            conn.execute(
+                """
+                CREATE TABLE IF NOT EXISTS favorites_events (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    client_id TEXT NOT NULL,
+                    sync_id TEXT NOT NULL,
+                    metric TEXT NOT NULL,
+                    path TEXT NOT NULL,
+                    product_id TEXT,
+                    source TEXT NOT NULL DEFAULT 'web',
+                    user_agent TEXT,
+                    source_ip TEXT,
+                    event_timestamp TEXT NOT NULL,
+                    created_at TEXT NOT NULL
+                )
+                """
+            )
             self._ensure_column(
                 conn=conn,
                 table_name="stripe_webhook_audit",
@@ -143,6 +172,15 @@ class OrderStore:
             )
             conn.execute(
                 "CREATE INDEX IF NOT EXISTS idx_pwa_install_events_client_metric_created ON pwa_install_events(client_id, metric, created_at DESC)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_favorites_sync_state_client_updated ON favorites_sync_state(client_id, updated_at DESC)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_favorites_events_client_created ON favorites_events(client_id, created_at DESC)"
+            )
+            conn.execute(
+                "CREATE INDEX IF NOT EXISTS idx_favorites_events_client_metric_created ON favorites_events(client_id, metric, created_at DESC)"
             )
 
     def _ensure_column(
@@ -995,6 +1033,127 @@ class OrderStore:
             }
             for row in rows
         ]
+
+    def get_favorites_state(
+        self,
+        *,
+        client_id: str,
+        sync_id: str,
+    ) -> Optional[dict[str, Any]]:
+        with self._connect() as conn:
+            row = conn.execute(
+                """
+                SELECT sync_id, product_ids_json, updated_at
+                FROM favorites_sync_state
+                WHERE client_id = ? AND sync_id = ?
+                """,
+                (client_id, sync_id),
+            ).fetchone()
+
+        if row is None:
+            return None
+
+        product_ids = json.loads(row["product_ids_json"])
+        if not isinstance(product_ids, list):
+            product_ids = []
+
+        return {
+            "sync_id": row["sync_id"],
+            "product_ids": [str(value) for value in product_ids],
+            "updated_at": row["updated_at"],
+        }
+
+    def save_favorites_state(
+        self,
+        *,
+        client_id: str,
+        sync_id: str,
+        product_ids: list[str],
+    ) -> dict[str, Any]:
+        now = datetime.now(timezone.utc).isoformat()
+        normalized_ids = [str(product_id) for product_id in product_ids]
+
+        with self._connect() as conn:
+            existing = conn.execute(
+                """
+                SELECT created_at
+                FROM favorites_sync_state
+                WHERE client_id = ? AND sync_id = ?
+                """,
+                (client_id, sync_id),
+            ).fetchone()
+
+            created_at = existing["created_at"] if existing else now
+            conn.execute(
+                """
+                INSERT OR REPLACE INTO favorites_sync_state (
+                    client_id,
+                    sync_id,
+                    product_ids_json,
+                    created_at,
+                    updated_at
+                )
+                VALUES (?, ?, ?, ?, ?)
+                """,
+                (
+                    client_id,
+                    sync_id,
+                    json.dumps(normalized_ids, ensure_ascii=False),
+                    created_at,
+                    now,
+                ),
+            )
+
+        return {
+            "sync_id": sync_id,
+            "product_ids": normalized_ids,
+            "updated_at": now,
+        }
+
+    def record_favorites_event(
+        self,
+        *,
+        client_id: str,
+        sync_id: str,
+        metric: str,
+        path: str,
+        product_id: Optional[str],
+        source: str,
+        event_timestamp: str,
+        user_agent: Optional[str],
+        source_ip: Optional[str],
+    ) -> None:
+        now = datetime.now(timezone.utc).isoformat()
+        with self._connect() as conn:
+            conn.execute(
+                """
+                INSERT INTO favorites_events (
+                    client_id,
+                    sync_id,
+                    metric,
+                    path,
+                    product_id,
+                    source,
+                    user_agent,
+                    source_ip,
+                    event_timestamp,
+                    created_at
+                )
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    client_id,
+                    sync_id,
+                    metric,
+                    path,
+                    product_id,
+                    source,
+                    user_agent,
+                    source_ip,
+                    event_timestamp,
+                    now,
+                ),
+            )
 
 
 @lru_cache(maxsize=1)
