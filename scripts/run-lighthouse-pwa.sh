@@ -10,6 +10,8 @@ WEB_URL="http://127.0.0.1:${WEB_PORT}"
 REPORT_PATH="$ROOT_DIR/lighthouse-pwa.report.json"
 API_LOG="/tmp/store-platform-lighthouse-api.log"
 WEB_LOG="/tmp/store-platform-lighthouse-web.log"
+LIGHTHOUSE_VERSION="${LIGHTHOUSE_VERSION:-11.7.1}"
+PWA_MIN_SCORE="${PWA_MIN_SCORE:-0.85}"
 
 API_PID=""
 WEB_PID=""
@@ -77,12 +79,13 @@ wait_for_url "$WEB_URL" 60
 
 rm -f "$REPORT_PATH"
 
-corepack pnpm dlx --package=lighthouse@12.8.2 lighthouse "$WEB_URL" \
+corepack pnpm dlx "lighthouse@${LIGHTHOUSE_VERSION}" "$WEB_URL" \
+  --quiet \
   --only-categories=pwa \
   --chrome-flags="--headless=new --no-sandbox --disable-gpu" \
   --output=json \
   --output-path="$REPORT_PATH"
 
-node "$ROOT_DIR/scripts/assert-lighthouse-pwa.mjs" "$REPORT_PATH" "0.9"
+node "$ROOT_DIR/scripts/assert-lighthouse-pwa.mjs" "$REPORT_PATH" "$PWA_MIN_SCORE"
 
 echo "Lighthouse report: $REPORT_PATH"

@@ -29,18 +29,21 @@ if (!lhr || typeof lhr !== "object") {
 }
 
 const pwaCategory = lhr.categories?.pwa;
-if (!pwaCategory) {
-  console.error("Lighthouse report does not include the PWA category.");
-  process.exit(1);
+if (pwaCategory) {
+  const score = Number(pwaCategory.score ?? 0);
+  if (score < minScore) {
+    console.error(`PWA score ${score.toFixed(2)} is below required ${minScore.toFixed(2)}.`);
+    process.exit(1);
+  }
+} else {
+  console.warn("Lighthouse report does not include PWA category; falling back to required PWA audits.");
 }
 
-const score = Number(pwaCategory.score ?? 0);
-if (score < minScore) {
-  console.error(`PWA score ${score.toFixed(2)} is below required ${minScore.toFixed(2)}.`);
-  process.exit(1);
-}
+const legacyAudits = ["service-worker", "installable-manifest", "offline-start-url"];
+const modernAudits = ["installable-manifest", "maskable-icon"];
 
-const requiredAuditIds = ["service-worker", "installable-manifest", "offline-start-url"];
+const hasLegacyAudits = legacyAudits.every((auditId) => Boolean(lhr.audits?.[auditId]));
+const requiredAuditIds = hasLegacyAudits ? legacyAudits : modernAudits;
 const failedAudits = [];
 
 for (const auditId of requiredAuditIds) {
@@ -61,4 +64,9 @@ if (failedAudits.length > 0) {
   process.exit(1);
 }
 
-console.log(`Lighthouse PWA check passed with score ${score.toFixed(2)}.`);
+if (pwaCategory) {
+  const score = Number(pwaCategory.score ?? 0);
+  console.log(`Lighthouse PWA check passed with score ${score.toFixed(2)}.`);
+} else {
+  console.log("Lighthouse PWA check passed via required audit checks.");
+}

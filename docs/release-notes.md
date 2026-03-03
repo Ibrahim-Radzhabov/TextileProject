@@ -15,6 +15,9 @@
 - Tuned shared transition spring/easing and reduced-motion behavior for product media interactions.
 - Added visual snapshot regression suite for storefront key pages (`/`, `/catalog`, `/product/[slug]`) on `390/768/1280`.
 - Added dedicated CI visual gate (`corepack pnpm e2e:visual`) and excluded `@visual` specs from generic `e2e` step.
+- Added Lighthouse performance guard for storefront routes (`/`, `/catalog`, `/product/[slug]`) with versioned budgets for score/LCP/CLS/INP.
+- Added CI performance step (`PERF_SKIP_BUILD=1 corepack pnpm perf:storefront`).
+- Stabilized `pwa:lighthouse` for current Lighthouse versions (compatible package pin + adaptive PWA audit set and configurable score threshold).
 
 ### `44047ba` - Unified storefront smoke + CI gate
 - Added `smoke:storefront` script with route checks and viewport QA for `390/768/1024/1280`.

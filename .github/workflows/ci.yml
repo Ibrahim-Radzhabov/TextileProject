@@ -53,6 +53,9 @@ jobs:
           NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1 corepack pnpm --dir apps/web build
           NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1 SMOKE_SKIP_BUILD=1 corepack pnpm smoke:storefront
 
+      - name: Lighthouse storefront performance
+        run: PERF_SKIP_BUILD=1 corepack pnpm perf:storefront
+
       - name: E2E catalog view presets
         run: corepack pnpm e2e:presets
 

@@ -223,10 +223,25 @@
   - Snapshot checks cover `/`, `/catalog`, `/product/[slug]` for target breakpoints.
   - CI fails on meaningful snapshot diffs.
 
+### 17) Storefront performance budget guard
+- Status: `completed` (Lighthouse perf runner for `/`, `/catalog`, `/product/[slug]` + CI budget gate for score/LCP/CLS/INP).
+- Files:
+  - `scripts/run-lighthouse-storefront-perf.sh`
+  - `scripts/assert-lighthouse-storefront-perf.mjs`
+  - `docs/storefront-performance-budgets.json`
+  - `package.json`
+  - `.github/workflows/ci.yml`
+- Goal:
+  - Keep storefront perf regressions visible before merge.
+- Acceptance:
+  - CI enforces per-route thresholds for performance score and core metrics.
+  - Budget file is versioned and can be tuned explicitly.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - `corepack pnpm smoke:storefront` passes.
 - `corepack pnpm e2e:visual` passes.
+- `corepack pnpm perf:storefront` passes.
 - Open storefront at `http://127.0.0.1:3000`.
 - Verify viewports: `390`, `768`, `1024`, `1280`.
 - Hero checks:

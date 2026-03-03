@@ -21,6 +21,7 @@
     "e2e:ui": "playwright test --ui",
     "e2e:install": "playwright install",
     "smoke:storefront": "node scripts/storefront-smoke.mjs",
+    "perf:storefront": "bash scripts/run-lighthouse-storefront-perf.sh",
     "pwa:lighthouse": "bash scripts/run-lighthouse-pwa.sh",
     "stripe:smoke": "bash scripts/stripe-smoke.sh",
     "format": "prettier --write .",
