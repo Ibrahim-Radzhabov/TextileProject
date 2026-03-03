@@ -12,15 +12,13 @@ export type ProductGridProps = {
   title?: string;
   subtitle?: string;
   onQuickAdd?: (product: Product) => void;
-  enableSharedTransition?: boolean;
 };
 
 export const ProductGrid: React.FC<ProductGridProps> = ({
   products,
   title,
   subtitle,
-  onQuickAdd,
-  enableSharedTransition = false
+  onQuickAdd
 }) => {
   const isEmpty = products.length === 0;
 
@@ -55,7 +53,6 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               <ProductCard
                 product={product}
                 onQuickAdd={onQuickAdd}
-                enableSharedTransition={enableSharedTransition}
               />
             </motion.div>
           ))}

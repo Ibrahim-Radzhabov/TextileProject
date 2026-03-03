@@ -9,7 +9,6 @@ import { springSnappy } from "../motion/presets";
 export type ProductCardProps = {
   product: Product;
   onQuickAdd?: (product: Product) => void;
-  enableSharedTransition?: boolean;
 };
 
 function formatMoney(amount: number, currency: string): string {
@@ -48,8 +47,7 @@ function resolveMetadataValue(product: Product, preferredKeys: string[]): string
 
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
-  onQuickAdd,
-  enableSharedTransition = false
+  onQuickAdd
 }) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const spotlightRectRef = React.useRef<DOMRect | null>(null);
@@ -57,8 +55,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const spotlightPositionRef = React.useRef({ x: 0, y: 0 });
   const primaryImage = product.media[0];
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
-  const sharedMediaLayoutId = enableSharedTransition ? `product-media-${product.id}` : undefined;
-  const sharedTitleLayoutId = enableSharedTransition ? `product-title-${product.id}` : undefined;
   const hasComparePrice =
     product.compareAtPrice &&
     product.compareAtPrice.currency === product.price.currency &&
@@ -143,12 +139,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="aspect-[4/5] overflow-hidden bg-card/20">
             {primaryImage && (
               // eslint-disable-next-line @next/next/no-img-element
-              <motion.img
-                layoutId={sharedMediaLayoutId}
+              <img
                 src={primaryImage.url}
                 alt={primaryImage.alt}
                 className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
-                transition={springSnappy}
               />
             )}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background/48 via-background/20 to-transparent" />
@@ -185,13 +179,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 {product.badges && product.badges[0]?.label ? product.badges[0].label : roomTag?.replace(/-/g, " ")}
               </p>
             )}
-            <motion.p
-              layoutId={sharedTitleLayoutId}
-              className="ui-title line-clamp-1 text-[15px]"
-              transition={springSnappy}
-            >
-              {product.name}
-            </motion.p>
+            <p className="ui-title line-clamp-1 text-[15px]">{product.name}</p>
             {product.shortDescription && (
               <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground/95">{product.shortDescription}</p>
             )}
