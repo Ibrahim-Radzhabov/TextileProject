@@ -2,11 +2,13 @@
 
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
+import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
+import { enableSharedProductTransition } from "@/lib/feature-flags";
 
 type StorefrontShellProps = {
   children: ReactNode;
@@ -77,7 +79,13 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
           </span>
         }
       >
-        {children}
+        {enableSharedProductTransition ? (
+          <LayoutGroup id="storefront-shared-elements">
+            {children}
+          </LayoutGroup>
+        ) : (
+          children
+        )}
       </LayoutShell>
       <CartDrawer
         open={open}

@@ -119,12 +119,15 @@
   - No awkward loop reset feeling.
 
 ### 9) Shared element transitions (grid -> PDP)
-- Status: `paused` (initial pass rolled back due layout instability; to revisit with isolated transition boundary).
+- Status: `in_progress` (reintroduced behind `NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1`; default `off` for stable mainline behavior).
 - Files:
   - `packages/ui/src/components/ProductCard.tsx`
+  - `packages/ui/src/components/ProductGrid.tsx`
   - `packages/ui/src/components/ProductGallery.tsx`
+  - `apps/web/app/catalog/catalog-page-client.tsx`
   - `apps/web/app/product/[slug]/product-page-client.tsx`
   - `apps/web/app/storefront-shell.tsx`
+  - `apps/web/lib/feature-flags.ts`
 - Goal:
   - Premium continuity between list and product page.
 - Acceptance:
