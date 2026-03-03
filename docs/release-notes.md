@@ -13,6 +13,8 @@
 - Added accessibility hardening for catalog/PDP interactions (focus states, ARIA metadata, keyboard gallery navigation).
 - Added Playwright keyboard a11y check (`tests/e2e/storefront-a11y.spec.ts`) and CI guard step.
 - Tuned shared transition spring/easing and reduced-motion behavior for product media interactions.
+- Added visual snapshot regression suite for storefront key pages (`/`, `/catalog`, `/product/[slug]`) on `390/768/1280`.
+- Added dedicated CI visual gate (`corepack pnpm e2e:visual`) and excluded `@visual` specs from generic `e2e` step.
 
 ### `44047ba` - Unified storefront smoke + CI gate
 - Added `smoke:storefront` script with route checks and viewport QA for `390/768/1024/1280`.

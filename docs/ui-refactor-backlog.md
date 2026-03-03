@@ -209,9 +209,24 @@
   - Transition remains smooth under throttled CPU.
   - No distracting jump in image/title continuity.
 
+### 16) Storefront visual regression guard
+- Status: `completed` (visual snapshot suite for home/catalog/PDP on 390/768/1280 + dedicated CI gate).
+- Files:
+  - `tests/e2e/storefront-visual.spec.ts`
+  - `tests/e2e/storefront-visual.spec.ts-snapshots/*`
+  - `playwright.config.ts`
+  - `package.json`
+  - `.github/workflows/ci.yml`
+- Goal:
+  - Catch accidental visual drift in key storefront entry points early.
+- Acceptance:
+  - Snapshot checks cover `/`, `/catalog`, `/product/[slug]` for target breakpoints.
+  - CI fails on meaningful snapshot diffs.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - `corepack pnpm smoke:storefront` passes.
+- `corepack pnpm e2e:visual` passes.
 - Open storefront at `http://127.0.0.1:3000`.
 - Verify viewports: `390`, `768`, `1024`, `1280`.
 - Hero checks:

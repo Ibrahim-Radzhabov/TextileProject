@@ -59,6 +59,9 @@ jobs:
       - name: E2E storefront a11y
         run: corepack pnpm e2e:a11y
 
+      - name: E2E storefront visual snapshots
+        run: corepack pnpm e2e:visual
+
       - name: E2E
         run: corepack pnpm e2e
 
