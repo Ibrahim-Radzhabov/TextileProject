@@ -119,7 +119,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
         }
         footer={
           <span className="text-xs text-muted-foreground">
-            Powered by store-platform
+            Работает на store-platform
           </span>
         }
       >

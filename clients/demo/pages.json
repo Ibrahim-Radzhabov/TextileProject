@@ -10,7 +10,7 @@
         "type": "hero",
         "contentPlacement": "below",
         "content": {
-          "eyebrow": "Atelier window textiles",
+          "eyebrow": "Atelier • текстиль для окон",
           "title": "Искусство оформления окон",
           "subtitle": "Шторы премиум-класса для роскошного интерьера",
           "trustLine": "Индивидуальный пошив • Подбор фактуры • Консультация по свету",
@@ -22,7 +22,7 @@
             },
             {
               "label": "По светопропусканию",
-              "subtitle": "Вуаль, dimout, blackout",
+              "subtitle": "Вуаль, димаут, блэкаут",
               "href": "/catalog?view=light"
             },
             {
@@ -32,7 +32,7 @@
             },
             {
               "label": "Готовые наборы",
-              "subtitle": "Day-night сцены для окна",
+              "subtitle": "Сценарии день/ночь для окна",
               "href": "/catalog?view=kits"
             }
           ],
@@ -54,8 +54,8 @@
       {
         "id": "hero-story-privacy",
         "type": "media-feature",
-        "eyebrow": "Editorial selection",
-        "title": "Daylight by day, privacy by evening.",
+        "eyebrow": "Подборка atelier",
+        "title": "Дневной свет днем, приватность вечером",
         "subtitle": "Собирайте двухслойные сцены из тюля и плотной портьеры под ваш режим дня.",
         "body": "Сначала мягкий свет для дневной глубины интерьера, затем плотность и приватность для вечера. Такой подход работает как базовый гардероб для окна.",
         "align": "right",
@@ -68,7 +68,7 @@
           "mobileObjectPosition": "center center"
         },
         "cta": {
-          "label": "Смотреть day-night",
+          "label": "Смотреть день/ночь",
           "href": "/catalog"
         }
       },
