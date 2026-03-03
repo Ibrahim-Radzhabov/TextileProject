@@ -183,11 +183,13 @@
   - Preset state is visible and reversible in catalog controls.
 
 ### 14) Catalog/PDP a11y pass
-- Status: `pending`.
+- Status: `completed` (keyboard reachability + ARIA semantics for catalog cards, PDP gallery and main CTA; dedicated e2e a11y check added).
 - Files:
   - `packages/ui/src/components/ProductCard.tsx`
   - `packages/ui/src/components/ProductGallery.tsx`
   - `apps/web/app/product/[slug]/product-page-client.tsx`
+  - `tests/e2e/storefront-a11y.spec.ts`
+  - `.github/workflows/ci.yml`
 - Goal:
   - Improve keyboard access and ARIA semantics for card links, gallery thumbs and PDP CTA blocks.
 - Acceptance:
@@ -195,10 +197,11 @@
   - No critical accessibility violations in automated checks.
 
 ### 15) Transition motion quality polish
-- Status: `pending`.
+- Status: `completed` (shared transition spring tuned; reduced-motion behavior improved for card media hover).
 - Files:
   - `packages/ui/src/components/ProductCard.tsx`
   - `packages/ui/src/components/ProductGallery.tsx`
+  - `apps/web/app/product/[slug]/product-page-client.tsx`
   - `packages/ui/src/motion/presets.ts`
 - Goal:
   - Fine-tune shared transition timing/easing for low-end devices and reduce perceived jitter.

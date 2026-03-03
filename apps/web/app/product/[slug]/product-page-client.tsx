@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Badge, Button, ProductCard, ProductGallery, Surface } from "@store-platform/ui";
+import { Badge, Button, ProductCard, ProductGallery, Surface, springSharedElement } from "@store-platform/ui";
 import type { Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
@@ -48,6 +48,7 @@ export function ProductPageClient({
   const addPulseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const priceFormatted = formatMoney(product.price.amount, product.price.currency);
+  const productTitleId = `product-title-${product.id}`;
   const sharedMediaLayoutId = enableSharedProductTransition ? `product-media-${product.id}` : undefined;
   const sharedTitleLayoutId = enableSharedProductTransition ? `product-title-${product.id}` : undefined;
   const compareAtPrice = product.compareAtPrice;
@@ -173,13 +174,14 @@ export function ProductPageClient({
                 {sharedTitleLayoutId ? (
                   <motion.h1
                     layoutId={sharedTitleLayoutId}
-                    transition={{ duration: 0.35 }}
+                    transition={springSharedElement}
+                    id={productTitleId}
                     className="ui-title-serif text-3xl sm:text-4xl"
                   >
                     {product.name}
                   </motion.h1>
                 ) : (
-                  <h1 className="ui-title-serif text-3xl sm:text-4xl">{product.name}</h1>
+                  <h1 id={productTitleId} className="ui-title-serif text-3xl sm:text-4xl">{product.name}</h1>
                 )}
 
                 {product.shortDescription && (
@@ -193,7 +195,11 @@ export function ProductPageClient({
                 )}
               </header>
 
-              <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-4">
+              <div
+                className="rounded-xl border border-border/45 bg-card/62 px-4 py-4"
+                role="region"
+                aria-label="Покупка товара"
+              >
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="ui-kicker">Цена</p>
@@ -223,6 +229,9 @@ export function ProductPageClient({
                 >
                   <Button
                     fullWidth
+                    data-testid="pdp-add-to-cart"
+                    aria-label={`Добавить ${product.name} в корзину`}
+                    aria-busy={isAdding || isPricing}
                     onClick={() => {
                       void handleAddToCart();
                     }}

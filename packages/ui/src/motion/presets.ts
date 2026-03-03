@@ -26,6 +26,13 @@ export const springSnappy: Transition = {
   mass: 0.9
 };
 
+export const springSharedElement: Transition = {
+  type: "spring",
+  stiffness: 245,
+  damping: 27,
+  mass: 0.98
+};
+
 export const gridContainerVariants: Variants = {
   hidden: {},
   visible: {

@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import type { Product } from "@store-platform/shared-types";
 import { Button } from "./Button";
-import { springSnappy } from "../motion/presets";
+import { springSharedElement, springSnappy } from "../motion/presets";
 
 export type ProductCardProps = {
   product: Product;
@@ -51,6 +51,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onQuickAdd,
   enableSharedTransition = false
 }) => {
+  const prefersReducedMotion = useReducedMotion();
   const rootRef = React.useRef<HTMLDivElement>(null);
   const spotlightRectRef = React.useRef<DOMRect | null>(null);
   const spotlightFrameRef = React.useRef<number | null>(null);
@@ -59,6 +60,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
   const sharedMediaLayoutId = enableSharedTransition ? `product-media-${product.id}` : undefined;
   const sharedTitleLayoutId = enableSharedTransition ? `product-title-${product.id}` : undefined;
+  const titleId = `product-card-title-${product.id}`;
+  const priceId = `product-card-price-${product.id}`;
   const hasComparePrice =
     product.compareAtPrice &&
     product.compareAtPrice.currency === product.price.currency &&
@@ -124,7 +127,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <motion.div
       ref={rootRef}
-      whileHover={{ y: -2 }}
+      whileHover={prefersReducedMotion ? undefined : { y: -2 }}
       transition={springSnappy}
       onMouseEnter={handlePointerEnter}
       onMouseMove={handlePointerMove}
@@ -137,7 +140,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <a
             href={productHref}
             aria-label={`Открыть товар ${product.name}`}
-            className="absolute inset-0 z-10 rounded-none"
+            aria-describedby={`${titleId} ${priceId}`}
+            className="absolute inset-0 z-10 rounded-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           />
 
           <div className="aspect-[4/5] overflow-hidden bg-card/20">
@@ -149,15 +153,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     layoutId={sharedMediaLayoutId}
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
-                    transition={springSnappy}
+                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.05] motion-reduce:scale-100"
+                    transition={springSharedElement}
                   />
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
+                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.05] motion-reduce:scale-100"
                   />
                 )}
               </>
@@ -166,12 +170,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
 
           {onQuickAdd && (
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 translate-y-2 px-3 pb-3 opacity-0 transition-all duration-[var(--motion-normal)] ease-out group-hover:translate-y-0 group-hover:opacity-100">
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 translate-y-2 px-3 pb-3 opacity-0 transition-all duration-[var(--motion-normal)] ease-out motion-reduce:transition-none group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
               <div className="pointer-events-auto rounded-[10px] border border-border/35 bg-card/66 p-2 backdrop-blur-sm">
                 <div className="grid grid-cols-2 gap-2">
                   <a
                     href={productHref}
-                    className="inline-flex h-8 items-center justify-center rounded-[8px] border border-border/50 px-2 text-xs text-muted-foreground transition-colors hover:border-border/70 hover:text-foreground"
+                    className="inline-flex h-8 items-center justify-center rounded-[8px] border border-border/50 px-2 text-xs text-muted-foreground transition-colors hover:border-border/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     Подробнее
                   </a>
@@ -179,6 +183,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     size="sm"
                     fullWidth
                     data-testid={`quick-add-${product.slug}`}
+                    aria-label={`Добавить ${product.name} в корзину`}
                     onClick={() => onQuickAdd(product)}
                   >
                     В корзину
@@ -199,13 +204,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             {enableSharedTransition ? (
               <motion.p
                 layoutId={sharedTitleLayoutId}
+                id={titleId}
                 className="ui-title line-clamp-1 text-[15px]"
-                transition={springSnappy}
+                transition={springSharedElement}
               >
                 {product.name}
               </motion.p>
             ) : (
-              <p className="ui-title line-clamp-1 text-[15px]">{product.name}</p>
+              <p id={titleId} className="ui-title line-clamp-1 text-[15px]">{product.name}</p>
             )}
             {product.shortDescription && (
               <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground/95">{product.shortDescription}</p>
@@ -222,7 +228,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div className="mt-auto flex items-end justify-between gap-2">
             <div className="space-y-0.5">
               <p className="ui-kicker">Price</p>
-              <p className="text-sm font-semibold text-foreground">
+              <p id={priceId} className="text-sm font-semibold text-foreground">
                 {formatMoney(product.price.amount, product.price.currency)}
               </p>
               {hasComparePrice && product.compareAtPrice && (

@@ -10,6 +10,9 @@
 - Added Playwright check for `catalog -> PDP` transition stability (`tests/e2e/storefront-transition.spec.ts`).
 - Added catalog query-presets mapping for hero quick-links (`view=room|light|texture|kits`).
 - Added Playwright check for catalog presets (`tests/e2e/catalog-presets.spec.ts`).
+- Added accessibility hardening for catalog/PDP interactions (focus states, ARIA metadata, keyboard gallery navigation).
+- Added Playwright keyboard a11y check (`tests/e2e/storefront-a11y.spec.ts`) and CI guard step.
+- Tuned shared transition spring/easing and reduced-motion behavior for product media interactions.
 
 ### `44047ba` - Unified storefront smoke + CI gate
 - Added `smoke:storefront` script with route checks and viewport QA for `390/768/1024/1280`.
