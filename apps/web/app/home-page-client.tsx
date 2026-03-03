@@ -86,7 +86,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
 
   if (contentPlacement === "below") {
     return (
-      <section key={block.id} className="space-y-4 sm:space-y-5">
+      <section key={block.id} className="space-y-5 sm:space-y-6 lg:space-y-7">
         <section className="relative isolate overflow-hidden rounded-[1.75rem] bg-card/40">
           {block.media && (
             <HeroMedia
@@ -100,12 +100,12 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             <div className={`absolute inset-0 ${heroOverlayClass}`} />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.18)_0%,rgba(10,10,10,0.08)_45%,rgba(10,10,10,0.28)_100%)]" />
           </div>
-          <div className="relative z-10 min-h-[420px] sm:min-h-[520px] lg:min-h-[640px]" />
+          <div className="relative z-10 min-h-[320px] sm:min-h-[500px] lg:min-h-[620px]" />
         </section>
 
         {hasContentPanel && (
-          <section className="grid gap-4 rounded-[1.5rem] border border-border/45 bg-card/78 p-5 sm:p-6 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,0.3fr)] lg:gap-6 lg:p-7">
-            <div className="space-y-4 sm:space-y-5">
+          <section className="grid gap-5 rounded-[1.5rem] border border-border/45 bg-card/78 p-5 sm:p-7 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,0.32fr)] lg:gap-7 lg:p-8">
+            <div className="space-y-4 sm:space-y-5 lg:space-y-6">
               {content.eyebrow && (
                 <motion.p
                   initial={{ opacity: 0, y: 8 }}
@@ -121,7 +121,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...transitionStandard, delay: 0.03 }}
-                  className="ui-title-display text-[clamp(2rem,5vw,4.1rem)] leading-[0.98] text-foreground"
+                  className="ui-title-display max-w-[12ch] text-[clamp(1.95rem,4.9vw,3.95rem)] leading-[0.99] text-foreground"
                 >
                   {content.title}
                 </motion.h1>
@@ -131,7 +131,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...transitionStandard, delay: 0.08 }}
-                  className="ui-body max-w-3xl text-foreground/86"
+                  className="ui-body max-w-2xl text-foreground/86"
                 >
                   {content.subtitle}
                 </motion.p>
@@ -141,7 +141,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...transitionQuick, delay: 0.12 }}
-                  className="flex flex-wrap items-center gap-3"
+                  className="flex flex-wrap items-center gap-2.5 sm:gap-3"
                 >
                   {content.primaryCta && (
                     <a
@@ -166,7 +166,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...transitionQuick, delay: 0.16 }}
-                  className="text-xs uppercase tracking-[0.06em] text-muted-foreground/88 sm:text-[13px]"
+                  className="pt-1 text-xs uppercase tracking-[0.06em] text-muted-foreground/88 sm:text-[13px]"
                 >
                   {content.trustLine}
                 </motion.p>
@@ -178,13 +178,13 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ ...transitionQuick, delay: 0.18 }}
-                className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1"
+                className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-1"
               >
                 {heroQuickLinks.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
-                    className="group rounded-2xl border border-border/45 bg-card/62 p-4 text-foreground transition-colors hover:border-border/72 hover:bg-card/82"
+                    className="group rounded-2xl border border-border/45 bg-card/62 p-4 sm:p-[1.05rem] text-foreground transition-colors hover:border-border/72 hover:bg-card/82"
                   >
                     <p className="text-sm font-medium tracking-[0.01em] text-foreground/96">{link.label}</p>
                     {link.subtitle && (
