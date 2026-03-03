@@ -34,6 +34,12 @@ def _normalize_origins(raw: Union[List[str], str]) -> List[str]:
     if not value:
         return []
 
+    if (
+        (value.startswith("'") and value.endswith("'"))
+        or (value.startswith('"') and value.endswith('"'))
+    ) and len(value) >= 2:
+        value = value[1:-1].strip()
+
     try:
         parsed = json.loads(value)
         if isinstance(parsed, list):
