@@ -7,7 +7,10 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 
 from ..config import get_settings
 from ..domain.models import (
+    FavoritesEventEntry,
+    FavoritesEventListResponse,
     FavoritesEventRequest,
+    FavoritesMetric,
     PwaInstallDailySummaryEntry,
     PwaInstallDailySummaryResponse,
     PwaInstallEventEntry,
@@ -48,7 +51,7 @@ def _resolve_source_ip(request: Request) -> Optional[str]:
     return None
 
 
-def _build_pwa_date_bounds(
+def _build_date_bounds(
     *,
     date_from: Optional[date],
     date_to: Optional[date],
@@ -156,7 +159,7 @@ def list_pwa_install_events(
     limit: int = Query(default=20, ge=1, le=100),
     offset: int = Query(default=0, ge=0),
 ) -> PwaInstallEventListResponse:
-    normalized_since, normalized_until = _build_pwa_date_bounds(date_from=date_from, date_to=date_to)
+    normalized_since, normalized_until = _build_date_bounds(date_from=date_from, date_to=date_to)
 
     settings = get_settings()
     store = get_order_store()
@@ -191,7 +194,7 @@ def list_pwa_install_events_daily(
     date_from: Optional[date] = Query(default=None),
     date_to: Optional[date] = Query(default=None),
 ) -> PwaInstallDailySummaryResponse:
-    normalized_since, normalized_until = _build_pwa_date_bounds(date_from=date_from, date_to=date_to)
+    normalized_since, normalized_until = _build_date_bounds(date_from=date_from, date_to=date_to)
 
     settings = get_settings()
     store = get_order_store()
@@ -240,7 +243,7 @@ def export_pwa_install_events_csv(
     date_to: Optional[date] = Query(default=None),
     sort: SortOrder = Query(default="newest"),
 ) -> Response:
-    normalized_since, normalized_until = _build_pwa_date_bounds(date_from=date_from, date_to=date_to)
+    normalized_since, normalized_until = _build_date_bounds(date_from=date_from, date_to=date_to)
 
     settings = get_settings()
     store = get_order_store()
@@ -301,6 +304,135 @@ def export_pwa_install_events_csv(
 
     timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
     filename = f"pwa-install-events-{settings.client_id}-{timestamp}.csv"
+    return Response(
+        content="\ufeff" + output.getvalue(),
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "X-Export-Total": str(total),
+            "X-Export-Returned": str(len(rows_buffer)),
+        },
+    )
+
+
+@router.get(
+    "/metrics/favorites-events",
+    response_model=FavoritesEventListResponse,
+    dependencies=[Depends(require_admin_token)],
+)
+def list_favorites_events(
+    metric: Optional[FavoritesMetric] = Query(default=None),
+    sync_id: Optional[str] = Query(default=None, min_length=1, max_length=120),
+    path_prefix: Optional[str] = Query(default=None, min_length=1, max_length=200),
+    date_from: Optional[date] = Query(default=None),
+    date_to: Optional[date] = Query(default=None),
+    sort: SortOrder = Query(default="newest"),
+    limit: int = Query(default=20, ge=1, le=100),
+    offset: int = Query(default=0, ge=0),
+) -> FavoritesEventListResponse:
+    normalized_since, normalized_until = _build_date_bounds(date_from=date_from, date_to=date_to)
+
+    settings = get_settings()
+    store = get_order_store()
+
+    items, total = store.list_favorites_events(
+        client_id=settings.client_id,
+        metric=metric,
+        sync_id=sync_id,
+        path_prefix=path_prefix,
+        since_iso=normalized_since,
+        until_iso=normalized_until,
+        sort=sort,
+        limit=limit,
+        offset=offset,
+    )
+
+    return FavoritesEventListResponse(
+        items=[FavoritesEventEntry.model_validate(item) for item in items],
+        total=total,
+        limit=limit,
+        offset=offset,
+    )
+
+
+@router.get(
+    "/metrics/favorites-events/export.csv",
+    dependencies=[Depends(require_admin_token)],
+)
+def export_favorites_events_csv(
+    metric: Optional[FavoritesMetric] = Query(default=None),
+    sync_id: Optional[str] = Query(default=None, min_length=1, max_length=120),
+    path_prefix: Optional[str] = Query(default=None, min_length=1, max_length=200),
+    date_from: Optional[date] = Query(default=None),
+    date_to: Optional[date] = Query(default=None),
+    sort: SortOrder = Query(default="newest"),
+) -> Response:
+    normalized_since, normalized_until = _build_date_bounds(date_from=date_from, date_to=date_to)
+
+    settings = get_settings()
+    store = get_order_store()
+
+    rows_buffer: list[dict] = []
+    offset = 0
+    batch_size = 500
+    max_rows = 5000
+    total = 0
+
+    while len(rows_buffer) < max_rows:
+        remaining = max_rows - len(rows_buffer)
+        items, total = store.list_favorites_events(
+            client_id=settings.client_id,
+            metric=metric,
+            sync_id=sync_id,
+            path_prefix=path_prefix,
+            since_iso=normalized_since,
+            until_iso=normalized_until,
+            sort=sort,
+            limit=min(batch_size, remaining),
+            offset=offset,
+        )
+        if not items:
+            break
+        rows_buffer.extend(items)
+        offset += len(items)
+        if offset >= total:
+            break
+
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(
+        [
+            "id",
+            "metric",
+            "sync_id",
+            "product_id",
+            "path",
+            "source",
+            "event_timestamp",
+            "created_at",
+            "user_agent",
+            "source_ip",
+        ]
+    )
+
+    for item in rows_buffer:
+        writer.writerow(
+            [
+                item.get("id"),
+                item.get("metric"),
+                item.get("sync_id"),
+                item.get("product_id") or "",
+                item.get("path"),
+                item.get("source"),
+                item.get("event_timestamp"),
+                item.get("created_at"),
+                item.get("user_agent") or "",
+                item.get("source_ip") or "",
+            ]
+        )
+
+    timestamp = datetime.now(timezone.utc).strftime("%Y%m%d-%H%M%S")
+    filename = f"favorites-events-{settings.client_id}-{timestamp}.csv"
     return Response(
         content="\ufeff" + output.getvalue(),
         media_type="text/csv; charset=utf-8",

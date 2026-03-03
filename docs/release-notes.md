@@ -18,6 +18,10 @@
 - Added Lighthouse performance guard for storefront routes (`/`, `/catalog`, `/product/[slug]`) with versioned budgets for score/LCP/CLS/INP.
 - Added CI performance step (`PERF_SKIP_BUILD=1 corepack pnpm perf:storefront`).
 - Stabilized `pwa:lighthouse` for current Lighthouse versions (compatible package pin + adaptive PWA audit set and configurable score threshold).
+- Added admin favorites analytics screen (`/admin/analytics/favorites`) with read-only filters (`metric`, `sync_id`, period) and CSV export.
+- Added backend favorites analytics endpoints (`GET /metrics/favorites-events`, `GET /metrics/favorites-events/export.csv`) with admin token guard.
+- Replaced legacy shared favorites sync id with stable `anon-*` id persisted in localStorage + cookie.
+- Added E2E coverage for favorites sync persistence and PDP heart state (`tests/e2e/favorites-sync.spec.ts`).
 
 ### `44047ba` - Unified storefront smoke + CI gate
 - Added `smoke:storefront` script with route checks and viewport QA for `390/768/1024/1280`.

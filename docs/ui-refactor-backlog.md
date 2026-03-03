@@ -299,6 +299,40 @@
   - `/favorites` shows persisted items and supports quick add + remove.
   - Smoke route coverage includes `/favorites`.
 
+### 22) Favorites analytics (admin read-only)
+- Status: `completed` (API list/export + admin screen with filters by metric/sync_id/date and CSV export proxy).
+- Files:
+  - `apps/api/routers/metrics.py`
+  - `apps/api/domain/order_store.py`
+  - `apps/api/domain/models.py`
+  - `apps/web/lib/api-client.ts`
+  - `apps/web/app/admin/analytics/favorites/page.tsx`
+  - `apps/web/app/admin/analytics/favorites/export/route.ts`
+- Goal:
+  - Give admin a read-only observability surface for favorites behavior.
+- Acceptance:
+  - `/admin/analytics/favorites` shows filtered events.
+  - Export endpoint returns CSV for active filters.
+
+### 23) Favorites sync-id personalization
+- Status: `completed` (legacy `shared` removed; stable `anon-*` id persisted in localStorage + cookie with fallback generation).
+- Files:
+  - `apps/web/store/favorites-store.ts`
+- Goal:
+  - Move away from global `shared` sync namespace and keep per-browser stable sync identity.
+- Acceptance:
+  - New sessions get `anon-*` sync id.
+  - Existing `shared` ids are migrated on init.
+
+### 24) Favorites sync e2e coverage
+- Status: `completed` (new flow test: home -> add favorite -> reload -> favorites + PDP heart assertion).
+- Files:
+  - `tests/e2e/favorites-sync.spec.ts`
+- Goal:
+  - Lock sync/favorite regressions in CI.
+- Acceptance:
+  - E2E asserts persistence after reload and PDP favorite state consistency.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - `corepack pnpm smoke:storefront` passes.

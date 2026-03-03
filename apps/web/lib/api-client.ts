@@ -205,6 +205,33 @@ type PwaInstallDailySummaryResponseDto = {
   items: PwaInstallDailySummaryEntryDto[];
 };
 
+type FavoritesEventDto = {
+  id: number;
+  client_id: string;
+  sync_id: string;
+  metric:
+    | "favorites_opened"
+    | "favorite_added"
+    | "favorite_removed"
+    | "favorites_cleared"
+    | "favorites_synced_pull"
+    | "favorites_synced_push";
+  path: string;
+  product_id?: string | null;
+  source: "web";
+  user_agent?: string | null;
+  source_ip?: string | null;
+  event_timestamp: string;
+  created_at: string;
+};
+
+type FavoritesEventListResponseDto = {
+  items: FavoritesEventDto[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
 type FavoritesSyncResponseDto = {
   sync_id?: string;
   syncId?: string;
@@ -471,6 +498,29 @@ export type FavoritesMetric =
   | "favorites_synced_pull"
   | "favorites_synced_push";
 
+export type FavoritesEventSource = "web";
+
+export type FavoritesEvent = {
+  id: number;
+  clientId: string;
+  syncId: string;
+  metric: FavoritesMetric;
+  path: string;
+  productId?: string | null;
+  source: FavoritesEventSource;
+  userAgent?: string | null;
+  sourceIp?: string | null;
+  eventTimestamp: string;
+  createdAt: string;
+};
+
+export type FavoritesEventListResponse = {
+  items: FavoritesEvent[];
+  total: number;
+  limit: number;
+  offset: number;
+};
+
 export type FavoritesSyncSnapshot = {
   syncId: string;
   productIds: string[];
@@ -602,6 +652,22 @@ function normalizeFavoritesSyncSnapshot(dto: FavoritesSyncResponseDto): Favorite
     syncId: getRequired(syncId, "favorites.syncId"),
     productIds: Array.isArray(productIds) ? productIds.map((value) => String(value)) : [],
     updatedAt: getRequired(updatedAt, "favorites.updatedAt")
+  };
+}
+
+function normalizeFavoritesEvent(dto: FavoritesEventDto): FavoritesEvent {
+  return {
+    id: dto.id,
+    clientId: dto.client_id,
+    syncId: dto.sync_id,
+    metric: dto.metric,
+    path: dto.path,
+    productId: dto.product_id ?? null,
+    source: dto.source,
+    userAgent: dto.user_agent ?? null,
+    sourceIp: dto.source_ip ?? null,
+    eventTimestamp: dto.event_timestamp,
+    createdAt: dto.created_at
   };
 }
 
@@ -969,6 +1035,60 @@ export async function fetchPwaInstallDailySummary(options?: {
 
   return {
     items: dto.items.map((item) => normalizePwaInstallDailySummaryEntry(item))
+  };
+}
+
+export async function fetchFavoritesEvents(options?: {
+  metric?: FavoritesMetric;
+  syncId?: string;
+  pathPrefix?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  sort?: SortOrder;
+  limit?: number;
+  offset?: number;
+}): Promise<FavoritesEventListResponse> {
+  const params = new URLSearchParams();
+  if (options?.metric) {
+    params.set("metric", options.metric);
+  }
+  if (options?.syncId) {
+    params.set("sync_id", options.syncId);
+  }
+  if (options?.pathPrefix) {
+    params.set("path_prefix", options.pathPrefix);
+  }
+  if (options?.dateFrom) {
+    params.set("date_from", options.dateFrom);
+  }
+  if (options?.dateTo) {
+    params.set("date_to", options.dateTo);
+  }
+  if (options?.sort) {
+    params.set("sort", options.sort);
+  }
+  if (options?.limit !== undefined) {
+    params.set("limit", String(options.limit));
+  }
+  if (options?.offset !== undefined) {
+    params.set("offset", String(options.offset));
+  }
+
+  const query = params.toString();
+  const res = await fetch(
+    `${resolveApiUrl()}/metrics/favorites-events${query ? `?${query}` : ""}`,
+    {
+      cache: "no-store",
+      headers: resolveAdminHeaders()
+    }
+  );
+  const dto = await handleJson<FavoritesEventListResponseDto>(res);
+
+  return {
+    items: dto.items.map((item) => normalizeFavoritesEvent(item)),
+    total: dto.total,
+    limit: dto.limit,
+    offset: dto.offset
   };
 }
 

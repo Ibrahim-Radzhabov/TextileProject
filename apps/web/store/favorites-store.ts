@@ -9,11 +9,93 @@ import {
 } from "@/lib/api-client";
 
 const FAVORITES_MAX_ITEMS = 200;
-const FAVORITES_DEFAULT_SYNC_ID = "shared";
+const FAVORITES_DEFAULT_SYNC_ID = "anon-fallback";
 const FAVORITES_SYNC_ID_STORAGE_KEY = "store-platform-favorites-sync-id";
+const FAVORITES_SYNC_ID_COOKIE_NAME = "sp_favorites_sync_id";
+const FAVORITES_SYNC_ID_COOKIE_MAX_AGE = 60 * 60 * 24 * 365 * 2;
+const LEGACY_SYNC_IDS = new Set(["shared"]);
 
 function canUseLocalStorage(): boolean {
   return typeof window !== "undefined" && typeof window.localStorage !== "undefined";
+}
+
+function readSyncIdFromCookie(): string | null {
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  const chunks = document.cookie.split("; ");
+  for (const chunk of chunks) {
+    const [rawName, ...rest] = chunk.split("=");
+    if (rawName !== FAVORITES_SYNC_ID_COOKIE_NAME) {
+      continue;
+    }
+    const rawValue = rest.join("=");
+    if (!rawValue) {
+      continue;
+    }
+    try {
+      return decodeURIComponent(rawValue);
+    } catch {
+      return rawValue;
+    }
+  }
+
+  return null;
+}
+
+function writeSyncIdCookie(syncId: string): void {
+  if (typeof document === "undefined") {
+    return;
+  }
+  document.cookie = [
+    `${FAVORITES_SYNC_ID_COOKIE_NAME}=${encodeURIComponent(syncId)}`,
+    `Max-Age=${FAVORITES_SYNC_ID_COOKIE_MAX_AGE}`,
+    "Path=/",
+    "SameSite=Lax"
+  ].join("; ");
+}
+
+function buildAnonSyncId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return `anon-${crypto.randomUUID()}`;
+  }
+  const random = Math.random().toString(36).slice(2, 10);
+  return `anon-${Date.now().toString(36)}-${random}`;
+}
+
+function normalizeSyncId(raw: string | null | undefined): string | null {
+  if (!raw) {
+    return null;
+  }
+  const value = raw.trim();
+  if (!value || value.length > 120 || LEGACY_SYNC_IDS.has(value)) {
+    return null;
+  }
+  return value;
+}
+
+function persistSyncId(syncId: string): void {
+  if (canUseLocalStorage()) {
+    try {
+      window.localStorage.setItem(FAVORITES_SYNC_ID_STORAGE_KEY, syncId);
+    } catch {
+      // Ignore localStorage write failures.
+    }
+  }
+  writeSyncIdCookie(syncId);
+}
+
+function readSyncIdFromStorage(): string | null {
+  if (!canUseLocalStorage()) {
+    return null;
+  }
+
+  try {
+    return normalizeSyncId(window.localStorage.getItem(FAVORITES_SYNC_ID_STORAGE_KEY));
+  } catch {
+    return null;
+  }
 }
 
 function normalizeProductIds(rawIds: string[]): string[] {
@@ -49,21 +131,21 @@ function arraysEqual(a: string[], b: string[]): boolean {
 }
 
 function resolveSyncId(): string {
-  if (!canUseLocalStorage()) {
-    return FAVORITES_DEFAULT_SYNC_ID;
+  const fromStorage = readSyncIdFromStorage();
+  if (fromStorage) {
+    writeSyncIdCookie(fromStorage);
+    return fromStorage;
   }
 
-  try {
-    const existing = window.localStorage.getItem(FAVORITES_SYNC_ID_STORAGE_KEY);
-    if (existing && existing.trim().length > 0) {
-      return existing.trim();
-    }
-    window.localStorage.setItem(FAVORITES_SYNC_ID_STORAGE_KEY, FAVORITES_DEFAULT_SYNC_ID);
-  } catch {
-    // No-op: fallback to shared sync id.
+  const fromCookie = normalizeSyncId(readSyncIdFromCookie());
+  if (fromCookie) {
+    persistSyncId(fromCookie);
+    return fromCookie;
   }
 
-  return FAVORITES_DEFAULT_SYNC_ID;
+  const generated = buildAnonSyncId();
+  persistSyncId(generated);
+  return generated;
 }
 
 function currentPathname(): string {

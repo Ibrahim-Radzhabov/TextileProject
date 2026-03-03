@@ -514,3 +514,68 @@ test("pwa metrics endpoint stores install events and supports admin filters", as
   expect(exportBody).toContain("prompt_available");
   expect(exportBody).toContain(trackedPath);
 });
+
+test("favorites metrics endpoint stores events and supports admin filters/export", async ({ request }) => {
+  const pathSuffix = Date.now();
+  const trackedPath = `/e2e/favorites-metrics-${pathSuffix}`;
+  const syncId = `anon-e2e-${pathSuffix}`;
+  const eventTimestamp = new Date().toISOString();
+  const todayIso = eventTimestamp.slice(0, 10);
+
+  const trackResponse = await request.post(`${API_BASE_URL}/metrics/favorites-events`, {
+    data: {
+      metric: "favorite_added",
+      syncId,
+      productId: "p1",
+      path: trackedPath,
+      timestamp: eventTimestamp,
+      source: "web"
+    }
+  });
+  expect(trackResponse.status()).toBe(202);
+  expect((await trackResponse.json()) as { ok: boolean }).toEqual({ ok: true });
+
+  const unauthorizedListResponse = await request.get(
+    `${API_BASE_URL}/metrics/favorites-events?sync_id=${encodeURIComponent(syncId)}`
+  );
+  expect(unauthorizedListResponse.status()).toBe(401);
+
+  const listResponse = await request.get(
+    `${API_BASE_URL}/metrics/favorites-events?metric=favorite_added&sync_id=${encodeURIComponent(syncId)}&date_from=${todayIso}&date_to=${todayIso}&sort=newest&limit=10&offset=0`,
+    {
+      headers: {
+        "x-admin-token": ADMIN_TOKEN
+      }
+    }
+  );
+  expect(listResponse.ok()).toBeTruthy();
+  const listPayload = (await listResponse.json()) as {
+    items: Array<{ metric: string; sync_id: string; path: string; product_id: string | null }>;
+    total: number;
+  };
+  expect(listPayload.total).toBeGreaterThan(0);
+  expect(
+    listPayload.items.some(
+      (item) =>
+        item.metric === "favorite_added" &&
+        item.sync_id === syncId &&
+        item.path === trackedPath &&
+        item.product_id === "p1"
+    )
+  ).toBeTruthy();
+
+  const exportResponse = await request.get(
+    `${API_BASE_URL}/metrics/favorites-events/export.csv?metric=favorite_added&sync_id=${encodeURIComponent(syncId)}&date_from=${todayIso}&date_to=${todayIso}&sort=newest`,
+    {
+      headers: {
+        "x-admin-token": ADMIN_TOKEN
+      }
+    }
+  );
+  expect(exportResponse.ok()).toBeTruthy();
+  expect(exportResponse.headers()["content-type"]).toContain("text/csv");
+  const exportBody = await exportResponse.text();
+  expect(exportBody).toContain("favorite_added");
+  expect(exportBody).toContain(syncId);
+  expect(exportBody).toContain(trackedPath);
+});

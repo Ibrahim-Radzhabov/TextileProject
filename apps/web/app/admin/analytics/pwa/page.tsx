@@ -405,6 +405,12 @@ export default async function AdminPwaAnalyticsPage({
               Заказы
             </Link>
             <Link
+              href="/admin/analytics/favorites"
+              className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
+            >
+              Favorites
+            </Link>
+            <Link
               href="/admin/products"
               className="inline-flex h-9 items-center justify-center rounded-lg border border-border/60 px-3 text-xs text-muted-foreground transition-colors hover:border-accent/50 hover:text-foreground"
             >

@@ -469,6 +469,27 @@ class FavoritesEventRequest(BaseModel):
         populate_by_name = True
 
 
+class FavoritesEventEntry(BaseModel):
+    id: int
+    client_id: str
+    sync_id: str
+    metric: FavoritesMetric
+    path: str
+    product_id: Optional[str] = None
+    source: FavoritesEventSource
+    user_agent: Optional[str] = None
+    source_ip: Optional[str] = None
+    event_timestamp: str
+    created_at: str
+
+
+class FavoritesEventListResponse(BaseModel):
+    items: List[FavoritesEventEntry]
+    total: int
+    limit: int
+    offset: int
+
+
 class FavoritesSyncPayload(BaseModel):
     product_ids: List[str] = Field(default_factory=list, alias="productIds")
 
