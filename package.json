@@ -13,6 +13,7 @@
     "build": "corepack pnpm --filter @store-platform/config-schema build && corepack pnpm --filter @store-platform/shared-types build && corepack pnpm --filter @store-platform/ui build && corepack pnpm --filter web build",
     "lint": "PATH=\"$PWD/.bin:$PATH\" turbo lint --filter='./apps/*' --filter='./packages/*'",
     "e2e": "playwright test",
+    "e2e:transition": "playwright test tests/e2e/storefront-transition.spec.ts",
     "e2e:headed": "playwright test --headed",
     "e2e:ui": "playwright test --ui",
     "e2e:install": "playwright install",

@@ -9,7 +9,7 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 45
 
     steps:
       - name: Checkout
@@ -48,8 +48,16 @@ jobs:
       - name: Storefront smoke
         run: SMOKE_SKIP_BUILD=1 corepack pnpm smoke:storefront
 
+      - name: Storefront smoke (shared transition on)
+        run: |
+          NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1 corepack pnpm --dir apps/web build
+          NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1 SMOKE_SKIP_BUILD=1 corepack pnpm smoke:storefront
+
       - name: E2E
         run: corepack pnpm e2e
+
+      - name: E2E catalog -> PDP transition (shared on)
+        run: NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1 corepack pnpm e2e:transition
 
       - name: Lighthouse PWA
         run: corepack pnpm pwa:lighthouse

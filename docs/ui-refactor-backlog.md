@@ -158,14 +158,53 @@
   - No `metadataBase property ... not set` warning during storefront navigation.
 
 ### 12) Storefront viewport regression QA
-- Status: `completed` (unified `smoke:storefront` script + CI step; standalone runtime parity with copied `static/public`; automated headless pass for `390/768/1024/1280` on home/catalog/product/checkout).
+- Status: `completed` (unified `smoke:storefront` script + CI step; standalone runtime parity with copied `static/public`; ON/OFF smoke coverage in CI + Playwright catalog->PDP transition check).
 - Files:
   - `scripts/storefront-smoke.mjs`
   - `.github/workflows/ci.yml`
+  - `tests/e2e/storefront-transition.spec.ts`
 - Goal:
   - Confirm no layout drift, overflow, or runtime errors on target storefront breakpoints.
 - Acceptance:
   - HTTP `200` for key pages, no horizontal overflow, no browser console/page errors in automated run.
+
+## P3 (Next Cycle, 2-3 days)
+
+### 13) Hero quick-links behavior mapping
+- Status: `pending`.
+- Files:
+  - `apps/web/app/catalog/catalog-page-client.tsx`
+  - `apps/web/lib/page-block-renderers.tsx`
+  - `clients/demo/pages.json`
+- Goal:
+  - Bind hero quick-link query params (`view=room|light|texture|kits`) to real preset filters/sorts in catalog.
+- Acceptance:
+  - Every hero quick-link opens catalog in meaningful prefiltered state.
+  - Preset state is visible and reversible in catalog controls.
+
+### 14) Catalog/PDP a11y pass
+- Status: `pending`.
+- Files:
+  - `packages/ui/src/components/ProductCard.tsx`
+  - `packages/ui/src/components/ProductGallery.tsx`
+  - `apps/web/app/product/[slug]/product-page-client.tsx`
+- Goal:
+  - Improve keyboard access and ARIA semantics for card links, gallery thumbs and PDP CTA blocks.
+- Acceptance:
+  - Keyboard-only flow reaches all key controls on catalog and PDP.
+  - No critical accessibility violations in automated checks.
+
+### 15) Transition motion quality polish
+- Status: `pending`.
+- Files:
+  - `packages/ui/src/components/ProductCard.tsx`
+  - `packages/ui/src/components/ProductGallery.tsx`
+  - `packages/ui/src/motion/presets.ts`
+- Goal:
+  - Fine-tune shared transition timing/easing for low-end devices and reduce perceived jitter.
+- Acceptance:
+  - Transition remains smooth under throttled CPU.
+  - No distracting jump in image/title continuity.
 
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.

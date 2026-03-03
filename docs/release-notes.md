@@ -6,6 +6,8 @@
 - Updated `smoke:storefront` to start standalone Next.js server when available.
 - Added automatic copy of `.next/static` and `public` assets into standalone output before startup.
 - Removed `next start` standalone warning from smoke runs while preserving route/viewport checks.
+- Added CI smoke coverage for shared-transition mode (`NEXT_PUBLIC_ENABLE_SHARED_PRODUCT_TRANSITION=1`).
+- Added Playwright check for `catalog -> PDP` transition stability (`tests/e2e/storefront-transition.spec.ts`).
 
 ### `44047ba` - Unified storefront smoke + CI gate
 - Added `smoke:storefront` script with route checks and viewport QA for `390/768/1024/1280`.
