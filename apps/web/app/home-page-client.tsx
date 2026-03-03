@@ -237,16 +237,26 @@ function renderProductGridBlock(
   favoriteProductIds: string[],
   onToggleFavorite: (product: Product) => void
 ): JSX.Element {
+  const isHomeFeatured = block.id === "home-featured";
+
   return (
     <section
       key={block.id}
-      id={block.id === "home-featured" ? "featured" : undefined}
+      id={isHomeFeatured ? "featured" : undefined}
       className="scroll-mt-24 space-y-4"
     >
       {(block.title || block.subtitle) && (
-        <header className="space-y-2">
-          {block.title && <h2 className="ui-title text-2xl sm:text-3xl">{block.title}</h2>}
-          {block.subtitle && <p className="ui-subtle max-w-3xl text-sm sm:text-base">{block.subtitle}</p>}
+        <header className={isHomeFeatured ? "space-y-2 text-center" : "space-y-2"}>
+          {block.title && (
+            <h2 className={isHomeFeatured ? "ui-title-display ui-h2" : "ui-title text-2xl sm:text-3xl"}>
+              {block.title}
+            </h2>
+          )}
+          {block.subtitle && (
+            <p className={isHomeFeatured ? "ui-subtle mx-auto max-w-3xl text-sm sm:text-base" : "ui-subtle max-w-3xl text-sm sm:text-base"}>
+              {block.subtitle}
+            </p>
+          )}
           <div className="premium-divider" />
         </header>
       )}

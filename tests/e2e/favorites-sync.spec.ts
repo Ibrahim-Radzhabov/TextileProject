@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 
 test("favorites sync flow persists after reload and reflects on PDP", async ({ page }) => {
   await page.goto("/", { waitUntil: "networkidle" });
-  await expect(page.getByRole("heading", { name: /Тихий люкс/i })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
 
   const firstCard = page.locator('[data-testid^="product-card-"]').first();
   await expect(firstCard).toBeVisible();

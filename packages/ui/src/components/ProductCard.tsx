@@ -21,33 +21,6 @@ function formatMoney(amount: number, currency: string): string {
   });
 }
 
-function resolveMetadataValue(product: Product, preferredKeys: string[]): string | null {
-  const metadata = product.metadata;
-  if (!metadata) {
-    return null;
-  }
-
-  const normalizedToOriginal = new Map<string, string>();
-  for (const key of Object.keys(metadata)) {
-    normalizedToOriginal.set(key.toLowerCase().trim(), key);
-  }
-
-  for (const preferredKey of preferredKeys) {
-    const original = normalizedToOriginal.get(preferredKey.toLowerCase().trim());
-    if (!original) {
-      continue;
-    }
-
-    const rawValue = metadata[original];
-    if (rawValue === undefined || rawValue === null) {
-      continue;
-    }
-    return String(rawValue);
-  }
-
-  return null;
-}
-
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onQuickAdd,
@@ -56,10 +29,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onToggleFavorite
 }) => {
   const prefersReducedMotion = useReducedMotion();
-  const rootRef = React.useRef<HTMLDivElement>(null);
-  const spotlightRectRef = React.useRef<DOMRect | null>(null);
-  const spotlightFrameRef = React.useRef<number | null>(null);
-  const spotlightPositionRef = React.useRef({ x: 0, y: 0 });
   const primaryImage = product.media[0];
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
   const sharedMediaLayoutId = enableSharedTransition ? `product-media-${product.id}` : undefined;
@@ -70,76 +39,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     product.compareAtPrice &&
     product.compareAtPrice.currency === product.price.currency &&
     product.compareAtPrice.amount > product.price.amount;
-  const lightControl = resolveMetadataValue(product, ["Light control", "Затемнение"]);
-  const fabric = resolveMetadataValue(product, ["Fabric", "Ткань", "Материал"]);
-  const roomTag = (product.tags ?? []).find((tag) =>
-    ["bedroom", "living-room", "office", "kids"].includes(tag)
-  );
-
-  const flushSpotlightPosition = () => {
-    const root = rootRef.current;
-    if (!root) {
-      spotlightFrameRef.current = null;
-      return;
-    }
-
-    root.style.setProperty("--spotlight-x", `${spotlightPositionRef.current.x}px`);
-    root.style.setProperty("--spotlight-y", `${spotlightPositionRef.current.y}px`);
-    spotlightFrameRef.current = null;
-  };
-
-  const handlePointerEnter = (event: React.MouseEvent<HTMLDivElement>) => {
-    spotlightRectRef.current = event.currentTarget.getBoundingClientRect();
-  };
-
-  const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = spotlightRectRef.current ?? event.currentTarget.getBoundingClientRect();
-    spotlightRectRef.current = rect;
-    spotlightPositionRef.current = {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
-    };
-
-    if (spotlightFrameRef.current === null) {
-      spotlightFrameRef.current = window.requestAnimationFrame(flushSpotlightPosition);
-    }
-  };
-
-  const handlePointerLeave = () => {
-    const root = rootRef.current;
-    if (!root) {
-      return;
-    }
-
-    root.style.setProperty("--spotlight-x", "50%");
-    root.style.setProperty("--spotlight-y", "50%");
-    spotlightRectRef.current = null;
-    if (spotlightFrameRef.current !== null) {
-      window.cancelAnimationFrame(spotlightFrameRef.current);
-      spotlightFrameRef.current = null;
-    }
-  };
-
-  React.useEffect(() => {
-    return () => {
-      if (spotlightFrameRef.current !== null) {
-        window.cancelAnimationFrame(spotlightFrameRef.current);
-      }
-    };
-  }, []);
+  const roomTag = (product.tags ?? []).find((tag) => ["bedroom", "living-room", "office", "kids"].includes(tag));
+  const overline = product.badges?.[0]?.label ?? roomTag?.replace(/-/g, " ");
 
   return (
     <motion.div
-      ref={rootRef}
       whileHover={prefersReducedMotion ? undefined : { y: -2 }}
       transition={springSnappy}
-      onMouseEnter={handlePointerEnter}
-      onMouseMove={handlePointerMove}
-      onMouseLeave={handlePointerLeave}
-      className="group spotlight-card h-full"
+      className="group h-full"
       data-testid={`product-card-${product.slug}`}
     >
-      <article className="relative flex h-full flex-col overflow-hidden rounded-[10px] bg-transparent">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-[8px] border border-border/32 bg-card/92">
         <div className="relative overflow-hidden">
           <a
             href={productHref}
@@ -181,7 +91,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </button>
           )}
 
-          <div className="aspect-[5/6] overflow-hidden bg-card/20 sm:aspect-[4/5]">
+          <div className="aspect-[4/5] overflow-hidden bg-muted/20">
             {primaryImage && (
               <>
                 {enableSharedTransition ? (
@@ -190,7 +100,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     layoutId={sharedMediaLayoutId}
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.05] motion-reduce:scale-100"
+                    className="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.03] motion-reduce:scale-100"
                     transition={springSharedElement}
                   />
                 ) : (
@@ -198,83 +108,71 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   <img
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.05] motion-reduce:scale-100"
+                    className="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.03] motion-reduce:scale-100"
                   />
                 )}
               </>
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/48 via-background/20 to-transparent sm:h-28" />
           </div>
-
-          {onQuickAdd && (
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 translate-y-2 px-2 pb-2 opacity-0 transition-all duration-[var(--motion-normal)] ease-out motion-reduce:transition-none sm:px-3 sm:pb-3 group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:translate-y-0 group-focus-within:opacity-100">
-              <div className="pointer-events-auto rounded-[10px] border border-border/35 bg-card/66 p-1.5 backdrop-blur-sm sm:p-2">
-                <div className="grid grid-cols-2 gap-2">
-                  <a
-                    href={productHref}
-                    className="inline-flex h-8 items-center justify-center rounded-[8px] border border-border/50 px-2 text-xs text-muted-foreground transition-colors hover:border-border/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  >
-                    Подробнее
-                  </a>
-                  <Button
-                    size="sm"
-                    fullWidth
-                    data-testid={`quick-add-${product.slug}`}
-                    aria-label={`Добавить ${product.name} в корзину`}
-                    onClick={() => onQuickAdd(product)}
-                  >
-                    В корзину
-                  </Button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
 
-        <div className="relative z-20 flex flex-1 flex-col gap-2.5 px-0.5 pb-0.5 pt-2.5 sm:gap-3 sm:px-2 sm:pb-1 sm:pt-3">
-          <div className="space-y-1 sm:space-y-1.5">
-            {(roomTag || (product.badges && product.badges[0]?.label)) && (
-              <p className="ui-kicker">
-                {product.badges && product.badges[0]?.label ? product.badges[0].label : roomTag?.replace(/-/g, " ")}
+        <div className="relative z-20 flex flex-1 flex-col gap-2.5 p-3 sm:p-3.5">
+          <div className="space-y-1.5">
+            {overline && (
+              <p className="ui-kicker text-muted-foreground/78">
+                {overline}
               </p>
             )}
             {enableSharedTransition ? (
               <motion.p
                 layoutId={sharedTitleLayoutId}
                 id={titleId}
-                className="ui-title line-clamp-1 text-[14px] sm:text-[15px]"
+                className="ui-title line-clamp-1 text-[1.04rem]"
                 transition={springSharedElement}
               >
                 {product.name}
               </motion.p>
             ) : (
-              <p id={titleId} className="ui-title line-clamp-1 text-[14px] sm:text-[15px]">{product.name}</p>
+              <p id={titleId} className="ui-title line-clamp-1 text-[1.04rem]">{product.name}</p>
             )}
             {product.shortDescription && (
-              <p className="hidden text-xs leading-relaxed text-muted-foreground/95 sm:line-clamp-2">{product.shortDescription}</p>
-            )}
-            {(fabric || lightControl || roomTag) && (
-              <p className="ui-kicker text-[9px] sm:text-[10px]">
-                {roomTag ? `${roomTag.replace(/-/g, " ")} • ` : ""}
-                {fabric ? `${fabric} • ` : ""}
-                {lightControl ? `${lightControl} light control` : ""}
+              <p className="line-clamp-2 text-[0.88rem] leading-relaxed text-muted-foreground/86">
+                {product.shortDescription}
               </p>
             )}
           </div>
 
-          <div className="mt-auto flex items-end justify-between gap-2">
+          <div className="mt-auto flex items-end justify-between gap-2 pt-1.5">
             <div className="space-y-0.5">
-              <p className="ui-kicker">Price</p>
-              <p id={priceId} className="text-sm font-semibold text-foreground">
+              <p className="ui-label">Цена</p>
+              <p id={priceId} className="text-[1.12rem] font-semibold text-foreground">
                 {formatMoney(product.price.amount, product.price.currency)}
               </p>
               {hasComparePrice && product.compareAtPrice && (
-                <p className="text-[11px] text-muted-foreground line-through">
+                <p className="text-xs text-muted-foreground line-through">
                   {formatMoney(product.compareAtPrice.amount, product.compareAtPrice.currency)}
                 </p>
               )}
             </div>
           </div>
+
+          {onQuickAdd && (
+            <Button
+              size="sm"
+              fullWidth
+              variant="secondary"
+              className="relative z-20 h-9 rounded-[6px] border-border/45 bg-accent text-white hover:bg-accent/92"
+              data-testid={`quick-add-${product.slug}`}
+              aria-label={`Добавить ${product.name} в корзину`}
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                onQuickAdd(product);
+              }}
+            >
+              В корзину
+            </Button>
+          )}
         </div>
       </article>
     </motion.div>

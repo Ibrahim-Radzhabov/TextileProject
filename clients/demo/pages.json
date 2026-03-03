@@ -75,15 +75,15 @@
       {
         "id": "home-featured",
         "type": "product-grid",
-        "title": "Коллекция для окон",
-        "subtitle": "Сцены для дневного света, приватности и мягкой акустики комнаты.",
+        "title": "Выбор наших покупателей",
+        "subtitle": "Премиальные ткани и готовые решения для разных сценариев света.",
         "layout": "auto-fit",
         "filter": { "featured": true }
       },
       {
         "id": "home-blackout",
         "type": "product-grid",
-        "title": "Blackout Focus",
+        "title": "Сценарии blackout",
         "subtitle": "Плотные решения для спальни, детской и домашнего кино.",
         "layout": "auto-fit",
         "filter": { "tags": ["blackout"] }
@@ -91,7 +91,7 @@
       {
         "id": "home-sheer",
         "type": "product-grid",
-        "title": "Sheer and Tulle",
+        "title": "Тюль и полупрозрачные ткани",
         "subtitle": "Воздушные ткани для мягкого дневного света и легкой приватности.",
         "layout": "auto-fit",
         "filter": { "tags": ["sheer", "tulle"] }

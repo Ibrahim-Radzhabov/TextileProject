@@ -64,33 +64,23 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             onClick={onClose}
           />
           <motion.aside
-            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-[32rem] flex-col border-l border-border/45 bg-background/95 backdrop-blur-xl"
+            className="fixed inset-y-0 right-0 z-50 flex w-full max-w-[24.5rem] flex-col border-l border-border/35 bg-card/95 backdrop-blur-xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 260, damping: 28 }}
           >
-            <div className="relative shrink-0 overflow-hidden border-b border-border/60 px-4 py-4 sm:px-5 sm:py-5">
-              <div className="relative z-10 flex items-start justify-between gap-3">
-                <div className="space-y-0.5">
-                  <p className="ui-kicker">Order preview</p>
-                  <h2 className="text-sm font-medium tracking-tight">Корзина</h2>
-                  <p className="text-xs text-muted-foreground">
-                    {itemsCount > 0 ? `${itemsCount} поз. в заказе` : "Добавьте товары для оформления"}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-full border border-border/50 bg-card/45 px-2 text-[11px] font-medium text-muted-foreground">
-                    {itemsCount}
-                  </span>
-                  <button
-                    type="button"
-                    onClick={onClose}
-                    className="rounded-lg border border-border/55 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-border/75 hover:text-foreground"
-                  >
-                    Закрыть
-                  </button>
-                </div>
+            <div className="relative shrink-0 overflow-hidden border-b border-border/40 px-4 py-4 sm:px-5">
+              <div className="relative z-10 flex items-center justify-between gap-3">
+                <h2 className="ui-title-display text-[2rem] leading-none text-foreground">Ваш заказ</h2>
+                <button
+                  type="button"
+                  onClick={onClose}
+                  className="rounded-md border border-border/45 px-2.5 py-1 text-xs text-muted-foreground transition-colors hover:border-border/70 hover:text-foreground"
+                  aria-label="Закрыть корзину"
+                >
+                  ✕
+                </button>
               </div>
             </div>
             <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 py-4 sm:px-5 sm:py-5">
@@ -129,7 +119,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </Surface>
               )}
               {hasItems && cart && (
-                <div className="space-y-3.5">
+                <div className="space-y-2.5">
                   <AnimatePresence mode="sync">
                     {cart.items.map((item, index) => (
                       <motion.div
@@ -141,17 +131,19 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         exit="exit"
                         layout
                       >
-                        <Surface tone="subtle" className="flex items-center gap-3.5 px-3.5 py-3.5 sm:px-4">
+                        <Surface tone="subtle" className="flex items-center gap-3 px-3 py-3 sm:px-3.5">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={item.productSnapshot.media[0]?.url}
                             alt={item.productSnapshot.media[0]?.alt ?? item.productSnapshot.name}
-                            className="h-14 w-14 shrink-0 rounded-xl object-cover"
+                            className="h-16 w-16 shrink-0 rounded-md object-cover"
                           />
                           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                            <p className="truncate text-sm font-medium tracking-tight">{item.productSnapshot.name}</p>
-                            <p className="text-[11px] text-muted-foreground">
-                              {formatMoney(item.unitPrice.amount, item.unitPrice.currency)}
+                            <p className="truncate text-sm font-medium tracking-tight text-foreground">
+                              {item.productSnapshot.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground">
+                              {item.quantity} шт.
                             </p>
                             <div className="mt-1 flex items-center gap-1.5 text-[11px]">
                               <button
@@ -181,7 +173,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               </button>
                             </div>
                           </div>
-                          <div className="shrink-0 text-xs font-medium tracking-tight">
+                          <div className="shrink-0 text-base font-semibold tracking-tight text-foreground">
                             {formatMoney(item.lineTotal.amount, item.lineTotal.currency)}
                           </div>
                         </Surface>
@@ -191,9 +183,9 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
               )}
             </div>
-            <div className="shrink-0 border-t border-border/60 px-4 py-4 sm:px-5 sm:py-5">
+            <div className="shrink-0 border-t border-border/40 px-4 py-4 sm:px-5 sm:py-5">
               {cart && (
-                <div className="mb-4 space-y-2.5 rounded-xl border border-border/55 bg-card/35 px-3.5 py-3">
+                <div className="mb-4 space-y-2.5 rounded-md border border-border/38 bg-card/70 px-3.5 py-3">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                     <span>Товаров</span>
                     <span>{itemsCount}</span>
@@ -205,14 +197,14 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </div>
                   )}
                   {grandTotal && (
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="text-muted-foreground">Итого</span>
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">Итого:</span>
                       <motion.span
                         key={grandTotal.amount}
                         initial={{ opacity: 0, y: 4 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.25 }}
-                        className="font-semibold"
+                        className="text-[1.8rem] font-semibold leading-none"
                       >
                         {formatMoney(grandTotal.amount, grandTotal.currency)}
                       </motion.span>
@@ -220,23 +212,21 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                   )}
                 </div>
               )}
-              <button
-                type="button"
-                onClick={onClose}
-                className="mb-2.5 h-9 w-full rounded-lg border border-border/55 px-3 text-xs text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
-              >
-                Продолжить покупки
-              </button>
-              <p className="mb-2.5 text-center text-[11px] text-muted-foreground">
-                Позиции и сумма обновляются автоматически
-              </p>
               <Button
                 fullWidth
                 disabled={!hasItems || isUpdating}
                 onClick={onCheckout}
+                className="h-11 rounded-[6px] bg-accent text-white hover:bg-accent/92"
               >
-                {isUpdating ? "Обновление…" : "Перейти к оформлению"}
+                {isUpdating ? "Обновление…" : "Оформить заказ"}
               </Button>
+              <button
+                type="button"
+                onClick={onClose}
+                className="mt-2.5 h-10 w-full rounded-[6px] border border-border/55 px-3 text-sm text-foreground transition-colors hover:bg-card/86"
+              >
+                Перейти в корзину
+              </button>
             </div>
           </motion.aside>
         </>
