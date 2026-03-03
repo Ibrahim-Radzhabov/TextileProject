@@ -171,11 +171,11 @@
 ## P3 (Next Cycle, 2-3 days)
 
 ### 13) Hero quick-links behavior mapping
-- Status: `pending`.
+- Status: `completed` (mapped `view=room|light|texture|kits` to catalog presets with visible banner + reset action + e2e coverage).
 - Files:
   - `apps/web/app/catalog/catalog-page-client.tsx`
-  - `apps/web/lib/page-block-renderers.tsx`
-  - `clients/demo/pages.json`
+  - `apps/web/lib/catalog-view-presets.ts`
+  - `tests/e2e/catalog-presets.spec.ts`
 - Goal:
   - Bind hero quick-link query params (`view=room|light|texture|kits`) to real preset filters/sorts in catalog.
 - Acceptance:

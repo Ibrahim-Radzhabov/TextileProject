@@ -1,11 +1,13 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Badge, CatalogFilterSidebar, ProductGrid, Surface } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
+import { resolveCatalogViewPreset, type CatalogSort } from "@/lib/catalog-view-presets";
 import { renderNonProductGridBlock } from "@/lib/page-block-renderers";
 
 type CatalogPageClientProps = {
@@ -13,8 +15,6 @@ type CatalogPageClientProps = {
   products: Product[];
   allTags: string[];
 };
-
-type CatalogSort = "recommended" | "price_asc" | "price_desc" | "name_asc" | "name_desc";
 
 const sortOptions: Array<{ value: CatalogSort; label: string }> = [
   { value: "recommended", label: "Рекомендовано" },
@@ -36,9 +36,34 @@ function formatMoney(amount: number | null, currency: string): string {
 }
 
 export function CatalogPageClient({ page, products, allTags }: CatalogPageClientProps) {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
   const { addProduct } = useCartStore();
-  const [tagsFilter, setTagsFilter] = useState<string[]>([]);
-  const [sort, setSort] = useState<CatalogSort>("recommended");
+  const activePreset = useMemo(
+    () => resolveCatalogViewPreset(searchParams.get("view"), allTags),
+    [allTags, searchParams]
+  );
+  const [tagsFilter, setTagsFilter] = useState<string[]>(activePreset?.tags ?? []);
+  const [sort, setSort] = useState<CatalogSort>(activePreset?.sort ?? "recommended");
+  const lastPresetKeyRef = useRef<string | null>(activePreset?.key ?? null);
+
+  useEffect(() => {
+    const nextPresetKey = activePreset?.key ?? null;
+    if (lastPresetKeyRef.current === nextPresetKey) {
+      return;
+    }
+
+    lastPresetKeyRef.current = nextPresetKey;
+    if (activePreset) {
+      setTagsFilter(activePreset.tags);
+      setSort(activePreset.sort);
+      return;
+    }
+
+    setTagsFilter([]);
+    setSort("recommended");
+  }, [activePreset]);
 
   const filteredProducts = useMemo(() => {
     const filtered = products.filter((product) => {
@@ -102,6 +127,17 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     setTagsFilter((prev) => (prev.includes(tag) ? prev.filter((entry) => entry !== tag) : [...prev, tag]));
   };
 
+  const clearActivePreset = () => {
+    setTagsFilter([]);
+    setSort("recommended");
+    lastPresetKeyRef.current = null;
+
+    const nextSearch = new URLSearchParams(searchParams.toString());
+    nextSearch.delete("view");
+    const nextQuery = nextSearch.toString();
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+  };
+
   return (
     <div className="min-h-0 space-y-8 pb-10">
       <header className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-6 sm:px-7 sm:py-8">
@@ -152,6 +188,29 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
               <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
               {selectedCount > 0 && <Badge tone="accent">Тегов: {selectedCount}</Badge>}
             </div>
+
+            {activePreset && (
+              <div
+                className="mt-3 rounded-xl border border-border/45 bg-card/55 px-3 py-3"
+                data-testid="catalog-preset-banner"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="space-y-1" data-testid={`catalog-preset-${activePreset.key}`}>
+                    <p className="ui-kicker">Preset</p>
+                    <p className="text-sm font-medium tracking-tight">{activePreset.label}</p>
+                    <p className="text-xs leading-relaxed text-muted-foreground">{activePreset.description}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={clearActivePreset}
+                    className="rounded-[10px] border border-border/60 px-3 py-1 text-[11px] text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+                    data-testid="catalog-preset-clear"
+                  >
+                    Сбросить preset
+                  </button>
+                </div>
+              </div>
+            )}
 
             <div className="mt-3 space-y-3">
               <div className="flex flex-wrap gap-2">

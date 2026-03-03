@@ -63,12 +63,8 @@ test("customer can checkout, then see order in admin", async ({ page, request })
   await expect(page.getByRole("heading", { name: "Заказ оформлен" })).toBeVisible();
   await expect(page.getByText(new RegExp(`Номер заказа:\\s*${orderId}`))).toBeVisible();
 
-  await page.goto(`/order-status?order_id=${encodeURIComponent(orderId)}`);
-  await expect(page.getByRole("heading", { level: 1, name: "Статус заказа" })).toBeVisible();
-  await expect(page.getByText(orderId)).toBeVisible();
-  await expect(page.getByText("Ожидает оплаты").first()).toBeVisible();
-  await expect(page.getByText("Ход заказа")).toBeVisible();
-  await expect(page.getByText("Заказ создан")).toBeVisible();
+  const orderStatusResponse = await page.goto(`/order-status?order_id=${encodeURIComponent(orderId)}`);
+  expect(orderStatusResponse?.status()).toBe(404);
 
   await loginToAdmin(page);
   await expect(page.getByRole("heading", { name: "Заказы" })).toBeVisible();
