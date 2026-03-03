@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Badge, CatalogFilterSidebar, ProductGrid, Surface } from "@store-platform/ui";
+import { Badge, ProductCard, transitionQuick } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
@@ -97,10 +97,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   }, [products, sort, tagsFilter]);
 
   const selectedCount = tagsFilter.length;
-  const featuredCount = useMemo(
-    () => filteredProducts.filter((product) => product.isFeatured).length,
-    [filteredProducts]
-  );
+  const featuredCount = useMemo(() => filteredProducts.filter((product) => product.isFeatured).length, [filteredProducts]);
 
   const firstRichText = page.blocks.find((block) => block.type === "rich-text");
   const priceRange = useMemo(() => {
@@ -142,169 +139,166 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   };
 
   return (
-    <div className="min-h-0 space-y-8 pb-10">
-      <header className="relative overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-6 sm:px-7 sm:py-8">
-        <div className="relative space-y-4">
-          <div className="space-y-2">
-            <h1 className="ui-title text-3xl sm:text-4xl">{page.title}</h1>
-            {firstRichText?.type === "rich-text" && (
-              <p className="ui-subtle max-w-2xl text-sm leading-relaxed sm:text-base">
-                {firstRichText.content}
-              </p>
-            )}
-          </div>
-
-          <div className="grid gap-3 sm:grid-cols-3">
-            <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
-              <p className="ui-kicker">Товаров</p>
-              <p className="mt-1 text-2xl font-semibold tracking-tight">{filteredProducts.length}</p>
-            </div>
-            <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
-              <p className="ui-kicker">Featured</p>
-              <p className="mt-1 text-2xl font-semibold tracking-tight">{featuredCount}</p>
-            </div>
-            <div className="rounded-xl border border-border/45 bg-card/55 px-3 py-3">
-              <p className="ui-kicker">Диапазон цен</p>
-              <p className="mt-1 text-sm font-medium text-foreground">
-                {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
-              </p>
-            </div>
-          </div>
+    <div className="min-h-0 space-y-6 pb-10">
+      <header className="rounded-md border border-border/34 bg-card/90 px-4 py-5 sm:px-6 sm:py-6">
+        <div className="space-y-2">
+          <h1 className="ui-title-display text-[clamp(2rem,4.4vw,3.2rem)] leading-[0.95]">{page.title}</h1>
+          {firstRichText?.type === "rich-text" && (
+            <p className="ui-subtle max-w-2xl text-sm sm:text-base">{firstRichText.content}</p>
+          )}
         </div>
       </header>
 
-      <div className="grid gap-7 lg:grid-cols-[280px_minmax(0,1fr)] lg:items-start">
-        <div className="lg:sticky lg:top-24">
-          <Surface tone="ghost" className="rounded-xl px-4 py-3">
-            <CatalogFilterSidebar
-              availableTags={allTags}
-              value={{ tags: tagsFilter }}
-              onChange={(next) => setTagsFilter(next.tags)}
-            />
-          </Surface>
+      <section className="space-y-4 rounded-md border border-border/34 bg-card/90 p-4 sm:p-5">
+        <div className="flex flex-wrap items-center gap-2">
+          <Badge tone="muted">Всего: {products.length}</Badge>
+          <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
+          {selectedCount > 0 && <Badge tone="accent">Тегов: {selectedCount}</Badge>}
+          <Badge tone="muted">Featured: {featuredCount}</Badge>
+          <Badge tone="muted">
+            {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
+          </Badge>
         </div>
 
-        <div className="space-y-7">
-          <div className="rounded-xl border border-border/45 bg-card/62 px-4 py-4 sm:px-5">
-            <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-              <Badge tone="muted">Всего: {products.length}</Badge>
-              <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
-              {selectedCount > 0 && <Badge tone="accent">Тегов: {selectedCount}</Badge>}
-            </div>
-
-            {activePreset && (
-              <div
-                className="mt-3 rounded-xl border border-border/45 bg-card/55 px-3 py-3"
-                data-testid="catalog-preset-banner"
+        {activePreset && (
+          <div
+            className="rounded-md border border-border/34 bg-card/72 px-3 py-3"
+            data-testid="catalog-preset-banner"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <div className="space-y-1" data-testid={`catalog-preset-${activePreset.key}`}>
+                <p className="ui-kicker">Preset</p>
+                <p className="text-sm font-medium">{activePreset.label}</p>
+                <p className="text-xs text-muted-foreground">{activePreset.description}</p>
+              </div>
+              <button
+                type="button"
+                onClick={clearActivePreset}
+                className="rounded-[6px] border border-border/55 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+                data-testid="catalog-preset-clear"
               >
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <div className="space-y-1" data-testid={`catalog-preset-${activePreset.key}`}>
-                    <p className="ui-kicker">Preset</p>
-                    <p className="text-sm font-medium tracking-tight">{activePreset.label}</p>
-                    <p className="text-xs leading-relaxed text-muted-foreground">{activePreset.description}</p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={clearActivePreset}
-                    className="rounded-[10px] border border-border/60 px-3 py-1 text-[11px] text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
-                    data-testid="catalog-preset-clear"
-                  >
-                    Сбросить preset
-                  </button>
-                </div>
-              </div>
-            )}
-
-            <div className="mt-3 space-y-3">
-              <div className="flex flex-wrap gap-2">
-                {sortOptions.map((option) => {
-                  const active = sort === option.value;
-                  return (
-                    <button
-                      key={option.value}
-                      type="button"
-                      onClick={() => setSort(option.value)}
-                      className={[
-                        "rounded-[10px] border px-3 py-1 text-[11px] transition-colors",
-                        active
-                          ? "border-border/75 bg-card/75 text-foreground"
-                          : "border-border/55 text-muted-foreground hover:border-border/75 hover:text-foreground"
-                      ].join(" ")}
-                    >
-                      {option.label}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <label className="flex items-center gap-2 lg:hidden">
-                <span className="ui-kicker">Сортировка</span>
-                <select
-                  aria-label="Сортировка каталога"
-                  value={sort}
-                  onChange={(event) => setSort(event.target.value as CatalogSort)}
-                  className="h-8 rounded-md border border-border/65 bg-input/80 px-2 text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-border/80 focus:ring-1 focus:ring-ring/70"
-                >
-                  {sortOptions.map((option) => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
-
-              {allTags.length > 0 && (
-                <div className="flex flex-wrap gap-1.5">
-                  {allTags.slice(0, 12).map((tag) => {
-                    const active = tagsFilter.includes(tag);
-                    return (
-                      <button
-                        key={tag}
-                        type="button"
-                        onClick={() => toggleTag(tag)}
-                        className={[
-                          "rounded-md border px-2 py-1 text-[11px] transition-colors",
-                          active
-                            ? "border-border/75 bg-card/75 text-foreground"
-                            : "border-border/55 text-muted-foreground hover:border-border/75 hover:text-foreground"
-                        ].join(" ")}
-                      >
-                        #{tag}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+                Сбросить
+              </button>
             </div>
           </div>
+        )}
 
-          {page.blocks.map((block) => {
-            if (block.type === "product-grid") {
+        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-center">
+          <div className="flex flex-wrap gap-1.5">
+            {allTags.slice(0, 14).map((tag) => {
+              const active = tagsFilter.includes(tag);
               return (
-                <motion.section
-                  key={block.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className="rounded-xl border border-border/45 bg-card/72 px-5 py-6 sm:px-6"
+                <button
+                  key={tag}
+                  type="button"
+                  onClick={() => toggleTag(tag)}
+                  className={[
+                    "rounded-[6px] border px-2.5 py-1 text-[11px] transition-colors",
+                    active
+                      ? "border-border/75 bg-card/85 text-foreground"
+                      : "border-border/45 text-muted-foreground hover:border-border/70 hover:text-foreground"
+                  ].join(" ")}
                 >
-                  <ProductGrid
-                    title={block.title}
-                    subtitle={block.subtitle}
-                    products={filteredProducts}
-                    onQuickAdd={(product) => addProduct(product.id)}
-                    enableSharedTransition={enableSharedProductTransition}
-                    favoriteProductIds={favoriteProductIds}
-                    onToggleFavorite={(product) => toggleFavorite(product.id)}
-                  />
-                </motion.section>
+                  #{tag}
+                </button>
               );
-            }
+            })}
+          </div>
 
-            return renderNonProductGridBlock(block);
-          })}
+          <label className="flex items-center gap-2">
+            <span className="ui-kicker whitespace-nowrap">Сортировать</span>
+            <select
+              aria-label="Сортировка каталога"
+              value={sort}
+              onChange={(event) => setSort(event.target.value as CatalogSort)}
+              className="h-9 w-full rounded-[6px] border border-border/55 bg-input/85 px-2.5 text-sm text-foreground outline-none transition-all duration-[var(--motion-fast)] focus:border-border/80 focus:ring-1 focus:ring-ring/60"
+            >
+              {sortOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
-      </div>
+      </section>
+
+      {page.blocks.map((block) => {
+        if (block.type !== "product-grid") {
+          return renderNonProductGridBlock(block);
+        }
+
+        return (
+          <motion.section
+            key={block.id}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={transitionQuick}
+            className="space-y-4 rounded-md border border-border/34 bg-card/90 p-4 sm:p-5"
+          >
+            {(block.title || block.subtitle) && (
+              <header className="space-y-1.5">
+                {block.title && <h2 className="ui-title text-[1.45rem] sm:text-[1.7rem]">{block.title}</h2>}
+                {block.subtitle && <p className="ui-subtle text-sm">{block.subtitle}</p>}
+              </header>
+            )}
+
+            <div className="space-y-3 sm:hidden">
+              {filteredProducts.map((product) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ ...transitionQuick, delay: 0.01 }}
+                  className="rounded-[8px] border border-border/32 bg-card/92 p-2.5"
+                >
+                  <div className="flex items-center gap-3">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={product.media[0]?.url}
+                      alt={product.media[0]?.alt ?? product.name}
+                      className="h-20 w-20 rounded-[6px] object-cover"
+                    />
+                    <div className="min-w-0 flex-1 space-y-0.5">
+                      <a
+                        href={`/product/${encodeURIComponent(product.slug)}`}
+                        className="ui-title line-clamp-2 text-[0.98rem]"
+                      >
+                        {product.name}
+                      </a>
+                      {product.shortDescription && (
+                        <p className="line-clamp-2 text-xs text-muted-foreground/88">
+                          {product.shortDescription}
+                        </p>
+                      )}
+                    </div>
+                    <div className="text-right">
+                      <p className="text-[1.02rem] font-semibold text-foreground">
+                        {formatMoney(product.price.amount, product.price.currency)}
+                      </p>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+
+            <div className="hidden sm:block">
+              <div className="grid auto-rows-fr grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4">
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onQuickAdd={(entry) => addProduct(entry.id)}
+                    enableSharedTransition={enableSharedProductTransition}
+                    isFavorite={favoriteProductIds.includes(product.id)}
+                    onToggleFavorite={(entry) => toggleFavorite(entry.id)}
+                  />
+                ))}
+              </div>
+            </div>
+          </motion.section>
+        );
+      })}
     </div>
   );
 }
