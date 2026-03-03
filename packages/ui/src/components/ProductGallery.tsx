@@ -7,11 +7,13 @@ import { Surface } from "./Surface";
 
 export type ProductGalleryProps = {
   media: ProductMedia[];
+  mainImageLayoutId?: string;
 };
 
-export const ProductGallery: React.FC<ProductGalleryProps> = ({ media }) => {
+export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImageLayoutId }) => {
   const [activeId, setActiveId] = React.useState<string | null>(media[0]?.id ?? null);
   const active = media.find((m) => m.id === activeId) ?? media[0];
+  const activeLayoutId = active?.id === media[0]?.id ? mainImageLayoutId : undefined;
 
   return (
     <div className="space-y-3">
@@ -20,6 +22,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media }) => {
           // eslint-disable-next-line @next/next/no-img-element
           <motion.img
             key={active.id}
+            layoutId={activeLayoutId}
             src={active.url}
             alt={active.alt}
             className="h-full w-full max-h-[480px] object-cover"

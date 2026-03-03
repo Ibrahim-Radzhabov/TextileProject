@@ -47,6 +47,8 @@ export function ProductPageClient({
   const addPulseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const priceFormatted = formatMoney(product.price.amount, product.price.currency);
+  const sharedMediaLayoutId = `product-media-${product.id}`;
+  const sharedTitleLayoutId = `product-title-${product.id}`;
   const compareAtPrice = product.compareAtPrice;
   const hasComparePrice =
     !!compareAtPrice &&
@@ -141,7 +143,10 @@ export function ProductPageClient({
           transition={{ duration: 0.25 }}
           className="space-y-5"
         >
-          <ProductGallery media={product.media} />
+          <ProductGallery
+            media={product.media}
+            mainImageLayoutId={sharedMediaLayoutId}
+          />
 
           {product.description && (
             <Surface tone="subtle" className="space-y-2 rounded-xl px-5 py-6 sm:px-6">
@@ -167,7 +172,13 @@ export function ProductPageClient({
                   ))}
                 </div>
 
-                <h1 className="ui-title-serif text-3xl sm:text-4xl">{product.name}</h1>
+                <motion.h1
+                  layoutId={sharedTitleLayoutId}
+                  transition={{ duration: 0.35 }}
+                  className="ui-title-serif text-3xl sm:text-4xl"
+                >
+                  {product.name}
+                </motion.h1>
 
                 {product.shortDescription && (
                   <p className="ui-subtle text-sm leading-relaxed sm:text-base">{product.shortDescription}</p>

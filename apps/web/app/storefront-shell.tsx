@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
+import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
@@ -83,7 +84,9 @@ export function StorefrontShell({ children, config, activeThemeVariantId }: Stor
           </span>
         }
       >
-        {children}
+        <LayoutGroup id="storefront-shared-elements">
+          {children}
+        </LayoutGroup>
       </LayoutShell>
       <CartDrawer
         open={open}
