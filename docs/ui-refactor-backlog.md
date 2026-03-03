@@ -241,6 +241,19 @@
   - CI enforces per-route thresholds for performance score and core metrics.
   - Budget file is versioned and can be tuned explicitly.
 
+## P4 (Conversion, current cycle)
+
+### 18) Checkout mobile summary/CTA polish
+- Status: `completed` (mobile sticky bottom summary + submit CTA, desktop CTA kept inline; checkout summary list constrained on small screens).
+- Files:
+  - `apps/web/app/checkout/page.tsx`
+- Goal:
+  - Keep the primary checkout action visible on mobile without long scroll.
+  - Reduce friction between form completion and order submission.
+- Acceptance:
+  - Mobile viewport keeps total + submit control visible in a fixed bottom bar.
+  - No viewport overflow/runtime errors on checkout in smoke run.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - `corepack pnpm smoke:storefront` passes.

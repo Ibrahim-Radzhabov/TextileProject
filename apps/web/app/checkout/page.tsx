@@ -100,10 +100,12 @@ export default function CheckoutPage() {
       style: "currency",
       currency: cart.totals.grandTotal.currency
     }) ?? "—";
+  const isSubmitDisabled = submitting || !hasItems || isPricing;
 
   return (
-    <div className="grid gap-6 pb-10 sm:gap-8 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+    <div className="grid gap-6 pb-28 sm:gap-8 sm:pb-32 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:pb-10">
       <motion.form
+        id="checkout-form"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
@@ -246,7 +248,7 @@ export default function CheckoutPage() {
           </Surface>
         </motion.div>
 
-        <Button type="submit" fullWidth disabled={submitting || !hasItems || isPricing}>
+        <Button type="submit" fullWidth className="hidden md:inline-flex" disabled={isSubmitDisabled}>
           {submitting ? (
             <span className="inline-flex items-center gap-2">
               <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -269,7 +271,7 @@ export default function CheckoutPage() {
             <span className="text-sm font-semibold">{totalFormatted}</span>
           </div>
 
-          <div className="space-y-2">
+          <div className="max-h-56 space-y-2 overflow-auto pr-1 md:max-h-none md:overflow-visible md:pr-0">
             {cart?.items.map((item) => (
               <div key={item.id} className="flex items-center justify-between gap-2 rounded-[10px] border border-border/45 px-3 py-2">
                 <div className="min-w-0">
@@ -296,6 +298,28 @@ export default function CheckoutPage() {
           </div>
         </Surface>
       </motion.div>
+
+      <div className="fixed inset-x-3 bottom-3 z-40 md:hidden">
+        <Surface
+          tone="elevated"
+          className="rounded-xl border border-border/45 bg-card/90 px-3 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_14px_36px_rgba(0,0,0,0.2)] backdrop-blur-sm"
+        >
+          <div className="mb-2 flex items-center justify-between">
+            <span className="ui-kicker">Итого</span>
+            <span className="text-sm font-semibold">{totalFormatted}</span>
+          </div>
+          <Button type="submit" form="checkout-form" fullWidth disabled={isSubmitDisabled}>
+            {submitting ? (
+              <span className="inline-flex items-center gap-2">
+                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                Оформляем…
+              </span>
+            ) : (
+              `Подтвердить заказ ${totalFormatted !== "—" ? `• ${totalFormatted}` : ""}`
+            )}
+          </Button>
+        </Surface>
+      </div>
     </div>
   );
 }
