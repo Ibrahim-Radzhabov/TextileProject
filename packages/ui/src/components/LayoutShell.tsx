@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { Surface } from "./Surface";
 import { transitionStandard } from "../motion/presets";
 
 export type LayoutShellProps = {
@@ -21,24 +22,25 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
 
   return (
     <div className="page-shell">
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1360px] flex-col px-4 pb-24 pt-3 sm:px-6 sm:pb-12 sm:pt-4 lg:px-10 lg:pt-5">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col px-4 pb-24 pt-4 sm:px-6 sm:pb-12 sm:pt-6 lg:px-10 lg:pt-8">
         {topNav && (
           <motion.div
-            className="sticky top-2 z-50 mb-5 sm:top-3 sm:mb-7"
+            className="sticky top-3 z-40 mb-6 sm:top-4 sm:mb-8"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={transitionStandard}
           >
-            <div
+            <Surface
+              tone={isScrolled ? "elevated" : "ghost"}
               className={[
-                "flex items-center justify-between transition-[padding,border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-normal)]",
+                "flex items-center justify-between border transition-[padding,border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-fast)]",
                 isScrolled
-                  ? "rounded-2xl border border-border/52 bg-card/76 px-3 py-2 shadow-soft-subtle backdrop-blur-xl sm:px-4 sm:py-2.5"
-                  : "rounded-2xl border border-transparent bg-transparent px-1 py-1"
+                  ? "rounded-xl border-border/58 bg-card/90 px-3 py-2 sm:px-4 sm:py-2.5"
+                  : "rounded-2xl border-border/36 bg-card/66 px-4 py-2.5 sm:px-5 sm:py-3"
               ].join(" ")}
             >
               {topNav}
-            </div>
+            </Surface>
           </motion.div>
         )}
 
@@ -51,9 +53,9 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
             animate={{ opacity: 1 }}
             transition={{ ...transitionStandard, delay: 0.12 }}
           >
-            <div className="rounded-xl border border-border/35 bg-card/58 px-4 py-2.5 backdrop-blur-md sm:px-5 sm:py-3">
+            <Surface tone="ghost" className="rounded-xl px-4 py-2.5 sm:px-5 sm:py-3">
               {footer}
-            </div>
+            </Surface>
           </motion.div>
         )}
       </div>

@@ -22,7 +22,7 @@ export const TopNav: React.FC<TopNavProps> = ({
 }) => {
   const leftContent = (
     <div className="flex items-center gap-3">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border border-border/42 bg-card/70 backdrop-blur-sm">
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-[10px] border border-border/45 bg-card/75 backdrop-blur-sm">
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -39,7 +39,7 @@ export const TopNav: React.FC<TopNavProps> = ({
       <div className="flex min-w-0 flex-col">
         <span className="truncate text-sm font-medium leading-tight tracking-[-0.01em] text-foreground">{shopName}</span>
         <span className="ui-kicker">
-          Оконный текстиль
+          Window Textiles
         </span>
       </div>
     </div>
