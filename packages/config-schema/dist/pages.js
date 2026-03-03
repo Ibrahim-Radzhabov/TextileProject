@@ -12,7 +12,10 @@ const heroMediaSchema = z
     mobileSrc: hrefSchema.optional(),
     poster: hrefSchema.optional(),
     alt: z.string().min(1).optional(),
-    overlayOpacity: z.number().min(0).max(0.9).optional()
+    overlayOpacity: z.number().min(0).max(0.9).optional(),
+    overlayPreset: z.enum(["editorial", "balanced", "contrast"]).optional(),
+    objectPosition: z.string().min(1).optional(),
+    mobileObjectPosition: z.string().min(1).optional()
 })
     .superRefine((media, ctx) => {
     if (media.type === "video" && !media.poster) {
@@ -29,6 +32,15 @@ const heroBlock = z.object({
     eyebrow: z.string().optional(),
     title: z.string().min(1),
     subtitle: z.string().optional(),
+    trustLine: z.string().min(1).optional(),
+    quickLinks: z
+        .array(z.object({
+        label: z.string().min(1),
+        subtitle: z.string().optional(),
+        href: hrefSchema
+    }))
+        .max(6)
+        .optional(),
     media: heroMediaSchema.optional(),
     primaryCta: z
         .object({
