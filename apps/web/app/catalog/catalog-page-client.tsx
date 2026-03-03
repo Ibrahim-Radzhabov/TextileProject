@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Badge, CatalogFilterSidebar, ProductGrid, Surface } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
+import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { renderNonProductGridBlock } from "@/lib/page-block-renderers";
 
 type CatalogPageClientProps = {
@@ -230,6 +231,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                     subtitle={block.subtitle}
                     products={filteredProducts}
                     onQuickAdd={(product) => addProduct(product.id)}
+                    enableSharedTransition={enableSharedProductTransition}
                   />
                 </motion.section>
               );
