@@ -22,7 +22,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
 
   return (
     <div className="page-shell">
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col px-4 pb-12 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col px-4 pb-24 pt-4 sm:px-6 sm:pb-12 sm:pt-6 lg:px-10 lg:pt-8">
         {topNav && (
           <motion.div
             className="sticky top-3 z-40 mb-6 sm:top-4 sm:mb-8"

@@ -265,6 +265,20 @@
   - Success page clearly communicates completion and optional order id.
   - Primary action leads back to catalog, secondary action returns home.
 
+### 20) Mobile bottom navigation (storefront)
+- Status: `completed` (fixed bottom nav with 4 actions: home, catalog, cart, favorites; active state by route; cart opens drawer; hidden on admin and checkout flow).
+- Files:
+  - `apps/web/app/storefront-shell.tsx`
+  - `apps/web/app/(components)/mobile-bottom-nav.tsx`
+  - `apps/web/app/favorites/page.tsx`
+  - `packages/ui/src/components/LayoutShell.tsx`
+- Goal:
+  - Give smartphone users persistent core navigation without returning to top header.
+  - Match familiar tab-bar behavior for storefront browsing.
+- Acceptance:
+  - On mobile storefront pages, fixed bottom bar is visible with 4 labeled icons.
+  - No overlap regressions with checkout fixed CTA and no admin-route leakage.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - `corepack pnpm smoke:storefront` passes.

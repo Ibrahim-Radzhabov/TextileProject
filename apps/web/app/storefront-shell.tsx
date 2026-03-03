@@ -2,12 +2,14 @@
 
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
+import { usePathname } from "next/navigation";
 import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
+import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 
 type StorefrontShellProps = {
@@ -22,6 +24,7 @@ const ClientDefaultSeo = dynamic(
 );
 
 export function StorefrontShell({ children, config, activeThemeVariantId: _activeThemeVariantId }: StorefrontShellProps) {
+  const pathname = usePathname();
   const {
     cart,
     open,
@@ -33,6 +36,9 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     removeProduct
   } = useCartStore();
   const itemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
+  const isAdminArea = pathname.startsWith("/admin");
+  const isCheckoutFlow = pathname.startsWith("/checkout");
+  const showMobileBottomNav = !isAdminArea && !isCheckoutFlow;
 
   return (
     <>
@@ -56,10 +62,13 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             leftHref="/"
             rightSlot={
               <>
-                <PwaInstallNavButton />
+                <div className="hidden sm:block">
+                  <PwaInstallNavButton />
+                </div>
                 <Button
                   variant="secondary"
                   size="sm"
+                  className="hidden sm:inline-flex"
                   onClick={() => setOpen(true)}
                 >
                   Корзина
@@ -107,6 +116,13 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
         }}
       />
       <PwaInstallPrompt />
+      {showMobileBottomNav && (
+        <MobileBottomNav
+          cartItemCount={itemCount}
+          cartOpen={open}
+          onCartOpen={() => setOpen(true)}
+        />
+      )}
     </>
   );
 }
