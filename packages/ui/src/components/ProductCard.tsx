@@ -48,6 +48,52 @@ function resolveMetadataValue(product: Product, preferredKeys: string[]): string
   return null;
 }
 
+function resolveRoomLabel(rawTag?: string): string | null {
+  if (!rawTag) {
+    return null;
+  }
+
+  const normalized = rawTag.toLowerCase();
+  if (normalized === "bedroom") {
+    return "Спальня";
+  }
+  if (normalized === "living-room") {
+    return "Гостиная";
+  }
+  if (normalized === "office") {
+    return "Кабинет";
+  }
+  if (normalized === "kids") {
+    return "Детская";
+  }
+
+  return rawTag.replace(/-/g, " ");
+}
+
+function resolveBenefitCopy(product: Product, fabric: string | null, lightControl: string | null, room: string | null): string {
+  const shortDescription = product.shortDescription?.trim();
+  if (shortDescription) {
+    return shortDescription;
+  }
+
+  const parts: string[] = [];
+  if (fabric) {
+    parts.push(fabric);
+  }
+  if (lightControl) {
+    parts.push(`${lightControl} свет`);
+  }
+  if (room) {
+    parts.push(room);
+  }
+
+  if (parts.length > 0) {
+    return parts.join(" • ");
+  }
+
+  return "Премиальная фактура для спокойного света в интерьере.";
+}
+
 export const ProductCard: React.FC<ProductCardProps> = ({
   product,
   onQuickAdd,
@@ -56,10 +102,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   onToggleFavorite
 }) => {
   const prefersReducedMotion = useReducedMotion();
-  const rootRef = React.useRef<HTMLDivElement>(null);
-  const spotlightRectRef = React.useRef<DOMRect | null>(null);
-  const spotlightFrameRef = React.useRef<number | null>(null);
-  const spotlightPositionRef = React.useRef({ x: 0, y: 0 });
   const primaryImage = product.media[0];
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
   const sharedMediaLayoutId = enableSharedTransition ? `product-media-${product.id}` : undefined;
@@ -75,71 +117,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const roomTag = (product.tags ?? []).find((tag) =>
     ["bedroom", "living-room", "office", "kids"].includes(tag)
   );
-
-  const flushSpotlightPosition = () => {
-    const root = rootRef.current;
-    if (!root) {
-      spotlightFrameRef.current = null;
-      return;
-    }
-
-    root.style.setProperty("--spotlight-x", `${spotlightPositionRef.current.x}px`);
-    root.style.setProperty("--spotlight-y", `${spotlightPositionRef.current.y}px`);
-    spotlightFrameRef.current = null;
-  };
-
-  const handlePointerEnter = (event: React.MouseEvent<HTMLDivElement>) => {
-    spotlightRectRef.current = event.currentTarget.getBoundingClientRect();
-  };
-
-  const handlePointerMove = (event: React.MouseEvent<HTMLDivElement>) => {
-    const rect = spotlightRectRef.current ?? event.currentTarget.getBoundingClientRect();
-    spotlightRectRef.current = rect;
-    spotlightPositionRef.current = {
-      x: event.clientX - rect.left,
-      y: event.clientY - rect.top
-    };
-
-    if (spotlightFrameRef.current === null) {
-      spotlightFrameRef.current = window.requestAnimationFrame(flushSpotlightPosition);
-    }
-  };
-
-  const handlePointerLeave = () => {
-    const root = rootRef.current;
-    if (!root) {
-      return;
-    }
-
-    root.style.setProperty("--spotlight-x", "50%");
-    root.style.setProperty("--spotlight-y", "50%");
-    spotlightRectRef.current = null;
-    if (spotlightFrameRef.current !== null) {
-      window.cancelAnimationFrame(spotlightFrameRef.current);
-      spotlightFrameRef.current = null;
-    }
-  };
-
-  React.useEffect(() => {
-    return () => {
-      if (spotlightFrameRef.current !== null) {
-        window.cancelAnimationFrame(spotlightFrameRef.current);
-      }
-    };
-  }, []);
+  const roomLabel = resolveRoomLabel(roomTag);
+  const benefitCopy = resolveBenefitCopy(product, fabric, lightControl, roomLabel);
+  const badgeLabel = product.badges?.[0]?.label ?? roomLabel;
 
   return (
     <motion.div
-      ref={rootRef}
       whileHover={prefersReducedMotion ? undefined : { y: -2 }}
       transition={springSnappy}
-      onMouseEnter={handlePointerEnter}
-      onMouseMove={handlePointerMove}
-      onMouseLeave={handlePointerLeave}
-      className="group spotlight-card h-full"
+      className="group h-full"
       data-testid={`product-card-${product.slug}`}
     >
-      <article className="relative flex h-full flex-col overflow-hidden rounded-[10px] bg-transparent">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-[12px] bg-transparent">
         <div className="relative overflow-hidden">
           <a
             href={productHref}
@@ -181,7 +170,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </button>
           )}
 
-          <div className="aspect-[5/6] overflow-hidden bg-card/20 sm:aspect-[4/5]">
+          <div className="aspect-[4/5] overflow-hidden bg-card/16">
             {primaryImage && (
               <>
                 {enableSharedTransition ? (
@@ -190,7 +179,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     layoutId={sharedMediaLayoutId}
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.05] motion-reduce:scale-100"
+                    className="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.04] motion-reduce:scale-100"
                     transition={springSharedElement}
                   />
                 ) : (
@@ -198,12 +187,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   <img
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.05] motion-reduce:scale-100"
+                    className="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.04] motion-reduce:scale-100"
                   />
                 )}
               </>
             )}
-            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background/48 via-background/20 to-transparent sm:h-28" />
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-background/36 via-background/12 to-transparent sm:h-24" />
           </div>
 
           {onQuickAdd && (
@@ -231,41 +220,34 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           )}
         </div>
 
-        <div className="relative z-20 flex flex-1 flex-col gap-2.5 px-0.5 pb-0.5 pt-2.5 sm:gap-3 sm:px-2 sm:pb-1 sm:pt-3">
-          <div className="space-y-1 sm:space-y-1.5">
-            {(roomTag || (product.badges && product.badges[0]?.label)) && (
-              <p className="ui-kicker">
-                {product.badges && product.badges[0]?.label ? product.badges[0].label : roomTag?.replace(/-/g, " ")}
+        <div className="relative z-20 flex flex-1 flex-col gap-2.5 px-0.5 pb-0.5 pt-3 sm:gap-3 sm:px-1 sm:pb-1 sm:pt-3.5">
+          <div className="space-y-1.5">
+            {badgeLabel && (
+              <p className="ui-label text-muted-foreground/88">
+                {badgeLabel}
               </p>
             )}
             {enableSharedTransition ? (
               <motion.p
                 layoutId={sharedTitleLayoutId}
                 id={titleId}
-                className="ui-title line-clamp-1 text-[14px] sm:text-[15px]"
+                className="ui-title line-clamp-1 text-[15px] sm:text-base"
                 transition={springSharedElement}
               >
                 {product.name}
               </motion.p>
             ) : (
-              <p id={titleId} className="ui-title line-clamp-1 text-[14px] sm:text-[15px]">{product.name}</p>
+              <p id={titleId} className="ui-title line-clamp-1 text-[15px] sm:text-base">{product.name}</p>
             )}
-            {product.shortDescription && (
-              <p className="hidden text-xs leading-relaxed text-muted-foreground/95 sm:line-clamp-2">{product.shortDescription}</p>
-            )}
-            {(fabric || lightControl || roomTag) && (
-              <p className="ui-kicker text-[9px] sm:text-[10px]">
-                {roomTag ? `${roomTag.replace(/-/g, " ")} • ` : ""}
-                {fabric ? `${fabric} • ` : ""}
-                {lightControl ? `${lightControl} light control` : ""}
-              </p>
-            )}
+            <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground/90">
+              {benefitCopy}
+            </p>
           </div>
 
-          <div className="mt-auto flex items-end justify-between gap-2">
+          <div className="mt-auto flex items-end justify-between gap-2 pt-1.5">
             <div className="space-y-0.5">
-              <p className="ui-kicker">Price</p>
-              <p id={priceId} className="text-sm font-semibold text-foreground">
+              <p className="ui-label text-muted-foreground/82">Цена</p>
+              <p id={priceId} className="text-base font-semibold text-foreground">
                 {formatMoney(product.price.amount, product.price.currency)}
               </p>
               {hasComparePrice && product.compareAtPrice && (
