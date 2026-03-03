@@ -254,6 +254,17 @@
   - Mobile viewport keeps total + submit control visible in a fixed bottom bar.
   - No viewport overflow/runtime errors on checkout in smoke run.
 
+### 19) Checkout success conversion polish
+- Status: `completed` (editorial success card with clear completion state, readable order id token, and conversion-first CTA order).
+- Files:
+  - `apps/web/app/checkout/success/page.tsx`
+- Goal:
+  - Make post-checkout state explicit and calm.
+  - Keep users in storefront flow with clear next actions.
+- Acceptance:
+  - Success page clearly communicates completion and optional order id.
+  - Primary action leads back to catalog, secondary action returns home.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - `corepack pnpm smoke:storefront` passes.

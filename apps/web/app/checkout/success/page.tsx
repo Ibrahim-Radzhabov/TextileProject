@@ -18,39 +18,55 @@ function SuccessContent() {
 
   return (
     <motion.div
-      className="flex min-h-[60vh] items-center justify-center px-4"
+      className="flex min-h-[66vh] items-center justify-center px-4 py-6 sm:py-8"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.3 }}
     >
-      <Surface className="w-full max-w-md px-6 py-8 text-center">
+      <Surface className="w-full max-w-lg rounded-[1.1rem] border border-border/45 bg-card/82 px-5 py-6 text-center sm:px-7 sm:py-8">
         <motion.div
-          className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-500/20"
+          className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-emerald-300/45 bg-emerald-500/18 text-emerald-200"
           initial={{ scale: 0.9, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, type: "spring", stiffness: 200, damping: 20 }}
-        />
-        <h1 className="mb-2 text-lg font-semibold tracking-tight">
-          Заказ оформлен
-        </h1>
-        {orderId && (
-          <p className="mb-1 text-xs text-muted-foreground">
-            Номер заказа: {orderId}
-          </p>
-        )}
-        <p className="mb-6 text-sm text-muted-foreground">
-          Детали отправлены на почту. Можно закрыть вкладку или вернуться в магазин.
+        >
+          <svg
+            viewBox="0 0 24 24"
+            className="h-6 w-6"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M6 12.5L10 16.5L18 8.5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        </motion.div>
+        <p className="ui-kicker mb-2">Checkout complete</p>
+        <h1 className="ui-title mb-2 text-[1.6rem] leading-tight sm:text-[1.9rem]">Заказ оформлен</h1>
+        <p className="mx-auto mb-4 max-w-[34ch] text-sm text-muted-foreground sm:text-[15px]">
+          Мы отправили подтверждение на email. Дальше можно вернуться к подбору тканей и продолжить комплектование.
         </p>
-        <div className="flex flex-col justify-center gap-2 sm:flex-row">
+        {orderId && (
+          <div className="mx-auto mb-5 inline-flex max-w-full items-center gap-2 rounded-[10px] border border-border/50 bg-card/60 px-3 py-1.5 text-xs text-muted-foreground sm:text-sm">
+            <span className="ui-kicker text-[10px] sm:text-[11px]">Order</span>
+            <span className="truncate font-medium text-foreground">{orderId}</span>
+          </div>
+        )}
+        <div className="flex flex-col justify-center gap-2.5 sm:flex-row">
           <Link
             href="/catalog"
-            className="inline-flex h-11 items-center justify-center rounded-lg border border-border/60 px-5 text-sm font-medium text-foreground shadow-soft-subtle transition-colors hover:border-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-border/70 bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            В каталог
+            Продолжить в каталог
           </Link>
           <Link
             href="/"
-            className="inline-flex h-11 items-center justify-center rounded-lg border border-accent/60 bg-accent px-5 text-sm font-medium text-white shadow-soft-subtle transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-border/60 bg-card/72 px-5 text-sm font-medium text-foreground transition-colors hover:border-border/75 hover:bg-card/88 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             На главную
           </Link>
