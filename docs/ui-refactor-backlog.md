@@ -145,6 +145,15 @@
   - Header has no user account/status actions.
   - `/order-status` is not an active user flow.
 
+### 11) Metadata runtime stability
+- Status: `completed` (dynamic `metadataBase` from request headers; no fallback warning in runtime logs).
+- Files:
+  - `apps/web/app/layout.tsx`
+- Goal:
+  - Remove noisy metadata warnings and keep social/meta URL resolution deterministic in different hosts.
+- Acceptance:
+  - No `metadataBase property ... not set` warning during storefront navigation.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - Open storefront at `http://127.0.0.1:3000`.

@@ -2,7 +2,7 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { cache } from "react";
 import type { ReactNode, CSSProperties } from "react";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import type { ThemeConfig } from "@store-platform/shared-types";
 import { fetchStorefrontConfig } from "@/lib/api-client";
 import {
@@ -106,11 +106,29 @@ function resolveShortName(shopName: string): string {
   return normalized.slice(0, 20).trimEnd();
 }
 
+function resolveMetadataBase(): URL {
+  const headerStore = headers();
+  const host =
+    headerStore.get("x-forwarded-host") ??
+    headerStore.get("host") ??
+    "127.0.0.1:3000";
+  const forwardedProto = headerStore.get("x-forwarded-proto");
+  const protocol =
+    forwardedProto ?? (host.includes("localhost") || host.startsWith("127.0.0.1") ? "http" : "https");
+
+  try {
+    return new URL(`${protocol}://${host}`);
+  } catch {
+    return new URL("http://127.0.0.1:3000");
+  }
+}
+
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getStorefrontConfig();
   const shortName = resolveShortName(config.shop.name);
 
   return {
+    metadataBase: resolveMetadataBase(),
     applicationName: config.shop.name,
     title: {
       default: config.seo.defaultTitle,
