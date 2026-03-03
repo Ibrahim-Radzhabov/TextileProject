@@ -60,254 +60,125 @@ function filterProducts(products: Product[], block: ProductGridBlock): Product[]
 
 function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast"): string {
   if (preset === "contrast") {
-    return "bg-[linear-gradient(92deg,rgba(10,10,10,0.78)_0%,rgba(10,10,10,0.46)_42%,rgba(10,10,10,0.14)_64%,rgba(10,10,10,0.52)_100%)]";
+    return "bg-[linear-gradient(180deg,rgba(10,9,8,0.35)_0%,rgba(10,9,8,0.22)_42%,rgba(10,9,8,0.44)_100%)]";
   }
 
   if (preset === "balanced") {
-    return "bg-[linear-gradient(92deg,rgba(10,10,10,0.62)_0%,rgba(10,10,10,0.32)_38%,rgba(10,10,10,0.08)_63%,rgba(10,10,10,0.4)_100%)]";
+    return "bg-[linear-gradient(180deg,rgba(243,240,236,0.42)_0%,rgba(243,240,236,0.22)_45%,rgba(243,240,236,0.44)_100%)]";
   }
 
-  return "bg-[linear-gradient(92deg,rgba(10,10,10,0.7)_0%,rgba(10,10,10,0.38)_40%,rgba(10,10,10,0.1)_62%,rgba(10,10,10,0.46)_100%)]";
+  return "bg-[linear-gradient(180deg,rgba(243,240,236,0.46)_0%,rgba(243,240,236,0.2)_44%,rgba(243,240,236,0.48)_100%)]";
 }
 
 function renderHeroBlock(block: HeroBlock): JSX.Element {
   const content = resolveHeroContent(block);
-  const contentPlacement = block.contentPlacement ?? "overlay";
   const heroOverlayClass = resolveHeroOverlayClass(block.media?.overlayPreset);
   const heroQuickLinks = content.quickLinks.slice(0, 4);
-  const hasTextContent = Boolean(
-    content.eyebrow ||
-      content.title ||
-      content.subtitle ||
-      content.primaryCta ||
-      content.secondaryCta ||
-      content.trustLine
-  );
-  const hasContentPanel = hasTextContent || heroQuickLinks.length > 0;
-
-  if (contentPlacement === "below") {
-    return (
-      <section key={block.id} className="space-y-5 sm:space-y-6 lg:space-y-7">
-        <section className="relative isolate overflow-hidden rounded-[1.75rem] bg-card/40">
-          {block.media && (
-            <HeroMedia
-              media={block.media}
-              title={content.title}
-              defaultOverlayOpacity={0.1}
-              overlayClassName="bg-background/16"
-            />
-          )}
-          <div className="pointer-events-none absolute inset-0 z-[1]">
-            <div className={`absolute inset-0 ${heroOverlayClass}`} />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.18)_0%,rgba(10,10,10,0.08)_45%,rgba(10,10,10,0.28)_100%)]" />
-          </div>
-          <div className="relative z-10 min-h-[320px] sm:min-h-[500px] lg:min-h-[620px]" />
-        </section>
-
-        {hasContentPanel && (
-          <section className="grid gap-5 rounded-[1.5rem] border border-border/45 bg-card/78 p-5 sm:p-7 lg:grid-cols-[minmax(0,0.68fr)_minmax(0,0.32fr)] lg:gap-7 lg:p-8">
-            <div className="space-y-4 sm:space-y-5 lg:space-y-6">
-              {content.eyebrow && (
-                <motion.p
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={transitionQuick}
-                  className="inline-flex rounded-full border border-border/55 bg-card/58 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.07em] text-muted-foreground"
-                >
-                  {content.eyebrow}
-                </motion.p>
-              )}
-              {content.title && (
-                <motion.h1
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...transitionStandard, delay: 0.03 }}
-                  className="ui-title-display max-w-[12ch] text-[clamp(1.95rem,4.9vw,3.95rem)] leading-[0.99] text-foreground"
-                >
-                  {content.title}
-                </motion.h1>
-              )}
-              {content.subtitle && (
-                <motion.p
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...transitionStandard, delay: 0.08 }}
-                  className="ui-body max-w-2xl text-foreground/86"
-                >
-                  {content.subtitle}
-                </motion.p>
-              )}
-              {(content.primaryCta || content.secondaryCta) && (
-                <motion.div
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...transitionQuick, delay: 0.12 }}
-                  className="flex flex-wrap items-center gap-2.5 sm:gap-3"
-                >
-                  {content.primaryCta && (
-                    <a
-                      href={content.primaryCta.href}
-                      className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/92"
-                    >
-                      {content.primaryCta.label}
-                    </a>
-                  )}
-                  {content.secondaryCta && (
-                    <a
-                      href={content.secondaryCta.href}
-                      className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/60 bg-card/70 px-5 text-sm text-foreground/92 transition-colors hover:border-border/85 hover:bg-card/86"
-                    >
-                      {content.secondaryCta.label}
-                    </a>
-                  )}
-                </motion.div>
-              )}
-              {content.trustLine && (
-                <motion.p
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ ...transitionQuick, delay: 0.16 }}
-                  className="pt-1 text-xs uppercase tracking-[0.06em] text-muted-foreground/88 sm:text-[13px]"
-                >
-                  {content.trustLine}
-                </motion.p>
-              )}
-            </div>
-
-            {heroQuickLinks.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...transitionQuick, delay: 0.18 }}
-                className="grid gap-3.5 sm:grid-cols-2 lg:grid-cols-1"
-              >
-                {heroQuickLinks.map((link) => (
-                  <a
-                    key={link.label}
-                    href={link.href}
-                    className="group rounded-2xl border border-border/45 bg-card/62 p-4 sm:p-[1.05rem] text-foreground transition-colors hover:border-border/72 hover:bg-card/82"
-                  >
-                    <p className="text-sm font-medium tracking-[0.01em] text-foreground/96">{link.label}</p>
-                    {link.subtitle && (
-                      <p className="mt-1 text-xs leading-relaxed text-muted-foreground/88">{link.subtitle}</p>
-                    )}
-                  </a>
-                ))}
-              </motion.div>
-            )}
-          </section>
-        )}
-      </section>
-    );
-  }
-
   return (
-    <section
-      key={block.id}
-      className="relative isolate overflow-hidden rounded-[1.75rem] bg-card/40 px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10"
-    >
-      {block.media && (
-        <HeroMedia
-          media={block.media}
-          title={content.title}
-          defaultOverlayOpacity={0.1}
-          overlayClassName="bg-background/20"
-        />
-      )}
-      <div className="pointer-events-none absolute inset-0 z-[1]">
-        <div className={`absolute inset-0 ${heroOverlayClass}`} />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.16)_0%,rgba(10,10,10,0.04)_38%,rgba(10,10,10,0.52)_100%)]" />
-      </div>
-
-      <div className="relative z-10 grid gap-6 lg:min-h-[640px] lg:grid-cols-[minmax(0,0.72fr)_minmax(0,0.28fr)] lg:items-end">
-        <div className="max-w-3xl space-y-5 lg:space-y-6">
-          {content.eyebrow && (
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={transitionQuick}
-              className="inline-flex rounded-full border border-white/50 bg-black/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.07em] text-white"
-            >
-              {content.eyebrow}
-            </motion.p>
-          )}
-          {content.title && (
-            <motion.h1
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...transitionStandard, delay: 0.05 }}
-              className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,5.2rem)] leading-[0.96] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.34)]"
-            >
-              {content.title}
-            </motion.h1>
-          )}
-          {content.subtitle && (
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...transitionStandard, delay: 0.1 }}
-              className="ui-body max-w-2xl text-white/88 drop-shadow-[0_2px_14px_rgba(0,0,0,0.3)]"
-            >
-              {content.subtitle}
-            </motion.p>
-          )}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...transitionQuick, delay: 0.15 }}
-            className="flex flex-wrap items-center gap-3"
-          >
-            {content.primaryCta && (
-              <a
-                href={content.primaryCta.href}
-                className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/92"
-              >
-                {content.primaryCta.label}
-              </a>
-            )}
-            {content.secondaryCta && (
-              <a
-                href={content.secondaryCta.href}
-                className="inline-flex h-10 items-center justify-center rounded-[10px] border border-white/40 bg-white/20 px-5 text-sm text-white/95 transition-colors hover:border-white/60 hover:bg-white/25"
-              >
-                {content.secondaryCta.label}
-              </a>
-            )}
-          </motion.div>
-          {content.trustLine && (
-            <motion.p
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ ...transitionQuick, delay: 0.2 }}
-              className="text-xs uppercase tracking-[0.06em] text-white/82 sm:text-[13px]"
-            >
-              {content.trustLine}
-            </motion.p>
-          )}
+    <section key={block.id} className="overflow-hidden rounded-md border border-border/28 bg-card/80">
+      <section className="relative isolate min-h-[360px] sm:min-h-[470px] lg:min-h-[540px]">
+        {block.media && (
+          <HeroMedia
+            media={block.media}
+            title={content.title}
+            defaultOverlayOpacity={0.14}
+            overlayClassName="bg-background/16"
+          />
+        )}
+        <div className="pointer-events-none absolute inset-0 z-[1]">
+          <div className={`absolute inset-0 ${heroOverlayClass}`} />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(243,240,236,0.18)_0%,rgba(243,240,236,0.08)_46%,rgba(243,240,236,0.48)_100%)]" />
         </div>
 
-        {heroQuickLinks.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ ...transitionQuick, delay: 0.2 }}
-            className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1"
-          >
-            {heroQuickLinks.map((link) => (
+        <div className="relative z-10 flex min-h-[360px] items-center justify-center px-5 py-10 text-center sm:min-h-[470px] sm:px-10 sm:py-12 lg:min-h-[540px] lg:px-16">
+          <div className="max-w-4xl space-y-4 sm:space-y-5 lg:space-y-6">
+            {content.eyebrow && (
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={transitionQuick}
+                className="ui-kicker text-foreground/78"
+              >
+                {content.eyebrow}
+              </motion.p>
+            )}
+            {content.title && (
+              <motion.h1
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...transitionStandard, delay: 0.05 }}
+                className="ui-title-display ui-h1 mx-auto max-w-[16ch] text-foreground"
+              >
+                {content.title}
+              </motion.h1>
+            )}
+            {content.subtitle && (
+              <motion.p
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...transitionStandard, delay: 0.1 }}
+                className="ui-body mx-auto max-w-2xl text-foreground/86"
+              >
+                {content.subtitle}
+              </motion.p>
+            )}
+            {(content.primaryCta || content.secondaryCta) && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...transitionQuick, delay: 0.14 }}
+                className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3"
+              >
+                {content.primaryCta && (
+                  <a
+                    href={content.primaryCta.href}
+                    className="inline-flex h-11 items-center justify-center rounded-[6px] border border-transparent bg-accent px-6 text-sm font-medium text-white transition-colors hover:bg-accent/92"
+                  >
+                    {content.primaryCta.label}
+                  </a>
+                )}
+                {content.secondaryCta && (
+                  <a
+                    href={content.secondaryCta.href}
+                    className="inline-flex h-11 items-center justify-center rounded-[6px] border border-border/55 bg-card/72 px-6 text-sm text-foreground transition-colors hover:bg-card/86"
+                  >
+                    {content.secondaryCta.label}
+                  </a>
+                )}
+              </motion.div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {heroQuickLinks.length > 0 && (
+        <motion.section
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ ...transitionQuick, delay: 0.18 }}
+          className="border-t border-border/34 bg-card/86 p-3 sm:p-4 lg:px-5 lg:py-4"
+        >
+          <nav aria-label="Быстрый выбор коллекции" className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+            {heroQuickLinks.map((link, index) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="group rounded-2xl border border-white/25 bg-black/22 p-4 text-white backdrop-blur-[2px] transition-colors hover:border-white/45 hover:bg-black/30"
+                className={[
+                  "group rounded-[6px] border border-border/36 px-3 py-3 text-left transition-colors hover:bg-card/92",
+                  index % 2 === 0
+                    ? "bg-[linear-gradient(120deg,rgba(255,255,255,0.52),rgba(246,241,234,0.36))]"
+                    : "bg-[linear-gradient(120deg,rgba(247,241,232,0.56),rgba(238,230,219,0.34))]"
+                ].join(" ")}
               >
-                <p className="text-sm font-medium tracking-[0.01em] text-white/96">{link.label}</p>
+                <p className="ui-label text-foreground">{link.label}</p>
                 {link.subtitle && (
-                  <p className="mt-1 text-xs leading-relaxed text-white/72">{link.subtitle}</p>
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground/86">{link.subtitle}</p>
                 )}
               </a>
             ))}
-          </motion.div>
-        )}
-      </div>
+          </nav>
+        </motion.section>
+      )}
     </section>
   );
 }

@@ -10,10 +10,10 @@
         "type": "hero",
         "contentPlacement": "below",
         "content": {
-          "eyebrow": "Window textiles",
-          "title": "Тихий люкс для штор и тюля.",
-          "subtitle": "Воздушные тюли, плотные портьеры и выверенные фактуры для спокойного света в интерьере.",
-          "trustLine": "Образцы тканей • Быстрый подбор • Консультация по свету",
+          "eyebrow": "Atelier window textiles",
+          "title": "Искусство оформления окон",
+          "subtitle": "Шторы премиум-класса для роскошного интерьера",
+          "trustLine": "Индивидуальный пошив • Подбор фактуры • Консультация по свету",
           "quickLinks": [
             {
               "label": "По комнате",
@@ -22,12 +22,12 @@
             },
             {
               "label": "По светопропусканию",
-              "subtitle": "Sheer, dimout, blackout",
+              "subtitle": "Вуаль, dimout, blackout",
               "href": "/catalog?view=light"
             },
             {
               "label": "По фактуре",
-              "subtitle": "Лен, жаккард, вельвет",
+              "subtitle": "Лен, жаккард, бархат",
               "href": "/catalog?view=texture"
             },
             {
@@ -37,7 +37,7 @@
             }
           ],
           "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
-          "secondaryCta": { "label": "Смотреть коллекцию", "href": "#featured" }
+          "secondaryCta": { "label": "Подбор за 2 минуты", "href": "#featured" }
         },
         "media": {
           "type": "video",
