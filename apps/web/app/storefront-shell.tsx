@@ -2,14 +2,12 @@
 
 import type { ReactNode } from "react";
 import dynamic from "next/dynamic";
-import Link from "next/link";
 import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
-import { ThemeDemoSwitcher } from "@/components/theme-demo-switcher";
 
 type StorefrontShellProps = {
   children: ReactNode;
@@ -22,7 +20,7 @@ const ClientDefaultSeo = dynamic(
   { ssr: false }
 );
 
-export function StorefrontShell({ children, config, activeThemeVariantId }: StorefrontShellProps) {
+export function StorefrontShell({ children, config, activeThemeVariantId: _activeThemeVariantId }: StorefrontShellProps) {
   const {
     cart,
     open,
@@ -57,11 +55,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId }: Stor
             leftHref="/"
             rightSlot={
               <>
-                <ThemeDemoSwitcher theme={config.theme} activeVariantId={activeThemeVariantId} />
                 <PwaInstallNavButton />
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href="/order-status">Статус заказа</Link>
-                </Button>
                 <Button
                   variant="secondary"
                   size="sm"
