@@ -201,11 +201,19 @@ class PageBlockBase(BaseModel):
     type: str
 
 
+class HeroQuickLink(BaseModel):
+    label: str
+    subtitle: Optional[str] = None
+    href: str
+
+
 class HeroBlock(PageBlockBase):
     type: Literal["hero"]
     eyebrow: Optional[str] = None
     title: str
     subtitle: Optional[str] = None
+    trust_line: Optional[str] = Field(default=None, alias="trustLine")
+    quick_links: Optional[List[HeroQuickLink]] = Field(default=None, alias="quickLinks")
     media: Optional[Dict[str, Any]] = None
     primary_cta: Optional[Dict[str, str]] = Field(default=None, alias="primaryCta")
     secondary_cta: Optional[Dict[str, str]] = Field(default=None, alias="secondaryCta")

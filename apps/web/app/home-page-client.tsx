@@ -65,34 +65,34 @@ function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast")
 
 function renderHeroBlock(block: HeroBlock): JSX.Element {
   const heroOverlayClass = resolveHeroOverlayClass(block.media?.overlayPreset);
+  const heroQuickLinks = block.quickLinks?.slice(0, 4) ?? [];
 
   return (
-    <section key={block.id} className="relative isolate overflow-hidden rounded-xl border border-border/45 bg-card/80 px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+    <section
+      key={block.id}
+      className="relative isolate overflow-hidden rounded-[1.75rem] bg-card/40 px-5 py-6 sm:px-8 sm:py-8 lg:px-10 lg:py-10"
+    >
       {block.media && (
         <HeroMedia
           media={block.media}
           title={block.title}
-          defaultOverlayOpacity={0.18}
-          overlayClassName="bg-background"
+          defaultOverlayOpacity={0.1}
+          overlayClassName="bg-background/20"
         />
       )}
       <div className="pointer-events-none absolute inset-0 z-[1]">
         <div className={`absolute inset-0 ${heroOverlayClass}`} />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.12)_0%,rgba(10,10,10,0.06)_36%,rgba(10,10,10,0.3)_100%)]" />
-      </div>
-      <div className="pointer-events-none absolute inset-0 opacity-45">
-        <div className="absolute left-0 top-0 h-full w-px bg-border/60" />
-        <div className="absolute right-0 top-0 h-full w-px bg-border/60" />
-        <div className="absolute left-0 top-[62px] h-px w-full bg-border/60" />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.16)_0%,rgba(10,10,10,0.04)_38%,rgba(10,10,10,0.52)_100%)]" />
       </div>
 
-      <div className="relative z-10 max-w-3xl space-y-5">
+      <div className="relative z-10 grid gap-6 lg:min-h-[640px] lg:grid-cols-[minmax(0,0.72fr)_minmax(0,0.28fr)] lg:items-end">
+        <div className="max-w-3xl space-y-5 lg:space-y-6">
           {block.eyebrow && (
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
-              className="inline-flex rounded-full border border-white/40 bg-black/25 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.05em] text-white/90"
+              className="inline-flex rounded-full border border-white/50 bg-black/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.07em] text-white"
             >
               {block.eyebrow}
             </motion.p>
@@ -101,7 +101,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,4.8rem)] leading-[0.98] text-white drop-shadow-[0_3px_16px_rgba(0,0,0,0.28)]"
+            className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,5.2rem)] leading-[0.96] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.34)]"
           >
             {block.title}
           </motion.h1>
@@ -110,7 +110,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="max-w-2xl text-base leading-relaxed text-white/80 drop-shadow-[0_2px_12px_rgba(0,0,0,0.22)] sm:text-lg"
+              className="max-w-2xl text-base leading-relaxed text-white/88 drop-shadow-[0_2px_14px_rgba(0,0,0,0.3)] sm:text-lg"
             >
               {block.subtitle}
             </motion.p>
@@ -138,6 +138,39 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
               </a>
             )}
           </motion.div>
+          {block.trustLine && (
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.2 }}
+              className="text-xs uppercase tracking-[0.06em] text-white/82 sm:text-[13px]"
+            >
+              {block.trustLine}
+            </motion.p>
+          )}
+        </div>
+
+        {heroQuickLinks.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
+            className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1"
+          >
+            {heroQuickLinks.map((link) => (
+              <a
+                key={link.label}
+                href={link.href}
+                className="group rounded-2xl border border-white/25 bg-black/22 p-4 text-white backdrop-blur-[2px] transition-colors hover:border-white/45 hover:bg-black/30"
+              >
+                <p className="text-sm font-medium tracking-[0.01em] text-white/96">{link.label}</p>
+                {link.subtitle && (
+                  <p className="mt-1 text-xs leading-relaxed text-white/72">{link.subtitle}</p>
+                )}
+              </a>
+            ))}
+          </motion.div>
+        )}
       </div>
     </section>
   );

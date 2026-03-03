@@ -35,6 +35,17 @@ const heroBlock = z.object({
   eyebrow: z.string().optional(),
   title: z.string().min(1),
   subtitle: z.string().optional(),
+  trustLine: z.string().min(1).optional(),
+  quickLinks: z
+    .array(
+      z.object({
+        label: z.string().min(1),
+        subtitle: z.string().optional(),
+        href: hrefSchema
+      })
+    )
+    .max(6)
+    .optional(),
   media: heroMediaSchema.optional(),
   primaryCta: z
     .object({

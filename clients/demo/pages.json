@@ -11,6 +11,29 @@
         "eyebrow": "Window textiles",
         "title": "Тихий люкс для штор и тюля.",
         "subtitle": "Воздушные тюли, плотные портьеры и выверенные фактуры для спокойного света в интерьере.",
+        "trustLine": "Образцы тканей • Быстрый подбор • Консультация по свету",
+        "quickLinks": [
+          {
+            "label": "По комнате",
+            "subtitle": "Гостиная, спальня, детская",
+            "href": "/catalog?view=room"
+          },
+          {
+            "label": "По светопропусканию",
+            "subtitle": "Sheer, dimout, blackout",
+            "href": "/catalog?view=light"
+          },
+          {
+            "label": "По фактуре",
+            "subtitle": "Лен, жаккард, вельвет",
+            "href": "/catalog?view=texture"
+          },
+          {
+            "label": "Готовые наборы",
+            "subtitle": "Day-night сцены для окна",
+            "href": "/catalog?view=kits"
+          }
+        ],
         "media": {
           "type": "video",
           "src": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4",

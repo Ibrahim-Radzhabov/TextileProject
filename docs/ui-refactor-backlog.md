@@ -47,7 +47,22 @@
 
 ## P1 (Next Pass, 1 day)
 
-### 4) Header behavior (immersive -> solid on scroll)
+### 4) Hero quick-entry IA (Nike-like choice paths)
+- Status: `completed` (implemented in config + web + API model).
+- Files:
+  - `packages/shared-types/src/configs.ts`
+  - `packages/config-schema/src/pages.ts`
+  - `apps/api/domain/models.py`
+  - `apps/web/app/home-page-client.tsx`
+  - `clients/demo/pages.json`
+- Goal:
+  - Replace dashboard-like hero utilities with commerce-oriented quick paths.
+  - Keep Hero focused on one message + CTA + guided entry.
+- Acceptance:
+  - Hero displays up to 4 config-driven quick links.
+  - No hardcoded content in Hero quick-entry row.
+
+### 5) Header behavior (immersive -> solid on scroll)
 - Files:
   - `packages/ui/src/components/LayoutShell.tsx`
   - `packages/ui/src/components/TopNav.tsx`
@@ -59,7 +74,7 @@
   - Header does not steal focus from Hero.
   - Stable readability after scroll.
 
-### 5) Typography system hardening
+### 6) Typography system hardening
 - Files:
   - `apps/web/app/globals.css`
   - `packages/ui/src/components/Hero.tsx`
@@ -72,7 +87,7 @@
   - Visual hierarchy is clear in one glance.
   - No mixed/random text rhythm between sections.
 
-### 6) Motion consistency
+### 7) Motion consistency
 - Files:
   - `packages/ui/src/components/*.tsx`
   - `apps/web/app/*/*.tsx`
@@ -85,7 +100,7 @@
 
 ## P2 (Polish, 2-3 days)
 
-### 7) Hero media quality pipeline
+### 8) Hero media quality pipeline
 - Files:
   - `clients/demo/pages.json`
   - `apps/web/public/...` (if local media assets are added)
@@ -96,7 +111,7 @@
   - Brand-media fit for curtains/tulle.
   - No awkward loop reset feeling.
 
-### 8) Shared element transitions (grid -> PDP)
+### 9) Shared element transitions (grid -> PDP)
 - Files:
   - `packages/ui/src/components/ProductCard.tsx`
   - `apps/web/app/product/[slug]/product-page-client.tsx`

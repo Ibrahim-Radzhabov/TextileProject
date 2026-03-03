@@ -55,6 +55,12 @@ export type HeroBlock = PageBlockBase & {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  trustLine?: string;
+  quickLinks?: {
+    label: string;
+    subtitle?: string;
+    href: string;
+  }[];
   media?: {
     type: "image" | "video";
     src: string;
