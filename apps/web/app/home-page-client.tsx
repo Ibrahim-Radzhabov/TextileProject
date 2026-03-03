@@ -1,6 +1,5 @@
 "use client";
 
-import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { CtaStrip, EmptyState, HeroMedia, ProductCard } from "@store-platform/ui";
 import type {
@@ -18,14 +17,6 @@ import { useCartStore } from "@/store/cart-store";
 type HomePageClientProps = {
   homePage: PageConfig;
   products: Product[];
-};
-
-type HomeStats = {
-  totalProducts: number;
-  featuredProducts: number;
-  tagsCount: number;
-  minPrice: number | null;
-  maxPrice: number | null;
 };
 
 const containerVariants = {
@@ -60,46 +51,6 @@ function filterProducts(products: Product[], block: ProductGridBlock): Product[]
   });
 }
 
-function resolveHomeStats(products: Product[]): HomeStats {
-  const featuredProducts = products.filter((product) => product.isFeatured).length;
-  const tags = new Set<string>();
-
-  let minPrice: number | null = null;
-  let maxPrice: number | null = null;
-
-  for (const product of products) {
-    for (const tag of product.tags ?? []) {
-      tags.add(tag);
-    }
-
-    const amount = product.price.amount;
-    if (minPrice === null || amount < minPrice) {
-      minPrice = amount;
-    }
-    if (maxPrice === null || amount > maxPrice) {
-      maxPrice = amount;
-    }
-  }
-
-  return {
-    totalProducts: products.length,
-    featuredProducts,
-    tagsCount: tags.size,
-    minPrice,
-    maxPrice
-  };
-}
-
-function formatPrice(amount: number | null, currency: string): string {
-  if (amount === null) {
-    return "—";
-  }
-  return amount.toLocaleString(undefined, {
-    style: "currency",
-    currency
-  });
-}
-
 function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast"): string {
   if (preset === "contrast") {
     return "bg-[linear-gradient(92deg,rgba(10,10,10,0.78)_0%,rgba(10,10,10,0.46)_42%,rgba(10,10,10,0.14)_64%,rgba(10,10,10,0.52)_100%)]";
@@ -112,7 +63,7 @@ function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast")
   return "bg-[linear-gradient(92deg,rgba(10,10,10,0.7)_0%,rgba(10,10,10,0.38)_40%,rgba(10,10,10,0.1)_62%,rgba(10,10,10,0.46)_100%)]";
 }
 
-function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): JSX.Element {
+function renderHeroBlock(block: HeroBlock): JSX.Element {
   const heroOverlayClass = resolveHeroOverlayClass(block.media?.overlayPreset);
 
   return (
@@ -135,14 +86,13 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
         <div className="absolute left-0 top-[62px] h-px w-full bg-border/60" />
       </div>
 
-      <div className="relative z-10 grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-10">
-        <div className="space-y-5">
+      <div className="relative z-10 max-w-3xl space-y-5">
           {block.eyebrow && (
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.35 }}
-              className="ui-kicker inline-flex rounded-full border border-border/70 bg-card/45 px-3 py-1"
+              className="inline-flex rounded-full border border-white/40 bg-black/25 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.05em] text-white/90"
             >
               {block.eyebrow}
             </motion.p>
@@ -151,7 +101,7 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.05 }}
-            className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,4.8rem)] leading-[0.98] text-foreground drop-shadow-[0_3px_16px_rgba(0,0,0,0.18)]"
+            className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,4.8rem)] leading-[0.98] text-white drop-shadow-[0_3px_16px_rgba(0,0,0,0.28)]"
           >
             {block.title}
           </motion.h1>
@@ -160,10 +110,10 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="ui-subtle max-w-2xl text-base leading-relaxed text-foreground/85 drop-shadow-[0_2px_12px_rgba(0,0,0,0.14)] sm:text-lg"
-          >
-            {block.subtitle}
-          </motion.p>
+              className="max-w-2xl text-base leading-relaxed text-white/80 drop-shadow-[0_2px_12px_rgba(0,0,0,0.22)] sm:text-lg"
+            >
+              {block.subtitle}
+            </motion.p>
           )}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
@@ -182,35 +132,12 @@ function renderHeroBlock(block: HeroBlock, stats: HomeStats, currency: string): 
             {block.secondaryCta && (
               <a
                 href={block.secondaryCta.href}
-                className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/60 bg-card/55 px-5 text-sm text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+                className="inline-flex h-10 items-center justify-center rounded-[10px] border border-white/40 bg-white/20 px-5 text-sm text-white/95 transition-colors hover:border-white/60 hover:bg-white/25"
               >
                 {block.secondaryCta.label}
               </a>
             )}
           </motion.div>
-        </div>
-
-        <motion.aside
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="grid grid-cols-1 gap-2 border-t border-border/35 pt-3 sm:grid-cols-3 sm:gap-3 lg:grid-cols-1 lg:gap-3 lg:border-none lg:pt-0"
-        >
-          <div className="rounded-xl border border-border/45 bg-card/62 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
-            <p className="ui-kicker">Products</p>
-            <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.totalProducts}</p>
-          </div>
-          <div className="rounded-xl border border-border/45 bg-card/62 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
-            <p className="ui-kicker">Featured</p>
-            <p className="mt-1 text-2xl font-semibold tracking-tight">{stats.featuredProducts}</p>
-          </div>
-          <div className="rounded-xl border border-border/45 bg-card/62 px-3 py-2 backdrop-blur-md sm:px-4 sm:py-3">
-            <p className="ui-kicker">Budget Range</p>
-            <p className="mt-1 text-sm text-foreground">
-              {formatPrice(stats.minPrice, currency)} - {formatPrice(stats.maxPrice, currency)}
-            </p>
-          </div>
-        </motion.aside>
       </div>
     </section>
   );
@@ -311,13 +238,11 @@ function renderProductGridBlock(
 
 function renderBlock(
   block: PageBlock,
-  stats: HomeStats,
-  currency: string,
   products: Product[],
   onQuickAdd: (product: Product) => void
 ): JSX.Element | null {
   if (block.type === "hero") {
-    return renderHeroBlock(block, stats, currency);
+    return renderHeroBlock(block);
   }
 
   if (block.type === "product-grid") {
@@ -341,13 +266,11 @@ function renderBlock(
 
 export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const { addProduct } = useCartStore();
-  const stats = useMemo(() => resolveHomeStats(products), [products]);
-  const currency = products[0]?.price.currency ?? "USD";
 
   return (
     <div className="home-concept-editorial space-y-9 sm:space-y-10 lg:space-y-12">
       {homePage.blocks.map((block) =>
-        renderBlock(block, stats, currency, products, (product) => addProduct(product.id))
+        renderBlock(block, products, (product) => addProduct(product.id))
       )}
     </div>
   );

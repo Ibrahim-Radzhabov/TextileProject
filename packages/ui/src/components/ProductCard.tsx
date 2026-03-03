@@ -3,9 +3,7 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import type { Product } from "@store-platform/shared-types";
-import { Badge } from "./Badge";
 import { Button } from "./Button";
-import { Surface } from "./Surface";
 
 export type ProductCardProps = {
   product: Product;
@@ -126,59 +124,29 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
       className="group spotlight-card h-full"
       data-testid={`product-card-${product.slug}`}
     >
-      <Surface tone="subtle" className="relative flex h-full flex-col overflow-hidden rounded-xl border border-border/45 bg-card/80">
-        <div className="relative overflow-hidden border-b border-border/35">
+      <article className="relative flex h-full flex-col overflow-hidden rounded-[10px] bg-transparent">
+        <div className="relative overflow-hidden">
           <a
             href={productHref}
             aria-label={`Открыть товар ${product.name}`}
             className="absolute inset-0 z-10 rounded-none"
           />
 
-          <div className="aspect-[4/5] overflow-hidden bg-card/40">
+          <div className="aspect-[4/5] overflow-hidden bg-card/20">
             {primaryImage && (
               // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={primaryImage.url}
                 alt={primaryImage.alt}
-                className="h-full w-full object-cover transition-transform duration-[400ms] ease-out group-hover:scale-[1.04]"
+                className="h-full w-full object-cover transition-transform duration-[700ms] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.05]"
               />
             )}
             <div className="pointer-events-none absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-background/48 via-background/20 to-transparent" />
           </div>
 
-          {product.badges && product.badges.length > 0 && (
-            <div className="pointer-events-none absolute left-3 top-3 z-20 flex gap-1">
-              {product.badges.map((badge) => (
-                <Badge key={badge.id} tone="muted">
-                  {badge.label}
-                </Badge>
-              ))}
-            </div>
-          )}
-
-          {(lightControl || fabric || roomTag) && (
-            <div className="pointer-events-none absolute inset-x-3 bottom-3 z-[18] flex flex-wrap gap-1.5">
-              {lightControl && (
-                <span className="rounded-full border border-border/50 bg-card/78 px-2 py-0.5 text-[10px] text-muted-foreground backdrop-blur-sm">
-                  Light {lightControl}
-                </span>
-              )}
-              {fabric && (
-                <span className="rounded-full border border-border/50 bg-card/78 px-2 py-0.5 text-[10px] text-muted-foreground backdrop-blur-sm">
-                  {fabric}
-                </span>
-              )}
-              {roomTag && (
-                <span className="rounded-full border border-border/50 bg-card/78 px-2 py-0.5 text-[10px] text-muted-foreground backdrop-blur-sm">
-                  {roomTag.replace(/-/g, " ")}
-                </span>
-              )}
-            </div>
-          )}
-
           {onQuickAdd && (
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 translate-y-2 px-3 pb-3 opacity-0 transition-all duration-[var(--motion-normal)] ease-out group-hover:translate-y-0 group-hover:opacity-100">
-              <div className="pointer-events-auto rounded-[10px] border border-border/45 bg-card/72 p-2 backdrop-blur-md">
+              <div className="pointer-events-auto rounded-[10px] border border-border/35 bg-card/66 p-2 backdrop-blur-sm">
                 <div className="grid grid-cols-2 gap-2">
                   <a
                     href={productHref}
@@ -200,14 +168,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
           )}
         </div>
 
-        <div className="relative z-20 flex flex-1 flex-col gap-3 px-4 py-4">
+        <div className="relative z-20 flex flex-1 flex-col gap-3 px-1 pb-1 pt-3 sm:px-2">
           <div className="space-y-1.5">
+            {(roomTag || (product.badges && product.badges[0]?.label)) && (
+              <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground">
+                {product.badges && product.badges[0]?.label ? product.badges[0].label : roomTag?.replace(/-/g, " ")}
+              </p>
+            )}
             <p className="line-clamp-1 text-[15px] font-medium tracking-tight">{product.name}</p>
             {product.shortDescription && (
               <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{product.shortDescription}</p>
             )}
-            {(fabric || lightControl) && (
-              <p className="ui-kicker">
+            {(fabric || lightControl || roomTag) && (
+              <p className="ui-kicker text-[10px]">
+                {roomTag ? `${roomTag.replace(/-/g, " ")} • ` : ""}
                 {fabric ? `${fabric} • ` : ""}
                 {lightControl ? `${lightControl} light control` : ""}
               </p>
@@ -228,7 +202,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
             </div>
           </div>
         </div>
-      </Surface>
+      </article>
     </motion.div>
   );
 };
