@@ -9,6 +9,7 @@ import { springSnappy } from "../motion/presets";
 export type ProductCardProps = {
   product: Product;
   onQuickAdd?: (product: Product) => void;
+  enableSharedTransition?: boolean;
 };
 
 function formatMoney(amount: number, currency: string): string {
@@ -45,15 +46,19 @@ function resolveMetadataValue(product: Product, preferredKeys: string[]): string
   return null;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd }) => {
+export const ProductCard: React.FC<ProductCardProps> = ({
+  product,
+  onQuickAdd,
+  enableSharedTransition = false
+}) => {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const spotlightRectRef = React.useRef<DOMRect | null>(null);
   const spotlightFrameRef = React.useRef<number | null>(null);
   const spotlightPositionRef = React.useRef({ x: 0, y: 0 });
   const primaryImage = product.media[0];
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
-  const sharedMediaLayoutId = `product-media-${product.id}`;
-  const sharedTitleLayoutId = `product-title-${product.id}`;
+  const sharedMediaLayoutId = enableSharedTransition ? `product-media-${product.id}` : undefined;
+  const sharedTitleLayoutId = enableSharedTransition ? `product-title-${product.id}` : undefined;
   const hasComparePrice =
     product.compareAtPrice &&
     product.compareAtPrice.currency === product.price.currency &&

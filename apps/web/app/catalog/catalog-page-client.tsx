@@ -230,6 +230,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                     subtitle={block.subtitle}
                     products={filteredProducts}
                     onQuickAdd={(product) => addProduct(product.id)}
+                    enableSharedTransition
                   />
                 </motion.section>
               );

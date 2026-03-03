@@ -119,7 +119,7 @@
   - No awkward loop reset feeling.
 
 ### 9) Shared element transitions (grid -> PDP)
-- Status: `completed` (initial pass: shared `layoutId` for product media/title + shared layout group in storefront shell).
+- Status: `completed` (initial pass: shared `layoutId` for product media/title in catalog flow + shared layout group in storefront shell; home kept stable without shared IDs to avoid collisions).
 - Files:
   - `packages/ui/src/components/ProductCard.tsx`
   - `packages/ui/src/components/ProductGallery.tsx`
