@@ -120,7 +120,7 @@ export default function CheckoutPage() {
             </div>
             <div className="flex flex-wrap gap-2">
               <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Безопасная оплата</span>
-              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Статус заказа</span>
+              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Поддержка магазина</span>
               <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Fast checkout</span>
             </div>
           </div>

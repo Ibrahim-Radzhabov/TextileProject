@@ -43,16 +43,16 @@ function SuccessContent() {
         </p>
         <div className="flex flex-col justify-center gap-2 sm:flex-row">
           <Link
-            href={orderId ? `/order-status?order_id=${encodeURIComponent(orderId)}` : "/order-status"}
+            href="/catalog"
             className="inline-flex h-11 items-center justify-center rounded-lg border border-border/60 px-5 text-sm font-medium text-foreground shadow-soft-subtle transition-colors hover:border-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Проверить статус
+            В каталог
           </Link>
           <Link
             href="/"
             className="inline-flex h-11 items-center justify-center rounded-lg border border-accent/60 bg-accent px-5 text-sm font-medium text-white shadow-soft-subtle transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            Вернуться на главную
+            На главную
           </Link>
         </div>
       </Surface>

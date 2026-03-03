@@ -130,6 +130,19 @@
 - Acceptance:
   - Transition feels coherent and not distracting.
 
+### 10) Remove customer account-like entry points
+- Status: `completed` (theme switcher + order-status nav removed; `/order-status` now redirects to home; checkout success points back to catalog/home).
+- Files:
+  - `apps/web/app/storefront-shell.tsx`
+  - `apps/web/app/order-status/page.tsx`
+  - `apps/web/app/checkout/success/page.tsx`
+  - `apps/web/app/checkout/page.tsx`
+- Goal:
+  - Keep storefront focused on catalog/checkout only (no user cabinet flow).
+- Acceptance:
+  - Header has no user account/status actions.
+  - `/order-status` is not an active user flow.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - Open storefront at `http://127.0.0.1:3000`.
