@@ -1,8 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { motion } from "framer-motion";
+import { motion, useMotionValueEvent, useScroll } from "framer-motion";
 import { Surface } from "./Surface";
+import { transitionStandard } from "../motion/presets";
 
 export type LayoutShellProps = {
   children: React.ReactNode;
@@ -11,19 +12,32 @@ export type LayoutShellProps = {
 };
 
 export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, footer }) => {
+  const [isScrolled, setIsScrolled] = React.useState(false);
+  const { scrollY } = useScroll();
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const next = latest > 44;
+    setIsScrolled((prev) => (prev === next ? prev : next));
+  });
+
   return (
     <div className="page-shell">
       <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1200px] flex-col px-4 pb-12 pt-4 sm:px-6 sm:pt-6 lg:px-10 lg:pt-8">
         {topNav && (
           <motion.div
-            className="mb-6 sm:mb-8"
+            className="sticky top-3 z-40 mb-6 sm:top-4 sm:mb-8"
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.2 }}
+            transition={transitionStandard}
           >
             <Surface
-              tone="elevated"
-              className="flex items-center justify-between rounded-xl px-4 py-2.5 sm:px-5 sm:py-3"
+              tone={isScrolled ? "elevated" : "ghost"}
+              className={[
+                "flex items-center justify-between border transition-[padding,border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-fast)]",
+                isScrolled
+                  ? "rounded-xl border-border/58 bg-card/90 px-3 py-2 sm:px-4 sm:py-2.5"
+                  : "rounded-2xl border-border/36 bg-card/66 px-4 py-2.5 sm:px-5 sm:py-3"
+              ].join(" ")}
             >
               {topNav}
             </Surface>
@@ -37,7 +51,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
             className="mt-9 text-sm text-muted-foreground sm:mt-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.15, duration: 0.2 }}
+            transition={{ ...transitionStandard, delay: 0.12 }}
           >
             <Surface tone="ghost" className="rounded-xl px-4 py-2.5 sm:px-5 sm:py-3">
               {footer}

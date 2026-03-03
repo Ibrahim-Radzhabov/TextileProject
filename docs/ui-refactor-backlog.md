@@ -63,6 +63,7 @@
   - No hardcoded content in Hero quick-entry row.
 
 ### 5) Header behavior (immersive -> solid on scroll)
+- Status: `completed` (sticky nav + scroll state surface).
 - Files:
   - `packages/ui/src/components/LayoutShell.tsx`
   - `packages/ui/src/components/TopNav.tsx`
@@ -75,6 +76,7 @@
   - Stable readability after scroll.
 
 ### 6) Typography system hardening
+- Status: `completed` (tokenized helpers in globals + applied to hero/product cards).
 - Files:
   - `apps/web/app/globals.css`
   - `packages/ui/src/components/Hero.tsx`
@@ -88,7 +90,10 @@
   - No mixed/random text rhythm between sections.
 
 ### 7) Motion consistency
+- Status: `completed` (shared presets introduced and wired in core storefront surfaces).
 - Files:
+  - `packages/ui/src/motion/presets.ts`
+  - `packages/ui/src/index.ts`
   - `packages/ui/src/components/*.tsx`
   - `apps/web/app/*/*.tsx`
 - Goal:

@@ -1,7 +1,16 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CtaStrip, EmptyState, HeroMedia, ProductCard } from "@store-platform/ui";
+import {
+  CtaStrip,
+  EmptyState,
+  HeroMedia,
+  ProductCard,
+  gridContainerVariants,
+  gridItemVariants,
+  transitionQuick,
+  transitionStandard
+} from "@store-platform/ui";
 import type {
   CtaStripBlock,
   HeroBlock,
@@ -17,21 +26,6 @@ import { useCartStore } from "@/store/cart-store";
 type HomePageClientProps = {
   homePage: PageConfig;
   products: Product[];
-};
-
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.05,
-      delayChildren: 0.04
-    }
-  }
-};
-
-const itemVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0 }
 };
 
 function filterProducts(products: Product[], block: ProductGridBlock): Product[] {
@@ -91,7 +85,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35 }}
+              transition={transitionQuick}
               className="inline-flex rounded-full border border-white/50 bg-black/20 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.07em] text-white"
             >
               {block.eyebrow}
@@ -100,7 +94,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
+            transition={{ ...transitionStandard, delay: 0.05 }}
             className="ui-title-display max-w-[11ch] text-[clamp(2.4rem,5.8vw,5.2rem)] leading-[0.96] text-white drop-shadow-[0_4px_20px_rgba(0,0,0,0.34)]"
           >
             {block.title}
@@ -109,8 +103,8 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             <motion.p
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="max-w-2xl text-base leading-relaxed text-white/88 drop-shadow-[0_2px_14px_rgba(0,0,0,0.3)] sm:text-lg"
+              transition={{ ...transitionStandard, delay: 0.1 }}
+              className="ui-body max-w-2xl text-white/88 drop-shadow-[0_2px_14px_rgba(0,0,0,0.3)]"
             >
               {block.subtitle}
             </motion.p>
@@ -118,7 +112,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.15 }}
+            transition={{ ...transitionQuick, delay: 0.15 }}
             className="flex flex-wrap items-center gap-3"
           >
             {block.primaryCta && (
@@ -142,7 +136,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             <motion.p
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
+              transition={{ ...transitionQuick, delay: 0.2 }}
               className="text-xs uppercase tracking-[0.06em] text-white/82 sm:text-[13px]"
             >
               {block.trustLine}
@@ -154,7 +148,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
+            transition={{ ...transitionQuick, delay: 0.2 }}
             className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1"
           >
             {heroQuickLinks.map((link) => (
@@ -250,14 +244,14 @@ function renderProductGridBlock(
       ) : (
         <motion.div
           className="grid auto-rows-fr grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
-          variants={containerVariants}
+          variants={gridContainerVariants}
           initial="hidden"
           animate="visible"
         >
           {visibleProducts.map((product, index) => (
             <motion.div
               key={product.id}
-              variants={itemVariants}
+              variants={gridItemVariants}
               className={index === 0 ? "sm:col-span-2 xl:col-span-2" : undefined}
             >
               <ProductCard product={product} onQuickAdd={onQuickAdd} />

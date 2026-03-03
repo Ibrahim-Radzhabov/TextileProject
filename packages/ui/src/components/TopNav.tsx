@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { motion } from "framer-motion";
+import { transitionStandard } from "../motion/presets";
 
 export type TopNavProps = {
   logo?: {
@@ -36,7 +37,7 @@ export const TopNav: React.FC<TopNavProps> = ({
         )}
       </div>
       <div className="flex min-w-0 flex-col">
-        <span className="truncate text-sm font-medium leading-tight tracking-tight text-foreground">{shopName}</span>
+        <span className="truncate text-sm font-medium leading-tight tracking-[-0.01em] text-foreground">{shopName}</span>
         <span className="ui-kicker">
           Window Textiles
         </span>
@@ -49,7 +50,7 @@ export const TopNav: React.FC<TopNavProps> = ({
       className="flex items-center justify-between gap-4"
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
+      transition={transitionStandard}
     >
       {leftHref ? (
         <a

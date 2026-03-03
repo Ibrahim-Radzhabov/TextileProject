@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion } from "framer-motion";
 import type { Product } from "@store-platform/shared-types";
 import { Button } from "./Button";
+import { springSnappy } from "../motion/presets";
 
 export type ProductCardProps = {
   product: Product;
@@ -117,7 +118,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
     <motion.div
       ref={rootRef}
       whileHover={{ y: -2 }}
-      transition={{ type: "spring", stiffness: 220, damping: 26 }}
+      transition={springSnappy}
       onMouseEnter={handlePointerEnter}
       onMouseMove={handlePointerMove}
       onMouseLeave={handlePointerLeave}
@@ -171,13 +172,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onQuickAdd })
         <div className="relative z-20 flex flex-1 flex-col gap-3 px-1 pb-1 pt-3 sm:px-2">
           <div className="space-y-1.5">
             {(roomTag || (product.badges && product.badges[0]?.label)) && (
-              <p className="text-[11px] font-medium uppercase tracking-[0.06em] text-muted-foreground">
+              <p className="ui-kicker">
                 {product.badges && product.badges[0]?.label ? product.badges[0].label : roomTag?.replace(/-/g, " ")}
               </p>
             )}
-            <p className="line-clamp-1 text-[15px] font-medium tracking-tight">{product.name}</p>
+            <p className="ui-title line-clamp-1 text-[15px]">{product.name}</p>
             {product.shortDescription && (
-              <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground">{product.shortDescription}</p>
+              <p className="line-clamp-2 text-xs leading-relaxed text-muted-foreground/95">{product.shortDescription}</p>
             )}
             {(fabric || lightControl || roomTag) && (
               <p className="ui-kicker text-[10px]">

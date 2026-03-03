@@ -16,3 +16,4 @@ export * from "./components/ProductGallery";
 export * from "./components/CatalogFilterSidebar";
 export * from "./components/CtaStrip";
 export * from "./components/QuickActionForms";
+export * from "./motion/presets";
