@@ -279,6 +279,26 @@
   - On mobile storefront pages, fixed bottom bar is visible with 4 labeled icons.
   - No overlap regressions with checkout fixed CTA and no admin-route leakage.
 
+### 21) Favorites functional layer
+- Status: `completed` (persistent favorites store + heart toggle on product cards + favorites listing page with quick-add/removal flow).
+- Files:
+  - `apps/web/store/favorites-store.ts`
+  - `packages/ui/src/components/ProductCard.tsx`
+  - `packages/ui/src/components/ProductGrid.tsx`
+  - `apps/web/app/home-page-client.tsx`
+  - `apps/web/app/catalog/catalog-page-client.tsx`
+  - `apps/web/app/product/[slug]/product-page-client.tsx`
+  - `apps/web/app/favorites/page.tsx`
+  - `apps/web/app/favorites/favorites-page-client.tsx`
+  - `scripts/storefront-smoke.mjs`
+- Goal:
+  - Turn bottom-nav "Избранное" into a real shopping flow, not a static stub.
+  - Preserve selected products between sessions on the same device.
+- Acceptance:
+  - Product cards allow add/remove favorites via heart icon.
+  - `/favorites` shows persisted items and supports quick add + remove.
+  - Smoke route coverage includes `/favorites`.
+
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
 - `corepack pnpm smoke:storefront` passes.

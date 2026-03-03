@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Badge, CatalogFilterSidebar, ProductGrid, Surface } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
+import { useFavoritesStore } from "@/store/favorites-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { resolveCatalogViewPreset, type CatalogSort } from "@/lib/catalog-view-presets";
 import { renderNonProductGridBlock } from "@/lib/page-block-renderers";
@@ -40,6 +41,8 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { addProduct } = useCartStore();
+  const favoriteProductIds = useFavoritesStore((state) => state.productIds);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
   const activePreset = useMemo(
     () => resolveCatalogViewPreset(searchParams.get("view"), allTags),
     [allTags, searchParams]
@@ -291,6 +294,8 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                     products={filteredProducts}
                     onQuickAdd={(product) => addProduct(product.id)}
                     enableSharedTransition={enableSharedProductTransition}
+                    favoriteProductIds={favoriteProductIds}
+                    onToggleFavorite={(product) => toggleFavorite(product.id)}
                   />
                 </motion.section>
               );

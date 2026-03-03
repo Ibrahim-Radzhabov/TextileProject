@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Badge, Button, ProductCard, ProductGallery, Surface, springSharedElement } from "@store-platform/ui";
 import type { Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
+import { useFavoritesStore } from "@/store/favorites-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 
 type ProductPageClientProps = {
@@ -43,6 +44,8 @@ export function ProductPageClient({
   productPageTexts
 }: ProductPageClientProps) {
   const { addProduct, isPricing } = useCartStore();
+  const favoriteProductIds = useFavoritesStore((state) => state.productIds);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
   const [isAdding, setIsAdding] = useState(false);
   const [addedPulse, setAddedPulse] = useState(false);
   const addPulseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -296,7 +299,12 @@ export function ProductPageClient({
           <div className="flex gap-4 overflow-x-auto pb-2">
             {related.map((candidate) => (
               <div key={candidate.id} className="min-w-[220px] max-w-[240px] flex-1">
-                <ProductCard product={candidate} onQuickAdd={(next) => void addProduct(next.id)} />
+                <ProductCard
+                  product={candidate}
+                  onQuickAdd={(next) => void addProduct(next.id)}
+                  isFavorite={favoriteProductIds.includes(candidate.id)}
+                  onToggleFavorite={(next) => toggleFavorite(next.id)}
+                />
               </div>
             ))}
           </div>

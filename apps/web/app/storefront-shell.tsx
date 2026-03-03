@@ -7,6 +7,7 @@ import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { Button, CartDrawer, LayoutShell, TopNav } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
+import { useFavoritesStore } from "@/store/favorites-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
@@ -35,6 +36,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     decrementProduct,
     removeProduct
   } = useCartStore();
+  const favoriteItemCount = useFavoritesStore((state) => state.productIds.length);
   const itemCount = cart?.items.reduce((acc, item) => acc + item.quantity, 0) ?? 0;
   const isAdminArea = pathname.startsWith("/admin");
   const isCheckoutFlow = pathname.startsWith("/checkout");
@@ -119,6 +121,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
       {showMobileBottomNav && (
         <MobileBottomNav
           cartItemCount={itemCount}
+          favoriteItemCount={favoriteItemCount}
           cartOpen={open}
           onCartOpen={() => setOpen(true)}
         />

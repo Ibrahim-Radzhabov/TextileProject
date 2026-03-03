@@ -22,6 +22,7 @@ const sourcePublicPath = "apps/web/public";
 const routeChecks = [
   { path: "/", expectedStatus: 200 },
   { path: "/catalog", expectedStatus: 200 },
+  { path: "/favorites", expectedStatus: 200 },
   { path: "/product/ripple-fold-sheer", expectedStatus: 200 },
   { path: "/checkout", expectedStatus: 200 },
   { path: "/checkout/success", expectedStatus: 200 },
@@ -38,6 +39,7 @@ const viewportChecks = [
 const viewportPages = [
   { name: "home", path: "/" },
   { name: "catalog", path: "/catalog" },
+  { name: "favorites", path: "/favorites" },
   { name: "product", path: "/product/ripple-fold-sheer" },
   { name: "checkout", path: "/checkout" }
 ];

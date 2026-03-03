@@ -22,6 +22,7 @@ import type {
   RichTextBlock
 } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
+import { useFavoritesStore } from "@/store/favorites-store";
 
 type HomePageClientProps = {
   homePage: PageConfig;
@@ -361,7 +362,9 @@ function renderCtaStripBlock(block: CtaStripBlock): JSX.Element {
 function renderProductGridBlock(
   block: ProductGridBlock,
   visibleProducts: Product[],
-  onQuickAdd: (product: Product) => void
+  onQuickAdd: (product: Product) => void,
+  favoriteProductIds: string[],
+  onToggleFavorite: (product: Product) => void
 ): JSX.Element {
   return (
     <section
@@ -394,7 +397,12 @@ function renderProductGridBlock(
               key={product.id}
               variants={gridItemVariants}
             >
-              <ProductCard product={product} onQuickAdd={onQuickAdd} />
+              <ProductCard
+                product={product}
+                onQuickAdd={onQuickAdd}
+                isFavorite={favoriteProductIds.includes(product.id)}
+                onToggleFavorite={onToggleFavorite}
+              />
             </motion.div>
           ))}
         </motion.div>
@@ -406,14 +414,22 @@ function renderProductGridBlock(
 function renderBlock(
   block: PageBlock,
   products: Product[],
-  onQuickAdd: (product: Product) => void
+  onQuickAdd: (product: Product) => void,
+  favoriteProductIds: string[],
+  onToggleFavorite: (product: Product) => void
 ): JSX.Element | null {
   if (block.type === "hero") {
     return renderHeroBlock(block);
   }
 
   if (block.type === "product-grid") {
-    return renderProductGridBlock(block, filterProducts(products, block), onQuickAdd);
+    return renderProductGridBlock(
+      block,
+      filterProducts(products, block),
+      onQuickAdd,
+      favoriteProductIds,
+      onToggleFavorite
+    );
   }
 
   if (block.type === "media-feature") {
@@ -433,11 +449,19 @@ function renderBlock(
 
 export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const { addProduct } = useCartStore();
+  const favoriteProductIds = useFavoritesStore((state) => state.productIds);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
 
   return (
     <div className="home-concept-editorial space-y-9 sm:space-y-10 lg:space-y-12">
       {homePage.blocks.map((block) =>
-        renderBlock(block, products, (product) => addProduct(product.id))
+        renderBlock(
+          block,
+          products,
+          (product) => addProduct(product.id),
+          favoriteProductIds,
+          (product) => toggleFavorite(product.id)
+        )
       )}
     </div>
   );

@@ -13,6 +13,8 @@ export type ProductGridProps = {
   subtitle?: string;
   onQuickAdd?: (product: Product) => void;
   enableSharedTransition?: boolean;
+  favoriteProductIds?: string[];
+  onToggleFavorite?: (product: Product) => void;
 };
 
 export const ProductGrid: React.FC<ProductGridProps> = ({
@@ -20,9 +22,15 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   title,
   subtitle,
   onQuickAdd,
-  enableSharedTransition = false
+  enableSharedTransition = false,
+  favoriteProductIds,
+  onToggleFavorite
 }) => {
   const isEmpty = products.length === 0;
+  const favoriteIdSet = React.useMemo(
+    () => new Set(favoriteProductIds ?? []),
+    [favoriteProductIds]
+  );
 
   return (
     <section className="space-y-5 sm:space-y-6">
@@ -56,6 +64,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
                 product={product}
                 onQuickAdd={onQuickAdd}
                 enableSharedTransition={enableSharedTransition}
+                isFavorite={favoriteIdSet.has(product.id)}
+                onToggleFavorite={onToggleFavorite}
               />
             </motion.div>
           ))}
