@@ -131,7 +131,7 @@
   - Transition feels coherent and not distracting.
 
 ### 10) Remove customer account-like entry points
-- Status: `completed` (theme switcher + order-status nav removed; `/order-status` now redirects to home; checkout success points back to catalog/home; dead storefront helper components removed).
+- Status: `completed` (theme switcher + order-status nav removed; checkout success points back to catalog/home; `/order-status` route removed; dead storefront helper components removed).
 - Files:
   - `apps/web/app/storefront-shell.tsx`
   - `apps/web/app/order-status/page.tsx`
@@ -143,7 +143,7 @@
   - Keep storefront focused on catalog/checkout only (no user cabinet flow).
 - Acceptance:
   - Header has no user account/status actions.
-  - `/order-status` is not an active user flow.
+  - `/order-status` is not exposed as a storefront route.
 
 ### 11) Metadata runtime stability
 - Status: `completed` (dynamic `metadataBase` from request headers; no fallback warning in runtime logs).
@@ -153,6 +153,15 @@
   - Remove noisy metadata warnings and keep social/meta URL resolution deterministic in different hosts.
 - Acceptance:
   - No `metadataBase property ... not set` warning during storefront navigation.
+
+### 12) Storefront viewport regression QA
+- Status: `completed` (automated headless pass for `390/768/1024/1280` on home/catalog/product/checkout).
+- Files:
+  - `apps/web/app/**/*`
+- Goal:
+  - Confirm no layout drift, overflow, or runtime errors on target storefront breakpoints.
+- Acceptance:
+  - HTTP `200` for key pages, no horizontal overflow, no browser console/page errors in automated run.
 
 ## Local Validation Checklist (Before Any Push)
 - `corepack pnpm --dir apps/web build` passes.
