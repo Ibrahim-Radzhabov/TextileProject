@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, type ReactNode } from "react";
-import dynamic from "next/dynamic";
 import { usePathname } from "next/navigation";
 import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
@@ -18,11 +17,6 @@ type StorefrontShellProps = {
   config: StorefrontConfig;
   activeThemeVariantId: string;
 };
-
-const ClientDefaultSeo = dynamic(
-  () => import("next-seo").then((mod) => mod.DefaultSeo),
-  { ssr: false }
-);
 
 export function StorefrontShell({ children, config, activeThemeVariantId: _activeThemeVariantId }: StorefrontShellProps) {
   const pathname = usePathname();
@@ -53,18 +47,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
 
   return (
     <>
-      <ClientDefaultSeo
-        defaultTitle={config.seo.defaultTitle}
-        titleTemplate={config.seo.titleTemplate}
-        description={config.seo.description}
-        openGraph={{
-          title: config.seo.defaultTitle,
-          description: config.seo.description,
-          images: config.seo.openGraphImage
-            ? [{ url: config.seo.openGraphImage }]
-            : undefined
-        }}
-      />
       <LayoutShell
         topNav={
           <TopNav

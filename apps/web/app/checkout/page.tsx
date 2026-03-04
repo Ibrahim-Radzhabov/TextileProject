@@ -22,12 +22,14 @@ const checkoutSchema = z.object({
 
 type CheckoutFormValues = z.infer<typeof checkoutSchema>;
 
+const CURRENCY_LOCALE = "ru-RU";
+
 function createIdempotencyKey(): string {
   return `checkout-${Math.random().toString(36).slice(2)}-${Date.now()}`;
 }
 
 function formatMoney(amount: number, currency: string): string {
-  return amount.toLocaleString(undefined, {
+  return amount.toLocaleString(CURRENCY_LOCALE, {
     style: "currency",
     currency
   });
@@ -96,7 +98,7 @@ export default function CheckoutPage() {
   };
 
   const totalFormatted =
-    cart?.totals.grandTotal.amount.toLocaleString(undefined, {
+    cart?.totals.grandTotal.amount.toLocaleString(CURRENCY_LOCALE, {
       style: "currency",
       currency: cart.totals.grandTotal.currency
     }) ?? "—";

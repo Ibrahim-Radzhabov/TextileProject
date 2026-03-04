@@ -25,12 +25,14 @@ const sortOptions: Array<{ value: CatalogSort; label: string }> = [
   { value: "name_desc", label: "Название Z-A" }
 ];
 
+const CURRENCY_LOCALE = "ru-RU";
+
 function formatMoney(amount: number | null, currency: string): string {
   if (amount === null) {
     return "—";
   }
 
-  return amount.toLocaleString(undefined, {
+  return amount.toLocaleString(CURRENCY_LOCALE, {
     style: "currency",
     currency
   });

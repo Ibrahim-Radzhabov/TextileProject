@@ -17,8 +17,10 @@ type ProductPageClientProps = {
   }>;
 };
 
+const CURRENCY_LOCALE = "ru-RU";
+
 function formatMoney(amount: number, currency: string): string {
-  return amount.toLocaleString(undefined, {
+  return amount.toLocaleString(CURRENCY_LOCALE, {
     style: "currency",
     currency
   });
