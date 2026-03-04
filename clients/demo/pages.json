@@ -41,14 +41,14 @@
         },
         "media": {
           "type": "video",
-          "src": "/demo/hero/3051489-sd_960_540_25fps.mp4",
-          "mobileSrc": "/demo/hero/3051489-sd_960_540_25fps.mp4",
-          "poster": "/demo/ripple-fold-sheer.svg",
+          "src": "/demo/hero/textile-loop-desktop.webm",
+          "mobileSrc": "/demo/hero/textile-loop-mobile.webm",
+          "poster": "/demo/hero/textile-loop-poster.svg",
           "alt": "Мягкая драпировка ткани у окна",
           "overlayOpacity": 0.18,
           "overlayPreset": "editorial",
-          "objectPosition": "78% 50%",
-          "mobileObjectPosition": "66% 42%"
+          "objectPosition": "50% 50%",
+          "mobileObjectPosition": "50% 42%"
         }
       },
       {

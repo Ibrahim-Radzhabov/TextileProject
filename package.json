@@ -24,6 +24,7 @@
     "perf:storefront": "bash scripts/run-lighthouse-storefront-perf.sh",
     "pwa:lighthouse": "bash scripts/run-lighthouse-pwa.sh",
     "stripe:smoke": "bash scripts/stripe-smoke.sh",
+    "media:hero-loop": "corepack pnpm exec node scripts/generate-hero-loop.mjs",
     "format": "prettier --write .",
     "init-client": "node scripts/init-client.mjs",
     "validate-client": "corepack pnpm --filter @store-platform/config-schema build && node scripts/validate-client.mjs"

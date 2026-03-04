@@ -73,7 +73,6 @@ function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast")
 function renderHeroBlock(block: HeroBlock): JSX.Element {
   const content = resolveHeroContent(block);
   const heroOverlayClass = resolveHeroOverlayClass(block.media?.overlayPreset);
-  const heroQuickLinks = content.quickLinks.slice(0, 4);
   return (
     <section key={block.id} className="overflow-hidden rounded-md border border-border/28 bg-card/80">
       <section className="relative isolate min-h-[360px] sm:min-h-[470px] lg:min-h-[540px]">
@@ -147,39 +146,59 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
                 )}
               </motion.div>
             )}
+            {content.trustLine && (
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ ...transitionQuick, delay: 0.18 }}
+                className="mx-auto max-w-2xl text-xs leading-relaxed tracking-[0.03em] text-foreground/72 sm:text-sm"
+              >
+                {content.trustLine}
+              </motion.p>
+            )}
           </div>
         </div>
       </section>
+    </section>
+  );
+}
 
-      {heroQuickLinks.length > 0 && (
-        <motion.section
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ ...transitionQuick, delay: 0.18 }}
-          className="border-t border-border/34 bg-card/86 p-3 sm:p-4 lg:px-5 lg:py-4"
-        >
-          <nav aria-label="Быстрый выбор коллекции" className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
-            {heroQuickLinks.map((link, index) => (
+function renderHeroQuickLinksBar(
+  links: ReturnType<typeof resolveHeroContent>["quickLinks"],
+  key: string
+): JSX.Element {
+  return (
+    <motion.section
+      key={key}
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ ...transitionQuick, delay: 0.2 }}
+      className="sticky top-14 z-30 sm:top-[4.7rem]"
+    >
+      <nav
+        aria-label="Быстрые переходы по каталогу"
+        className="rounded-[8px] border border-border/38 bg-card/90 p-2 backdrop-blur-xl"
+      >
+        <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="grid min-w-[640px] grid-cols-4 gap-2 sm:min-w-0">
+            {links.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className={[
-                  "group rounded-[6px] border border-border/36 px-3 py-3 text-left transition-colors hover:bg-card/92",
-                  index % 2 === 0
-                    ? "bg-[linear-gradient(120deg,rgba(255,255,255,0.52),rgba(246,241,234,0.36))]"
-                    : "bg-[linear-gradient(120deg,rgba(247,241,232,0.56),rgba(238,230,219,0.34))]"
-                ].join(" ")}
+                className="group rounded-[6px] border border-border/36 bg-card/72 px-3 py-2.5 text-left transition-colors hover:bg-card/92"
               >
-                <p className="ui-label text-foreground">{link.label}</p>
+                <p className="ui-label text-foreground/92">{link.label}</p>
                 {link.subtitle && (
-                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground/86">{link.subtitle}</p>
+                  <p className="mt-1 line-clamp-1 text-[11px] leading-relaxed text-muted-foreground/86">
+                    {link.subtitle}
+                  </p>
                 )}
               </a>
             ))}
-          </nav>
-        </motion.section>
-      )}
-    </section>
+          </div>
+        </div>
+      </nav>
+    </motion.section>
   );
 }
 
@@ -332,18 +351,30 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const { addProduct } = useCartStore();
   const favoriteProductIds = useFavoritesStore((state) => state.productIds);
   const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
+  const heroBlock = homePage.blocks.find((entry): entry is HeroBlock => entry.type === "hero");
+  const heroQuickLinks = heroBlock ? resolveHeroContent(heroBlock).quickLinks.slice(0, 4) : [];
 
   return (
     <div className="home-concept-editorial space-y-8 sm:space-y-9 lg:space-y-11">
-      {homePage.blocks.map((block) =>
-        renderBlock(
+      {homePage.blocks.flatMap((block) => {
+        const blockNode = renderBlock(
           block,
           products,
           (product) => addProduct(product.id),
           favoriteProductIds,
           (product) => toggleFavorite(product.id)
-        )
-      )}
+        );
+
+        if (!blockNode) {
+          return [];
+        }
+
+        if (block.type === "hero" && heroQuickLinks.length > 0) {
+          return [blockNode, renderHeroQuickLinksBar(heroQuickLinks, `${block.id}-quick-links`)];
+        }
+
+        return [blockNode];
+      })}
     </div>
   );
 }
