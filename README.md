@@ -232,3 +232,17 @@ pnpm validate-client demo
 ```
 
 This ensures that `shop.json`, `theme.json`, `catalog.json`, `pages.json`, `seo.json` and `integrations.json` all conform to the shared schemas in `@store-platform/config-schema`.
+
+---
+
+### Deploy contour
+
+Production rollout checklist and commands:
+
+- [`docs/deploy-contour.md`](docs/deploy-contour.md)
+
+Post-deploy smoke command:
+
+```bash
+BASE_URL=https://<your-domain> API_URL=https://<your-api-domain> corepack pnpm deploy:smoke
+```
