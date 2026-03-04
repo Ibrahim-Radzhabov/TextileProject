@@ -173,23 +173,25 @@ function renderHeroQuickLinksBar(
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...transitionQuick, delay: 0.2 }}
-      className="sticky top-14 z-30 sm:top-[4.7rem]"
+      className="sticky top-[4.1rem] z-30 sm:top-[4.7rem]"
     >
       <nav
         aria-label="Быстрые переходы по каталогу"
-        className="rounded-[8px] border border-border/38 bg-card/90 p-2 backdrop-blur-xl"
+        className="rounded-[8px] border border-border/38 bg-card/88 p-1.5 backdrop-blur-xl sm:p-2"
       >
         <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="grid min-w-[640px] grid-cols-4 gap-2 sm:min-w-0">
+          <div className="flex min-w-[520px] gap-1.5 sm:grid sm:min-w-0 sm:grid-cols-4 sm:gap-2">
             {links.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="group rounded-[6px] border border-border/36 bg-card/72 px-3 py-2.5 text-left transition-colors hover:bg-card/92"
+                className="group min-w-0 flex-1 rounded-[6px] border border-border/36 bg-card/72 px-2.5 py-2 text-left transition-colors hover:bg-card/92 sm:px-3 sm:py-2.5"
               >
-                <p className="ui-label text-foreground/92">{link.label}</p>
+                <p className="ui-label line-clamp-1 text-[11px] text-foreground/92 sm:text-[12px]">
+                  {link.label}
+                </p>
                 {link.subtitle && (
-                  <p className="mt-1 line-clamp-1 text-[11px] leading-relaxed text-muted-foreground/86">
+                  <p className="mt-1 hidden line-clamp-1 text-[11px] leading-relaxed text-muted-foreground/86 sm:block">
                     {link.subtitle}
                   </p>
                 )}
