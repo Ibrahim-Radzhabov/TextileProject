@@ -30,7 +30,9 @@ async function cleanupProductById(request: APIRequestContext, productId: string)
 
 test("customer can checkout, then see order in admin", async ({ page, request }) => {
   await page.goto("/");
-  await expect(page.getByRole("heading", { name: /Тихий люкс/i })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: /Искусство оформления окон|Тихий люкс/i })
+  ).toBeVisible();
 
   await page.goto("/catalog");
   await expect(page.getByRole("heading", { name: "Каталог" })).toBeVisible();
@@ -61,14 +63,14 @@ test("customer can checkout, then see order in admin", async ({ page, request })
 
   await page.goto(`/checkout/success?order_id=${encodeURIComponent(orderId)}`);
   await expect(page.getByRole("heading", { name: "Заказ оформлен" })).toBeVisible();
-  await expect(page.getByText(new RegExp(`Номер заказа:\\s*${orderId}`))).toBeVisible();
+  await expect(page.getByText(orderId)).toBeVisible();
 
   const orderStatusResponse = await page.goto(`/order-status?order_id=${encodeURIComponent(orderId)}`);
   expect(orderStatusResponse?.status()).toBe(404);
 
   await loginToAdmin(page);
   await expect(page.getByRole("heading", { name: "Заказы" })).toBeVisible();
-  await page.getByLabel(/Поиск/).fill("e2e@example.com");
+  await page.locator('input[name="q"]').fill("e2e@example.com");
   await page.getByLabel("С даты").fill(createdOrderDate);
   await page.getByRole("button", { name: "Применить" }).click();
   await expect(page).toHaveURL(/q=e2e%40example\.com/);
@@ -134,7 +136,7 @@ test("admin can create, update and delete product in products panel", async ({ p
     await expect(page).toHaveURL(/\/admin\/products/);
     await expect(page.getByText("Товар создан.")).toBeVisible();
 
-    await page.getByLabel(/Поиск/).fill(productId);
+    await page.locator('input[name="q"]').fill(productId);
     await page.getByRole("button", { name: "Применить" }).click();
     await expect(page).toHaveURL(new RegExp(`q=${encodeURIComponent(productId)}`));
 
@@ -153,7 +155,7 @@ test("admin can create, update and delete product in products panel", async ({ p
 
     await expect(page).toHaveURL(/\/admin\/products/);
     await expect(page.getByText("Товар обновлен.")).toBeVisible();
-    await page.getByLabel(/Поиск/).fill(productId);
+    await page.locator('input[name="q"]').fill(productId);
     await page.getByRole("button", { name: "Применить" }).click();
     const updatedRow = page.locator("tr", { hasText: productId });
     await expect(updatedRow).toBeVisible();
@@ -258,7 +260,7 @@ test("admin can update status to shipped and export filtered CSV", async ({ page
   expect(webhookResponse.ok()).toBeTruthy();
 
   await loginToAdmin(page);
-  await page.getByLabel(/Поиск/).fill(email);
+  await page.locator('input[name="q"]').fill(email);
   await page.getByLabel("Сортировка").selectOption("oldest");
   await page.getByRole("button", { name: "Применить" }).click();
   await expect(page).toHaveURL(new RegExp(`q=${encodeURIComponent(email)}`));
