@@ -23,6 +23,7 @@ import type {
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { PinnedHorizontalShowcase } from "@/components/pinned-horizontal-showcase";
+import { HeroPinnedVideo } from "@/components/hero-pinned-video";
 
 type HomePageClientProps = {
   homePage: PageConfig;
@@ -60,12 +61,30 @@ function filterProducts(products: Product[], block: ProductGridBlock): Product[]
 
 function renderHeroBlock(block: HeroBlock): JSX.Element {
   const content = resolveHeroContent(block);
+  const media = block.media;
+
+  if (!media) {
+    return (
+      <section key={block.id} className="overflow-hidden rounded-md border border-border/28 bg-card/80">
+        <section className="relative isolate min-h-[360px] sm:min-h-[470px] lg:min-h-[540px]" />
+      </section>
+    );
+  }
+
+  if (media.type === "video") {
+    return (
+      <section key={block.id} className="rounded-md border border-border/28 bg-card/80">
+        <HeroPinnedVideo media={media} title={content.title} />
+      </section>
+    );
+  }
+
   return (
     <section key={block.id} className="overflow-hidden rounded-md border border-border/28 bg-card/80">
       <section className="relative isolate min-h-[360px] sm:min-h-[470px] lg:min-h-[540px]">
-        {block.media && (
+        {media && (
           <HeroMedia
-            media={block.media}
+            media={media}
             title={content.title}
             defaultOverlayOpacity={0.04}
             overlayClassName="bg-background/8"
