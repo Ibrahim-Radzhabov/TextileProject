@@ -51,20 +51,6 @@ export function TopNavSearchFilter({
   }, [pathname, queryFromUrl]);
 
   useEffect(() => {
-    if (pathname !== "/") {
-      return;
-    }
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const media = window.matchMedia("(min-width: 1024px)");
-    if (media.matches) {
-      setOpen(true);
-    }
-  }, [pathname]);
-
-  useEffect(() => {
     if (!open) {
       return;
     }
@@ -145,7 +131,6 @@ export function TopNavSearchFilter({
             aria-label="Поиск и фильтрация каталога"
           >
             <span className={styles.orbs} aria-hidden />
-            <span className={styles.perimeterPass} aria-hidden />
 
             <div className={styles.inner}>
               <span className={styles.searchIcon} aria-hidden>

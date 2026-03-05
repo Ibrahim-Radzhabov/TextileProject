@@ -3,13 +3,14 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { AnimatedFilterInput, Badge, ProductCard, transitionQuick } from "@store-platform/ui";
+import { Badge, ProductCard, transitionQuick } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { resolveCatalogViewPreset, type CatalogSort } from "@/lib/catalog-view-presets";
 import { renderNonProductGridBlock } from "@/lib/page-block-renderers";
+import { CatalogNeonFilter } from "@/components/catalog-neon-filter";
 
 type CatalogPageClientProps = {
   page: PageConfig;
@@ -216,7 +217,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         )}
 
         <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-center">
-          <AnimatedFilterInput
+          <CatalogNeonFilter
             value={searchValue}
             onChange={setSearchValue}
             placeholder="Поиск по названию, фактуре и тегам..."
