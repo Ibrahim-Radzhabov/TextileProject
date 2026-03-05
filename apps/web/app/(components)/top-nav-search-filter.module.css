@@ -24,6 +24,7 @@
 
 .trigger:hover {
   color: rgb(var(--color-foreground) / 1);
+  border-color: rgb(var(--color-accent) / 0.6);
 }
 
 .trigger:focus-visible {
@@ -33,7 +34,13 @@
 
 .frame {
   --radius: 18px;
-  --border-width: 1px;
+  --border-width: 1.2px;
+  --trace-opacity: 0.88;
+  --pass-opacity: 0.82;
+  --orb-opacity: 0.68;
+  --trace-speed: 3.1s;
+  --pass-speed: 1.15s;
+  --drift-speed: 3.2s;
 
   position: absolute;
   right: 0;
@@ -47,8 +54,22 @@
   contain: paint;
 }
 
+.balanced {
+  --trace-opacity: 0.78;
+  --pass-opacity: 0.72;
+  --orb-opacity: 0.6;
+  --trace-speed: 3.4s;
+  --pass-speed: 1.35s;
+  --drift-speed: 3.4s;
+}
+
 .vivid {
-  --border-width: 1.2px;
+  --trace-opacity: 0.97;
+  --pass-opacity: 0.95;
+  --orb-opacity: 0.82;
+  --trace-speed: 2.45s;
+  --pass-speed: 0.86s;
+  --drift-speed: 2.9s;
 }
 
 .frame::before {
@@ -64,13 +85,13 @@
     ),
     radial-gradient(
       150px 100px at 78% 84%,
-      rgb(var(--color-accent) / 0.86),
+      rgb(var(--color-accent) / 0.84),
       transparent 72%
     );
   filter: blur(13px);
-  opacity: 0.68;
+  opacity: var(--orb-opacity);
   pointer-events: none;
-  animation: drift 3.4s ease-in-out infinite alternate;
+  animation: drift var(--drift-speed) ease-in-out infinite alternate;
   transition: opacity var(--motion-normal);
   transform-origin: center;
   will-change: transform, opacity;
@@ -86,17 +107,18 @@
   background: conic-gradient(
     from 0deg,
     transparent 0deg,
-    transparent 36deg,
-    rgb(var(--color-accent) / 0.98) 58deg,
-    transparent 84deg,
-    transparent 162deg,
-    rgb(var(--color-accent-soft) / 0.96) 196deg,
-    transparent 224deg,
-    transparent 292deg,
-    rgb(var(--color-accent) / 0.95) 326deg,
+    transparent 24deg,
+    rgb(var(--color-accent) / 0.98) 46deg,
+    transparent 68deg,
+    transparent 150deg,
+    rgb(var(--color-accent-soft) / 0.95) 190deg,
+    transparent 220deg,
+    transparent 286deg,
+    rgb(var(--color-ring) / 0.94) 320deg,
     transparent 360deg
   );
-  animation: spin-transform 3.2s linear infinite;
+  opacity: var(--trace-opacity);
+  animation: spin-transform var(--trace-speed) linear infinite;
   transform-origin: center;
   will-change: transform;
 
@@ -107,16 +129,32 @@
   mask-composite: exclude;
 }
 
-.vivid::before {
-  filter: blur(15px);
-  opacity: 0.76;
-  animation:
-    drift 3s ease-in-out infinite alternate,
-    breathe 2.2s ease-in-out infinite alternate;
-}
+.perimeterPass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-width);
+  pointer-events: none;
+  background: conic-gradient(
+    from 280deg,
+    transparent 0deg,
+    transparent 314deg,
+    rgb(var(--color-foreground) / 0.1) 328deg,
+    rgb(var(--color-foreground) / 0.98) 338deg,
+    rgb(var(--color-accent) / 0.98) 348deg,
+    transparent 360deg
+  );
+  opacity: var(--pass-opacity);
+  animation: pass-spin var(--pass-speed) linear infinite;
+  transform-origin: center;
+  will-change: transform;
+  z-index: 2;
 
-.vivid::after {
-  animation: spin-transform 2.45s linear infinite;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
 }
 
 .orbs {
@@ -125,7 +163,7 @@
   border-radius: 26px;
   pointer-events: none;
   filter: blur(17px);
-  opacity: 0.7;
+  opacity: calc(var(--orb-opacity) + 0.04);
   background:
     radial-gradient(
       150px 90px at 28% 12%,
@@ -137,21 +175,13 @@
       rgb(var(--color-accent) / 0.64),
       transparent 74%
     );
-  animation: drift 3.2s ease-in-out infinite alternate;
+  animation: drift var(--drift-speed) ease-in-out infinite alternate;
   transition: opacity var(--motion-normal);
-}
-
-.vivid .orbs {
-  opacity: 0.82;
-  filter: blur(18px);
-  animation:
-    drift 2.9s ease-in-out infinite alternate,
-    breathe 2.4s ease-in-out infinite alternate;
 }
 
 .inner {
   position: relative;
-  z-index: 1;
+  z-index: 3;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -249,27 +279,33 @@
 
 .frame:hover::before,
 .frame:focus-within::before {
-  opacity: 0.86;
+  opacity: 0.94;
 }
 
 .frame:hover .orbs,
 .frame:focus-within .orbs {
-  opacity: 0.9;
-}
-
-.vivid:hover::before,
-.vivid:focus-within::before {
   opacity: 0.98;
 }
 
-.vivid:hover .orbs,
-.vivid:focus-within .orbs {
-  opacity: 0.98;
+.frame:hover::after,
+.frame:focus-within::after {
+  opacity: 1;
+}
+
+.frame:hover .perimeterPass,
+.frame:focus-within .perimeterPass {
+  opacity: 1;
 }
 
 @keyframes spin-transform {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes pass-spin {
+  to {
+    transform: rotate(-360deg);
   }
 }
 
@@ -280,16 +316,6 @@
 
   to {
     transform: translate3d(10px, 2px, 0);
-  }
-}
-
-@keyframes breathe {
-  from {
-    opacity: 0.9;
-  }
-
-  to {
-    opacity: 1;
   }
 }
 
@@ -317,7 +343,16 @@
 @media (prefers-reduced-motion: reduce) {
   .frame::before,
   .frame::after,
-  .orbs {
+  .orbs,
+  .perimeterPass {
     animation: none !important;
+  }
+
+  .frame::after {
+    opacity: 0.75;
+  }
+
+  .perimeterPass {
+    opacity: 0.45;
   }
 }

@@ -5,20 +5,36 @@ import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import styles from "./top-nav-search-filter.module.css";
 
+export type TopNavSearchIntensity = "balanced" | "vivid";
+
+type TopNavSearchFilterProps = {
+  intensity?: TopNavSearchIntensity;
+  className?: string;
+};
+
+function normalizeQuery(value: string): string {
+  return value.trim().replace(/\s+/g, " ");
+}
+
 function buildCatalogHref(searchText: string, openFilters: boolean): string {
   const params = new URLSearchParams();
-  const query = searchText.trim();
+  const query = normalizeQuery(searchText);
+
   if (query.length > 0) {
     params.set("q", query);
   }
   if (openFilters) {
     params.set("open_filters", "1");
   }
+
   const suffix = params.toString();
   return suffix.length > 0 ? `/catalog?${suffix}` : "/catalog";
 }
 
-export function TopNavSearchFilter() {
+export function TopNavSearchFilter({
+  intensity = "balanced",
+  className
+}: TopNavSearchFilterProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -41,6 +57,7 @@ export function TopNavSearchFilter() {
     if (typeof window === "undefined") {
       return;
     }
+
     const media = window.matchMedia("(min-width: 1024px)");
     if (media.matches) {
       setOpen(true);
@@ -53,7 +70,6 @@ export function TopNavSearchFilter() {
     }
 
     inputRef.current?.focus();
-    inputRef.current?.select();
 
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target;
@@ -95,7 +111,11 @@ export function TopNavSearchFilter() {
   );
 
   return (
-    <div ref={rootRef} className={styles.container}>
+    <div
+      ref={rootRef}
+      className={[styles.container, className].filter(Boolean).join(" ")}
+      data-intensity={intensity}
+    >
       {!open && (
         <button
           type="button"
@@ -113,7 +133,7 @@ export function TopNavSearchFilter() {
         {open && (
           <motion.form
             key="top-nav-neon-search"
-            className={`${styles.frame} ${styles.vivid}`}
+            className={[styles.frame, intensity === "vivid" ? styles.vivid : styles.balanced].join(" ")}
             initial={{ opacity: 0, x: 12, scale: 0.98 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 10, scale: 0.985 }}
@@ -122,8 +142,11 @@ export function TopNavSearchFilter() {
               event.preventDefault();
               submitSearch(false);
             }}
+            aria-label="Поиск и фильтрация каталога"
           >
             <span className={styles.orbs} aria-hidden />
+            <span className={styles.perimeterPass} aria-hidden />
+
             <div className={styles.inner}>
               <span className={styles.searchIcon} aria-hidden>
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -137,7 +160,8 @@ export function TopNavSearchFilter() {
                 value={value}
                 onChange={(event) => setValue(event.target.value)}
                 placeholder="Поиск по каталогу..."
-                aria-label="Поиск по каталогу"
+                aria-label="Введите запрос для поиска по каталогу"
+                type="search"
               />
 
               {value.trim().length > 0 && (
@@ -156,7 +180,7 @@ export function TopNavSearchFilter() {
               <button
                 type="button"
                 className={styles.filterBtn}
-                aria-label="Открыть фильтры"
+                aria-label="Открыть фильтры каталога"
                 onClick={() => submitSearch(true)}
               >
                 <svg preserveAspectRatio="none" height={16} width={16} viewBox="4.8 4.56 14.832 15.408" fill="none" aria-hidden="true">

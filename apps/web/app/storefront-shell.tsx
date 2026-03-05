@@ -57,7 +57,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             links={navLinks}
             rightSlot={
               <>
-                <TopNavSearchFilter />
+                <TopNavSearchFilter intensity="balanced" />
                 <a
                   href="/favorites"
                   className="inline-flex h-9 items-center gap-1 rounded-[8px] border border-border/35 px-2.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
