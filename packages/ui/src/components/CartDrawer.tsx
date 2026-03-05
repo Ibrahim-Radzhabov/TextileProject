@@ -216,6 +216,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               )}
               <Button
                 fullWidth
+                ripple
                 disabled={!hasItems || isUpdating}
                 onClick={onCheckout}
                 className="h-11 rounded-[6px] bg-accent text-white hover:bg-accent/92"
@@ -225,7 +226,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-2.5 h-10 w-full rounded-[6px] border border-border/55 px-3 text-sm text-foreground transition-colors hover:bg-card/86"
+                className="mt-2.5 h-10 w-full rounded-[6px] border border-accent/70 bg-accent px-3 text-sm font-medium text-white transition-colors hover:bg-accent/90"
               >
                 Перейти в корзину
               </button>

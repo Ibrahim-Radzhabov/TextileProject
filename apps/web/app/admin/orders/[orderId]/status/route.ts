@@ -7,7 +7,7 @@ type RouteParams = {
 };
 
 function resolveApiUrl(): string {
-  return process.env.STORE_API_URL ?? process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://localhost:8000";
+  return process.env.STORE_API_URL ?? process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://127.0.0.1:8000";
 }
 
 function buildOrderDetailsRedirectUrl(baseUrl: URL, options: {

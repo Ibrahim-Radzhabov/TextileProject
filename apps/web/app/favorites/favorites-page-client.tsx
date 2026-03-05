@@ -70,7 +70,7 @@ export function FavoritesPageClient({ products }: FavoritesPageClientProps) {
           <button
             type="button"
             onClick={clearFavorites}
-            className="rounded-[10px] border border-border/60 px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+            className="rounded-[10px] border border-accent/70 bg-accent px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-accent/90"
           >
             Очистить список
           </button>

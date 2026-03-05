@@ -162,7 +162,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             <Button
               size="sm"
               fullWidth
-              variant="secondary"
+              variant="primary"
+              ripple
               className="relative z-20 h-9 rounded-[6px] border-border/45 bg-accent text-white hover:bg-accent/92"
               data-testid={`quick-add-${product.slug}`}
               aria-label={`Добавить ${product.name} в корзину`}

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Badge, ProductCard, transitionQuick } from "@store-platform/ui";
+import { AnimatedFilterInput, Badge, ProductCard, transitionQuick } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
@@ -42,6 +42,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const searchParamsValue = searchParams.toString();
   const { addProduct } = useCartStore();
   const favoriteProductIds = useFavoritesStore((state) => state.productIds);
   const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
@@ -51,6 +52,9 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   );
   const [tagsFilter, setTagsFilter] = useState<string[]>(activePreset?.tags ?? []);
   const [sort, setSort] = useState<CatalogSort>(activePreset?.sort ?? "recommended");
+  const initialSearchValue = searchParams.get("q")?.trim() ?? "";
+  const [searchValue, setSearchValue] = useState(initialSearchValue);
+  const [showTagFilters, setShowTagFilters] = useState(true);
   const lastPresetKeyRef = useRef<string | null>(activePreset?.key ?? null);
 
   useEffect(() => {
@@ -70,14 +74,39 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     setSort("recommended");
   }, [activePreset]);
 
+  useEffect(() => {
+    const params = new URLSearchParams(searchParamsValue);
+    const nextQuery = params.get("q")?.trim() ?? "";
+    setSearchValue((prev) => (prev === nextQuery ? prev : nextQuery));
+
+    if (params.get("open_filters") === "1") {
+      setShowTagFilters(true);
+    }
+  }, [searchParamsValue]);
+
   const filteredProducts = useMemo(() => {
+    const searchQuery = searchValue.trim().toLowerCase();
     const filtered = products.filter((product) => {
-      if (!tagsFilter.length) {
+      const tags = product.tags ?? [];
+
+      if (tagsFilter.length > 0 && !tagsFilter.some((tag) => tags.includes(tag))) {
+        return false;
+      }
+
+      if (!searchQuery) {
         return true;
       }
 
-      const tags = product.tags ?? [];
-      return tagsFilter.some((tag) => tags.includes(tag));
+      const haystack = [
+        product.name,
+        product.shortDescription ?? "",
+        product.description ?? "",
+        ...tags
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(searchQuery);
     });
 
     if (sort === "recommended") {
@@ -96,7 +125,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
       }
       return a.name.localeCompare(b.name);
     });
-  }, [products, sort, tagsFilter]);
+  }, [products, searchValue, sort, tagsFilter]);
 
   const selectedCount = tagsFilter.length;
   const featuredCount = useMemo(() => filteredProducts.filter((product) => product.isFeatured).length, [filteredProducts]);
@@ -155,6 +184,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         <div className="flex flex-wrap items-center gap-2">
           <Badge tone="muted">Всего: {products.length}</Badge>
           <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
+          {searchValue.trim().length > 0 && <Badge tone="accent">Поиск: {searchValue.trim()}</Badge>}
           {selectedCount > 0 && <Badge tone="accent">Тегов: {selectedCount}</Badge>}
           <Badge tone="muted">Featured: {featuredCount}</Badge>
           <Badge tone="muted">
@@ -176,7 +206,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
               <button
                 type="button"
                 onClick={clearActivePreset}
-                className="rounded-[6px] border border-border/55 px-3 py-1 text-xs text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+                className="rounded-[6px] border border-accent/70 bg-accent px-3 py-1 text-xs font-medium text-white transition-colors hover:bg-accent/90"
                 data-testid="catalog-preset-clear"
               >
                 Сбросить
@@ -186,26 +216,13 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         )}
 
         <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-center">
-          <div className="flex flex-wrap gap-1.5">
-            {allTags.slice(0, 14).map((tag) => {
-              const active = tagsFilter.includes(tag);
-              return (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => toggleTag(tag)}
-                  className={[
-                    "rounded-[6px] border px-2.5 py-1 text-[11px] transition-colors",
-                    active
-                      ? "border-border/75 bg-card/85 text-foreground"
-                      : "border-border/45 text-muted-foreground hover:border-border/70 hover:text-foreground"
-                  ].join(" ")}
-                >
-                  #{tag}
-                </button>
-              );
-            })}
-          </div>
+          <AnimatedFilterInput
+            value={searchValue}
+            onChange={setSearchValue}
+            placeholder="Поиск по названию, фактуре и тегам..."
+            onFilterClick={() => setShowTagFilters((prev) => !prev)}
+            filterActive={showTagFilters}
+          />
 
           <label className="flex items-center gap-2">
             <span className="ui-kicker whitespace-nowrap">Сортировать</span>
@@ -223,6 +240,40 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
             </select>
           </label>
         </div>
+
+        <AnimatePresence initial={false}>
+          {showTagFilters && (
+            <motion.div
+              key="catalog-tags"
+              initial={{ opacity: 0, height: 0, y: -6 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={{ opacity: 0, height: 0, y: -6 }}
+              transition={transitionQuick}
+              className="overflow-hidden"
+            >
+              <div className="flex flex-wrap gap-1.5 pt-0.5">
+                {allTags.slice(0, 14).map((tag) => {
+                  const active = tagsFilter.includes(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      onClick={() => toggleTag(tag)}
+                      className={[
+                        "rounded-[6px] border px-2.5 py-1 text-[11px] transition-colors",
+                        active
+                          ? "border-accent/80 bg-accent text-white"
+                          : "border-accent/70 bg-accent/90 text-white hover:bg-accent"
+                      ].join(" ")}
+                    >
+                      #{tag}
+                    </button>
+                  );
+                })}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </section>
 
       {page.blocks.map((block) => {

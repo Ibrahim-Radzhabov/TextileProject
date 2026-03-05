@@ -269,6 +269,7 @@ export function ProductPageClient({
                 >
                   <Button
                     fullWidth
+                    ripple
                     data-testid="pdp-add-to-cart"
                     aria-label={`Добавить ${product.name} в корзину`}
                     aria-busy={isAdding || isPricing}

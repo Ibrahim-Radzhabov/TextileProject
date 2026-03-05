@@ -10,6 +10,7 @@ import { useFavoritesStore } from "@/store/favorites-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
+import { TopNavSearchFilter } from "@/components/top-nav-search-filter";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 
 type StorefrontShellProps = {
@@ -56,15 +57,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             links={navLinks}
             rightSlot={
               <>
-                <a
-                  href="/catalog"
-                  className="inline-flex h-9 items-center justify-center rounded-[8px] border border-border/35 px-2.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  aria-label="Поиск по каталогу"
-                >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
-                  </svg>
-                </a>
+                <TopNavSearchFilter />
                 <a
                   href="/favorites"
                   className="inline-flex h-9 items-center gap-1 rounded-[8px] border border-border/35 px-2.5 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"

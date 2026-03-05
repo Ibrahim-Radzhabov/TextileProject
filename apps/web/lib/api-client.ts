@@ -8,7 +8,7 @@ import type {
   StorefrontConfig
 } from "@store-platform/shared-types";
 
-const PUBLIC_API_URL = process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://localhost:8000";
+const PUBLIC_API_URL = process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://127.0.0.1:8000";
 const INTERNAL_API_URL = process.env.STORE_API_URL ?? PUBLIC_API_URL;
 
 function resolveApiUrl(): string {

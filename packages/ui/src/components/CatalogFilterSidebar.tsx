@@ -63,7 +63,7 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
             <button
               type="button"
               onClick={clearTags}
-              className="text-[11px] text-muted-foreground transition-colors hover:text-foreground"
+              className="rounded-[8px] border border-accent/70 bg-accent px-2 py-1 text-[11px] font-medium text-white transition-colors hover:bg-accent/90"
             >
               Сбросить
             </button>
@@ -81,8 +81,8 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
               className={[
                 "rounded-[10px] border px-3 py-1 text-[11px] transition-all duration-[var(--motion-fast)]",
                 active
-                  ? "border-border/80 bg-card/78 text-foreground"
-                  : "border-border/55 bg-card/55 text-muted-foreground hover:border-border/75 hover:text-foreground"
+                  ? "border-accent/80 bg-accent text-white"
+                  : "border-accent/70 bg-accent/90 text-white hover:bg-accent"
               ]
                 .filter(Boolean)
                 .join(" ")}
@@ -143,7 +143,7 @@ export const CatalogFilterSidebar: React.FC<CatalogFilterSidebarProps> = ({
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="rounded-md px-2 py-1 text-xs text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
+                  className="rounded-md border border-accent/70 bg-accent px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-accent/90"
                 >
                   Закрыть
                 </button>

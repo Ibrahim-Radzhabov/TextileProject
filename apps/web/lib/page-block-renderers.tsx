@@ -39,7 +39,7 @@ export function renderNonProductGridBlock(block: PageBlock): ReactNode {
           {block.cta && (
             <a
               href={block.cta.href}
-              className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-card/65 px-4 text-sm text-foreground transition-colors hover:border-border/90"
+              className="inline-flex h-10 items-center justify-center rounded-[10px] border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90"
             >
               {block.cta.label}
             </a>

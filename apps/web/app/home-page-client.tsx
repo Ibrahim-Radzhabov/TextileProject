@@ -8,8 +8,7 @@ import {
   ProductCard,
   gridContainerVariants,
   gridItemVariants,
-  transitionQuick,
-  transitionStandard
+  transitionQuick
 } from "@store-platform/ui";
 import type {
   CtaStripBlock,
@@ -58,21 +57,8 @@ function filterProducts(products: Product[], block: ProductGridBlock): Product[]
   });
 }
 
-function resolveHeroOverlayClass(preset?: "editorial" | "balanced" | "contrast"): string {
-  if (preset === "contrast") {
-    return "bg-[linear-gradient(180deg,rgba(10,9,8,0.35)_0%,rgba(10,9,8,0.22)_42%,rgba(10,9,8,0.44)_100%)]";
-  }
-
-  if (preset === "balanced") {
-    return "bg-[linear-gradient(180deg,rgba(243,240,236,0.42)_0%,rgba(243,240,236,0.22)_45%,rgba(243,240,236,0.44)_100%)]";
-  }
-
-  return "bg-[linear-gradient(180deg,rgba(243,240,236,0.46)_0%,rgba(243,240,236,0.2)_44%,rgba(243,240,236,0.48)_100%)]";
-}
-
 function renderHeroBlock(block: HeroBlock): JSX.Element {
   const content = resolveHeroContent(block);
-  const heroOverlayClass = resolveHeroOverlayClass(block.media?.overlayPreset);
   return (
     <section key={block.id} className="overflow-hidden rounded-md border border-border/28 bg-card/80">
       <section className="relative isolate min-h-[360px] sm:min-h-[470px] lg:min-h-[540px]">
@@ -80,84 +66,10 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
           <HeroMedia
             media={block.media}
             title={content.title}
-            defaultOverlayOpacity={0.14}
-            overlayClassName="bg-background/16"
+            defaultOverlayOpacity={0.04}
+            overlayClassName="bg-background/8"
           />
         )}
-        <div className="pointer-events-none absolute inset-0 z-[1]">
-          <div className={`absolute inset-0 ${heroOverlayClass}`} />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(243,240,236,0.18)_0%,rgba(243,240,236,0.08)_46%,rgba(243,240,236,0.48)_100%)]" />
-        </div>
-
-        <div className="relative z-10 flex min-h-[360px] items-center justify-center px-5 py-10 text-center sm:min-h-[470px] sm:px-10 sm:py-12 lg:min-h-[540px] lg:px-16">
-          <div className="max-w-4xl space-y-4 sm:space-y-5 lg:space-y-6">
-            {content.eyebrow && (
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={transitionQuick}
-                className="ui-kicker text-foreground/78"
-              >
-                {content.eyebrow}
-              </motion.p>
-            )}
-            {content.title && (
-              <motion.h1
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...transitionStandard, delay: 0.05 }}
-                className="ui-title-display ui-h1 mx-auto max-w-[16ch] text-foreground"
-              >
-                {content.title}
-              </motion.h1>
-            )}
-            {content.subtitle && (
-              <motion.p
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...transitionStandard, delay: 0.1 }}
-                className="ui-body mx-auto max-w-2xl text-foreground/86"
-              >
-                {content.subtitle}
-              </motion.p>
-            )}
-            {(content.primaryCta || content.secondaryCta) && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...transitionQuick, delay: 0.14 }}
-                className="flex flex-wrap items-center justify-center gap-2.5 sm:gap-3"
-              >
-                {content.primaryCta && (
-                  <a
-                    href={content.primaryCta.href}
-                    className="inline-flex h-11 items-center justify-center rounded-[6px] border border-transparent bg-accent px-6 text-sm font-medium text-white transition-colors hover:bg-accent/92"
-                  >
-                    {content.primaryCta.label}
-                  </a>
-                )}
-                {content.secondaryCta && (
-                  <a
-                    href={content.secondaryCta.href}
-                    className="inline-flex h-11 items-center justify-center rounded-[6px] border border-border/55 bg-card/72 px-6 text-sm text-foreground transition-colors hover:bg-card/86"
-                  >
-                    {content.secondaryCta.label}
-                  </a>
-                )}
-              </motion.div>
-            )}
-            {content.trustLine && (
-              <motion.p
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ ...transitionQuick, delay: 0.18 }}
-                className="mx-auto max-w-2xl text-xs leading-relaxed tracking-[0.03em] text-foreground/72 sm:text-sm"
-              >
-                {content.trustLine}
-              </motion.p>
-            )}
-          </div>
-        </div>
       </section>
     </section>
   );
@@ -221,7 +133,7 @@ function renderMediaFeatureBlock(block: MediaFeatureBlock): JSX.Element {
         {block.cta && (
           <a
             href={block.cta.href}
-            className="inline-flex h-10 items-center justify-center rounded-[10px] border border-border/70 bg-card/65 px-4 text-sm text-foreground transition-colors hover:border-border/90"
+            className="inline-flex h-10 items-center justify-center rounded-[10px] border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90"
           >
             {block.cta.label}
           </a>

@@ -60,13 +60,13 @@ function SuccessContent() {
         <div className="flex flex-col justify-center gap-2.5 sm:flex-row">
           <Link
             href="/catalog"
-            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-border/70 bg-foreground px-5 text-sm font-medium text-background transition-colors hover:bg-foreground/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-accent/70 bg-accent px-5 text-sm font-medium text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             Продолжить в каталог
           </Link>
           <Link
             href="/"
-            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-border/60 bg-card/72 px-5 text-sm font-medium text-foreground transition-colors hover:border-border/75 hover:bg-card/88 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-accent/70 bg-accent px-5 text-sm font-medium text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             На главную
           </Link>

@@ -67,7 +67,7 @@ function resolveTrackEndpoint(): string {
     return explicitEndpoint;
   }
 
-  const apiBase = (process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://localhost:8000").trim();
+  const apiBase = (process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://127.0.0.1:8000").trim();
   return `${apiBase.replace(/\/+$/, "")}/metrics/pwa-install-events`;
 }
 

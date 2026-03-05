@@ -250,7 +250,7 @@ export default function CheckoutPage() {
           </Surface>
         </motion.div>
 
-        <Button type="submit" fullWidth className="hidden md:inline-flex" disabled={isSubmitDisabled}>
+        <Button type="submit" fullWidth ripple className="hidden md:inline-flex" disabled={isSubmitDisabled}>
           {submitting ? (
             <span className="inline-flex items-center gap-2">
               <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
@@ -310,7 +310,7 @@ export default function CheckoutPage() {
             <span className="ui-kicker">Итого</span>
             <span className="text-sm font-semibold">{totalFormatted}</span>
           </div>
-          <Button type="submit" form="checkout-form" fullWidth disabled={isSubmitDisabled}>
+          <Button type="submit" form="checkout-form" fullWidth ripple disabled={isSubmitDisabled}>
             {submitting ? (
               <span className="inline-flex items-center gap-2">
                 <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />

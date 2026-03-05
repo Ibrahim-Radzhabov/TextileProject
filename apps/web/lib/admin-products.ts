@@ -143,7 +143,7 @@ function parseMetadataFromJson(raw: string): Record<string, string | number | bo
 }
 
 export function resolveStoreApiUrl(): string {
-  return process.env.STORE_API_URL ?? process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://localhost:8000";
+  return process.env.STORE_API_URL ?? process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://127.0.0.1:8000";
 }
 
 export function buildAdminApiHeaders(): HeadersInit {
