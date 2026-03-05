@@ -22,6 +22,7 @@ import type {
 } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
+import { PinnedHorizontalShowcase } from "@/components/pinned-horizontal-showcase";
 
 type HomePageClientProps = {
   homePage: PageConfig;
@@ -266,7 +267,13 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const favoriteProductIds = useFavoritesStore((state) => state.productIds);
   const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
   const heroBlock = homePage.blocks.find((entry): entry is HeroBlock => entry.type === "hero");
+  const firstProductGridBlock = homePage.blocks.find(
+    (entry): entry is ProductGridBlock => entry.type === "product-grid"
+  );
   const heroQuickLinks = heroBlock ? resolveHeroContent(heroBlock).quickLinks.slice(0, 4) : [];
+  const featuredProducts = products.filter((product) => product.isFeatured);
+  const showcaseProducts = (featuredProducts.length >= 3 ? featuredProducts : products).slice(0, 7);
+  const shouldRenderPinnedShowcase = showcaseProducts.length >= 3;
 
   return (
     <div className="home-concept-editorial space-y-8 sm:space-y-9 lg:space-y-11">
@@ -283,8 +290,25 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
           return [];
         }
 
-        if (block.type === "hero" && heroQuickLinks.length > 0) {
-          return [blockNode, renderHeroQuickLinksBar(heroQuickLinks, `${block.id}-quick-links`)];
+        if (block.type === "hero") {
+          const sections: JSX.Element[] = [blockNode];
+
+          if (heroQuickLinks.length > 0) {
+            sections.push(renderHeroQuickLinksBar(heroQuickLinks, `${block.id}-quick-links`));
+          }
+
+          if (shouldRenderPinnedShowcase) {
+            sections.push(
+              <PinnedHorizontalShowcase
+                key={`${block.id}-pinned-horizontal`}
+                products={showcaseProducts}
+                title={firstProductGridBlock?.title}
+                subtitle={firstProductGridBlock?.subtitle}
+              />
+            );
+          }
+
+          return sections;
         }
 
         return [blockNode];

@@ -4,6 +4,7 @@ import * as React from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import type { Product } from "@store-platform/shared-types";
 import { Button } from "./Button";
+import { FavoriteToggleButton } from "./FavoriteToggleButton";
 import { springSharedElement, springSnappy } from "../motion/presets";
 
 export type ProductCardProps = {
@@ -61,36 +62,17 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           />
 
           {onToggleFavorite && (
-            <button
-              type="button"
+            <FavoriteToggleButton
+              testId={`favorite-toggle-${product.slug}`}
+              active={isFavorite}
+              addLabel={`Добавить ${product.name} в избранное`}
+              removeLabel={`Убрать ${product.name} из избранного`}
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
                 onToggleFavorite(product);
               }}
-              aria-label={isFavorite ? `Убрать ${product.name} из избранного` : `Добавить ${product.name} в избранное`}
-              className={[
-                "absolute right-2 top-2 z-20 inline-flex h-8 w-8 items-center justify-center rounded-full border backdrop-blur-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:right-2.5 sm:top-2.5",
-                isFavorite
-                  ? "border-border/75 bg-card/88 text-foreground"
-                  : "border-border/55 bg-card/72 text-muted-foreground hover:border-border/70 hover:text-foreground"
-              ].join(" ")}
-            >
-              <svg
-                viewBox="0 0 24 24"
-                className="h-[18px] w-[18px]"
-                fill={isFavorite ? "currentColor" : "none"}
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  d="M12 20.2C8.8 17.7 5 14.6 5 10.6C5 8.4 6.7 6.8 8.8 6.8C10.1 6.8 11.3 7.4 12 8.4C12.7 7.4 13.9 6.8 15.2 6.8C17.3 6.8 19 8.4 19 10.6C19 14.6 15.2 17.7 12 20.2Z"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </button>
+            />
           )}
 
           <div className="aspect-[4/5] overflow-hidden bg-muted/20">

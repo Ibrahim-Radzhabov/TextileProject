@@ -13,6 +13,7 @@ export * from "./components/ProductCard";
 export * from "./components/ProductGrid";
 export * from "./components/CartDrawer";
 export * from "./components/ProductGallery";
+export * from "./components/FavoriteToggleButton";
 export * from "./components/CatalogFilterSidebar";
 export * from "./components/CtaStrip";
 export * from "./components/QuickActionForms";
