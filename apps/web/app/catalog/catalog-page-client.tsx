@@ -18,6 +18,15 @@ type CatalogPageClientProps = {
   allTags: string[];
 };
 
+type MiniRailKey = "all" | "new" | "bestsellers" | "day-night" | "blackout";
+
+type MiniRailPreset = {
+  key: MiniRailKey;
+  label: string;
+  description: string;
+  predicate?: (product: Product) => boolean;
+};
+
 const sortOptions: Array<{ value: CatalogSort; label: string }> = [
   { value: "recommended", label: "Рекомендовано" },
   { value: "price_asc", label: "Цена ↑" },
@@ -27,6 +36,47 @@ const sortOptions: Array<{ value: CatalogSort; label: string }> = [
 ];
 
 const CURRENCY_LOCALE = "ru-RU";
+
+const miniRailPresets: MiniRailPreset[] = [
+  {
+    key: "all",
+    label: "Все позиции",
+    description: "Весь каталог без дополнительных ограничений."
+  },
+  {
+    key: "new",
+    label: "Новинки",
+    description: "Свежие поступления и новые фактуры.",
+    predicate: (product) => (product.badges ?? []).some((badge) => badge.label.toLowerCase().includes("new"))
+  },
+  {
+    key: "bestsellers",
+    label: "Бестселлеры",
+    description: "Самые востребованные позиции и флагманские модели.",
+    predicate: (product) =>
+      product.isFeatured || (product.badges ?? []).some((badge) => badge.label.toLowerCase().includes("best"))
+  },
+  {
+    key: "day-night",
+    label: "Day-Night",
+    description: "Сценарии комбинированного света на день и вечер.",
+    predicate: (product) => (product.tags ?? []).includes("day-night")
+  },
+  {
+    key: "blackout",
+    label: "Blackout",
+    description: "Плотные решения для максимального затемнения.",
+    predicate: (product) => (product.tags ?? []).includes("blackout")
+  }
+];
+
+function isMiniRailKey(value: string | null): value is MiniRailKey {
+  return miniRailPresets.some((preset) => preset.key === value);
+}
+
+function resolveMiniRailPreset(key: MiniRailKey): MiniRailPreset {
+  return miniRailPresets.find((preset) => preset.key === key) ?? miniRailPresets[0];
+}
 
 function formatMoney(amount: number | null, currency: string): string {
   if (amount === null) {
@@ -51,11 +101,14 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     () => resolveCatalogViewPreset(searchParams.get("view"), allTags),
     [allTags, searchParams]
   );
+  const initialMiniRailValue = searchParams.get("rail");
+  const initialMiniRail: MiniRailKey = isMiniRailKey(initialMiniRailValue) ? initialMiniRailValue : "all";
   const [tagsFilter, setTagsFilter] = useState<string[]>(activePreset?.tags ?? []);
   const [sort, setSort] = useState<CatalogSort>(activePreset?.sort ?? "recommended");
   const initialSearchValue = searchParams.get("q")?.trim() ?? "";
   const [searchValue, setSearchValue] = useState(initialSearchValue);
   const [showTagFilters, setShowTagFilters] = useState(true);
+  const [miniRail, setMiniRail] = useState<MiniRailKey>(initialMiniRail);
   const lastPresetKeyRef = useRef<string | null>(activePreset?.key ?? null);
 
   useEffect(() => {
@@ -79,6 +132,9 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     const params = new URLSearchParams(searchParamsValue);
     const nextQuery = params.get("q")?.trim() ?? "";
     setSearchValue((prev) => (prev === nextQuery ? prev : nextQuery));
+    const nextMiniRailValue = params.get("rail");
+    const nextMiniRail: MiniRailKey = isMiniRailKey(nextMiniRailValue) ? nextMiniRailValue : "all";
+    setMiniRail((prev) => (prev === nextMiniRail ? prev : nextMiniRail));
 
     if (params.get("open_filters") === "1") {
       setShowTagFilters(true);
@@ -87,10 +143,15 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
 
   const filteredProducts = useMemo(() => {
     const searchQuery = searchValue.trim().toLowerCase();
+    const activeMiniRailPreset = resolveMiniRailPreset(miniRail);
     const filtered = products.filter((product) => {
       const tags = product.tags ?? [];
 
       if (tagsFilter.length > 0 && !tagsFilter.some((tag) => tags.includes(tag))) {
+        return false;
+      }
+
+      if (activeMiniRailPreset.predicate && !activeMiniRailPreset.predicate(product)) {
         return false;
       }
 
@@ -126,7 +187,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
       }
       return a.name.localeCompare(b.name);
     });
-  }, [products, searchValue, sort, tagsFilter]);
+  }, [miniRail, products, searchValue, sort, tagsFilter]);
 
   const selectedCount = tagsFilter.length;
   const featuredCount = useMemo(() => filteredProducts.filter((product) => product.isFeatured).length, [filteredProducts]);
@@ -154,6 +215,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   }, [filteredProducts]);
 
   const currency = filteredProducts[0]?.price.currency ?? products[0]?.price.currency ?? "USD";
+  const activeMiniRailPreset = useMemo(() => resolveMiniRailPreset(miniRail), [miniRail]);
 
   const toggleTag = (tag: string) => {
     setTagsFilter((prev) => (prev.includes(tag) ? prev.filter((entry) => entry !== tag) : [...prev, tag]));
@@ -166,6 +228,18 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
 
     const nextSearch = new URLSearchParams(searchParams.toString());
     nextSearch.delete("view");
+    const nextQuery = nextSearch.toString();
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+  };
+
+  const selectMiniRailPreset = (nextPreset: MiniRailKey) => {
+    setMiniRail(nextPreset);
+    const nextSearch = new URLSearchParams(searchParams.toString());
+    if (nextPreset === "all") {
+      nextSearch.delete("rail");
+    } else {
+      nextSearch.set("rail", nextPreset);
+    }
     const nextQuery = nextSearch.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   };
@@ -186,6 +260,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
           <Badge tone="accent">Показано: {filteredProducts.length}</Badge>
           {searchValue.trim().length > 0 && <Badge tone="muted">Запрос: {searchValue.trim()}</Badge>}
           {selectedCount > 0 && <Badge tone="muted">Фильтры: {selectedCount}</Badge>}
+          {activeMiniRailPreset.key !== "all" && <Badge tone="muted">Поток: {activeMiniRailPreset.label}</Badge>}
           <Badge tone="muted">
             {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
           </Badge>
@@ -274,6 +349,41 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
             </motion.div>
           )}
         </AnimatePresence>
+      </section>
+
+      <section className="sticky top-[4.2rem] z-20 rounded-md border border-border/34 bg-card/90 p-2 shadow-soft-subtle backdrop-blur-xl sm:top-[4.8rem] sm:p-2.5">
+        <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex min-w-max gap-2 sm:gap-2.5">
+            {miniRailPresets.map((preset) => {
+              const active = preset.key === miniRail;
+              return (
+                <button
+                  key={preset.key}
+                  type="button"
+                  onClick={() => selectMiniRailPreset(preset.key)}
+                  className={[
+                    "group min-h-[38px] rounded-[6px] border px-3 py-1.5 text-left transition-colors sm:min-h-[40px]",
+                    active
+                      ? "border-accent/80 bg-accent text-white"
+                      : "border-border/45 bg-card/72 text-foreground hover:border-border/70 hover:bg-card/90"
+                  ].join(" ")}
+                >
+                  <p className="ui-label text-[11px] normal-case leading-tight tracking-[0.01em]">
+                    {preset.label}
+                  </p>
+                  <p
+                    className={[
+                      "mt-0.5 hidden text-[10px] leading-relaxed sm:block",
+                      active ? "text-white/88" : "text-muted-foreground/82"
+                    ].join(" ")}
+                  >
+                    {preset.description}
+                  </p>
+                </button>
+              );
+            })}
+          </div>
+        </div>
       </section>
 
       {page.blocks.map((block) => {
