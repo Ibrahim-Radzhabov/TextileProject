@@ -28,7 +28,7 @@ export function HeroPinnedVideo({ media, title, overlayContent }: HeroPinnedVide
       className="relative isolate min-h-[360px] overflow-hidden rounded-md bg-card/80 sm:min-h-[470px] lg:min-h-[540px]"
     >
       <motion.div
-        className="h-full"
+        className="absolute inset-0"
         style={
           prefersReducedMotion
             ? undefined
