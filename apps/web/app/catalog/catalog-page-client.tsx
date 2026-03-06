@@ -183,14 +183,13 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
 
       <section className="space-y-4 rounded-md border border-border/34 bg-card/90 p-4 sm:p-5">
         <div className="flex flex-wrap items-center gap-2">
-          <Badge tone="muted">Всего: {products.length}</Badge>
-          <Badge tone="accent">По фильтру: {filteredProducts.length}</Badge>
-          {searchValue.trim().length > 0 && <Badge tone="accent">Поиск: {searchValue.trim()}</Badge>}
-          {selectedCount > 0 && <Badge tone="accent">Тегов: {selectedCount}</Badge>}
-          <Badge tone="muted">Featured: {featuredCount}</Badge>
+          <Badge tone="accent">Показано: {filteredProducts.length}</Badge>
+          {searchValue.trim().length > 0 && <Badge tone="muted">Запрос: {searchValue.trim()}</Badge>}
+          {selectedCount > 0 && <Badge tone="muted">Фильтры: {selectedCount}</Badge>}
           <Badge tone="muted">
             {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
           </Badge>
+          {featuredCount > 0 && <Badge tone="muted">Featured: {featuredCount}</Badge>}
         </div>
 
         {activePreset && (
@@ -264,7 +263,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                         "rounded-[6px] border px-2.5 py-1 text-[11px] transition-colors",
                         active
                           ? "border-accent/80 bg-accent text-white"
-                          : "border-accent/70 bg-accent/90 text-white hover:bg-accent"
+                          : "border-border/45 bg-card/72 text-foreground/90 hover:border-border/70 hover:bg-card/86"
                       ].join(" ")}
                     >
                       #{tag}
@@ -337,11 +336,12 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
             </div>
 
             <div className="hidden sm:block">
-              <div className="grid auto-rows-fr grid-cols-2 gap-3 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid auto-rows-fr grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
                 {filteredProducts.map((product) => (
                   <ProductCard
                     key={product.id}
                     product={product}
+                    variant="editorial"
                     onQuickAdd={(entry) => addProduct(entry.id)}
                     enableSharedTransition={enableSharedProductTransition}
                     isFavorite={favoriteProductIds.includes(product.id)}
