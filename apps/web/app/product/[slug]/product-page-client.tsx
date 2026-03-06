@@ -48,6 +48,85 @@ function normalizeMetaKey(label: string): string {
     .toLowerCase();
 }
 
+type ProductSwatch = {
+  id: string;
+  label: string;
+  toneClass: string;
+};
+
+const swatchByTag: Record<string, { label: string; toneClass: string }> = {
+  linen: { label: "Linen Sand", toneClass: "bg-[#cdbda9]" },
+  jacquard: { label: "Jacquard Pearl", toneClass: "bg-[#d8d2c9]" },
+  velvet: { label: "Velvet Graphite", toneClass: "bg-[#4e4944]" },
+  blackout: { label: "Noir Blackout", toneClass: "bg-[#252729]" },
+  sheer: { label: "Sheer Pearl", toneClass: "bg-[#f2efe8]" },
+  tulle: { label: "Tulle Ivory", toneClass: "bg-[#ece7db]" },
+  "day-night": { label: "Day-Night Mix", toneClass: "bg-[#9a866d]" }
+};
+
+const serviceHighlights = [
+  {
+    id: "swatches",
+    title: "Образцы ткани",
+    description: "Отправим подборку оттенков перед заказом."
+  },
+  {
+    id: "consultation",
+    title: "Консультация",
+    description: "Поможем с шириной, складками и световым сценарием."
+  },
+  {
+    id: "warranty",
+    title: "Гарантия пошива",
+    description: "Поддержка после установки и корректировка посадки."
+  }
+] as const;
+
+function deriveSwatches(product: Product, fabricMeta: string | null): ProductSwatch[] {
+  const resolved: ProductSwatch[] = [];
+  const used = new Set<string>();
+  const tags = product.tags ?? [];
+
+  for (const tag of tags) {
+    const preset = swatchByTag[tag];
+    if (!preset || used.has(preset.label)) {
+      continue;
+    }
+
+    used.add(preset.label);
+    resolved.push({
+      id: `swatch-${tag}`,
+      label: preset.label,
+      toneClass: preset.toneClass
+    });
+  }
+
+  if (fabricMeta) {
+    const normalized = fabricMeta.toLowerCase();
+    for (const [tag, preset] of Object.entries(swatchByTag)) {
+      if (!normalized.includes(tag) || used.has(preset.label)) {
+        continue;
+      }
+
+      used.add(preset.label);
+      resolved.push({
+        id: `swatch-meta-${tag}`,
+        label: preset.label,
+        toneClass: preset.toneClass
+      });
+    }
+  }
+
+  if (resolved.length === 0) {
+    resolved.push(
+      { id: "swatch-default-ivory", label: "Soft Ivory", toneClass: "bg-[#ebe6dc]" },
+      { id: "swatch-default-taupe", label: "Warm Taupe", toneClass: "bg-[#9f8d78]" }
+    );
+  }
+
+  return resolved.slice(0, 4);
+}
+
 export function ProductPageClient({
   product,
   related,
@@ -103,6 +182,7 @@ export function ProductPageClient({
   const fabricMeta = metadataLookup.get("fabric") ?? metadataLookup.get("ткань") ?? null;
   const lightControlMeta = metadataLookup.get("light control") ?? metadataLookup.get("затемнение") ?? null;
   const panelWidthMeta = metadataLookup.get("width panel") ?? metadataLookup.get("ширина панели") ?? null;
+  const swatches = useMemo(() => deriveSwatches(product, fabricMeta), [fabricMeta, product]);
   const panelWidthCm = useMemo(() => {
     if (!panelWidthMeta) {
       return null;
@@ -151,7 +231,7 @@ export function ProductPageClient({
   };
 
   return (
-    <div className="space-y-10 pb-10">
+    <div className="space-y-10 pb-40 md:pb-10">
       <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -286,6 +366,47 @@ export function ProductPageClient({
                 </ul>
               </div>
 
+              <div className="space-y-3 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-1">
+                    <p className="ui-kicker">Swatches</p>
+                    <p className="text-sm font-medium tracking-tight">Образцы и оттенки ткани</p>
+                    <p className="ui-subtle text-xs">Подберем оттенок к вашему интерьеру перед заказом.</p>
+                  </div>
+                  <a
+                    href="mailto:atelier@textile.studio?subject=Запрос%20образцов%20ткани"
+                    className="inline-flex h-8 shrink-0 items-center rounded-[8px] border border-border/52 bg-card/70 px-2.5 text-xs font-medium transition-colors hover:border-border/70 hover:bg-card/90"
+                  >
+                    Запросить
+                  </a>
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {swatches.map((swatch) => (
+                    <button
+                      key={swatch.id}
+                      type="button"
+                      className="group inline-flex items-center gap-2 rounded-full border border-border/45 bg-card/78 px-2.5 py-1.5 text-xs transition-colors hover:border-border/70 hover:bg-card/92"
+                      aria-label={`Образец ${swatch.label}`}
+                    >
+                      <span className={`h-4 w-4 rounded-full border border-border/55 ${swatch.toneClass}`} aria-hidden="true" />
+                      <span className="text-foreground/88">{swatch.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="grid gap-2.5 sm:grid-cols-3">
+                {serviceHighlights.map((item) => (
+                  <div
+                    key={item.id}
+                    className="rounded-xl border border-border/42 bg-card/52 px-3.5 py-3"
+                  >
+                    <p className="ui-kicker">{item.title}</p>
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{item.description}</p>
+                  </div>
+                ))}
+              </div>
+
               {metadataEntries.length > 0 && (
                 <div className="grid gap-2 sm:grid-cols-2">
                   {metadataEntries.map((entry) => (
@@ -313,6 +434,37 @@ export function ProductPageClient({
           </Surface>
         </motion.div>
       </div>
+
+      <motion.div
+        className="fixed inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 rounded-[12px] border border-border/48 bg-card/94 p-2.5 shadow-soft backdrop-blur-xl md:hidden"
+        initial={{ opacity: 0, y: 14 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.22, delay: 0.08 }}
+      >
+        <div className="flex items-center gap-2.5">
+          <div className="min-w-0">
+            <p className="ui-kicker">Итого</p>
+            <p className="text-[1rem] font-semibold tracking-tight text-foreground">{priceFormatted}</p>
+            {comparePriceFormatted && (
+              <p className="text-[11px] text-muted-foreground line-through">{comparePriceFormatted}</p>
+            )}
+          </div>
+          <Button
+            fullWidth
+            size="sm"
+            ripple
+            className="h-10 flex-1 rounded-[8px]"
+            aria-label={`Добавить ${product.name} в корзину`}
+            aria-busy={isAdding || isPricing}
+            onClick={() => {
+              void handleAddToCart();
+            }}
+            disabled={isAdding || isPricing}
+          >
+            {isAdding || isPricing ? "Добавление..." : "В корзину"}
+          </Button>
+        </div>
+      </motion.div>
 
       {related.length > 0 && (
         <section className="space-y-4">
