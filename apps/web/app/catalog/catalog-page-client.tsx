@@ -303,19 +303,19 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...transitionQuick, delay: 0.01 }}
-                  className="rounded-[8px] border border-border/32 bg-card/92 p-2.5"
+                  className="rounded-[8px] border border-border/30 bg-card/92 p-3"
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3.5">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={product.media[0]?.url}
                       alt={product.media[0]?.alt ?? product.name}
-                      className="h-20 w-20 rounded-[6px] object-cover"
+                      className="h-[5.5rem] w-[5.5rem] rounded-[6px] object-cover"
                     />
                     <div className="min-w-0 flex-1 space-y-0.5">
                       <a
                         href={`/product/${encodeURIComponent(product.slug)}`}
-                        className="ui-title line-clamp-2 text-[0.98rem]"
+                        className="ui-title line-clamp-2 text-[1rem]"
                       >
                         {product.name}
                       </a>

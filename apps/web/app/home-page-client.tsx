@@ -105,25 +105,25 @@ function renderHeroQuickLinksBar(
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ ...transitionQuick, delay: 0.2 }}
-      className="sticky top-[4.1rem] z-30 sm:top-[4.7rem]"
+      className="sticky top-[4.2rem] z-30 sm:top-[4.8rem]"
     >
       <nav
         aria-label="Быстрые переходы по каталогу"
-        className="rounded-[8px] border border-border/38 bg-card/88 p-1.5 backdrop-blur-xl sm:p-2"
+        className="rounded-[8px] border border-border/38 bg-card/90 p-2 shadow-soft-subtle backdrop-blur-xl sm:p-2.5"
       >
         <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex gap-1.5 snap-x snap-mandatory sm:grid sm:min-w-0 sm:grid-cols-4 sm:gap-2">
+          <div className="flex gap-2 snap-x snap-mandatory sm:grid sm:min-w-0 sm:grid-cols-4 sm:gap-2.5">
             {links.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="group w-[calc(50%-0.1875rem)] shrink-0 snap-start rounded-[6px] border border-border/36 bg-card/72 px-2.5 py-2 text-left transition-colors hover:bg-card/92 sm:w-auto sm:px-3 sm:py-2.5"
+                className="group w-[72vw] max-w-[280px] min-h-[56px] shrink-0 snap-start rounded-[6px] border border-border/36 bg-card/74 px-3 py-2.5 text-left transition-colors hover:bg-card/94 active:bg-card/96 sm:w-auto sm:max-w-none sm:px-3.5 sm:py-2.5"
               >
                 <p className="ui-label text-[11px] leading-tight text-foreground/92 sm:text-[12px]">
                   {link.label}
                 </p>
                 {link.subtitle && (
-                  <p className="mt-1 hidden text-[11px] leading-relaxed text-muted-foreground/86 sm:block">
+                  <p className="mt-1 hidden text-[11px] leading-relaxed text-muted-foreground/82 sm:block">
                     {link.subtitle}
                   </p>
                 )}

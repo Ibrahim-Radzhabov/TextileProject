@@ -108,7 +108,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           </div>
         </div>
 
-        <div className={["relative z-20 flex flex-1 flex-col p-3 sm:p-3.5", isEditorial ? "gap-2" : "gap-2.5"].join(" ")}>
+        <div className={["relative z-20 flex flex-1 flex-col p-3.5 sm:p-3.5", isEditorial ? "gap-2" : "gap-2.5"].join(" ")}>
           <div className="space-y-1.5">
             {overline && (
               <p className="ui-kicker text-muted-foreground/78">
@@ -178,7 +178,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               ripple
               className={[
                 "relative z-20 rounded-[6px] border-border/45 bg-accent text-white hover:bg-accent/92",
-                isEditorial ? "h-9 text-[0.86rem]" : "h-9"
+                isEditorial ? "h-10 text-[0.87rem] sm:h-9" : "h-10 sm:h-9"
               ].join(" ")}
               data-testid={`quick-add-${product.slug}`}
               aria-label={`Добавить ${product.name} в корзину`}

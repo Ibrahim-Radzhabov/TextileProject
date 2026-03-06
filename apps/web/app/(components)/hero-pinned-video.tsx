@@ -19,6 +19,7 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
     sectionHeight: 0,
     maxShift: 0
   });
+  const [trackWidthPercent, setTrackWidthPercent] = React.useState(172);
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
@@ -46,7 +47,10 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
     const trackWidth = trackRef.current.scrollWidth;
     const maxShift = Math.max(0, trackWidth - viewportWidth);
     const viewportHeight = window.innerHeight;
-    const sectionHeight = Math.max(viewportHeight * 1.18, viewportHeight + maxShift * 1.04 + 120);
+    const sectionHeight = Math.max(viewportHeight * 1.24, viewportHeight + maxShift * 1.36 + 180);
+
+    const nextTrackWidthPercent = viewportWidth >= 1536 ? 182 : viewportWidth >= 1280 ? 176 : 170;
+    setTrackWidthPercent((prev) => (prev === nextTrackWidthPercent ? prev : nextTrackWidthPercent));
 
     setMetrics((prev) => {
       if (
@@ -96,11 +100,12 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
     offset: ["start start", "end end"]
   });
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 118,
-    damping: 30,
-    mass: 0.3
+    stiffness: 94,
+    damping: 28,
+    mass: 0.42
   });
   const trackX = useTransform(smoothProgress, [0, 1], [0, -metrics.maxShift]);
+  const progressScale = useTransform(smoothProgress, [0, 1], [0, 1]);
 
   if (useStaticMode) {
     return (
@@ -121,12 +126,12 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
       className="relative"
       style={{ height: metrics.sectionHeight > 0 ? `${metrics.sectionHeight}px` : "180vh" }}
     >
-      <div className="sticky top-[4.2rem] h-[min(72vh,620px)] overflow-hidden rounded-md bg-card/80 sm:top-[4.8rem]">
+      <div className="sticky top-[4.2rem] h-[min(74vh,660px)] overflow-hidden rounded-md bg-card/80 sm:top-[4.8rem]">
         <div ref={viewportRef} className="relative h-full w-full overflow-hidden">
           <motion.div
             ref={trackRef}
-            className="relative h-full w-[140vw] will-change-transform"
-            style={{ x: trackX }}
+            className="relative h-full will-change-transform"
+            style={{ width: `${trackWidthPercent}vw`, x: trackX }}
           >
             <HeroMedia
               media={media}
@@ -136,6 +141,12 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
               assetClassName="h-full w-full object-cover"
             />
           </motion.div>
+        </div>
+
+        <div className="absolute inset-x-4 bottom-3 z-20 sm:inset-x-6">
+          <div className="h-[2px] w-full overflow-hidden rounded-full bg-border/42">
+            <motion.div className="h-full origin-left rounded-full bg-accent" style={{ scaleX: progressScale }} />
+          </div>
         </div>
       </div>
     </section>
