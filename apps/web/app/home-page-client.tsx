@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import {
+  Button,
   CtaStrip,
   EmptyState,
   HeroMedia,
@@ -62,19 +63,83 @@ function filterProducts(products: Product[], block: ProductGridBlock): Product[]
 function renderHeroBlock(block: HeroBlock): JSX.Element {
   const content = resolveHeroContent(block);
   const media = block.media;
+  const contentPlacement = block.contentPlacement ?? "overlay";
+  const hasHeroCopy = Boolean(
+    content.eyebrow ||
+      content.title ||
+      content.subtitle ||
+      content.trustLine ||
+      content.primaryCta ||
+      content.secondaryCta
+  );
+
+  const heroCopy = hasHeroCopy ? (
+    <div className="space-y-4 sm:space-y-5">
+      {content.eyebrow && <p className="ui-kicker text-foreground/88">{content.eyebrow}</p>}
+      {content.title && (
+        <h1 className="ui-title-display text-[clamp(2.05rem,5.4vw,5rem)] leading-[0.92] text-foreground">
+          {content.title}
+        </h1>
+      )}
+      {content.subtitle && <p className="ui-subtle max-w-2xl text-sm sm:text-base lg:text-lg">{content.subtitle}</p>}
+      {(content.primaryCta || content.secondaryCta) && (
+        <div className="flex flex-wrap items-center gap-2.5 pt-1">
+          {content.primaryCta && (
+            <Button asChild size="md" ripple>
+              <a href={content.primaryCta.href}>{content.primaryCta.label}</a>
+            </Button>
+          )}
+          {content.secondaryCta && (
+            <Button
+              asChild
+              size="md"
+              ripple
+              className="border-border/52 bg-card/74 text-foreground hover:border-border/70 hover:bg-card/92"
+            >
+              <a href={content.secondaryCta.href}>{content.secondaryCta.label}</a>
+            </Button>
+          )}
+        </div>
+      )}
+      {content.trustLine && <p className="ui-subtle text-xs sm:text-sm">{content.trustLine}</p>}
+    </div>
+  ) : null;
 
   if (!media) {
     return (
       <section key={block.id} className="overflow-hidden rounded-md border border-border/28 bg-card/80">
-        <section className="relative isolate min-h-[360px] sm:min-h-[470px] lg:min-h-[540px]" />
+        <section className="relative isolate min-h-[360px] px-4 py-6 sm:min-h-[470px] sm:px-6 sm:py-7 lg:min-h-[540px] lg:px-8 lg:py-9">
+          {heroCopy}
+        </section>
       </section>
     );
   }
 
   if (media.type === "video") {
+    if (contentPlacement === "overlay" && heroCopy) {
+      return (
+        <section key={block.id} className="rounded-md border border-border/28 bg-card/80">
+          <HeroPinnedVideo
+            media={media}
+            title={content.title}
+            overlayContent={
+              <div className="rounded-[10px] border border-border/35 bg-card/76 p-4 shadow-soft-subtle backdrop-blur-xl sm:p-6 lg:p-7">
+                {heroCopy}
+              </div>
+            }
+          />
+        </section>
+      );
+    }
+
     return (
       <section key={block.id} className="rounded-md border border-border/28 bg-card/80">
         <HeroPinnedVideo media={media} title={content.title} />
+        {heroCopy && (
+          <div className="border-t border-border/28 px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
+            <div className="max-w-3xl">{heroCopy}</div>
+          </div>
+        )}
       </section>
     );
   }
@@ -90,7 +155,19 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             overlayClassName="bg-background/8"
           />
         )}
+        {contentPlacement === "overlay" && heroCopy && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 p-3 sm:p-5 lg:p-6">
+            <div className="pointer-events-auto max-w-[min(92vw,780px)] rounded-[10px] border border-border/35 bg-card/76 p-4 shadow-soft-subtle backdrop-blur-xl sm:p-6 lg:p-7">
+              {heroCopy}
+            </div>
+          </div>
+        )}
       </section>
+      {contentPlacement === "below" && heroCopy && (
+        <div className="border-t border-border/28 px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
+          <div className="max-w-3xl">{heroCopy}</div>
+        </div>
+      )}
     </section>
   );
 }

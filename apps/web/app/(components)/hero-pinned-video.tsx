@@ -7,6 +7,7 @@ import { HeroMedia, type HeroMediaConfig } from "@store-platform/ui";
 type HeroPinnedVideoProps = {
   media: HeroMediaConfig;
   title: string;
+  overlayContent?: React.ReactNode;
 };
 
 const HERO_SCROLL_TUNING = {
@@ -16,7 +17,7 @@ const HERO_SCROLL_TUNING = {
   sectionBottomPadding: 220
 } as const;
 
-export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Element {
+export function HeroPinnedVideo({ media, title, overlayContent }: HeroPinnedVideoProps): JSX.Element {
   const prefersReducedMotion = useReducedMotion();
   const sectionRef = React.useRef<HTMLElement | null>(null);
   const viewportRef = React.useRef<HTMLDivElement | null>(null);
@@ -126,6 +127,11 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
           defaultOverlayOpacity={0.04}
           overlayClassName="bg-background/8"
         />
+        {overlayContent && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 p-3 sm:p-5 lg:p-6">
+            <div className="pointer-events-auto max-w-[min(92vw,780px)]">{overlayContent}</div>
+          </div>
+        )}
       </section>
     );
   }
@@ -152,6 +158,12 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
             />
           </motion.div>
         </div>
+
+        {overlayContent && (
+          <div className="pointer-events-none absolute inset-x-0 bottom-5 z-20 px-4 sm:bottom-6 sm:px-6">
+            <div className="pointer-events-auto max-w-[min(92vw,780px)]">{overlayContent}</div>
+          </div>
+        )}
 
         <div className="absolute inset-x-4 bottom-3 z-20 sm:inset-x-6">
           <div className="h-[2px] w-full overflow-hidden rounded-full bg-border/42">
