@@ -32,14 +32,11 @@ for (const presetCase of presetCases) {
       presetCase.label
     );
 
-    const total = await readBadgeCount(page, /Всего:\s*\d+/);
-    const filtered = await readBadgeCount(page, /По фильтру:\s*\d+/);
-    const selectedTags = await readBadgeCount(page, /Тегов:\s*\d+/);
+    const shownCount = await readBadgeCount(page, /Показано:\s*\d+/);
+    const selectedFilters = await readBadgeCount(page, /Фильтры:\s*\d+/);
 
-    expect(total).toBeGreaterThan(0);
-    expect(filtered).toBeGreaterThan(0);
-    expect(filtered).toBeLessThanOrEqual(total);
-    expect(selectedTags).toBeGreaterThan(0);
+    expect(shownCount).toBeGreaterThan(0);
+    expect(selectedFilters).toBeGreaterThan(0);
 
     await page.getByTestId("catalog-preset-clear").click();
     await expect(page).not.toHaveURL(/view=/);
