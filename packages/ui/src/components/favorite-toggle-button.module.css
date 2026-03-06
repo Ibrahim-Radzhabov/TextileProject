@@ -1,7 +1,4 @@
 .button {
-  position: absolute;
-  top: 6px;
-  right: 6px;
   z-index: 20;
   width: 28px;
   height: 28px;
@@ -18,6 +15,12 @@
     background-color var(--motion-fast),
     color var(--motion-fast),
     transform 110ms ease;
+}
+
+.button[data-placement="overlay"] {
+  position: absolute;
+  top: 6px;
+  right: 6px;
 }
 
 .button:hover {
@@ -163,10 +166,13 @@
 
 @media (min-width: 640px) {
   .button {
-    top: 8px;
-    right: 8px;
     width: 30px;
     height: 30px;
+  }
+
+  .button[data-placement="overlay"] {
+    top: 8px;
+    right: 8px;
   }
 
   .icon {

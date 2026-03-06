@@ -10,6 +10,7 @@ export type FavoriteToggleButtonProps = {
   removeLabel: string;
   className?: string;
   testId?: string;
+  placement?: "overlay" | "inline";
 };
 
 const HEART_PATH =
@@ -21,7 +22,8 @@ export const FavoriteToggleButton: React.FC<FavoriteToggleButtonProps> = ({
   addLabel,
   removeLabel,
   className,
-  testId
+  testId,
+  placement = "overlay"
 }) => {
   const [burstKey, setBurstKey] = React.useState(0);
   const [bursting, setBursting] = React.useState(false);
@@ -59,6 +61,7 @@ export const FavoriteToggleButton: React.FC<FavoriteToggleButtonProps> = ({
       data-testid={testId}
       data-active={active ? "true" : "false"}
       data-burst={bursting ? "true" : "false"}
+      data-placement={placement}
       className={[styles.button, className ?? ""].filter(Boolean).join(" ")}
     >
       <span className={styles.icon}>
