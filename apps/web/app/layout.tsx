@@ -2,9 +2,10 @@ import "./globals.css";
 import type { Metadata, Viewport } from "next";
 import { cache } from "react";
 import type { ReactNode, CSSProperties } from "react";
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import type { ThemeConfig } from "@store-platform/shared-types";
 import { fetchStorefrontConfig } from "@/lib/api-client";
+import { buildOpenGraphImage, resolveMetadataBaseFromHeaders } from "@/lib/seo";
 import {
   resolveThemeByVariantId,
   resolveThemeVariantId,
@@ -106,35 +107,32 @@ function resolveShortName(shopName: string): string {
   return normalized.slice(0, 20).trimEnd();
 }
 
-function resolveMetadataBase(): URL {
-  const headerStore = headers();
-  const host =
-    headerStore.get("x-forwarded-host") ??
-    headerStore.get("host") ??
-    "127.0.0.1:3000";
-  const forwardedProto = headerStore.get("x-forwarded-proto");
-  const protocol =
-    forwardedProto ?? (host.includes("localhost") || host.startsWith("127.0.0.1") ? "http" : "https");
-
-  try {
-    return new URL(`${protocol}://${host}`);
-  } catch {
-    return new URL("http://127.0.0.1:3000");
-  }
-}
-
 export async function generateMetadata(): Promise<Metadata> {
   const config = await getStorefrontConfig();
   const shortName = resolveShortName(config.shop.name);
+  const ogImage = buildOpenGraphImage(config);
 
   return {
-    metadataBase: resolveMetadataBase(),
+    metadataBase: resolveMetadataBaseFromHeaders(),
     applicationName: config.shop.name,
     title: {
       default: config.seo.defaultTitle,
       template: config.seo.titleTemplate
     },
     description: config.seo.description,
+    openGraph: {
+      title: config.seo.defaultTitle,
+      description: config.seo.description,
+      siteName: config.shop.name,
+      type: "website",
+      images: ogImage ? [{ url: ogImage }] : undefined
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: config.seo.defaultTitle,
+      description: config.seo.description,
+      images: ogImage ? [ogImage] : undefined
+    },
     manifest: "/manifest.webmanifest",
     appleWebApp: {
       capable: true,
@@ -151,6 +149,10 @@ export async function generateMetadata(): Promise<Metadata> {
     },
     other: {
       "mobile-web-app-capable": "yes"
+    },
+    robots: {
+      index: true,
+      follow: true
     }
   };
 }

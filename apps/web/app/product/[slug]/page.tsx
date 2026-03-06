@@ -3,6 +3,12 @@ import { cache } from "react";
 import type { Metadata } from "next";
 import type { Product, StorefrontConfig } from "@store-platform/shared-types";
 import { fetchProduct, fetchStorefrontConfig } from "@/lib/api-client";
+import {
+  buildBreadcrumbJsonLd,
+  buildProductJsonLd,
+  buildStorefrontMetadata,
+  jsonLd
+} from "@/lib/seo";
 import { ProductPageClient } from "./product-page-client";
 
 const getProduct = cache(async (slug: string): Promise<Product | null> => {
@@ -36,15 +42,12 @@ export async function generateMetadata({
 
   const image = product.media?.[0]?.url ?? config.seo.openGraphImage;
 
-  return {
+  return buildStorefrontMetadata(config, {
     title,
     description,
-    openGraph: {
-      title,
-      description,
-      images: image ? [{ url: image }] : undefined
-    }
-  };
+    path: `/product/${encodeURIComponent(product.slug)}`,
+    image
+  });
 }
 
 export default async function ProductPage({
@@ -80,11 +83,29 @@ export default async function ProductPage({
       content: block.content
     }));
 
+  const schemas = [
+    buildBreadcrumbJsonLd([
+      { name: "Главная", path: "/" },
+      { name: "Каталог", path: "/catalog" },
+      { name: product.name, path: `/product/${encodeURIComponent(product.slug)}` }
+    ]),
+    buildProductJsonLd(config, product)
+  ];
+
   return (
-    <ProductPageClient
-      product={product}
-      related={related}
-      productPageTexts={productPageTextBlocks ?? []}
-    />
+    <>
+      {schemas.map((schema, index) => (
+        <script
+          key={`product-schema-${index}`}
+          type="application/ld+json"
+          dangerouslySetInnerHTML={jsonLd(schema)}
+        />
+      ))}
+      <ProductPageClient
+        product={product}
+        related={related}
+        productPageTexts={productPageTextBlocks ?? []}
+      />
+    </>
   );
 }

@@ -7,6 +7,12 @@
 - Refined Home hero flow: config-driven content placement (`overlay` / `below`) and removed horizontal scroll behavior from hero/home showcase composition.
 - Upgraded Catalog UX with sticky mini-bar presets (`rail=all|new|bestsellers|day-night|blackout`) and aligned neon search/filter interactions with top-nav behavior.
 - Upgraded PDP experience with premium content blocks (swatches + service highlights), shared favorite interaction, and sticky mobile CTA.
+- Added storefront SEO/GEO foundation:
+  - page-level metadata for home/catalog/PDP,
+  - `robots.txt` + `sitemap.xml`,
+  - schema.org JSON-LD for `Organization`, `WebSite`, `CollectionPage`, `BreadcrumbList`, `Product`,
+  - `noindex` coverage for admin, checkout and favorites flows,
+  - canonicalized catalog base route while keeping filter/query UX state.
 - Synced E2E catalog presets with current UI copy (`Показано` / `Фильтры`) to keep regression checks stable after copy/tone updates.
 - Refreshed storefront visual baselines for `390x844`, `768x1024`, `1280x900` after UI restructuring.
 - Applied theme-driven typography and text palette refinement for Atelier variant:
