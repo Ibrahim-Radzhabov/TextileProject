@@ -353,7 +353,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
 
       <section className="sticky top-[4.2rem] z-20 rounded-md border border-border/34 bg-card/90 p-2 shadow-soft-subtle backdrop-blur-xl sm:top-[4.8rem] sm:p-2.5">
         <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex min-w-max gap-2 sm:gap-2.5">
+          <div className="flex min-w-max snap-x snap-mandatory gap-2 sm:gap-2.5">
             {miniRailPresets.map((preset) => {
               const active = preset.key === miniRail;
               return (
@@ -362,7 +362,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   type="button"
                   onClick={() => selectMiniRailPreset(preset.key)}
                   className={[
-                    "group min-h-[38px] rounded-[6px] border px-3 py-1.5 text-left transition-colors sm:min-h-[40px]",
+                    "group min-h-[38px] min-w-[128px] snap-start rounded-[6px] border px-3 py-1.5 text-left transition-colors sm:min-h-[40px] sm:min-w-0",
                     active
                       ? "border-accent/80 bg-accent text-white"
                       : "border-border/45 bg-card/72 text-foreground hover:border-border/70 hover:bg-card/90"

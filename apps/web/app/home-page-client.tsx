@@ -74,16 +74,16 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
   );
 
   const heroCopy = hasHeroCopy ? (
-    <div className="space-y-4 sm:space-y-5">
+    <div className="space-y-3.5 sm:space-y-5">
       {content.eyebrow && <p className="ui-kicker text-foreground/88">{content.eyebrow}</p>}
       {content.title && (
-        <h1 className="ui-title-display text-[clamp(2.05rem,5.4vw,5rem)] leading-[0.92] text-foreground">
+        <h1 className="ui-title-display text-[clamp(1.82rem,8vw,4.9rem)] leading-[0.93] text-foreground">
           {content.title}
         </h1>
       )}
       {content.subtitle && <p className="ui-subtle max-w-2xl text-sm sm:text-base lg:text-lg">{content.subtitle}</p>}
       {(content.primaryCta || content.secondaryCta) && (
-        <div className="flex flex-wrap items-center gap-2.5 pt-1">
+        <div className="flex flex-wrap items-center gap-2 pt-1">
           {content.primaryCta && (
             <Button asChild size="md" ripple>
               <a href={content.primaryCta.href}>{content.primaryCta.label}</a>

@@ -231,7 +231,7 @@ export function ProductPageClient({
   };
 
   return (
-    <div className="space-y-10 pb-40 md:pb-10">
+    <div className="space-y-10 pb-[calc(10rem+env(safe-area-inset-bottom))] md:pb-10">
       <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -436,7 +436,7 @@ export function ProductPageClient({
       </div>
 
       <motion.div
-        className="fixed inset-x-3 bottom-[calc(4.5rem+env(safe-area-inset-bottom))] z-40 rounded-[12px] border border-border/48 bg-card/94 p-2.5 shadow-soft backdrop-blur-xl md:hidden"
+        className="fixed inset-x-3 bottom-[calc(4.4rem+env(safe-area-inset-bottom))] z-40 rounded-[12px] border border-border/48 bg-card/94 p-2.5 shadow-soft backdrop-blur-xl md:hidden"
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, delay: 0.08 }}
@@ -453,7 +453,7 @@ export function ProductPageClient({
             fullWidth
             size="sm"
             ripple
-            className="h-10 flex-1 rounded-[8px]"
+            className="h-11 flex-1 rounded-[8px]"
             aria-label={`Добавить ${product.name} в корзину`}
             aria-busy={isAdding || isPricing}
             onClick={() => {
