@@ -15,11 +15,11 @@ export type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> & {
 };
 
 const baseClasses =
-  "relative isolate inline-flex items-center justify-center overflow-hidden rounded-[10px] border font-medium tracking-tight transition-all duration-[var(--motion-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
+  "ui-button relative isolate inline-flex items-center justify-center overflow-hidden rounded-[10px] border transition-all duration-[var(--motion-fast)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50";
 
 const sizeClasses: Record<ButtonSize, string> = {
-  sm: "h-9 px-3.5 text-sm",
-  md: "h-11 px-4.5 text-sm",
+  sm: "h-9 px-3.5",
+  md: "h-11 px-4.5",
   lg: "h-12 px-6 text-base"
 };
 
