@@ -9,6 +9,13 @@ type HeroPinnedVideoProps = {
   title: string;
 };
 
+const HERO_SCROLL_TUNING = {
+  travelFactor: 0.96,
+  minViewportHeightFactor: 1.28,
+  shiftToHeightFactor: 1.52,
+  sectionBottomPadding: 220
+} as const;
+
 export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Element {
   const prefersReducedMotion = useReducedMotion();
   const sectionRef = React.useRef<HTMLElement | null>(null);
@@ -47,9 +54,12 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
     const trackWidth = trackRef.current.scrollWidth;
     const maxShift = Math.max(0, trackWidth - viewportWidth);
     const viewportHeight = window.innerHeight;
-    const sectionHeight = Math.max(viewportHeight * 1.24, viewportHeight + maxShift * 1.36 + 180);
+    const sectionHeight = Math.max(
+      viewportHeight * HERO_SCROLL_TUNING.minViewportHeightFactor,
+      viewportHeight + maxShift * HERO_SCROLL_TUNING.shiftToHeightFactor + HERO_SCROLL_TUNING.sectionBottomPadding
+    );
 
-    const nextTrackWidthPercent = viewportWidth >= 1536 ? 182 : viewportWidth >= 1280 ? 176 : 170;
+    const nextTrackWidthPercent = viewportWidth >= 1720 ? 188 : viewportWidth >= 1536 ? 184 : viewportWidth >= 1280 ? 180 : 174;
     setTrackWidthPercent((prev) => (prev === nextTrackWidthPercent ? prev : nextTrackWidthPercent));
 
     setMetrics((prev) => {
@@ -100,11 +110,11 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
     offset: ["start start", "end end"]
   });
   const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 94,
-    damping: 28,
-    mass: 0.42
+    stiffness: 82,
+    damping: 27,
+    mass: 0.54
   });
-  const trackX = useTransform(smoothProgress, [0, 1], [0, -metrics.maxShift]);
+  const trackX = useTransform(smoothProgress, [0, 1], [0, -(metrics.maxShift * HERO_SCROLL_TUNING.travelFactor)]);
   const progressScale = useTransform(smoothProgress, [0, 1], [0, 1]);
 
   if (useStaticMode) {
@@ -124,9 +134,9 @@ export function HeroPinnedVideo({ media, title }: HeroPinnedVideoProps): JSX.Ele
     <section
       ref={sectionRef}
       className="relative"
-      style={{ height: metrics.sectionHeight > 0 ? `${metrics.sectionHeight}px` : "180vh" }}
+      style={{ height: metrics.sectionHeight > 0 ? `${metrics.sectionHeight}px` : "205vh" }}
     >
-      <div className="sticky top-[4.2rem] h-[min(74vh,660px)] overflow-hidden rounded-md bg-card/80 sm:top-[4.8rem]">
+      <div className="sticky top-[4.2rem] h-[min(76vh,700px)] overflow-hidden rounded-md bg-card/80 sm:top-[4.8rem]">
         <div ref={viewportRef} className="relative h-full w-full overflow-hidden">
           <motion.div
             ref={trackRef}
