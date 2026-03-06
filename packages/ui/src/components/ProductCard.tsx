@@ -36,11 +36,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const isEditorial = variant === "editorial";
   const primaryImage = product.media[0];
+  const secondaryImage = product.media[1];
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
   const sharedMediaLayoutId = enableSharedTransition ? `product-media-${product.id}` : undefined;
   const sharedTitleLayoutId = enableSharedTransition ? `product-title-${product.id}` : undefined;
   const titleId = `product-card-title-${product.id}`;
   const priceId = `product-card-price-${product.id}`;
+  const canCrossfade = Boolean(primaryImage && secondaryImage && !prefersReducedMotion && !enableSharedTransition);
   const hasComparePrice =
     product.compareAtPrice &&
     product.compareAtPrice.currency === product.price.currency &&
@@ -50,18 +52,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <motion.div
-      whileHover={prefersReducedMotion ? undefined : { y: isEditorial ? -1 : -2 }}
+      whileHover={prefersReducedMotion ? undefined : isEditorial ? undefined : { y: -2 }}
       transition={springSnappy}
       className="group h-full"
       data-testid={`product-card-${product.slug}`}
     >
       <article
         className={[
-          "relative flex h-full flex-col overflow-hidden rounded-[8px] bg-card/94",
-          isEditorial ? "border border-border/26" : "border border-border/32"
+          "relative flex h-full flex-col",
+          isEditorial
+            ? "bg-transparent"
+            : "overflow-hidden rounded-[8px] border border-border/32 bg-card/94"
         ].join(" ")}
       >
-        <div className="relative overflow-hidden">
+        <div className={["relative overflow-hidden", isEditorial ? "rounded-[8px]" : ""].join(" ")}>
           <a
             href={productHref}
             aria-label={`Открыть товар ${product.name}`}
@@ -83,16 +87,40 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             />
           )}
 
-          <div className="aspect-[4/5] overflow-hidden bg-muted/20">
+          <div
+            className={[
+              "aspect-[4/5] overflow-hidden",
+              isEditorial ? "rounded-[6px] bg-card/32" : "bg-muted/20"
+            ].join(" ")}
+          >
             {primaryImage && (
-              <>
+              <div className="relative h-full w-full">
+                {secondaryImage && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={secondaryImage.url}
+                    alt=""
+                    aria-hidden="true"
+                    className={[
+                      "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                      canCrossfade
+                        ? "opacity-0 scale-[1.035] group-hover:scale-100 group-hover:opacity-100"
+                        : "opacity-0"
+                    ].join(" ")}
+                  />
+                )}
                 {enableSharedTransition ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <motion.img
                     layoutId={sharedMediaLayoutId}
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.03] motion-reduce:scale-100"
+                    className={[
+                      "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                      canCrossfade
+                        ? "opacity-100 group-hover:scale-[1.02] group-hover:opacity-0"
+                        : "opacity-100 group-hover:scale-[1.03]"
+                    ].join(" ")}
                     transition={springSharedElement}
                   />
                 ) : (
@@ -100,18 +128,28 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   <img
                     src={primaryImage.url}
                     alt={primaryImage.alt}
-                    className="h-full w-full object-cover transition-transform duration-[800ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none group-hover:scale-[1.03] motion-reduce:scale-100"
+                    className={[
+                      "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
+                      canCrossfade
+                        ? "opacity-100 group-hover:scale-[1.02] group-hover:opacity-0"
+                        : "opacity-100 group-hover:scale-[1.03]"
+                    ].join(" ")}
                   />
                 )}
-              </>
+              </div>
             )}
           </div>
         </div>
 
-        <div className={["relative z-20 flex flex-1 flex-col p-3.5 sm:p-3.5", isEditorial ? "gap-2" : "gap-2.5"].join(" ")}>
-          <div className="space-y-1.5">
+        <div
+          className={[
+            "relative z-20 flex flex-1 flex-col",
+            isEditorial ? "gap-3 px-0 pb-1 pt-5" : "gap-2.5 p-3.5 sm:p-3.5"
+          ].join(" ")}
+        >
+          <div className={isEditorial ? "space-y-2" : "space-y-1.5"}>
             {overline && (
-              <p className="ui-kicker text-muted-foreground/78">
+              <p className={isEditorial ? "ui-meta" : "ui-kicker text-muted-foreground/78"}>
                 {overline}
               </p>
             )}
@@ -120,8 +158,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 layoutId={sharedTitleLayoutId}
                 id={titleId}
                 className={[
-                  "ui-title line-clamp-1",
-                  isEditorial ? "text-[1.08rem] leading-tight" : "text-[1.04rem]"
+                  "line-clamp-2",
+                  isEditorial
+                    ? "ui-title-serif text-[1.38rem] leading-[1.02] text-foreground"
+                    : "ui-title text-[1.04rem]"
                 ].join(" ")}
                 transition={springSharedElement}
               >
@@ -131,8 +171,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <p
                 id={titleId}
                 className={[
-                  "ui-title line-clamp-1",
-                  isEditorial ? "text-[1.08rem] leading-tight" : "text-[1.04rem]"
+                  "line-clamp-2",
+                  isEditorial
+                    ? "ui-title-serif text-[1.38rem] leading-[1.02] text-foreground"
+                    : "ui-title text-[1.04rem]"
                 ].join(" ")}
               >
                 {product.name}
@@ -142,7 +184,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               <p
                 className={[
                   "text-muted-foreground/86",
-                  isEditorial ? "line-clamp-1 text-[0.85rem] leading-relaxed" : "line-clamp-2 text-[0.88rem] leading-relaxed"
+                  isEditorial
+                    ? "line-clamp-2 text-[0.89rem] leading-relaxed"
+                    : "line-clamp-2 text-[0.88rem] leading-relaxed"
                 ].join(" ")}
               >
                 {product.shortDescription}
@@ -150,7 +194,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             )}
           </div>
 
-          <div className={["mt-auto flex items-end justify-between gap-2", isEditorial ? "pt-1" : "pt-1.5"].join(" ")}>
+          <div
+            className={[
+              "mt-auto flex items-end justify-between gap-2",
+              isEditorial ? "border-t border-border/20 pt-3" : "pt-1.5"
+            ].join(" ")}
+          >
             <div className="space-y-0.5">
               {!isEditorial && <p className="ui-label">Цена</p>}
               <p

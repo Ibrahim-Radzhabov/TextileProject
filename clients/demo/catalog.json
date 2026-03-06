@@ -8,11 +8,11 @@
       "shortDescription": "Плотный лен blackout с мягкой архитектурной драпировкой.",
       "price": {
         "currency": "USD",
-        "amount": 189.0
+        "amount": 189
       },
       "compareAtPrice": {
         "currency": "USD",
-        "amount": 229.0
+        "amount": 229
       },
       "badges": [
         {
@@ -32,6 +32,11 @@
           "id": "m1",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Linen blackout drape"
+        },
+        {
+          "id": "m1-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Linen Blackout Drape detail"
         }
       ],
       "isFeatured": true,
@@ -50,7 +55,7 @@
       "shortDescription": "Воздушный тюль voile с мягким рассеиванием света.",
       "price": {
         "currency": "USD",
-        "amount": 74.0
+        "amount": 74
       },
       "badges": [
         {
@@ -70,6 +75,11 @@
           "id": "m2",
           "url": "/demo/airy-voile-tulle.svg",
           "alt": "Airy voile tulle"
+        },
+        {
+          "id": "m2-detail",
+          "url": "/demo/airy-voile-tulle-detail.svg",
+          "alt": "Airy Voile Tulle detail"
         }
       ],
       "isFeatured": true,
@@ -88,7 +98,7 @@
       "shortDescription": "Day-night комплект для гибкого сценария освещения.",
       "price": {
         "currency": "USD",
-        "amount": 239.0
+        "amount": 239
       },
       "badges": [
         {
@@ -108,6 +118,11 @@
           "id": "m3",
           "url": "/demo/jacquard-day-night-set.svg",
           "alt": "Jacquard day-night curtain set"
+        },
+        {
+          "id": "m3-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Jacquard Day-Night Set detail"
         }
       ],
       "isFeatured": true,
@@ -126,7 +141,7 @@
       "shortDescription": "Ровная волна и легкая полупрозрачность для современного интерьера.",
       "price": {
         "currency": "USD",
-        "amount": 128.0
+        "amount": 128
       },
       "badges": [
         {
@@ -146,6 +161,11 @@
           "id": "m4",
           "url": "/demo/ripple-fold-sheer.svg",
           "alt": "Ripple fold sheer curtain"
+        },
+        {
+          "id": "m4-detail",
+          "url": "/demo/ripple-fold-sheer-detail.svg",
+          "alt": "Ripple Fold Sheer detail"
         }
       ],
       "isFeatured": false,
@@ -164,11 +184,11 @@
       "shortDescription": "Плотный velvet blackout для домашнего кино и уюта вечером.",
       "price": {
         "currency": "USD",
-        "amount": 212.0
+        "amount": 212
       },
       "compareAtPrice": {
         "currency": "USD",
-        "amount": 249.0
+        "amount": 249
       },
       "badges": [
         {
@@ -188,6 +208,11 @@
           "id": "m5",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Velvet theater blackout curtain"
+        },
+        {
+          "id": "m5-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Velvet Theater Blackout detail"
         }
       ],
       "isFeatured": true,
@@ -206,7 +231,7 @@
       "shortDescription": "Теплый полупрозрачный лен для спокойной спальни.",
       "price": {
         "currency": "USD",
-        "amount": 89.0
+        "amount": 89
       },
       "badges": [
         {
@@ -226,6 +251,11 @@
           "id": "m6",
           "url": "/demo/airy-voile-tulle.svg",
           "alt": "Linen sheer sand tulle"
+        },
+        {
+          "id": "m6-detail",
+          "url": "/demo/airy-voile-tulle-detail.svg",
+          "alt": "Linen Sheer Sand detail"
         }
       ],
       "isFeatured": false,
@@ -244,7 +274,7 @@
       "shortDescription": "Фактурная драпировка с акцентом на акустический комфорт.",
       "price": {
         "currency": "USD",
-        "amount": 176.0
+        "amount": 176
       },
       "badges": [
         {
@@ -264,6 +294,11 @@
           "id": "m7",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Acoustic weave drape"
+        },
+        {
+          "id": "m7-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Acoustic Weave Drape detail"
         }
       ],
       "isFeatured": false,
@@ -282,7 +317,7 @@
       "shortDescription": "Широкий voile с ровными мягкими складками.",
       "price": {
         "currency": "USD",
-        "amount": 102.0
+        "amount": 102
       },
       "badges": [
         {
@@ -302,6 +337,11 @@
           "id": "m8",
           "url": "/demo/airy-voile-tulle.svg",
           "alt": "Pearl voile double width tulle"
+        },
+        {
+          "id": "m8-detail",
+          "url": "/demo/airy-voile-tulle-detail.svg",
+          "alt": "Pearl Voile Double Width detail"
         }
       ],
       "isFeatured": false,
@@ -320,7 +360,7 @@
       "shortDescription": "Теплосбережение и мягкое затемнение для ежедневного режима.",
       "price": {
         "currency": "USD",
-        "amount": 158.0
+        "amount": 158
       },
       "badges": [
         {
@@ -340,6 +380,11 @@
           "id": "m9",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Thermal dimout curtain"
+        },
+        {
+          "id": "m9-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Thermal Dimout Curtain detail"
         }
       ],
       "isFeatured": false,
@@ -358,7 +403,7 @@
       "shortDescription": "Легкий slub cotton для уютной кухни и breakfast-зоны.",
       "price": {
         "currency": "USD",
-        "amount": 68.0
+        "amount": 68
       },
       "badges": [
         {
@@ -378,6 +423,11 @@
           "id": "m10",
           "url": "/demo/airy-voile-tulle.svg",
           "alt": "Cotton slub cafe curtain"
+        },
+        {
+          "id": "m10-detail",
+          "url": "/demo/airy-voile-tulle-detail.svg",
+          "alt": "Cotton Slub Cafe Curtain detail"
         }
       ],
       "isFeatured": false,
@@ -396,11 +446,11 @@
       "shortDescription": "Двухслойный бархатный сет с аккуратной складкой.",
       "price": {
         "currency": "USD",
-        "amount": 264.0
+        "amount": 264
       },
       "compareAtPrice": {
         "currency": "USD",
-        "amount": 299.0
+        "amount": 299
       },
       "badges": [
         {
@@ -420,6 +470,11 @@
           "id": "m11",
           "url": "/demo/jacquard-day-night-set.svg",
           "alt": "Velvet pleat set"
+        },
+        {
+          "id": "m11-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Velvet Pleat Set detail"
         }
       ],
       "isFeatured": true,
@@ -438,7 +493,7 @@
       "shortDescription": "Нежный mesh-тюль для дневного света и приватности.",
       "price": {
         "currency": "USD",
-        "amount": 54.0
+        "amount": 54
       },
       "badges": [
         {
@@ -458,6 +513,11 @@
           "id": "m12",
           "url": "/demo/airy-voile-tulle.svg",
           "alt": "Soft mesh tulle white"
+        },
+        {
+          "id": "m12-detail",
+          "url": "/demo/airy-voile-tulle-detail.svg",
+          "alt": "Soft Mesh Tulle White detail"
         }
       ],
       "isFeatured": false,
@@ -476,7 +536,7 @@
       "shortDescription": "Натуральная фактура и мягкое движение ткани.",
       "price": {
         "currency": "USD",
-        "amount": 144.0
+        "amount": 144
       },
       "badges": [
         {
@@ -496,6 +556,11 @@
           "id": "m13",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Natural flax curtain"
+        },
+        {
+          "id": "m13-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Natural Flax Curtain detail"
         }
       ],
       "isFeatured": false,
@@ -514,7 +579,7 @@
       "shortDescription": "Надежное затемнение в кофейном оттенке.",
       "price": {
         "currency": "USD",
-        "amount": 171.0
+        "amount": 171
       },
       "badges": [
         {
@@ -534,6 +599,11 @@
           "id": "m14",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Mocha blackout panel"
+        },
+        {
+          "id": "m14-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Mocha Blackout Panel detail"
         }
       ],
       "isFeatured": false,
@@ -552,7 +622,7 @@
       "shortDescription": "Глубокий рисунок и выразительные складки.",
       "price": {
         "currency": "USD",
-        "amount": 198.0
+        "amount": 198
       },
       "badges": [
         {
@@ -572,6 +642,11 @@
           "id": "m15",
           "url": "/demo/jacquard-day-night-set.svg",
           "alt": "Herringbone drape duo"
+        },
+        {
+          "id": "m15-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Herringbone Drape Duo detail"
         }
       ],
       "isFeatured": true,
@@ -590,7 +665,7 @@
       "shortDescription": "Изящная волна и прозрачная фактура.",
       "price": {
         "currency": "USD",
-        "amount": 118.0
+        "amount": 118
       },
       "badges": [
         {
@@ -610,6 +685,11 @@
           "id": "m16",
           "url": "/demo/ripple-fold-sheer.svg",
           "alt": "Ivory ripple track sheer"
+        },
+        {
+          "id": "m16-detail",
+          "url": "/demo/ripple-fold-sheer-detail.svg",
+          "alt": "Ivory Ripple Track Sheer detail"
         }
       ],
       "isFeatured": false,
@@ -628,7 +708,7 @@
       "shortDescription": "Лаконичная форма и теплый sandstone оттенок.",
       "price": {
         "currency": "USD",
-        "amount": 134.0
+        "amount": 134
       },
       "badges": [
         {
@@ -648,6 +728,11 @@
           "id": "m17",
           "url": "/demo/ripple-fold-sheer.svg",
           "alt": "Sandstone roman curtain"
+        },
+        {
+          "id": "m17-detail",
+          "url": "/demo/ripple-fold-sheer-detail.svg",
+          "alt": "Sandstone Roman Curtain detail"
         }
       ],
       "isFeatured": false,
@@ -666,7 +751,7 @@
       "shortDescription": "Плотный acoustic blackout для тихого сна.",
       "price": {
         "currency": "USD",
-        "amount": 205.0
+        "amount": 205
       },
       "badges": [
         {
@@ -686,6 +771,11 @@
           "id": "m18",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Noise shield curtain"
+        },
+        {
+          "id": "m18-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Noise Shield Curtain detail"
         }
       ],
       "isFeatured": false,
@@ -704,7 +794,7 @@
       "shortDescription": "Теплый льняной сет для живого интерьерного акцента.",
       "price": {
         "currency": "USD",
-        "amount": 167.0
+        "amount": 167
       },
       "badges": [
         {
@@ -724,6 +814,11 @@
           "id": "m19",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Olive linen blend set"
+        },
+        {
+          "id": "m19-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Olive Linen Blend Set detail"
         }
       ],
       "isFeatured": false,
@@ -742,7 +837,7 @@
       "shortDescription": "Легкий второй слой для day-to-evening сценария.",
       "price": {
         "currency": "USD",
-        "amount": 76.0
+        "amount": 76
       },
       "badges": [
         {
@@ -762,6 +857,11 @@
           "id": "m20",
           "url": "/demo/airy-voile-tulle.svg",
           "alt": "Cloud sheer layer"
+        },
+        {
+          "id": "m20-detail",
+          "url": "/demo/airy-voile-tulle-detail.svg",
+          "alt": "Cloud Sheer Layer detail"
         }
       ],
       "isFeatured": false,
@@ -780,7 +880,7 @@
       "shortDescription": "Мягкий sunset-оттенок и выразительный рисунок.",
       "price": {
         "currency": "USD",
-        "amount": 149.0
+        "amount": 149
       },
       "badges": [
         {
@@ -800,6 +900,11 @@
           "id": "m21",
           "url": "/demo/jacquard-day-night-set.svg",
           "alt": "Sunset jacquard panel"
+        },
+        {
+          "id": "m21-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Sunset Jacquard Panel detail"
         }
       ],
       "isFeatured": false,
@@ -818,7 +923,7 @@
       "shortDescription": "Быстрый старт для day-night оформления окна.",
       "price": {
         "currency": "USD",
-        "amount": 222.0
+        "amount": 222
       },
       "badges": [
         {
@@ -838,6 +943,11 @@
           "id": "m22",
           "url": "/demo/jacquard-day-night-set.svg",
           "alt": "Dual track daylight kit"
+        },
+        {
+          "id": "m22-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Dual Track Daylight Kit detail"
         }
       ],
       "isFeatured": true,
@@ -856,7 +966,7 @@
       "shortDescription": "Dimout для кабинета и рабочих пространств.",
       "price": {
         "currency": "USD",
-        "amount": 139.0
+        "amount": 139
       },
       "badges": [
         {
@@ -876,6 +986,11 @@
           "id": "m23",
           "url": "/demo/ripple-fold-sheer.svg",
           "alt": "Studio dimout office curtain"
+        },
+        {
+          "id": "m23-detail",
+          "url": "/demo/ripple-fold-sheer-detail.svg",
+          "alt": "Studio Dimout Office detail"
         }
       ],
       "isFeatured": false,
@@ -894,7 +1009,7 @@
       "shortDescription": "Спокойный световой режим для детской комнаты.",
       "price": {
         "currency": "USD",
-        "amount": 129.0
+        "amount": 129
       },
       "badges": [
         {
@@ -914,6 +1029,11 @@
           "id": "m24",
           "url": "/demo/linen-blackout-drape.svg",
           "alt": "Kids room soft blackout curtain"
+        },
+        {
+          "id": "m24-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Kids Room Soft Blackout detail"
         }
       ],
       "isFeatured": false,
