@@ -1,5 +1,23 @@
 # Release Notes
 
+## 2026-03-06
+
+### `unreleased` - Storefront UI checkpoint (hero/catalog/PDP + typography)
+- Added current cross-device UI handoff checkpoint (`docs/agent-handoff-ui-current.md`) with restart instructions for the next agent.
+- Refined Home hero flow: config-driven content placement (`overlay` / `below`) and removed horizontal scroll behavior from hero/home showcase composition.
+- Upgraded Catalog UX with sticky mini-bar presets (`rail=all|new|bestsellers|day-night|blackout`) and aligned neon search/filter interactions with top-nav behavior.
+- Upgraded PDP experience with premium content blocks (swatches + service highlights), shared favorite interaction, and sticky mobile CTA.
+- Synced E2E catalog presets with current UI copy (`Показано` / `Фильтры`) to keep regression checks stable after copy/tone updates.
+- Refreshed storefront visual baselines for `390x844`, `768x1024`, `1280x900` after UI restructuring.
+- Applied theme-driven typography and text palette refinement for Atelier variant:
+  - tuned text contrast and muted hierarchy,
+  - updated semantic `ui-*` type tokens in `globals.css`,
+  - migrated button typography to semantic `ui-button` token usage in shared UI.
+- Validation after updates:
+  - `corepack pnpm --dir apps/web build` passes,
+  - `corepack pnpm e2e:visual` passes,
+  - `SMOKE_SKIP_BUILD=1 corepack pnpm smoke:storefront` passes.
+
 ## 2026-03-03
 
 ### `unreleased` - Smoke standalone parity
