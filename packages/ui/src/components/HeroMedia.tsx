@@ -20,6 +20,7 @@ export type HeroMediaProps = {
   assetClassName?: string;
   overlayClassName?: string;
   defaultOverlayOpacity?: number;
+  revealOnReady?: boolean;
 };
 
 type NavigatorWithConnection = Navigator & {
@@ -34,9 +35,11 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   className,
   assetClassName,
   overlayClassName,
-  defaultOverlayOpacity = 0.5
+  defaultOverlayOpacity = 0.5,
+  revealOnReady = false
 }) => {
   const [videoFailed, setVideoFailed] = React.useState(false);
+  const [isVideoReady, setIsVideoReady] = React.useState(!revealOnReady);
   const [preferImage, setPreferImage] = React.useState(false);
   const [isNarrowViewport, setIsNarrowViewport] = React.useState(false);
 
@@ -82,6 +85,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
 
   React.useEffect(() => {
     setVideoFailed(false);
+    setIsVideoReady(!revealOnReady);
   }, [media.type, media.src, media.mobileSrc, media.poster]);
 
   const fallbackSrc = media.type === "video" ? media.poster ?? media.src : media.src;
@@ -93,22 +97,54 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
     >
       {shouldRenderVideo ? (
         <>
+          {revealOnReady && media.poster && !videoFailed && (
+            <picture
+              className={[
+                "absolute inset-0 transition-opacity duration-700",
+                isVideoReady ? "opacity-0" : "opacity-100"
+              ].join(" ")}
+            >
+              {media.mobileSrc && <source srcSet={media.mobileSrc} media="(max-width: 768px)" />}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={media.poster}
+                alt={fallbackAlt}
+                className={mergedAssetClassName}
+                style={assetStyle}
+              />
+            </picture>
+          )}
           <video
             autoPlay
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             poster={media.poster}
             className={[
               mergedAssetClassName,
               "transition-opacity duration-300",
-              videoFailed ? "opacity-0" : "opacity-100"
+              revealOnReady
+                ? isVideoReady && !videoFailed
+                  ? "opacity-100"
+                  : "opacity-0"
+                : videoFailed
+                  ? "opacity-0"
+                  : "opacity-100"
             ].join(" ")}
             style={assetStyle}
-            onCanPlay={() => setVideoFailed(false)}
-            onLoadedData={() => setVideoFailed(false)}
-            onError={() => setVideoFailed(true)}
+            onCanPlay={() => {
+              setVideoFailed(false);
+              setIsVideoReady(true);
+            }}
+            onLoadedData={() => {
+              setVideoFailed(false);
+              setIsVideoReady(true);
+            }}
+            onError={() => {
+              setVideoFailed(true);
+              setIsVideoReady(false);
+            }}
           >
             {media.mobileSrc && <source src={media.mobileSrc} media="(max-width: 768px)" />}
             <source src={media.src} />

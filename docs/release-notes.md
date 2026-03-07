@@ -17,6 +17,11 @@
 - Expanded top-nav/footer QA e2e coverage:
   - mobile drawer behavior on `390` and `430`,
   - tablet breakpoint assertion on `768` (desktop nav shown, mobile rails hidden).
+- Added new config-driven hero video section behavior for home:
+  - editorial load reveal (container + overlay card),
+  - subtle scroll parallax (`translateY` + `scale`) with `prefers-reduced-motion` fallback,
+  - poster-first video reveal (`HeroMedia` `revealOnReady`) and graceful fallback to poster/image when video fails.
+- Updated demo home hero content in `clients/demo/pages.json` (`title/subtitle/trustLine/CTA`) to keep hero copy fully config-driven.
 - Validation after updates:
   - `corepack pnpm --dir apps/web build` passes,
   - `corepack pnpm exec playwright test tests/e2e/top-nav-footer.spec.ts` passes,

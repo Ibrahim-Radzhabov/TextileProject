@@ -23,6 +23,7 @@ import type {
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { HeroPinnedVideo } from "@/components/hero-pinned-video";
+import { HeroVideoSection } from "@/components/hero-video-section";
 
 type HomePageClientProps = {
   homePage: PageConfig;
@@ -139,14 +140,17 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
     }
 
     return (
-      <section key={block.id} className="rounded-md border border-border/28 bg-card/80">
-        <HeroPinnedVideo media={media} title={content.title} />
-        {heroCopy && (
-          <div className="border-t border-border/28 px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
-            <div className="max-w-3xl">{heroCopy}</div>
-          </div>
-        )}
-      </section>
+      <HeroVideoSection
+        key={block.id}
+        media={media}
+        title={content.title}
+        eyebrow={content.eyebrow}
+        subtitle={content.subtitle}
+        trustLine={content.trustLine}
+        quickLinks={content.quickLinks}
+        primaryCta={content.primaryCta}
+        secondaryCta={content.secondaryCta}
+      />
     );
   }
 
