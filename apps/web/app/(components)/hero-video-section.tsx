@@ -27,29 +27,9 @@ type HeroVideoSectionProps = {
   className?: string;
 };
 
-function buildCardLinks(
-  quickLinks: HeroLink[],
-  primaryCta?: HeroAction,
-  secondaryCta?: HeroAction
-): HeroLink[] {
-  if (quickLinks.length > 0) {
-    return quickLinks.slice(0, 2);
-  }
-
-  const fallback: HeroLink[] = [];
-  if (primaryCta) {
-    fallback.push({ label: primaryCta.label, href: primaryCta.href });
-  }
-  if (secondaryCta) {
-    fallback.push({ label: secondaryCta.label, href: secondaryCta.href });
-  }
-  return fallback;
-}
-
 export function HeroVideoSection({
   media,
   title,
-  eyebrow,
   subtitle,
   trustLine,
   quickLinks = [],
@@ -65,8 +45,6 @@ export function HeroVideoSection({
   });
   const mediaY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 24]);
   const mediaScale = useTransform(scrollYProgress, [0, 1], [1, prefersReducedMotion ? 1 : 1.03]);
-  const cardLinks = buildCardLinks(quickLinks, primaryCta, secondaryCta);
-  const heroHeading = eyebrow ?? title;
 
   return (
     <section
@@ -95,32 +73,6 @@ export function HeroVideoSection({
           />
         </motion.div>
       </motion.div>
-
-      {cardLinks.length > 0 && (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-4">
-          <motion.div
-            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.86, ease: [0.25, 0.1, 0.25, 1], delay: 0.56 }}
-            className="pointer-events-auto w-full max-w-[min(88vw,20.4rem)] translate-y-1/2 rounded-[4px] border border-border/45 bg-card px-5 py-4 text-center shadow-soft-subtle sm:px-6 sm:py-5"
-          >
-            {heroHeading && (
-              <p className="ui-kicker text-foreground/86">{heroHeading}</p>
-            )}
-            <div className="mt-2.5 space-y-1.5">
-              {cardLinks.map((link) => (
-                <a
-                  key={`${link.href}-${link.label}`}
-                  href={link.href}
-                  className="block text-[0.77rem] uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:text-foreground"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      )}
 
       <motion.div
         initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
