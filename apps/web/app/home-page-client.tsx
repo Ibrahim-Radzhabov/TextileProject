@@ -8,8 +8,7 @@ import {
   HeroMedia,
   ProductCard,
   gridContainerVariants,
-  gridItemVariants,
-  transitionQuick
+  gridItemVariants
 } from "@store-platform/ui";
 import type {
   CtaStripBlock,
@@ -74,13 +73,21 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
 
   const heroCopy = hasHeroCopy ? (
     <div className="space-y-3.5 sm:space-y-5">
-      {content.eyebrow && <p className="ui-kicker text-foreground/88">{content.eyebrow}</p>}
+      {content.eyebrow && (
+        <p className="ui-kicker text-foreground/88">
+          {content.eyebrow}
+        </p>
+      )}
       {content.title && (
         <h1 className="ui-title-display text-[clamp(1.82rem,8vw,4.9rem)] leading-[0.93] text-foreground">
           {content.title}
         </h1>
       )}
-      {content.subtitle && <p className="ui-subtle max-w-2xl text-sm sm:text-base lg:text-lg">{content.subtitle}</p>}
+      {content.subtitle && (
+        <p className="ui-subtle max-w-2xl text-sm sm:text-base lg:text-lg">
+          {content.subtitle}
+        </p>
+      )}
       {(content.primaryCta || content.secondaryCta) && (
         <div className="flex flex-wrap items-center gap-2 pt-1">
           {content.primaryCta && (
@@ -117,12 +124,12 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
   if (media.type === "video") {
     if (contentPlacement === "overlay" && heroCopy) {
       return (
-        <section key={block.id} className="rounded-md border border-border/28 bg-card/80">
+        <section key={block.id} className="rounded-md bg-card/80">
           <HeroPinnedVideo
             media={media}
             title={content.title}
             overlayContent={
-              <div className="rounded-[10px] border border-border/35 bg-card/76 p-4 shadow-soft-subtle backdrop-blur-xl sm:p-6 lg:p-7">
+              <div className="rounded-[4px] bg-card/96 px-6 py-5 shadow-soft-subtle sm:px-8 sm:py-7">
                 {heroCopy}
               </div>
             }
@@ -168,47 +175,6 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
         </div>
       )}
     </section>
-  );
-}
-
-function renderHeroQuickLinksBar(
-  links: ReturnType<typeof resolveHeroContent>["quickLinks"],
-  key: string
-): JSX.Element {
-  return (
-    <motion.section
-      key={key}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ ...transitionQuick, delay: 0.2 }}
-      className="sticky top-[4.2rem] z-30 sm:top-[4.8rem]"
-    >
-      <nav
-        aria-label="Быстрые переходы по каталогу"
-        className="rounded-[8px] border border-border/38 bg-card/90 p-2 shadow-soft-subtle backdrop-blur-xl sm:p-2.5"
-      >
-        <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex gap-2 snap-x snap-mandatory sm:grid sm:min-w-0 sm:grid-cols-4 sm:gap-2.5">
-            {links.map((link) => (
-              <a
-                key={link.label}
-                href={link.href}
-                className="group w-[72vw] max-w-[280px] min-h-[56px] shrink-0 snap-start rounded-[6px] border border-border/36 bg-card/74 px-3 py-2.5 text-left transition-colors hover:bg-card/94 active:bg-card/96 sm:w-auto sm:max-w-none sm:px-3.5 sm:py-2.5"
-              >
-                <p className="ui-label text-[11px] leading-tight text-foreground/92 sm:text-[12px]">
-                  {link.label}
-                </p>
-                {link.subtitle && (
-                  <p className="mt-1 hidden text-[11px] leading-relaxed text-muted-foreground/82 sm:block">
-                    {link.subtitle}
-                  </p>
-                )}
-              </a>
-            ))}
-          </div>
-        </div>
-      </nav>
-    </motion.section>
   );
 }
 
@@ -267,6 +233,7 @@ function renderProductGridBlock(
   onToggleFavorite: (product: Product) => void
 ): JSX.Element {
   const isHomeFeatured = block.id === "home-featured";
+  const productsToRender = isHomeFeatured ? visibleProducts.slice(0, 8) : visibleProducts;
 
   return (
     <section
@@ -290,7 +257,7 @@ function renderProductGridBlock(
         </header>
       )}
 
-      {visibleProducts.length === 0 ? (
+      {productsToRender.length === 0 ? (
         <EmptyState
           title="Подборка пока пустая"
           description="Попробуйте изменить фильтры или вернуться позже."
@@ -302,7 +269,7 @@ function renderProductGridBlock(
           initial="hidden"
           animate="visible"
         >
-          {visibleProducts.map((product) => (
+          {productsToRender.map((product) => (
             <motion.div
               key={product.id}
               variants={gridItemVariants}
@@ -312,6 +279,7 @@ function renderProductGridBlock(
                 onQuickAdd={onQuickAdd}
                 isFavorite={favoriteProductIds.includes(product.id)}
                 onToggleFavorite={onToggleFavorite}
+                variant="name-price"
               />
             </motion.div>
           ))}
@@ -361,8 +329,6 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const { addProduct } = useCartStore();
   const favoriteProductIds = useFavoritesStore((state) => state.productIds);
   const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
-  const heroBlock = homePage.blocks.find((entry): entry is HeroBlock => entry.type === "hero");
-  const heroQuickLinks = heroBlock ? resolveHeroContent(heroBlock).quickLinks.slice(0, 4) : [];
 
   return (
     <div className="home-concept-editorial space-y-8 sm:space-y-9 lg:space-y-11">
@@ -377,16 +343,6 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
 
         if (!blockNode) {
           return [];
-        }
-
-        if (block.type === "hero") {
-          const sections: JSX.Element[] = [blockNode];
-
-          if (heroQuickLinks.length > 0) {
-            sections.push(renderHeroQuickLinksBar(heroQuickLinks, `${block.id}-quick-links`));
-          }
-
-          return sections;
         }
 
         return [blockNode];

@@ -13,7 +13,7 @@ export type ProductCardProps = {
   enableSharedTransition?: boolean;
   isFavorite?: boolean;
   onToggleFavorite?: (product: Product) => void;
-  variant?: "default" | "editorial";
+  variant?: "default" | "editorial" | "name-price";
 };
 
 const CURRENCY_LOCALE = "ru-RU";
@@ -35,6 +35,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const isEditorial = variant === "editorial";
+  const isNamePrice = variant === "name-price";
   const primaryImage = product.media[0];
   const secondaryImage = product.media[1];
   const productHref = `/product/${encodeURIComponent(product.slug)}`;
@@ -147,8 +148,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             isEditorial ? "gap-3 px-0 pb-1 pt-5" : "gap-2.5 p-3.5 sm:p-3.5"
           ].join(" ")}
         >
-          <div className={isEditorial ? "space-y-2" : "space-y-1.5"}>
-            {overline && (
+          <div className={isEditorial ? "space-y-2" : isNamePrice ? "space-y-1" : "space-y-1.5"}>
+            {overline && !isNamePrice && (
               <p className={isEditorial ? "ui-meta" : "ui-kicker text-muted-foreground/78"}>
                 {overline}
               </p>
@@ -161,7 +162,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   "line-clamp-2",
                   isEditorial
                     ? "ui-title-serif text-[1.38rem] leading-[1.02] text-foreground"
-                    : "ui-title text-[1.04rem]"
+                    : isNamePrice
+                      ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
+                      : "ui-title text-[1.04rem]"
                 ].join(" ")}
                 transition={springSharedElement}
               >
@@ -174,13 +177,15 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   "line-clamp-2",
                   isEditorial
                     ? "ui-title-serif text-[1.38rem] leading-[1.02] text-foreground"
-                    : "ui-title text-[1.04rem]"
+                    : isNamePrice
+                      ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
+                      : "ui-title text-[1.04rem]"
                 ].join(" ")}
               >
                 {product.name}
               </p>
             )}
-            {product.shortDescription && (
+            {product.shortDescription && !isNamePrice && (
               <p
                 className={[
                   "text-muted-foreground/86",
@@ -197,21 +202,21 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div
             className={[
               "mt-auto flex items-end justify-between gap-2",
-              isEditorial ? "border-t border-border/20 pt-3" : "pt-1.5"
+              isEditorial || isNamePrice ? "border-t border-border/20 pt-3" : "pt-1.5"
             ].join(" ")}
           >
             <div className="space-y-0.5">
-              {!isEditorial && <p className="ui-label">Цена</p>}
+              {!isEditorial && !isNamePrice && <p className="ui-label">Цена</p>}
               <p
                 id={priceId}
                 className={[
                   "font-semibold text-foreground",
-                  isEditorial ? "text-[1.2rem] tracking-tight" : "text-[1.12rem]"
+                  isEditorial || isNamePrice ? "text-[1.2rem] tracking-tight" : "text-[1.12rem]"
                 ].join(" ")}
               >
                 {formatMoney(product.price.amount, product.price.currency)}
               </p>
-              {hasComparePrice && product.compareAtPrice && (
+              {hasComparePrice && product.compareAtPrice && !isNamePrice && (
                 <p className="text-xs text-muted-foreground line-through">
                   {formatMoney(product.compareAtPrice.amount, product.compareAtPrice.currency)}
                 </p>
@@ -221,23 +226,20 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           {onQuickAdd && (
             <Button
+              asChild
               size="sm"
               fullWidth
               variant="primary"
               ripple
               className={[
-                "relative z-20 rounded-[6px] border-border/45 bg-accent text-white hover:bg-accent/92",
+                "relative z-20 rounded-[6px] border-border/45 bg-accent text-white transition-[transform,box-shadow,background-color] duration-300 hover:bg-accent/92 hover:shadow-soft-subtle",
                 isEditorial ? "h-10 text-[0.87rem] sm:h-9" : "h-10 sm:h-9"
               ].join(" ")}
-              data-testid={`quick-add-${product.slug}`}
-              aria-label={`Добавить ${product.name} в корзину`}
-              onClick={(event) => {
-                event.preventDefault();
-                event.stopPropagation();
-                onQuickAdd(product);
-              }}
+              data-testid={`product-details-${product.slug}`}
             >
-              В корзину
+              <a href={productHref} aria-label={`Подробнее о ${product.name}`}>
+                Подробнее
+              </a>
             </Button>
           )}
         </div>

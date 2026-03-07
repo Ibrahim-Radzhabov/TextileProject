@@ -9,36 +9,28 @@
         "id": "hero-main",
         "type": "hero",
         "contentPlacement": "below",
-        "content": {
-          "eyebrow": "Atelier • текстиль для окон",
-          "title": "Искусство оформления окон",
-          "subtitle": "Шторы премиум-класса для роскошного интерьера",
-          "trustLine": "Индивидуальный пошив • Подбор фактуры • Консультация по свету",
-          "quickLinks": [
-            {
-              "label": "По комнате",
-              "subtitle": "Гостиная, спальня, детская",
-              "href": "/catalog?view=room"
-            },
-            {
-              "label": "По светопропусканию",
-              "subtitle": "Вуаль, димаут, блэкаут",
-              "href": "/catalog?view=light"
-            },
-            {
-              "label": "По фактуре",
-              "subtitle": "Лен, жаккард, бархат",
-              "href": "/catalog?view=texture"
-            },
-            {
-              "label": "Готовые наборы",
-              "subtitle": "Сценарии день/ночь для окна",
-              "href": "/catalog?view=kits"
-            }
-          ],
-          "primaryCta": { "label": "Открыть каталог", "href": "/catalog" },
-          "secondaryCta": { "label": "Подбор за 2 минуты", "href": "#featured" }
-        },
+        "quickLinks": [
+          {
+            "label": "По комнате",
+            "subtitle": "Гостиная, спальня, детская",
+            "href": "/catalog?view=room"
+          },
+          {
+            "label": "По светопропусканию",
+            "subtitle": "Вуаль, димаут, блэкаут",
+            "href": "/catalog?view=light"
+          },
+          {
+            "label": "По фактуре",
+            "subtitle": "Лен, жаккард, бархат",
+            "href": "/catalog?view=texture"
+          },
+          {
+            "label": "Готовые наборы",
+            "subtitle": "Сценарии день/ночь для окна",
+            "href": "/catalog?view=kits"
+          }
+        ],
         "media": {
           "type": "video",
           "src": "/demo/hero/textile-loop-desktop.mp4",
@@ -52,49 +44,10 @@
         }
       },
       {
-        "id": "hero-story-privacy",
-        "type": "media-feature",
-        "eyebrow": "Подборка atelier",
-        "title": "Дневной свет днем, приватность вечером",
-        "subtitle": "Собирайте двухслойные сцены из тюля и плотной портьеры под ваш режим дня.",
-        "body": "Сначала мягкий свет для дневной глубины интерьера, затем плотность и приватность для вечера. Такой подход работает как базовый гардероб для окна.",
-        "align": "right",
-        "media": {
-          "type": "image",
-          "src": "/demo/jacquard-day-night-set.svg",
-          "alt": "Двухслойная day-night композиция для окна",
-          "overlayOpacity": 0.2,
-          "objectPosition": "center center",
-          "mobileObjectPosition": "center center"
-        },
-        "cta": {
-          "label": "Смотреть день/ночь",
-          "href": "/catalog"
-        }
-      },
-      {
         "id": "home-featured",
         "type": "product-grid",
-        "title": "Выбор наших покупателей",
-        "subtitle": "Премиальные ткани и готовые решения для разных сценариев света.",
         "layout": "auto-fit",
-        "filter": { "featured": true }
-      },
-      {
-        "id": "home-blackout",
-        "type": "product-grid",
-        "title": "Сценарии blackout",
-        "subtitle": "Плотные решения для спальни, детской и домашнего кино.",
-        "layout": "auto-fit",
-        "filter": { "tags": ["blackout"] }
-      },
-      {
-        "id": "home-sheer",
-        "type": "product-grid",
-        "title": "Тюль и полупрозрачные ткани",
-        "subtitle": "Воздушные ткани для мягкого дневного света и легкой приватности.",
-        "layout": "auto-fit",
-        "filter": { "tags": ["sheer", "tulle"] }
+        "filter": {}
       }
     ]
   },

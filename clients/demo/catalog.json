@@ -30,12 +30,12 @@
       "media": [
         {
           "id": "m1",
-          "url": "/demo/linen-blackout-drape.svg",
+          "url": "/demo/satin_one.jpeg",
           "alt": "Linen blackout drape"
         },
         {
           "id": "m1-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
+          "url": "/demo/satin_two.jpeg",
           "alt": "Linen Blackout Drape detail"
         }
       ],
