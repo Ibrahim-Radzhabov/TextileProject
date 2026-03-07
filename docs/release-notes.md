@@ -1,5 +1,27 @@
 # Release Notes
 
+## 2026-03-07
+
+### `unreleased` - Storefront nav/footer contact config + mobile QA checkpoint
+- Replaced hardcoded storefront contact placeholders with config-driven `shop` fields:
+  - `contacts`,
+  - `supportLinks`,
+  - `socialLinks`,
+  - `primaryCta`.
+- Extended shared/frontend/backend storefront config contracts to carry new `shop` fields:
+  - `packages/shared-types/src/configs.ts`,
+  - `apps/api/domain/models.py`,
+  - `apps/web/lib/api-client.ts`.
+- Updated storefront shell to consume contact/support/social/CTA values from config instead of inline `mailto`/temp social URLs.
+- Updated PDP swatches request action to use config-driven contact CTA (with `mailto` subject auto-append when applicable).
+- Expanded top-nav/footer QA e2e coverage:
+  - mobile drawer behavior on `390` and `430`,
+  - tablet breakpoint assertion on `768` (desktop nav shown, mobile rails hidden).
+- Validation after updates:
+  - `corepack pnpm --dir apps/web build` passes,
+  - `corepack pnpm exec playwright test tests/e2e/top-nav-footer.spec.ts` passes,
+  - `SMOKE_SKIP_BUILD=1 corepack pnpm smoke:storefront` passes (`390/768/1024/1280`, no overflow, no console errors).
+
 ## 2026-03-06
 
 ### `unreleased` - Storefront UI checkpoint (hero/catalog/PDP + typography)

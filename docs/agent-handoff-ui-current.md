@@ -18,6 +18,11 @@
   - [x] service highlights block
   - [x] sticky mobile CTA for add-to-cart
 - [x] Mobile polish pass for Home + Catalog + PDP
+- [x] Mobile navigation variant 1 finalized:
+  - [x] bottom nav remains primary shopping rail,
+  - [x] drawer switched to service/contact/legal only (no duplicate catalog/favorites links).
+- [x] Storefront contact layer moved to config-driven `shop` fields (`contacts`, `supportLinks`, `socialLinks`, `primaryCta`) with shell + PDP integration.
+- [x] Header/footer drawer QA expanded for `390 / 430 / 768` breakpoints.
 - [x] `apps/web` build passes
 
 ## Relevant Files
@@ -52,4 +57,4 @@
    - catalog mini-bar behavior,
    - PDP sticky mobile CTA overlap with bottom nav.
 2. Decide whether to keep or simplify mini-bar preset logic (`rail`) for analytics/SEO URLs.
-3. If approved by product owner, prepare a release checkpoint tag and update `docs/release-notes.md`.
+3. Replace demo contact values in `clients/demo/shop.json` with production brand contacts/socials before public launch.

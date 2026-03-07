@@ -82,6 +82,8 @@ export default async function ProductPage({
       id: block.id,
       content: block.content
     }));
+  const sampleRequestHref =
+    config.shop.contacts?.emailHref ?? config.shop.primaryCta?.href ?? "/catalog?open_filters=1";
 
   const schemas = [
     buildBreadcrumbJsonLd([
@@ -105,6 +107,7 @@ export default async function ProductPage({
         product={product}
         related={related}
         productPageTexts={productPageTextBlocks ?? []}
+        sampleRequestHref={sampleRequestHref}
       />
     </>
   );

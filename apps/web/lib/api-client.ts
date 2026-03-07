@@ -252,6 +252,23 @@ type StorefrontConfigDto = Omit<StorefrontConfig, "shop" | "catalog" | "integrat
     primaryLocale?: string;
     primary_locale?: string;
     currency: string;
+    contacts?: {
+      phoneLabel?: string;
+      phone_label?: string;
+      phoneHref?: string;
+      phone_href?: string;
+      emailLabel?: string;
+      email_label?: string;
+      emailHref?: string;
+      email_href?: string;
+      address?: string;
+    };
+    socialLinks?: Array<{ label: string; href: string }>;
+    social_links?: Array<{ label: string; href: string }>;
+    supportLinks?: Array<{ label: string; href: string }>;
+    support_links?: Array<{ label: string; href: string }>;
+    primaryCta?: { label: string; href: string };
+    primary_cta?: { label: string; href: string };
   };
   catalog: {
     products: ProductDto[];
@@ -350,6 +367,18 @@ function normalizeCart(cart: CartDto): Cart {
 
 function normalizeStorefrontConfig(config: StorefrontConfigDto): StorefrontConfig {
   const primaryLocale = config.shop.primaryLocale ?? config.shop.primary_locale;
+  const contacts = config.shop.contacts
+    ? {
+        phoneLabel: config.shop.contacts.phoneLabel ?? config.shop.contacts.phone_label,
+        phoneHref: config.shop.contacts.phoneHref ?? config.shop.contacts.phone_href,
+        emailLabel: config.shop.contacts.emailLabel ?? config.shop.contacts.email_label,
+        emailHref: config.shop.contacts.emailHref ?? config.shop.contacts.email_href,
+        address: config.shop.contacts.address
+      }
+    : undefined;
+  const socialLinks = config.shop.socialLinks ?? config.shop.social_links;
+  const supportLinks = config.shop.supportLinks ?? config.shop.support_links;
+  const primaryCta = config.shop.primaryCta ?? config.shop.primary_cta;
 
   const stripe = config.integrations.stripe;
   const normalizedStripe =
@@ -379,8 +408,15 @@ function normalizeStorefrontConfig(config: StorefrontConfigDto): StorefrontConfi
   return {
     ...config,
     shop: {
-      ...config.shop,
-      primaryLocale: getRequired(primaryLocale, "shop.primaryLocale")
+      id: config.shop.id,
+      name: config.shop.name,
+      logo: config.shop.logo,
+      primaryLocale: getRequired(primaryLocale, "shop.primaryLocale"),
+      currency: config.shop.currency,
+      contacts,
+      socialLinks,
+      supportLinks,
+      primaryCta
     },
     catalog: {
       products: config.catalog.products.map((product) => normalizeProduct(product))

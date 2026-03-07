@@ -79,12 +79,32 @@ class Cart(BaseModel):
     currency: str
 
 
+class ShopLink(BaseModel):
+    label: str
+    href: str
+
+
+class ShopContacts(BaseModel):
+    phone_label: Optional[str] = Field(default=None, alias="phoneLabel")
+    phone_href: Optional[str] = Field(default=None, alias="phoneHref")
+    email_label: Optional[str] = Field(default=None, alias="emailLabel")
+    email_href: Optional[str] = Field(default=None, alias="emailHref")
+    address: Optional[str] = None
+
+    class Config:
+        populate_by_name = True
+
+
 class ShopConfig(BaseModel):
     id: str
     name: str
     logo: Optional[Dict[str, str]] = None
     primary_locale: str = Field(alias="primaryLocale")
     currency: str
+    contacts: Optional[ShopContacts] = None
+    social_links: Optional[List[ShopLink]] = Field(default=None, alias="socialLinks")
+    support_links: Optional[List[ShopLink]] = Field(default=None, alias="supportLinks")
+    primary_cta: Optional[ShopLink] = Field(default=None, alias="primaryCta")
 
     class Config:
         populate_by_name = True

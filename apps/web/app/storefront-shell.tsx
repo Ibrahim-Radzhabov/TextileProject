@@ -37,6 +37,23 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
   const isAdminArea = pathname.startsWith("/admin");
   const isCheckoutFlow = pathname.startsWith("/checkout");
   const showMobileBottomNav = !isAdminArea && !isCheckoutFlow;
+  const shopContacts = config.shop.contacts ?? {};
+  const hasShopContacts =
+    Boolean(shopContacts.phoneLabel) ||
+    Boolean(shopContacts.phoneHref) ||
+    Boolean(shopContacts.emailLabel) ||
+    Boolean(shopContacts.emailHref) ||
+    Boolean(shopContacts.address);
+  const primaryCta = config.shop.primaryCta ?? { label: "Подобрать ткань", href: "/catalog?open_filters=1" };
+  const supportLinks = config.shop.supportLinks && config.shop.supportLinks.length > 0
+    ? config.shop.supportLinks
+    : [
+        { label: "Подбор ткани", href: "/catalog?open_filters=1" },
+        { label: "Доставка и оплата", href: "/offer" },
+        { label: "Уход за тканями", href: "/offer" },
+        { label: "Вопросы и ответы", href: "/offer" }
+      ];
+  const contactHref = shopContacts.emailHref ?? shopContacts.phoneHref ?? "/offer";
   const navLinks = [
     {
       label: "Каталог",
@@ -44,7 +61,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
       isActive: pathname.startsWith("/catalog") || pathname.startsWith("/product") || pathname === "/"
     },
     { label: "Избранное", href: "/favorites", isActive: pathname.startsWith("/favorites") },
-    { label: "Контакты", href: "mailto:atelier@textile.studio" }
+    { label: "Контакты", href: contactHref }
   ];
   const footerColumns = [
     {
@@ -53,17 +70,12 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
         { label: "Тюль", href: "/catalog" },
         { label: "Шторы", href: "/catalog" },
         { label: "Комплекты", href: "/catalog" },
-        { label: "Пошив на заказ", href: "mailto:atelier@textile.studio" }
+        { label: "Пошив на заказ", href: primaryCta.href }
       ]
     },
     {
       title: "Клиентам",
-      links: [
-        { label: "Подбор ткани", href: "mailto:atelier@textile.studio" },
-        { label: "Доставка и оплата", href: "mailto:atelier@textile.studio" },
-        { label: "Уход за тканями", href: "mailto:atelier@textile.studio" },
-        { label: "Контакты", href: "mailto:atelier@textile.studio" }
-      ]
+      links: supportLinks
     }
   ];
   const footerTrustItems = [
@@ -98,21 +110,12 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             mobileMenu={{
               primaryLinks: [],
               serviceLinks: [
-                { label: "Подбор ткани", href: "mailto:atelier@textile.studio" },
-                { label: "Доставка и оплата", href: "mailto:atelier@textile.studio" },
-                { label: "Уход за тканями", href: "mailto:atelier@textile.studio" },
-                { label: "Вопросы и ответы", href: "mailto:atelier@textile.studio" },
+                ...supportLinks,
                 { label: "Политика конфиденциальности", href: "/privacy" },
                 { label: "Публичная оферта", href: "/offer" }
               ],
-              contacts: {
-                phoneLabel: "+7 (999) 000-00-00",
-                phoneHref: "tel:+79990000000",
-                emailLabel: "atelier@textile.studio",
-                emailHref: "mailto:atelier@textile.studio",
-                address: "Москва, Кутузовский проспект, 18"
-              },
-              cta: { label: "Подобрать ткань", href: "mailto:atelier@textile.studio" }
+              contacts: hasShopContacts ? shopContacts : undefined,
+              cta: primaryCta
             }}
             rightSlot={
               <>
@@ -148,10 +151,10 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                   <PwaInstallNavButton />
                 </div>
                 <a
-                  href="mailto:atelier@textile.studio"
+                  href={primaryCta.href}
                   className="hidden h-10 items-center rounded-full border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 md:inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 >
-                  Подобрать ткань
+                  {primaryCta.label}
                 </a>
               </>
             }
@@ -161,21 +164,11 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
           <Footer
             brandName={config.shop.name}
             description="Спокойный текстиль для интерьера: подбор ткани, пошив и комплектация под размеры, свет и ритм пространства."
-            cta={{ label: "Подобрать ткань", href: "mailto:atelier@textile.studio" }}
+            cta={primaryCta}
             trustItems={footerTrustItems}
             columns={footerColumns}
-            contacts={{
-              phoneLabel: "+7 (999) 000-00-00",
-              phoneHref: "tel:+79990000000",
-              emailLabel: "atelier@textile.studio",
-              emailHref: "mailto:atelier@textile.studio",
-              address: "Москва, Кутузовский проспект, 18"
-            }}
-            socialLinks={[
-              { label: "Instagram", href: "https://instagram.com" },
-              { label: "Pinterest", href: "https://pinterest.com" },
-              { label: "Telegram", href: "https://t.me" }
-            ]}
+            contacts={shopContacts}
+            socialLinks={config.shop.socialLinks ?? []}
             legalLinks={[
               { label: "Политика конфиденциальности", href: "/privacy" },
               { label: "Публичная оферта", href: "/offer" }

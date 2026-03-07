@@ -6,5 +6,44 @@
     "alt": "Textile Studio"
   },
   "primaryLocale": "ru-RU",
-  "currency": "USD"
+  "currency": "USD",
+  "contacts": {
+    "phoneLabel": "+7 (495) 120-18-40",
+    "phoneHref": "tel:+74951201840",
+    "emailLabel": "hello@textile.studio",
+    "emailHref": "mailto:hello@textile.studio",
+    "address": "Москва, Кутузовский проспект, 18"
+  },
+  "supportLinks": [
+    {
+      "label": "Подбор ткани",
+      "href": "/catalog?open_filters=1"
+    },
+    {
+      "label": "Доставка и оплата",
+      "href": "/offer"
+    },
+    {
+      "label": "Уход за тканями",
+      "href": "/offer"
+    },
+    {
+      "label": "Вопросы и ответы",
+      "href": "/offer"
+    }
+  ],
+  "socialLinks": [
+    {
+      "label": "Telegram",
+      "href": "https://t.me/textile_studio"
+    },
+    {
+      "label": "Pinterest",
+      "href": "https://www.pinterest.com/textile_studio/"
+    }
+  ],
+  "primaryCta": {
+    "label": "Подобрать ткань",
+    "href": "/catalog?open_filters=1"
+  }
 }

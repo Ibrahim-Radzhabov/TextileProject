@@ -10,6 +10,25 @@ export type ShopConfig = {
   };
   primaryLocale: string;
   currency: string;
+  contacts?: {
+    phoneLabel?: string;
+    phoneHref?: string;
+    emailLabel?: string;
+    emailHref?: string;
+    address?: string;
+  };
+  socialLinks?: Array<{
+    label: string;
+    href: string;
+  }>;
+  supportLinks?: Array<{
+    label: string;
+    href: string;
+  }>;
+  primaryCta?: {
+    label: string;
+    href: string;
+  };
 };
 
 export type SeoConfig = {

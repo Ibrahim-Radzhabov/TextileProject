@@ -23,6 +23,7 @@ type ProductPageClientProps = {
     id: string;
     content: string;
   }>;
+  sampleRequestHref: string;
 };
 
 const CURRENCY_LOCALE = "ru-RU";
@@ -46,6 +47,15 @@ function normalizeMetaKey(label: string): string {
     .replace(/[_-]+/g, " ")
     .trim()
     .toLowerCase();
+}
+
+function withSampleRequestSubject(href: string): string {
+  if (!href.startsWith("mailto:")) {
+    return href;
+  }
+
+  const separator = href.includes("?") ? "&" : "?";
+  return `${href}${separator}subject=Запрос%20образцов%20ткани`;
 }
 
 type ProductSwatch = {
@@ -130,7 +140,8 @@ function deriveSwatches(product: Product, fabricMeta: string | null): ProductSwa
 export function ProductPageClient({
   product,
   related,
-  productPageTexts
+  productPageTexts,
+  sampleRequestHref
 }: ProductPageClientProps) {
   const { addProduct, isPricing } = useCartStore();
   const favoriteProductIds = useFavoritesStore((state) => state.productIds);
@@ -205,6 +216,7 @@ export function ProductPageClient({
 
   const productPageLead = productPageTexts[0]?.content;
   const productPageSupport = productPageTexts.slice(1);
+  const sampleRequestActionHref = withSampleRequestSubject(sampleRequestHref);
 
   useEffect(() => {
     return () => {
@@ -374,7 +386,7 @@ export function ProductPageClient({
                     <p className="ui-subtle text-xs">Подберем оттенок к вашему интерьеру перед заказом.</p>
                   </div>
                   <a
-                    href="mailto:atelier@textile.studio?subject=Запрос%20образцов%20ткани"
+                    href={sampleRequestActionHref}
                     className="inline-flex h-8 shrink-0 items-center rounded-[8px] border border-border/52 bg-card/70 px-2.5 text-xs font-medium transition-colors hover:border-border/70 hover:bg-card/90"
                   >
                     Запросить
