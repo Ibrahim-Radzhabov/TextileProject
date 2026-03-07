@@ -65,21 +65,87 @@ export const TopNav: React.FC<TopNavProps> = ({
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const prefersReducedMotion = useReducedMotion();
   const monogram = buildMonogram(shopName);
+  const triggerRef = React.useRef<HTMLButtonElement | null>(null);
+  const drawerRef = React.useRef<HTMLElement | null>(null);
+  const previousFocusedRef = React.useRef<HTMLElement | null>(null);
   const primaryLinks = (mobileMenu?.primaryLinks ?? links).filter((link) => Boolean(link.href));
   const serviceLinks = mobileMenu?.serviceLinks ?? [];
   const contacts = mobileMenu?.contacts;
+
+  const closeMenu = React.useCallback(() => {
+    setIsMenuOpen(false);
+  }, []);
+
+  const getFocusableElements = React.useCallback((container: HTMLElement): HTMLElement[] => {
+    const focusable = container.querySelectorAll<HTMLElement>(
+      [
+        "a[href]",
+        "button:not([disabled])",
+        "input:not([disabled])",
+        "select:not([disabled])",
+        "textarea:not([disabled])",
+        "[tabindex]:not([tabindex='-1'])"
+      ].join(",")
+    );
+
+    return Array.from(focusable).filter(
+      (element) => !element.hasAttribute("disabled") && element.getAttribute("aria-hidden") !== "true"
+    );
+  }, []);
 
   React.useEffect(() => {
     if (!isMenuOpen) {
       return undefined;
     }
 
+    previousFocusedRef.current = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    const drawer = drawerRef.current;
+    if (drawer) {
+      const focusable = getFocusableElements(drawer);
+      (focusable[0] ?? drawer).focus();
+    }
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setIsMenuOpen(false);
+        event.preventDefault();
+        closeMenu();
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const currentDrawer = drawerRef.current;
+      if (!currentDrawer) {
+        return;
+      }
+
+      const focusable = getFocusableElements(currentDrawer);
+      if (focusable.length === 0) {
+        event.preventDefault();
+        currentDrawer.focus();
+        return;
+      }
+
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      const active = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      const activeInsideDrawer = active ? currentDrawer.contains(active) : false;
+
+      if (event.shiftKey) {
+        if (!activeInsideDrawer || active === first) {
+          event.preventDefault();
+          last.focus();
+        }
+        return;
+      }
+
+      if (!activeInsideDrawer || active === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
 
@@ -87,8 +153,10 @@ export const TopNav: React.FC<TopNavProps> = ({
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      previousFocusedRef.current?.focus();
+      previousFocusedRef.current = null;
     };
-  }, [isMenuOpen]);
+  }, [closeMenu, getFocusableElements, isMenuOpen]);
 
   const leftContent = (
     <div className="flex items-center gap-3.5">
@@ -168,7 +236,9 @@ export const TopNav: React.FC<TopNavProps> = ({
         <div className="flex min-w-0 flex-wrap items-center justify-end gap-1.5 text-sm sm:flex-nowrap sm:gap-2.5">
           {rightSlot}
           <button
+            ref={triggerRef}
             type="button"
+            data-testid="top-nav-mobile-open"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden"
             aria-label="Открыть меню"
             aria-expanded={isMenuOpen}
@@ -182,21 +252,24 @@ export const TopNav: React.FC<TopNavProps> = ({
       <AnimatePresence>
         {isMenuOpen && (
           <>
-            <motion.button
-              type="button"
-              aria-label="Закрыть меню"
+            <motion.div
+              aria-hidden="true"
+              data-testid="top-nav-mobile-overlay"
               className="fixed inset-0 z-[58] bg-foreground/20 backdrop-blur-[2px] md:hidden"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.18 }}
-              onClick={() => setIsMenuOpen(false)}
+              onClick={closeMenu}
             />
             <motion.aside
+              ref={drawerRef}
               id="top-nav-mobile-menu"
+              data-testid="top-nav-mobile-menu"
               role="dialog"
               aria-modal="true"
               aria-label="Мобильная навигация"
+              tabIndex={-1}
               className="fixed bottom-2 right-2 top-2 z-[59] flex w-[min(92vw,23rem)] flex-col overflow-hidden rounded-[1.4rem] border border-border/50 bg-card/96 p-5 shadow-soft md:hidden"
               initial={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 26 }}
               animate={{ opacity: 1, x: 0 }}
@@ -210,9 +283,10 @@ export const TopNav: React.FC<TopNavProps> = ({
                 </div>
                 <button
                   type="button"
+                  data-testid="top-nav-mobile-close"
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   aria-label="Закрыть меню"
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={closeMenu}
                 >
                   <span aria-hidden="true" className="text-lg leading-none">×</span>
                 </button>
@@ -232,7 +306,7 @@ export const TopNav: React.FC<TopNavProps> = ({
                             "flex min-h-11 items-center rounded-xl border border-border/42 px-3.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                             link.isActive ? "bg-accent/12 text-foreground" : "bg-card/70 text-muted-foreground hover:text-foreground"
                           ].join(" ")}
-                          onClick={() => setIsMenuOpen(false)}
+                          onClick={closeMenu}
                         >
                           {link.label}
                         </a>
@@ -250,7 +324,7 @@ export const TopNav: React.FC<TopNavProps> = ({
                           key={`${link.href}-${link.label}`}
                           href={link.href}
                           className="flex min-h-11 items-center rounded-xl border border-border/42 bg-card/70 px-3.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                          onClick={() => setIsMenuOpen(false)}
+                          onClick={closeMenu}
                         >
                           {link.label}
                         </a>
@@ -290,7 +364,7 @@ export const TopNav: React.FC<TopNavProps> = ({
                   <a
                     href={mobileMenu.cta.href}
                     className="inline-flex h-10 w-full items-center justify-center rounded-full border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    onClick={() => setIsMenuOpen(false)}
+                    onClick={closeMenu}
                   >
                     {mobileMenu.cta.label}
                   </a>
