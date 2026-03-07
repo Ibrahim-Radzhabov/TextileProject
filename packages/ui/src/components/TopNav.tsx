@@ -68,6 +68,8 @@ export const TopNav: React.FC<TopNavProps> = ({
   const primaryLinks = (mobileMenu?.primaryLinks ?? links).filter((link) => Boolean(link.href));
   const serviceLinks = mobileMenu?.serviceLinks ?? [];
   const contacts = mobileMenu?.contacts;
+  const menuTriggerRef = React.useRef<HTMLButtonElement>(null);
+  const closeButtonRef = React.useRef<HTMLButtonElement>(null);
 
   React.useEffect(() => {
     if (!isMenuOpen) {
@@ -76,6 +78,7 @@ export const TopNav: React.FC<TopNavProps> = ({
 
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    closeButtonRef.current?.focus({ preventScroll: true });
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -87,6 +90,7 @@ export const TopNav: React.FC<TopNavProps> = ({
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      menuTriggerRef.current?.focus({ preventScroll: true });
     };
   }, [isMenuOpen]);
 
@@ -173,6 +177,7 @@ export const TopNav: React.FC<TopNavProps> = ({
             aria-label="Открыть меню"
             aria-expanded={isMenuOpen}
             aria-controls="top-nav-mobile-menu"
+            ref={menuTriggerRef}
             onClick={() => setIsMenuOpen(true)}
           >
             <span aria-hidden="true" className="text-lg leading-none">≡</span>
@@ -210,6 +215,7 @@ export const TopNav: React.FC<TopNavProps> = ({
                 </div>
                 <button
                   type="button"
+                  ref={closeButtonRef}
                   className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   aria-label="Закрыть меню"
                   onClick={() => setIsMenuOpen(false)}
