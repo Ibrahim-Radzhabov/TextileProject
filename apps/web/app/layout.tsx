@@ -1,10 +1,9 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
-import { cache } from "react";
 import type { ReactNode, CSSProperties } from "react";
 import { cookies } from "next/headers";
 import type { ThemeConfig } from "@store-platform/shared-types";
-import { fetchStorefrontConfig } from "@/lib/api-client";
+import { getStorefrontConfig } from "@/lib/get-storefront-config";
 import { buildOpenGraphImage, resolveMetadataBaseFromHeaders } from "@/lib/seo";
 import {
   resolveThemeByVariantId,
@@ -15,8 +14,6 @@ import { PwaRegister } from "./pwa-register";
 import { StorefrontShell } from "./storefront-shell";
 
 export const dynamic = "force-dynamic";
-
-const getStorefrontConfig = cache(async () => fetchStorefrontConfig());
 
 function toRgbChannels(value: string): string {
   const raw = value.trim();

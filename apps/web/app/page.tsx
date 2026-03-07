@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import type { HeroBlock, PageConfig } from "@store-platform/shared-types";
-import { fetchStorefrontConfig } from "@/lib/api-client";
+import { getStorefrontConfig } from "@/lib/get-storefront-config";
 import {
   buildStorefrontMetadata,
   buildOrganizationJsonLd,
@@ -15,7 +15,7 @@ function resolveHomePage(pages: PageConfig[]): PageConfig | null {
 }
 
 export async function generateMetadata(): Promise<Metadata> {
-  const config = await fetchStorefrontConfig();
+  const config = await getStorefrontConfig();
   const homePage = resolveHomePage(config.pages);
   const hero = homePage?.blocks.find((block): block is HeroBlock => block.type === "hero");
   const title = hero?.content?.title ?? config.seo.defaultTitle;
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const config = await fetchStorefrontConfig();
+  const config = await getStorefrontConfig();
   const homePage = resolveHomePage(config.pages);
   if (!homePage) {
     return null;
