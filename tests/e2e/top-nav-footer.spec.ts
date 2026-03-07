@@ -26,6 +26,10 @@ test.describe("storefront top-nav and footer qa", () => {
 
     const dialog = page.getByTestId("top-nav-mobile-menu");
     await expect(dialog).toBeVisible();
+    await expect(dialog.getByText("Навигация")).toHaveCount(0);
+    await expect(dialog.locator("a[href='/catalog']")).toHaveCount(0);
+    await expect(dialog.locator("a[href='/favorites']")).toHaveCount(0);
+    await expect(dialog.getByText("Клиентам")).toBeVisible();
 
     const openState = await page.evaluate(() => {
       const drawer = document.getElementById("top-nav-mobile-menu");

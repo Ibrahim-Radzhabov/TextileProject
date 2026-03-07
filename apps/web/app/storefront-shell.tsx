@@ -96,16 +96,14 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             tagline="Window Textiles"
             links={navLinks}
             mobileMenu={{
-              primaryLinks: [
-                { label: "Каталог", href: "/catalog", isActive: pathname.startsWith("/catalog") || pathname.startsWith("/product") || pathname === "/" },
-                { label: "Избранное", href: "/favorites", isActive: pathname.startsWith("/favorites") },
-                { label: "Контакты", href: "mailto:atelier@textile.studio" }
-              ],
+              primaryLinks: [],
               serviceLinks: [
                 { label: "Подбор ткани", href: "mailto:atelier@textile.studio" },
                 { label: "Доставка и оплата", href: "mailto:atelier@textile.studio" },
                 { label: "Уход за тканями", href: "mailto:atelier@textile.studio" },
-                { label: "Вопросы и ответы", href: "mailto:atelier@textile.studio" }
+                { label: "Вопросы и ответы", href: "mailto:atelier@textile.studio" },
+                { label: "Политика конфиденциальности", href: "/privacy" },
+                { label: "Публичная оферта", href: "/offer" }
               ],
               contacts: {
                 phoneLabel: "+7 (999) 000-00-00",
