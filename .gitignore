@@ -34,6 +34,13 @@ artifacts/
 
 # Local env files
 infra/.env
+apps/api/.env
+apps/api/.env.*
+
+# Local media backups / alternates
+apps/web/public/demo/hero/hero_var1.mp4
+apps/web/public/demo/hero/*.bak.mp4
+apps/web/public/demo/hero/3051489-sd_960_540_25fps.mp4
 
 # Local package build outputs
 packages/*/dist/
