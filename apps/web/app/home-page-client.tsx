@@ -264,7 +264,7 @@ function renderProductGridBlock(
         />
       ) : (
         <motion.div
-          className="grid auto-rows-fr grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4"
+          className="grid auto-rows-fr grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4"
           variants={gridContainerVariants}
           initial="hidden"
           animate="visible"
@@ -272,6 +272,7 @@ function renderProductGridBlock(
           {productsToRender.map((product) => (
             <motion.div
               key={product.id}
+              className="min-h-0"
               variants={gridItemVariants}
             >
               <ProductCard
