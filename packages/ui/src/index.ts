@@ -7,6 +7,7 @@ export * from "./components/Select";
 export * from "./components/EmptyState";
 export * from "./components/LayoutShell";
 export * from "./components/TopNav";
+export * from "./components/Footer";
 export * from "./components/Hero";
 export * from "./components/HeroMedia";
 export * from "./components/ProductCard";

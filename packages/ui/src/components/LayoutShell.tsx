@@ -48,14 +48,12 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
 
         {footer && (
           <motion.div
-            className="mt-9 text-sm text-muted-foreground sm:mt-10"
+            className="mt-9 sm:mt-10"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ ...transitionStandard, delay: 0.12 }}
           >
-            <Surface tone="ghost" className="rounded-xl px-4 py-2.5 sm:px-5 sm:py-3">
-              {footer}
-            </Surface>
+            {footer}
           </motion.div>
         )}
       </div>
