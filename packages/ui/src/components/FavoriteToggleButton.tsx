@@ -80,8 +80,6 @@ export const FavoriteToggleButton: React.FC<FavoriteToggleButtonProps> = ({
         </svg>
       </span>
 
-      <span key={`ring-${burstKey}`} className={styles.ring} aria-hidden="true" />
-
       <svg
         key={`burst-${burstKey}`}
         viewBox="0 0 44 44"

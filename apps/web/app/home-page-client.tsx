@@ -23,6 +23,7 @@ import type {
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { HeroPinnedVideo } from "@/components/hero-pinned-video";
+import { HeroVideoEditorial } from "@/components/hero-video-editorial";
 
 type HomePageClientProps = {
   homePage: PageConfig;
@@ -122,6 +123,25 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
   }
 
   if (media.type === "video") {
+    const overlayVariant = block.overlayVariant ?? "full";
+    const quickLinks = content.quickLinks ?? block.quickLinks ?? [];
+    const primaryCta = content.primaryCta ?? block.primaryCta;
+
+    if (overlayVariant === "card") {
+      return (
+        <section key={block.id} className="rounded-md bg-card/80">
+          <HeroVideoEditorial
+            media={media}
+            title={content.title || block.title || block.cardTitle || ""}
+            cardTitle={block.cardTitle}
+            cardLinks={quickLinks.length > 0 ? quickLinks.map((l) => ({ label: l.label, href: l.href, subtitle: l.subtitle })) : undefined}
+            primaryCta={primaryCta}
+            introText={block.introText}
+          />
+        </section>
+      );
+    }
+
     if (contentPlacement === "overlay" && heroCopy) {
       return (
         <section key={block.id} className="rounded-md bg-card/80">

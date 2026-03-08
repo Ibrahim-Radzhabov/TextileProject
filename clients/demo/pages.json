@@ -9,6 +9,9 @@
         "id": "hero-main",
         "type": "hero",
         "contentPlacement": "below",
+        "overlayVariant": "card",
+        "cardTitle": "Подбор по сценарию",
+        "introText": "Спокойный текстиль для интерьера: подбор ткани, пошив и комплектация под размеры, свет и ритм пространства.",
         "quickLinks": [
           {
             "label": "По комнате",

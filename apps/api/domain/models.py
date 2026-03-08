@@ -226,6 +226,11 @@ class HeroBlock(PageBlockBase):
     content_placement: Optional[Literal["overlay", "below"]] = Field(
         default=None, alias="contentPlacement"
     )
+    overlay_variant: Optional[Literal["card", "full"]] = Field(
+        default=None, alias="overlayVariant"
+    )
+    card_title: Optional[str] = Field(default=None, alias="cardTitle")
+    intro_text: Optional[str] = Field(default=None, alias="introText")
     eyebrow: Optional[str] = None
     title: Optional[str] = None
     subtitle: Optional[str] = None

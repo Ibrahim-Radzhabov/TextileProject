@@ -10,6 +10,12 @@ export type TopNavSearchIntensity = "balanced" | "vivid";
 type TopNavSearchFilterProps = {
   intensity?: TopNavSearchIntensity;
   className?: string;
+  /** Controlled open state */
+  open?: boolean;
+  /** Called when open state should change (e.g. close) */
+  onOpenChange?: (open: boolean) => void;
+  /** When true, do not render the trigger button (use with controlled open) */
+  hideTrigger?: boolean;
 };
 
 function normalizeQuery(value: string): string {
@@ -33,12 +39,27 @@ function buildCatalogHref(searchText: string, openFilters: boolean): string {
 
 export function TopNavSearchFilter({
   intensity = "balanced",
-  className
+  className,
+  open: controlledOpen,
+  onOpenChange,
+  hideTrigger = false
 }: TopNavSearchFilterProps) {
   const pathname = usePathname();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [open, setOpen] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined && onOpenChange !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (isControlled) {
+        onOpenChange?.(next);
+      } else {
+        setInternalOpen(next);
+      }
+    },
+    [isControlled, onOpenChange]
+  );
   const [value, setValue] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -99,10 +120,14 @@ export function TopNavSearchFilter({
   return (
     <div
       ref={rootRef}
-      className={[styles.container, className].filter(Boolean).join(" ")}
+      className={[
+        styles.container,
+        hideTrigger && !open ? styles.containerCollapsed : "",
+        className
+      ].filter(Boolean).join(" ")}
       data-intensity={intensity}
     >
-      {!open && (
+      {!hideTrigger && !open && (
         <button
           type="button"
           className={styles.trigger}
