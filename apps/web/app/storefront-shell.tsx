@@ -172,7 +172,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
         footer={
           <Footer
             brandName={config.shop.name}
-            description="Спокойный текстиль для интерьера: подбор ткани, пошив и комплектация под размеры, свет и ритм пространства."
             cta={{ label: "Подобрать ткань", href: "mailto:atelier@textile.studio" }}
             trustItems={footerTrustItems}
             columns={footerColumns}

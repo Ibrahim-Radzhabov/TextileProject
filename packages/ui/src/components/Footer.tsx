@@ -17,7 +17,7 @@ export type FooterTrustItem = {
 
 export type FooterProps = {
   brandName: string;
-  description: string;
+  description?: string;
   cta?: FooterLink;
   socialLinks?: FooterLink[];
   columns: FooterColumn[];
@@ -62,7 +62,9 @@ export const Footer: React.FC<FooterProps> = ({
         <section className="grid gap-8 border-t border-border/40 pt-8 md:grid-cols-2 lg:grid-cols-[1.4fr_0.9fr_0.9fr_1fr]">
           <div>
             <h3 className="ui-title-serif text-[1.25rem] leading-none text-foreground">{brandName}</h3>
-            <p className="mt-3 max-w-[38ch] text-sm leading-relaxed text-muted-foreground">{description}</p>
+            {description ? (
+              <p className="mt-3 max-w-[38ch] text-sm leading-relaxed text-muted-foreground">{description}</p>
+            ) : null}
 
             {socialLinks.length > 0 && (
               <div className="mt-5 flex flex-wrap gap-2">

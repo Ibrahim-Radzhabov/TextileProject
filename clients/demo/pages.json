@@ -10,30 +10,6 @@
         "type": "hero",
         "contentPlacement": "below",
         "overlayVariant": "card",
-        "cardTitle": "Подбор по сценарию",
-        "introText": "Спокойный текстиль для интерьера: подбор ткани, пошив и комплектация под размеры, свет и ритм пространства.",
-        "quickLinks": [
-          {
-            "label": "По комнате",
-            "subtitle": "Гостиная, спальня, детская",
-            "href": "/catalog?view=room"
-          },
-          {
-            "label": "По светопропусканию",
-            "subtitle": "Вуаль, димаут, блэкаут",
-            "href": "/catalog?view=light"
-          },
-          {
-            "label": "По фактуре",
-            "subtitle": "Лен, жаккард, бархат",
-            "href": "/catalog?view=texture"
-          },
-          {
-            "label": "Готовые наборы",
-            "subtitle": "Сценарии день/ночь для окна",
-            "href": "/catalog?view=kits"
-          }
-        ],
         "media": {
           "type": "video",
           "src": "/demo/hero/textile-loop-desktop.mp4",
