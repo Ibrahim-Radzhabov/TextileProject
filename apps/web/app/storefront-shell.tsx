@@ -11,7 +11,9 @@ import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { TopNavSearchFilter } from "@/components/top-nav-search-filter";
+import { HeaderDropdownMenu } from "@/components/header-dropdown-menu";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
+import { AnnouncementTicker } from "../components/AnnouncementTicker";
 
 const iconHome = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -35,6 +37,10 @@ const iconCart = (
     <circle cx="16.4" cy="18.2" r="1.2" fill="currentColor" />
   </svg>
 );
+const tickerMessages = [
+  "Book a Private Appointment in Store",
+  "E-Concierging Availability, Monday to Sunday from 9 am to 7 pm"
+];
 
 type StorefrontShellProps = {
   children: ReactNode;
@@ -111,13 +117,14 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
 
   return (
     <>
+      <AnnouncementTicker messages={tickerMessages} interval={2100} transitionMs={320} />
       <LayoutShell
         topNav={
           <TopNav
             shopName={config.shop.name}
             logo={config.shop.logo}
             leftHref="/"
-            tagline="Window Textiles"
+            centerBrand
             links={[]}
             mobileMenu={{
               primaryLinks: [
@@ -142,27 +149,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             rightSlot={
               <>
                 <div className="hidden md:flex flex-col items-end gap-1.5">
-                  <nav aria-label="Быстрая навигация" className="flex items-center gap-1">
-                    {navLinks.map((link) => (
-                      <a
-                        key={`${link.href}-${link.label}`}
-                        href={link.href}
-                        className={[
-                          "group relative inline-flex h-8 items-center rounded-full px-3 text-[0.82rem] transition-colors",
-                          link.isActive ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"
-                        ].join(" ")}
-                        aria-current={link.isActive ? "page" : undefined}
-                      >
-                        <span>{link.label}</span>
-                        <span
-                          className={[
-                            "absolute inset-x-3 bottom-[0.3rem] h-px rounded-full bg-accent transition-transform duration-200",
-                            link.isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
-                          ].join(" ")}
-                        />
-                      </a>
-                    ))}
-                  </nav>
+                  <HeaderDropdownMenu links={navLinks} />
                   <AnimatedDock
                     items={[
                       { href: "/", icon: iconHome, title: "Главная" },
