@@ -11,7 +11,14 @@ import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { TopNavSearchFilter } from "@/components/top-nav-search-filter";
+import { HeaderDropdownMenu } from "@/components/header-dropdown-menu";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
+import { AnnouncementTicker } from "../components/AnnouncementTicker";
+
+const tickerMessages = [
+  "Book a Private Appointment in Store",
+  "E-Concierging Availability, Monday to Sunday from 9 am to 7 pm"
+];
 
 type StorefrontShellProps = {
   children: ReactNode;
@@ -99,6 +106,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
 
   return (
     <>
+      <AnnouncementTicker messages={tickerMessages} interval={2100} transitionMs={320} />
       <LayoutShell
         topNav={
           <TopNav
@@ -119,6 +127,9 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             }}
             rightSlot={
               <>
+                <div className="hidden md:block">
+                  <HeaderDropdownMenu links={navLinks} />
+                </div>
                 <TopNavSearchFilter intensity="balanced" />
                 <a
                   href="/favorites"
