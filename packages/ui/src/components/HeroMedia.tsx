@@ -23,12 +23,6 @@ export type HeroMediaProps = {
   revealOnReady?: boolean;
 };
 
-type NavigatorWithConnection = Navigator & {
-  connection?: {
-    saveData?: boolean;
-  };
-};
-
 export const HeroMedia: React.FC<HeroMediaProps> = ({
   media,
   title,
@@ -38,19 +32,12 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   defaultOverlayOpacity = 0.5,
   revealOnReady = false
 }) => {
+  const videoRef = React.useRef<HTMLVideoElement | null>(null);
   const [videoFailed, setVideoFailed] = React.useState(false);
-  const [isVideoReady, setIsVideoReady] = React.useState(!revealOnReady);
-  const [preferImage, setPreferImage] = React.useState(false);
+  const [showPoster, setShowPoster] = React.useState(revealOnReady && Boolean(media.poster));
   const [isNarrowViewport, setIsNarrowViewport] = React.useState(false);
-
-  React.useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    const nav = navigator as NavigatorWithConnection;
-    setPreferImage(Boolean(nav.connection?.saveData));
-  }, []);
+  const [activeVideoSrc, setActiveVideoSrc] = React.useState(media.src);
+  const [videoFallbackAttempted, setVideoFallbackAttempted] = React.useState(false);
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
@@ -69,7 +56,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
     };
   }, []);
 
-  const shouldRenderVideo = media.type === "video" && !preferImage;
+  const shouldRenderVideo = media.type === "video";
   const overlayOpacity = media.overlayOpacity ?? defaultOverlayOpacity;
   const mergedAssetClassName = [assetClassName ?? "h-full w-full object-cover"].join(" ").trim();
   const assetStyle = {
@@ -85,8 +72,63 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
 
   React.useEffect(() => {
     setVideoFailed(false);
-    setIsVideoReady(!revealOnReady);
+    setShowPoster(revealOnReady && Boolean(media.poster));
+    setVideoFallbackAttempted(false);
   }, [media.type, media.src, media.mobileSrc, media.poster]);
+
+  const primaryVideoSrc = isNarrowViewport && media.mobileSrc ? media.mobileSrc : media.src;
+  const fallbackVideoSrc = isNarrowViewport ? media.src : media.mobileSrc;
+
+  React.useEffect(() => {
+    if (media.type !== "video") {
+      return;
+    }
+
+    setActiveVideoSrc(primaryVideoSrc);
+    setVideoFallbackAttempted(false);
+  }, [media.type, primaryVideoSrc]);
+
+  React.useEffect(() => {
+    if (!shouldRenderVideo || videoFailed) {
+      return;
+    }
+
+    const node = videoRef.current;
+    if (!node) {
+      return;
+    }
+
+    const tryPlay = () => {
+      void node.play().catch(() => undefined);
+    };
+
+    tryPlay();
+
+    if (node.readyState >= 2) {
+      return;
+    }
+
+    node.addEventListener("loadedmetadata", tryPlay, { once: true });
+    node.addEventListener("loadeddata", tryPlay, { once: true });
+    return () => {
+      node.removeEventListener("loadedmetadata", tryPlay);
+      node.removeEventListener("loadeddata", tryPlay);
+    };
+  }, [activeVideoSrc, shouldRenderVideo, videoFailed]);
+
+  React.useEffect(() => {
+    if (!revealOnReady || !showPoster || videoFailed) {
+      return;
+    }
+
+    const fallbackTimer = window.setTimeout(() => {
+      setShowPoster(false);
+    }, 2500);
+
+    return () => {
+      window.clearTimeout(fallbackTimer);
+    };
+  }, [revealOnReady, showPoster, videoFailed]);
 
   const fallbackSrc = media.type === "video" ? media.poster ?? media.src : media.src;
   const fallbackAlt = media.alt ?? title;
@@ -97,14 +139,13 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
     >
       {shouldRenderVideo ? (
         <>
-          {revealOnReady && media.poster && !videoFailed && (
+          {revealOnReady && media.poster && showPoster && !videoFailed && (
             <picture
               className={[
                 "absolute inset-0 transition-opacity duration-700",
-                isVideoReady ? "opacity-0" : "opacity-100"
+                showPoster ? "opacity-100" : "opacity-0"
               ].join(" ")}
             >
-              {media.mobileSrc && <source srcSet={media.mobileSrc} media="(max-width: 768px)" />}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={media.poster}
@@ -115,19 +156,21 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
             </picture>
           )}
           <video
+            ref={videoRef}
             autoPlay
             muted
             loop
             playsInline
-            preload="metadata"
+            preload="auto"
             poster={media.poster}
+            src={activeVideoSrc}
             className={[
               mergedAssetClassName,
               "transition-opacity duration-300",
               revealOnReady
-                ? isVideoReady && !videoFailed
-                  ? "opacity-100"
-                  : "opacity-0"
+                ? videoFailed
+                  ? "opacity-0"
+                  : "opacity-100"
                 : videoFailed
                   ? "opacity-0"
                   : "opacity-100"
@@ -135,23 +178,31 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
             style={assetStyle}
             onCanPlay={() => {
               setVideoFailed(false);
-              setIsVideoReady(true);
+              setShowPoster(false);
             }}
             onLoadedData={() => {
               setVideoFailed(false);
-              setIsVideoReady(true);
+              setShowPoster(false);
+            }}
+            onPlaying={() => {
+              setVideoFailed(false);
+              setShowPoster(false);
             }}
             onError={() => {
+              if (!videoFallbackAttempted && fallbackVideoSrc && fallbackVideoSrc !== activeVideoSrc) {
+                setVideoFallbackAttempted(true);
+                setVideoFailed(false);
+                setShowPoster(true);
+                setActiveVideoSrc(fallbackVideoSrc);
+                return;
+              }
+
               setVideoFailed(true);
-              setIsVideoReady(false);
+              setShowPoster(true);
             }}
-          >
-            {media.mobileSrc && <source src={media.mobileSrc} media="(max-width: 768px)" />}
-            <source src={media.src} />
-          </video>
+          />
           {videoFailed && (
             <picture>
-              {media.mobileSrc && <source srcSet={media.mobileSrc} media="(max-width: 768px)" />}
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={fallbackSrc}
