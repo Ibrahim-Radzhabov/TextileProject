@@ -137,8 +137,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                 emailLabel: "atelier@textile.studio",
                 emailHref: "mailto:atelier@textile.studio",
                 address: "Москва, Кутузовский проспект, 18"
-              },
-              cta: { label: "Подобрать ткань", href: "mailto:atelier@textile.studio" }
+              }
             }}
             rightSlot={
               <>
@@ -159,12 +158,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                 <div className="hidden sm:block">
                   <PwaInstallNavButton />
                 </div>
-                <a
-                  href="mailto:atelier@textile.studio"
-                  className="hidden h-10 items-center rounded-full border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 md:inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                >
-                  Подобрать ткань
-                </a>
               </>
             }
           />

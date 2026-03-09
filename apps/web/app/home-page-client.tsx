@@ -24,6 +24,7 @@ import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { HeroPinnedVideo } from "@/components/hero-pinned-video";
 import { HeroVideoEditorial } from "@/components/hero-video-editorial";
+import { TextileTypeSwitcher } from "@/components/textile-type-switcher";
 
 type HomePageClientProps = {
   homePage: PageConfig;
@@ -364,6 +365,13 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
 
         if (!blockNode) {
           return [];
+        }
+
+        if (block.type === "hero") {
+          return [
+            blockNode,
+            <TextileTypeSwitcher key={`${block.id}-textile-switcher`} />
+          ];
         }
 
         return [blockNode];
