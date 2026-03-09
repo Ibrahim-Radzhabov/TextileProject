@@ -118,7 +118,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             logo={config.shop.logo}
             leftHref="/"
             tagline="Window Textiles"
-            links={navLinks}
+            links={[]}
             mobileMenu={{
               primaryLinks: [
                 { label: "Каталог", href: "/catalog", isActive: pathname.startsWith("/catalog") || pathname.startsWith("/product") || pathname === "/" },
@@ -141,14 +141,47 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             }}
             rightSlot={
               <>
-                <AnimatedDock
-                  items={[
-                    { href: "/", icon: iconHome, title: "Главная" },
-                    { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
-                    { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
-                    { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
-                  ]}
-                />
+                <div className="hidden md:flex flex-col items-end gap-1.5">
+                  <nav aria-label="Быстрая навигация" className="flex items-center gap-1">
+                    {navLinks.map((link) => (
+                      <a
+                        key={`${link.href}-${link.label}`}
+                        href={link.href}
+                        className={[
+                          "group relative inline-flex h-8 items-center rounded-full px-3 text-[0.82rem] transition-colors",
+                          link.isActive ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"
+                        ].join(" ")}
+                        aria-current={link.isActive ? "page" : undefined}
+                      >
+                        <span>{link.label}</span>
+                        <span
+                          className={[
+                            "absolute inset-x-3 bottom-[0.3rem] h-px rounded-full bg-accent transition-transform duration-200",
+                            link.isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                          ].join(" ")}
+                        />
+                      </a>
+                    ))}
+                  </nav>
+                  <AnimatedDock
+                    items={[
+                      { href: "/", icon: iconHome, title: "Главная" },
+                      { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
+                      { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
+                      { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
+                    ]}
+                  />
+                </div>
+                <div className="md:hidden">
+                  <AnimatedDock
+                    items={[
+                      { href: "/", icon: iconHome, title: "Главная" },
+                      { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
+                      { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
+                      { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
+                    ]}
+                  />
+                </div>
                 <TopNavSearchFilter
                   intensity="balanced"
                   open={searchOpen}

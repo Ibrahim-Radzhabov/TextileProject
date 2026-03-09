@@ -31,6 +31,7 @@ html {
 body {
   @apply bg-background text-foreground antialiased;
   font-size: var(--font-base-size, 16px);
+  font-family: var(--font-sans);
   background-image: var(--gradient-page);
   background-attachment: scroll;
 }
@@ -115,13 +116,13 @@ body {
 }
 
 .ui-title-serif {
-  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-family: var(--font-velura-display), "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
   letter-spacing: -0.02em;
   font-weight: 430;
 }
 
 .ui-title-display {
-  font-family: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-family: var(--font-velura-display), "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
   letter-spacing: -0.03em;
   font-weight: 460;
   line-height: 0.96;
