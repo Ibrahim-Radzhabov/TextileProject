@@ -60,7 +60,7 @@ function filterProducts(products: Product[], block: ProductGridBlock): Product[]
   });
 }
 
-function renderHeroBlock(block: HeroBlock): JSX.Element {
+function renderHeroBlock(block: HeroBlock, revealContent?: React.ReactNode): JSX.Element {
   const content = resolveHeroContent(block);
   const media = block.media;
   const contentPlacement = block.contentPlacement ?? "overlay";
@@ -130,7 +130,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
 
     if (overlayVariant === "card") {
       return (
-        <section key={block.id} className="rounded-md bg-card/80">
+        <section key={block.id} className="rounded-md">
           <HeroVideoEditorial
             media={media}
             title={content.title || block.title || block.cardTitle || ""}
@@ -138,6 +138,7 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
             cardLinks={quickLinks.length > 0 ? quickLinks.map((l) => ({ label: l.label, href: l.href, subtitle: l.subtitle })) : undefined}
             primaryCta={primaryCta}
             introText={block.introText}
+            revealContent={revealContent}
           />
         </section>
       );
@@ -355,6 +356,10 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   return (
     <div className="home-concept-editorial space-y-8 sm:space-y-9 lg:space-y-11">
       {homePage.blocks.flatMap((block) => {
+        if (block.type === "hero") {
+          return [renderHeroBlock(block, <TextileTypeSwitcher key={`${block.id}-textile-switcher`} />)];
+        }
+
         const blockNode = renderBlock(
           block,
           products,
@@ -365,13 +370,6 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
 
         if (!blockNode) {
           return [];
-        }
-
-        if (block.type === "hero") {
-          return [
-            blockNode,
-            <TextileTypeSwitcher key={`${block.id}-textile-switcher`} />
-          ];
         }
 
         return [blockNode];

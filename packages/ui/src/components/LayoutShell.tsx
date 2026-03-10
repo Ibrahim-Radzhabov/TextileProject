@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { motion, useMotionValueEvent, useScroll } from "framer-motion";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
 import { Surface } from "./Surface";
 import { transitionStandard } from "../motion/presets";
 
@@ -13,21 +13,48 @@ export type LayoutShellProps = {
 
 export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, footer }) => {
   const [isScrolled, setIsScrolled] = React.useState(false);
+  const [isTopNavHidden, setIsTopNavHidden] = React.useState(false);
+  const prefersReducedMotion = useReducedMotion();
   const { scrollY } = useScroll();
+  const lastScrollYRef = React.useRef(0);
 
   useMotionValueEvent(scrollY, "change", (latest) => {
+    const previous = lastScrollYRef.current;
+    const delta = latest - previous;
+    lastScrollYRef.current = latest;
     const next = latest > 34;
     setIsScrolled((prev) => (prev === next ? prev : next));
+
+    if (prefersReducedMotion) {
+      setIsTopNavHidden(false);
+      return;
+    }
+
+    if (latest <= 88) {
+      setIsTopNavHidden(false);
+      return;
+    }
+
+    if (Math.abs(delta) < 5) {
+      return;
+    }
+
+    const nextHidden = delta > 0;
+    setIsTopNavHidden((prev) => (prev === nextHidden ? prev : nextHidden));
   });
 
   return (
     <div className="page-shell">
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1360px] flex-col px-4 pb-24 pt-4 sm:px-6 sm:pb-12 sm:pt-6 lg:px-10 lg:pt-8">
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1360px] flex-col px-4 pb-24 pt-2 sm:px-6 sm:pb-12 sm:pt-3 lg:px-10 lg:pt-4">
         {topNav && (
           <motion.div
-            className="sticky top-0 z-40 mb-5 sm:mb-7"
+            className="sticky top-0 z-40 mb-2 sm:mb-3"
             initial={{ opacity: 0, y: -4 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={
+              prefersReducedMotion
+                ? { opacity: 1, y: 0 }
+                : { opacity: isTopNavHidden ? 0 : 1, y: isTopNavHidden ? "-115%" : 0 }
+            }
             transition={transitionStandard}
           >
             <Surface
@@ -44,7 +71,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
           </motion.div>
         )}
 
-        <main className="min-h-0 flex-1 py-3 sm:py-4 lg:py-6">{children}</main>
+        <main className="min-h-0 flex-1 pb-3 pt-0 sm:pb-4 sm:pt-0 lg:pb-6 lg:pt-0">{children}</main>
 
         {footer && (
           <motion.div
