@@ -60,7 +60,7 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
             <Surface
               tone={isScrolled ? "elevated" : "ghost"}
               className={[
-                "flex min-h-[3.25rem] items-center justify-between rounded-md border px-3 py-2 shadow-none backdrop-blur-0 transition-[border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-normal)] sm:min-h-[3.5rem] sm:px-4 sm:py-2.5",
+                "mx-auto flex min-h-[3.25rem] w-[93.5%] items-center justify-between rounded-md border px-3 py-2 shadow-none backdrop-blur-0 transition-[border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-normal)] sm:min-h-[3.5rem] sm:px-4 sm:py-2.5",
                 isScrolled
                   ? "border-border/42 bg-card/88 shadow-soft-subtle backdrop-blur-xl"
                   : "border-transparent bg-transparent"

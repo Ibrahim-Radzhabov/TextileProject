@@ -12,8 +12,8 @@ export type AnnouncementTickerProps = {
   className?: string;
 };
 
-const DEFAULT_INTERVAL = 2100;
-const DEFAULT_TRANSITION = 320;
+const DEFAULT_INTERVAL = 3600;
+const DEFAULT_TRANSITION = 520;
 
 export function AnnouncementTicker({
   messages,

@@ -117,7 +117,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
 
   return (
     <>
-      <AnnouncementTicker messages={tickerMessages} interval={2100} transitionMs={320} />
+      <AnnouncementTicker messages={tickerMessages} />
       <LayoutShell
         topNav={
           <TopNav
