@@ -36,6 +36,7 @@ export type TopNavProps = {
   rightSlot?: React.ReactNode;
   leftHref?: string;
   tagline?: string;
+  centerBrand?: boolean;
   mobileMenu?: TopNavMobileMenu;
 };
 
@@ -60,16 +61,21 @@ export const TopNav: React.FC<TopNavProps> = ({
   rightSlot,
   leftHref,
   tagline,
+  centerBrand = false,
   mobileMenu
 }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const prefersReducedMotion = useReducedMotion();
   const monogram = buildMonogram(shopName);
+  const hasCenterNav = links.length > 0;
+  const shouldCenterBrand = centerBrand && !hasCenterNav;
   const primaryLinks = (mobileMenu?.primaryLinks ?? links).filter((link) => Boolean(link.href));
   const serviceLinks = mobileMenu?.serviceLinks ?? [];
   const contacts = mobileMenu?.contacts;
   const menuTriggerRef = React.useRef<HTMLButtonElement>(null);
   const closeButtonRef = React.useRef<HTMLButtonElement>(null);
+  const leftLinkClassName =
+    "inline-flex rounded-xl transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
   React.useEffect(() => {
     if (!isMenuOpen) {
@@ -130,19 +136,10 @@ export const TopNav: React.FC<TopNavProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={transitionStandard}
     >
-      <div className="min-w-0">
-        {leftHref ? (
-          <a
-            className="inline-flex rounded-xl transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            href={leftHref}
-          >
-            {leftContent}
-          </a>
-        ) : (
-          leftContent
-        )}
+      <div className={["min-w-0", shouldCenterBrand ? "md:hidden" : ""].join(" ").trim()}>
+        {leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent}
       </div>
-      {links.length > 0 && (
+      {hasCenterNav && (
         <nav
           aria-label="Основная навигация"
           className="hidden items-center justify-center gap-1 md:flex"
@@ -167,6 +164,11 @@ export const TopNav: React.FC<TopNavProps> = ({
             </a>
           ))}
         </nav>
+      )}
+      {shouldCenterBrand && (
+        <div className="hidden min-w-0 items-center justify-center md:flex">
+          {leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent}
+        </div>
       )}
       {rightSlot && (
         <div className="flex min-w-0 flex-wrap items-center justify-end gap-1.5 text-sm sm:flex-nowrap sm:gap-2.5">
