@@ -136,7 +136,13 @@ export const TopNav: React.FC<TopNavProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={transitionStandard}
     >
-      <div className={["min-w-0", shouldCenterBrand ? "md:hidden" : ""].join(" ").trim()}>
+      <div
+        className={[
+          "min-w-0",
+          shouldCenterBrand ? "md:invisible md:pointer-events-none" : ""
+        ].join(" ").trim()}
+        aria-hidden={shouldCenterBrand ? true : undefined}
+      >
         {leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent}
       </div>
       {hasCenterNav && (
