@@ -45,13 +45,13 @@ export const Footer: React.FC<FooterProps> = ({
   const year = new Date().getFullYear();
 
   return (
-    <footer className="mt-12 border-t border-border/52 bg-gradient-to-b from-card/88 via-card/80 to-card/72">
+    <footer className="mt-12 border-t border-border/45 bg-card/52">
       <div className="space-y-8 px-1 py-8 sm:space-y-10 sm:py-10">
         <section className="grid gap-3 md:grid-cols-3 md:gap-4">
           {trustItems.map((item) => (
             <article
               key={item.title}
-              className="rounded-xl border border-border/46 bg-card/88 p-4 shadow-soft-subtle sm:p-5"
+              className="rounded-xl border border-border/40 bg-card/72 p-4 sm:p-5"
             >
               <p className="ui-label text-[11px] text-foreground">{item.title}</p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
@@ -59,7 +59,7 @@ export const Footer: React.FC<FooterProps> = ({
           ))}
         </section>
 
-        <section className="grid gap-8 border-t border-border/44 pt-8 md:grid-cols-2 lg:grid-cols-[1.4fr_0.9fr_0.9fr_1fr]">
+        <section className="grid gap-8 border-t border-border/40 pt-8 md:grid-cols-2 lg:grid-cols-[1.4fr_0.9fr_0.9fr_1fr]">
           <div>
             <h3 className="ui-title-serif text-[1.25rem] leading-none text-foreground">{brandName}</h3>
             {description ? (
@@ -74,7 +74,7 @@ export const Footer: React.FC<FooterProps> = ({
                     href={link.href}
                     target="_blank"
                     rel="noreferrer"
-                    className="inline-flex h-10 items-center rounded-full border border-border/50 bg-card/80 px-3 text-sm transition-colors hover:border-border/70 hover:bg-card/96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    className="inline-flex h-10 items-center rounded-full border border-border/45 bg-card/72 px-3 text-sm transition-colors hover:border-border/70 hover:bg-card/96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     {link.label}
                   </a>
@@ -136,7 +136,7 @@ export const Footer: React.FC<FooterProps> = ({
           </div>
         </section>
 
-        <section className="flex flex-col gap-3 border-t border-border/44 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
+        <section className="flex flex-col gap-3 border-t border-border/40 pt-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
           <p>{`© ${year} ${brandName}. Все права защищены.`}</p>
           {legalLinks.length > 0 && (
             <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
