@@ -1,10 +1,10 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
-import { cache } from "react";
 import type { ReactNode, CSSProperties } from "react";
 import { cookies } from "next/headers";
+import { Lora, Manrope } from "next/font/google";
 import type { ThemeConfig } from "@store-platform/shared-types";
-import { fetchStorefrontConfig } from "@/lib/api-client";
+import { getStorefrontConfig } from "@/lib/get-storefront-config";
 import { buildOpenGraphImage, resolveMetadataBaseFromHeaders } from "@/lib/seo";
 import {
   resolveThemeByVariantId,
@@ -16,7 +16,18 @@ import { StorefrontShell } from "./storefront-shell";
 
 export const dynamic = "force-dynamic";
 
-const getStorefrontConfig = cache(async () => fetchStorefrontConfig());
+const veluraUiFont = Manrope({
+  subsets: ["latin", "cyrillic"],
+  display: "swap",
+  variable: "--font-velura-ui"
+});
+
+const veluraDisplayFont = Lora({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+  variable: "--font-velura-display"
+});
 
 function toRgbChannels(value: string): string {
   const raw = value.trim();
@@ -92,7 +103,7 @@ function themeToCssVars(theme: ThemeConfig): CSSProperties {
     "--shadow-inset-soft": `inset 0 1px 0 rgba(${foregroundChannels} / 0.1)`,
     "--motion-fast": "180ms",
     "--motion-normal": "320ms",
-    "--font-sans": theme.typography.fontSans,
+    "--font-sans": `var(--font-velura-ui), ${theme.typography.fontSans}`,
     "--font-base-size": `${theme.typography.baseFontSize}px`,
     "--font-scale-ratio": `${theme.typography.scaleRatio}`
   } as CSSProperties;
@@ -185,7 +196,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
 
   return (
     <html lang="ru">
-      <body style={themeStyle}>
+      <body className={`${veluraUiFont.variable} ${veluraDisplayFont.variable}`} style={themeStyle}>
         <PwaRegister />
         <StorefrontShell config={config} activeThemeVariantId={activeThemeVariantId}>
           {children}

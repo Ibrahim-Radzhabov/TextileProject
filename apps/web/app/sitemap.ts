@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { fetchStorefrontConfig } from "@/lib/api-client";
+import { getStorefrontConfig } from "@/lib/get-storefront-config";
 import { resolveSiteUrl } from "@/lib/seo";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -21,19 +21,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   ];
 
-  try {
-    const config = await fetchStorefrontConfig();
-    const productRoutes: MetadataRoute.Sitemap = config.catalog.products
-      .filter((product) => product.isActive !== false)
-      .map((product) => ({
-        url: new URL(`/product/${encodeURIComponent(product.slug)}`, siteUrl).toString(),
-        lastModified,
-        changeFrequency: "weekly" as const,
-        priority: product.isFeatured ? 0.85 : 0.75
-      }));
+  const config = await getStorefrontConfig().catch(() => null);
 
-    return [...staticRoutes, ...productRoutes];
-  } catch {
+  if (!config) {
     return staticRoutes;
   }
+
+  const productRoutes: MetadataRoute.Sitemap = config.catalog.products
+    .filter((product) => product.isActive !== false)
+    .map((product) => ({
+      url: new URL(`/product/${encodeURIComponent(product.slug)}`, siteUrl).toString(),
+      lastModified,
+      changeFrequency: "weekly" as const,
+      priority: product.isFeatured ? 0.85 : 0.75
+    }));
+
+  return [...staticRoutes, ...productRoutes];
 }

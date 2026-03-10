@@ -33,10 +33,10 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
             <Surface
               tone={isScrolled ? "elevated" : "ghost"}
               className={[
-                "flex items-center justify-between border transition-[padding,border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-normal)]",
+                "flex min-h-[3.25rem] items-center justify-between rounded-md border px-3 py-2 shadow-none backdrop-blur-0 transition-[border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-normal)] sm:min-h-[3.5rem] sm:px-4 sm:py-2.5",
                 isScrolled
-                  ? "rounded-md border-border/42 bg-card/88 px-3 py-2 shadow-soft-subtle backdrop-blur-xl sm:px-4 sm:py-2.5"
-                  : "rounded-md border-transparent bg-transparent px-0 py-1 shadow-none backdrop-blur-0 sm:px-0 sm:py-1"
+                  ? "border-border/42 bg-card/88 shadow-soft-subtle backdrop-blur-xl"
+                  : "border-transparent bg-transparent"
               ].join(" ")}
             >
               {topNav}

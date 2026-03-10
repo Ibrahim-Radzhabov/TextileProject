@@ -63,6 +63,9 @@ const heroBlock = z.object({
   type: z.literal("hero"),
   content: heroContentSchema.optional(),
   contentPlacement: z.enum(["overlay", "below"]).optional(),
+  overlayVariant: z.enum(["card", "full"]).optional(),
+  cardTitle: z.string().optional(),
+  introText: z.string().optional(),
   eyebrow: z.string().optional(),
   title: z.string().min(1).optional(),
   subtitle: z.string().optional(),
@@ -163,10 +166,10 @@ export const pageSchema = z.object({
     }
     blockIds.add(block.id);
 
-    if (block.type === "hero" && !block.content?.title && !block.title) {
+    if (block.type === "hero" && !block.content?.title && !block.title && !block.cardTitle) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "hero block requires title in content.title (or legacy title)",
+        message: "hero block requires title in content.title, legacy title, or cardTitle",
         path: ["blocks", index, "content", "title"]
       });
     }

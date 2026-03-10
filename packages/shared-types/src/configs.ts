@@ -96,6 +96,12 @@ export type HeroBlock = PageBlockBase & {
   content?: HeroContent;
   // Controls where textual hero content is rendered.
   contentPlacement?: "overlay" | "below";
+  // "card" = narrow white card at bottom center (Loro Piana style), "full" = wide overlay.
+  overlayVariant?: "card" | "full";
+  // Short title/label for the overlay card when overlayVariant is "card".
+  cardTitle?: string;
+  // Text block that appears below hero with scroll reveal.
+  introText?: string;
   // Legacy fields kept for backward compatibility with old page configs.
   eyebrow?: string;
   title?: string;

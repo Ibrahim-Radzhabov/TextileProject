@@ -23,7 +23,8 @@ import type {
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { HeroPinnedVideo } from "@/components/hero-pinned-video";
-import { HeroVideoSection } from "@/components/hero-video-section";
+import { HeroVideoEditorial } from "@/components/hero-video-editorial";
+import { TextileTypeSwitcher } from "@/components/textile-type-switcher";
 
 type HomePageClientProps = {
   homePage: PageConfig;
@@ -123,6 +124,25 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
   }
 
   if (media.type === "video") {
+    const overlayVariant = block.overlayVariant ?? "full";
+    const quickLinks = content.quickLinks ?? block.quickLinks ?? [];
+    const primaryCta = content.primaryCta ?? block.primaryCta;
+
+    if (overlayVariant === "card") {
+      return (
+        <section key={block.id} className="rounded-md bg-card/80">
+          <HeroVideoEditorial
+            media={media}
+            title={content.title || block.title || block.cardTitle || ""}
+            cardTitle={block.cardTitle}
+            cardLinks={quickLinks.length > 0 ? quickLinks.map((l) => ({ label: l.label, href: l.href, subtitle: l.subtitle })) : undefined}
+            primaryCta={primaryCta}
+            introText={block.introText}
+          />
+        </section>
+      );
+    }
+
     if (contentPlacement === "overlay" && heroCopy) {
       return (
         <section key={block.id} className="rounded-md bg-card/80">
@@ -140,17 +160,14 @@ function renderHeroBlock(block: HeroBlock): JSX.Element {
     }
 
     return (
-      <HeroVideoSection
-        key={block.id}
-        media={media}
-        title={content.title}
-        eyebrow={content.eyebrow}
-        subtitle={content.subtitle}
-        trustLine={content.trustLine}
-        quickLinks={content.quickLinks}
-        primaryCta={content.primaryCta}
-        secondaryCta={content.secondaryCta}
-      />
+      <section key={block.id} className="rounded-md border border-border/28 bg-card/80">
+        <HeroPinnedVideo media={media} title={content.title} />
+        {heroCopy && (
+          <div className="border-t border-border/28 px-4 py-5 sm:px-6 sm:py-6 lg:px-8 lg:py-7">
+            <div className="max-w-3xl">{heroCopy}</div>
+          </div>
+        )}
+      </section>
     );
   }
 
@@ -268,7 +285,7 @@ function renderProductGridBlock(
         />
       ) : (
         <motion.div
-          className="grid auto-rows-fr grid-cols-2 gap-3 sm:grid-cols-2 sm:gap-4 xl:grid-cols-4"
+          className="grid auto-rows-fr grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4"
           variants={gridContainerVariants}
           initial="hidden"
           animate="visible"
@@ -276,6 +293,7 @@ function renderProductGridBlock(
           {productsToRender.map((product) => (
             <motion.div
               key={product.id}
+              className="min-h-0"
               variants={gridItemVariants}
             >
               <ProductCard
@@ -347,6 +365,13 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
 
         if (!blockNode) {
           return [];
+        }
+
+        if (block.type === "hero") {
+          return [
+            blockNode,
+            <TextileTypeSwitcher key={`${block.id}-textile-switcher`} />
+          ];
         }
 
         return [blockNode];

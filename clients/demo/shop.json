@@ -1,9 +1,9 @@
 {
   "id": "demo",
-  "name": "Textile Studio",
+  "name": "Velura",
   "logo": {
-    "src": "https://images.pexels.com/photos/7671166/pexels-photo-7671166.jpeg",
-    "alt": "Textile Studio"
+    "src": "/brand/velura-logo.svg",
+    "alt": "Velura"
   },
   "primaryLocale": "ru-RU",
   "currency": "USD",

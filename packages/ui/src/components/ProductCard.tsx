@@ -60,7 +60,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     >
       <article
         className={[
-          "relative flex h-full flex-col",
+          "relative flex h-full min-h-0 flex-col",
           isEditorial
             ? "bg-transparent"
             : "overflow-hidden rounded-[8px] border border-border/32 bg-card/94"

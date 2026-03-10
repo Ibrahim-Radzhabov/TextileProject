@@ -365,7 +365,7 @@ function normalizeCart(cart: CartDto): Cart {
   };
 }
 
-function normalizeStorefrontConfig(config: StorefrontConfigDto): StorefrontConfig {
+export function normalizeStorefrontConfig(config: StorefrontConfigDto): StorefrontConfig {
   const primaryLocale = config.shop.primaryLocale ?? config.shop.primary_locale;
   const contacts = config.shop.contacts
     ? {

@@ -1,10 +1,10 @@
 "use client";
 
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
-import { CartDrawer, Footer, LayoutShell, TopNav } from "@store-platform/ui";
+import { CartDrawer, Footer, LayoutShell, TopNav, AnimatedDock } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
@@ -15,6 +15,28 @@ import { HeaderDropdownMenu } from "@/components/header-dropdown-menu";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { AnnouncementTicker } from "../components/AnnouncementTicker";
 
+const iconHome = (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M4 10v10h6v-6h4v6h6V10L12 4 4 10Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+  </svg>
+);
+const iconSearch = (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+const iconHeart = (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M12 20c-3.4-2.7-6.5-5.2-6.5-8.7A3.8 3.8 0 0 1 9.3 7.5c1.1 0 2.1.5 2.7 1.4.6-.9 1.6-1.4 2.7-1.4a3.8 3.8 0 0 1 3.8 3.8c0 3.5-3.1 6-6.5 8.7Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+  </svg>
+);
+const iconCart = (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M4.5 6h1.7l1.4 8.2h8.7l1.6-6.3H8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <circle cx="10.4" cy="18.2" r="1.2" fill="currentColor" />
+    <circle cx="16.4" cy="18.2" r="1.2" fill="currentColor" />
+  </svg>
+);
 const tickerMessages = [
   "Book a Private Appointment in Store",
   "E-Concierging Availability, Monday to Sunday from 9 am to 7 pm"
@@ -28,6 +50,7 @@ type StorefrontShellProps = {
 
 export function StorefrontShell({ children, config, activeThemeVariantId: _activeThemeVariantId }: StorefrontShellProps) {
   const pathname = usePathname();
+  const [searchOpen, setSearchOpen] = useState(false);
   const {
     cart,
     open,
@@ -44,23 +67,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
   const isAdminArea = pathname.startsWith("/admin");
   const isCheckoutFlow = pathname.startsWith("/checkout");
   const showMobileBottomNav = !isAdminArea && !isCheckoutFlow;
-  const shopContacts = config.shop.contacts ?? {};
-  const hasShopContacts =
-    Boolean(shopContacts.phoneLabel) ||
-    Boolean(shopContacts.phoneHref) ||
-    Boolean(shopContacts.emailLabel) ||
-    Boolean(shopContacts.emailHref) ||
-    Boolean(shopContacts.address);
-  const primaryCta = config.shop.primaryCta ?? { label: "Подобрать ткань", href: "/catalog?open_filters=1" };
-  const supportLinks = config.shop.supportLinks && config.shop.supportLinks.length > 0
-    ? config.shop.supportLinks
-    : [
-        { label: "Подбор ткани", href: "/catalog?open_filters=1" },
-        { label: "Доставка и оплата", href: "/offer" },
-        { label: "Уход за тканями", href: "/offer" },
-        { label: "Вопросы и ответы", href: "/offer" }
-      ];
-  const contactHref = shopContacts.emailHref ?? shopContacts.phoneHref ?? "/offer";
   const navLinks = [
     {
       label: "Каталог",
@@ -68,7 +74,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
       isActive: pathname.startsWith("/catalog") || pathname.startsWith("/product") || pathname === "/"
     },
     { label: "Избранное", href: "/favorites", isActive: pathname.startsWith("/favorites") },
-    { label: "Контакты", href: contactHref }
+    { label: "Контакты", href: "mailto:atelier@textile.studio" }
   ];
   const footerColumns = [
     {
@@ -77,12 +83,17 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
         { label: "Тюль", href: "/catalog" },
         { label: "Шторы", href: "/catalog" },
         { label: "Комплекты", href: "/catalog" },
-        { label: "Пошив на заказ", href: primaryCta.href }
+        { label: "Пошив на заказ", href: "mailto:atelier@textile.studio" }
       ]
     },
     {
       title: "Клиентам",
-      links: supportLinks
+      links: [
+        { label: "Подбор ткани", href: "mailto:atelier@textile.studio" },
+        { label: "Доставка и оплата", href: "mailto:atelier@textile.studio" },
+        { label: "Уход за тканями", href: "mailto:atelier@textile.studio" },
+        { label: "Контакты", href: "mailto:atelier@textile.studio" }
+      ]
     }
   ];
   const footerTrustItems = [
@@ -113,60 +124,60 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             shopName={config.shop.name}
             logo={config.shop.logo}
             leftHref="/"
-            tagline="Window Textiles"
-            links={navLinks}
+            centerBrand
+            links={[]}
             mobileMenu={{
-              primaryLinks: [],
-              serviceLinks: [
-                ...supportLinks,
-                { label: "Политика конфиденциальности", href: "/privacy" },
-                { label: "Публичная оферта", href: "/offer" }
+              primaryLinks: [
+                { label: "Каталог", href: "/catalog", isActive: pathname.startsWith("/catalog") || pathname.startsWith("/product") || pathname === "/" },
+                { label: "Избранное", href: "/favorites", isActive: pathname.startsWith("/favorites") },
+                { label: "Контакты", href: "mailto:atelier@textile.studio" }
               ],
-              contacts: hasShopContacts ? shopContacts : undefined,
-              cta: primaryCta
+              serviceLinks: [
+                { label: "Подбор ткани", href: "mailto:atelier@textile.studio" },
+                { label: "Доставка и оплата", href: "mailto:atelier@textile.studio" },
+                { label: "Уход за тканями", href: "mailto:atelier@textile.studio" },
+                { label: "Вопросы и ответы", href: "mailto:atelier@textile.studio" }
+              ],
+              contacts: {
+                phoneLabel: "+7 (999) 000-00-00",
+                phoneHref: "tel:+79990000000",
+                emailLabel: "atelier@textile.studio",
+                emailHref: "mailto:atelier@textile.studio",
+                address: "Москва, Кутузовский проспект, 18"
+              }
             }}
             rightSlot={
               <>
-                <div className="hidden md:block">
+                <div className="hidden md:flex flex-col items-end gap-1.5">
                   <HeaderDropdownMenu links={navLinks} />
+                  <AnimatedDock
+                    items={[
+                      { href: "/", icon: iconHome, title: "Главная" },
+                      { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
+                      { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
+                      { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
+                    ]}
+                  />
                 </div>
-                <TopNavSearchFilter intensity="balanced" />
-                <a
-                  href="/favorites"
-                  className="hidden h-10 items-center gap-1 rounded-full border border-border/45 bg-card/84 px-3 text-muted-foreground transition-colors hover:border-border/65 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:inline-flex"
-                  aria-label="Избранное"
-                >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M12 20c-3.4-2.7-6.5-5.2-6.5-8.7A3.8 3.8 0 0 1 9.3 7.5c1.1 0 2.1.5 2.7 1.4.6-.9 1.6-1.4 2.7-1.4a3.8 3.8 0 0 1 3.8 3.8c0 3.5-3.1 6-6.5 8.7Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
-                  </svg>
-                  {favoriteItemCount > 0 && (
-                    <span className="text-[11px] text-foreground">{favoriteItemCount}</span>
-                  )}
-                </a>
-                <button
-                  type="button"
-                  className="hidden h-10 items-center gap-1 rounded-full border border-border/45 bg-card/84 px-3 text-muted-foreground transition-colors hover:border-border/65 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:inline-flex"
-                  onClick={() => setOpen(true)}
-                  aria-label="Открыть корзину"
-                >
-                  <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M4.5 6h1.7l1.4 8.2h8.7l1.6-6.3H8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-                    <circle cx="10.4" cy="18.2" r="1.2" fill="currentColor" />
-                    <circle cx="16.4" cy="18.2" r="1.2" fill="currentColor" />
-                  </svg>
-                  {itemCount > 0 && (
-                    <span className="text-[11px] text-foreground">{itemCount}</span>
-                  )}
-                </button>
+                <div className="md:hidden">
+                  <AnimatedDock
+                    items={[
+                      { href: "/", icon: iconHome, title: "Главная" },
+                      { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
+                      { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
+                      { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
+                    ]}
+                  />
+                </div>
+                <TopNavSearchFilter
+                  intensity="balanced"
+                  open={searchOpen}
+                  onOpenChange={setSearchOpen}
+                  hideTrigger
+                />
                 <div className="hidden sm:block">
                   <PwaInstallNavButton />
                 </div>
-                <a
-                  href={primaryCta.href}
-                  className="hidden h-10 items-center rounded-full border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 md:inline-flex focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                >
-                  {primaryCta.label}
-                </a>
               </>
             }
           />
@@ -174,12 +185,21 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
         footer={
           <Footer
             brandName={config.shop.name}
-            description="Спокойный текстиль для интерьера: подбор ткани, пошив и комплектация под размеры, свет и ритм пространства."
-            cta={primaryCta}
+            cta={{ label: "Подобрать ткань", href: "mailto:atelier@textile.studio" }}
             trustItems={footerTrustItems}
             columns={footerColumns}
-            contacts={shopContacts}
-            socialLinks={config.shop.socialLinks ?? []}
+            contacts={{
+              phoneLabel: "+7 (999) 000-00-00",
+              phoneHref: "tel:+79990000000",
+              emailLabel: "atelier@textile.studio",
+              emailHref: "mailto:atelier@textile.studio",
+              address: "Москва, Кутузовский проспект, 18"
+            }}
+            socialLinks={[
+              { label: "Instagram", href: "https://instagram.com" },
+              { label: "Pinterest", href: "https://pinterest.com" },
+              { label: "Telegram", href: "https://t.me" }
+            ]}
             legalLinks={[
               { label: "Политика конфиденциальности", href: "/privacy" },
               { label: "Публичная оферта", href: "/offer" }
