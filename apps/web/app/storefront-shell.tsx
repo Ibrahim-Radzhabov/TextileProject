@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { CartDrawer, Footer, LayoutShell, TopNav, AnimatedDock } from "@store-platform/ui";
@@ -14,6 +14,7 @@ import { TopNavSearchFilter } from "@/components/top-nav-search-filter";
 import { HeaderDropdownMenu } from "@/components/header-dropdown-menu";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { AnnouncementTicker } from "../components/AnnouncementTicker";
+import { SidebarMenu } from "./(components)/sidebar-menu";
 
 const iconHome = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
@@ -50,6 +51,7 @@ type StorefrontShellProps = {
 
 export function StorefrontShell({ children, config, activeThemeVariantId: _activeThemeVariantId }: StorefrontShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
   const {
     cart,
@@ -76,6 +78,27 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     { label: "Избранное", href: "/favorites", isActive: pathname.startsWith("/favorites") },
     { label: "Контакты", href: "mailto:atelier@textile.studio" }
   ];
+  const dropdownModes =
+    pathname === "/"
+      ? [
+          { id: "curtains", label: "Шторы" },
+          { id: "tulle", label: "Тюль" },
+          { id: "sets", label: "Комплекты" },
+          { id: "custom", label: "Пошив на заказ" }
+        ]
+      : undefined;
+
+  const handleDropdownModeChange = (id: string) => {
+    const segmentToQuery: Record<string, string> = {
+      curtains: "curtains",
+      tulle: "tulle",
+      sets: "sets",
+      custom: "custom"
+    };
+
+    const segment = segmentToQuery[id] ?? id;
+    void router.push(`/catalog?segment=${encodeURIComponent(segment)}`);
+  };
   const footerColumns = [
     {
       title: "Каталог",
@@ -117,6 +140,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
 
   return (
     <>
+      <SidebarMenu />
       <AnnouncementTicker messages={tickerMessages} />
       <LayoutShell
         topNav={
@@ -149,7 +173,15 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             rightSlot={
               <>
                 <div className="hidden md:flex flex-col items-end gap-1.5">
-                  <HeaderDropdownMenu links={navLinks} />
+                  {dropdownModes && (
+                    <HeaderDropdownMenu
+                      links={navLinks}
+                      title="Подбор текстиля"
+                      modes={dropdownModes}
+                      initialModeId={dropdownModes[0]?.id}
+                      onModeChange={handleDropdownModeChange}
+                    />
+                  )}
                   <AnimatedDock
                     items={[
                       { href: "/", icon: iconHome, title: "Главная" },
@@ -159,7 +191,16 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                     ]}
                   />
                 </div>
-                <div className="md:hidden">
+                <div className="md:hidden flex flex-col items-end gap-1.5">
+                  {dropdownModes && (
+                    <HeaderDropdownMenu
+                      links={navLinks}
+                      title="Подбор текстиля"
+                      modes={dropdownModes}
+                      initialModeId={dropdownModes[0]?.id}
+                      onModeChange={handleDropdownModeChange}
+                    />
+                  )}
                   <AnimatedDock
                     items={[
                       { href: "/", icon: iconHome, title: "Главная" },

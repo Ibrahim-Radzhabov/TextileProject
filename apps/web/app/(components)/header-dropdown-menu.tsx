@@ -9,9 +9,19 @@ type HeaderDropdownLink = {
   isActive?: boolean;
 };
 
+type HeaderDropdownMode = {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  badge?: number;
+};
+
 type HeaderDropdownMenuProps = {
   links: HeaderDropdownLink[];
   title?: string;
+  modes?: HeaderDropdownMode[];
+  initialModeId?: string;
+  onModeChange?: (id: string) => void;
 };
 
 function MenuGlyph({ open }: { open: boolean }) {
@@ -56,8 +66,17 @@ function MenuGlyph({ open }: { open: boolean }) {
   );
 }
 
-export function HeaderDropdownMenu({ links, title = "Spring/Summer 2026" }: HeaderDropdownMenuProps) {
+export function HeaderDropdownMenu({
+  links,
+  title = "Spring/Summer 2026",
+  modes,
+  initialModeId,
+  onModeChange
+}: HeaderDropdownMenuProps) {
   const [open, setOpen] = React.useState(false);
+  const [activeModeId, setActiveModeId] = React.useState<string | null>(
+    initialModeId ?? modes?.[0]?.id ?? null
+  );
   const reduceMotion = useReducedMotion();
   const triggerRef = React.useRef<HTMLButtonElement>(null);
   const closeRef = React.useRef<HTMLButtonElement>(null);
@@ -112,6 +131,21 @@ export function HeaderDropdownMenu({ links, title = "Spring/Summer 2026" }: Head
       triggerRef.current?.focus({ preventScroll: true });
     };
   }, [open]);
+
+  React.useEffect(() => {
+    if (!modes || modes.length === 0) {
+      setActiveModeId(null);
+      return;
+    }
+
+    const nextId = initialModeId ?? modes[0]?.id ?? null;
+    setActiveModeId((prev) => (prev == null ? nextId : prev));
+  }, [initialModeId, modes]);
+
+  const handleSelectMode = (id: string) => {
+    setActiveModeId(id);
+    onModeChange?.(id);
+  };
 
   return (
     <>
@@ -172,8 +206,48 @@ export function HeaderDropdownMenu({ links, title = "Spring/Summer 2026" }: Head
               }
             >
               <div className="border-b border-border/50 pb-3">
-                <p className="ui-title-serif text-[2.1rem] leading-[1.05] text-[color:#955a52]">{title}</p>
+                <p className="ui-title-serif text-[2.1rem] leading-[1.05] text-[color:#955a52]">
+                  {title}
+                </p>
               </div>
+
+              {modes && modes.length > 0 && (
+                <div className="mt-3 pb-3">
+                  <div className="flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+                    {modes.map((mode) => {
+                      const active = mode.id === activeModeId;
+                      return (
+                        <button
+                          key={mode.id}
+                          type="button"
+                          onClick={() => handleSelectMode(mode.id)}
+                          className={[
+                            "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[0.78rem] transition-colors whitespace-nowrap",
+                            active
+                              ? "border-[color:#955a52] bg-[color:#955a52] text-[#fdfaf5]"
+                              : "border-border/55 bg-[#f5f5f0] text-foreground/86 hover:border-border/80 hover:bg-[#f0ece4]"
+                          ].join(" ")}
+                        >
+                          {mode.icon && (
+                            <span
+                              aria-hidden="true"
+                              className="flex h-[18px] w-[18px] items-center justify-center [&>svg]:h-[14px] [&>svg]:w-[14px]"
+                            >
+                              {mode.icon}
+                            </span>
+                          )}
+                          <span>{mode.label}</span>
+                          {typeof mode.badge === "number" && mode.badge > 0 && (
+                            <span className="rounded-full bg-black/8 px-1.5 text-[0.7rem] leading-none text-foreground/80">
+                              {mode.badge > 99 ? "99+" : mode.badge}
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
 
               <motion.nav className="pt-4" aria-label="Навигация">
                 <ul className="space-y-3">
