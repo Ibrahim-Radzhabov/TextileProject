@@ -68,8 +68,13 @@ export function MobileBottomNav({
         >
           <NavIcon active={isHome}>
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 11.5L12 4L21 11.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <path d="M6.5 10.5V20H17.5V10.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path
+                d="M4 10v10h6v-6h4v6h6V10L12 4 4 10Z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </NavIcon>
           <NavLabel text="Главная" active={isHome} />
@@ -81,9 +86,42 @@ export function MobileBottomNav({
         >
           <NavIcon active={isCatalog}>
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="10.5" cy="10.5" r="6" stroke="currentColor" strokeWidth="2" />
-              <path d="M16 16L21 21" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-              <path d="M7 10.5H14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+              <rect
+                x="4.5"
+                y="4.5"
+                width="7"
+                height="7"
+                rx="1.4"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <rect
+                x="12.5"
+                y="4.5"
+                width="7"
+                height="7"
+                rx="1.4"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <rect
+                x="4.5"
+                y="12.5"
+                width="7"
+                height="7"
+                rx="1.4"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
+              <rect
+                x="12.5"
+                y="12.5"
+                width="7"
+                height="7"
+                rx="1.4"
+                stroke="currentColor"
+                strokeWidth="1.8"
+              />
             </svg>
           </NavIcon>
           <NavLabel text="Каталог" active={isCatalog} />
@@ -96,9 +134,15 @@ export function MobileBottomNav({
         >
           <NavIcon active={isCart}>
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M3 5H5L7.4 14.2C7.6 15 8.3 15.5 9.1 15.5H17.3C18 15.5 18.7 15 18.9 14.3L21 8H6.2" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="9.5" cy="19" r="1.4" fill="currentColor" />
-              <circle cx="17" cy="19" r="1.4" fill="currentColor" />
+              <path
+                d="M4.5 6h1.7l1.4 8.2h8.7l1.6-6.3H8"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <circle cx="10.4" cy="18.2" r="1.2" fill="currentColor" />
+              <circle cx="16.4" cy="18.2" r="1.2" fill="currentColor" />
             </svg>
           </NavIcon>
           <NavLabel text="Корзина" active={isCart} />
@@ -115,7 +159,12 @@ export function MobileBottomNav({
         >
           <NavIcon active={isFavorites}>
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M12 20.2C8.8 17.7 5 14.6 5 10.6C5 8.4 6.7 6.8 8.8 6.8C10.1 6.8 11.3 7.4 12 8.4C12.7 7.4 13.9 6.8 15.2 6.8C17.3 6.8 19 8.4 19 10.6C19 14.6 15.2 17.7 12 20.2Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" />
+              <path
+                d="M12 20c-3.4-2.7-6.5-5.2-6.5-8.7A3.8 3.8 0 0 1 9.3 7.5c1.1 0 2.1.5 2.7 1.4.6-.9 1.6-1.4 2.7-1.4a3.8 3.8 0 0 1 3.8 3.8c0 3.5-3.1 6-6.5 8.7Z"
+                stroke="currentColor"
+                strokeWidth="1.8"
+                strokeLinejoin="round"
+              />
             </svg>
           </NavIcon>
           <NavLabel text="Избранное" active={isFavorites} />
