@@ -93,24 +93,6 @@ const colorToneClassByKey: Record<string, string> = {
   white: "bg-[#f3efe7]",
 };
 
-const serviceHighlights = [
-  {
-    id: "swatches",
-    title: "Образцы ткани",
-    description: "Отправим подборку оттенков перед заказом."
-  },
-  {
-    id: "consultation",
-    title: "Консультация",
-    description: "Поможем с шириной, складками и световым сценарием."
-  },
-  {
-    id: "warranty",
-    title: "Гарантия пошива",
-    description: "Поддержка после установки и корректировка посадки."
-  }
-] as const;
-
 function deriveSwatches(product: Product, fabricMeta: string | null): ProductSwatch[] {
   const resolved: ProductSwatch[] = [];
   const used = new Set<string>();
@@ -201,6 +183,7 @@ export function ProductPageClient({
   const isCurrentProductFavorite = favoriteProductIds.includes(product.id);
   const [isAdding, setIsAdding] = useState(false);
   const [addedPulse, setAddedPulse] = useState(false);
+  const [isLeadExpanded, setIsLeadExpanded] = useState(false);
   const addPulseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const priceFormatted = formatMoney(product.price.amount, product.price.currency);
@@ -303,6 +286,15 @@ export function ProductPageClient({
   const productPageLead = productPageTexts[0]?.content;
   const productPageSupport = productPageTexts.slice(1);
   const sampleRequestActionHref = withSampleRequestSubject(sampleRequestHref);
+  const compositionMeta =
+    fabricMeta ??
+    metadataLookup.get("composition") ??
+    metadataLookup.get("состав") ??
+    metadataLookup.get("material") ??
+    null;
+  const leadSource = productPageLead ?? product.description ?? product.shortDescription ?? "";
+  const leadIsCollapsible = leadSource.length > 220;
+  const leadPreview = leadIsCollapsible ? `${leadSource.slice(0, 220).trimEnd()}…` : leadSource;
 
   useEffect(() => {
     if (resolvedColorOptions.length === 0) {
@@ -324,6 +316,10 @@ export function ProductPageClient({
       }
     };
   }, []);
+
+  useEffect(() => {
+    setIsLeadExpanded(false);
+  }, [leadSource]);
 
   const handleAddToCart = async () => {
     setIsAdding(true);
@@ -368,71 +364,71 @@ export function ProductPageClient({
         >
           <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
             <div className="relative z-10 space-y-5">
-              <header className="space-y-3">
-                {sharedTitleLayoutId ? (
-                  <motion.h1
-                    layoutId={sharedTitleLayoutId}
-                    transition={springSharedElement}
-                    id={productTitleId}
-                    className="ui-title-serif text-3xl sm:text-4xl"
-                  >
-                    {product.name}
-                  </motion.h1>
-                ) : (
-                  <h1 id={productTitleId} className="ui-title-serif text-3xl sm:text-4xl">{product.name}</h1>
-                )}
+              <header className="space-y-4 pb-1">
+                <div className="flex items-start justify-between gap-3">
+                  <div className="space-y-2">
+                    {sharedTitleLayoutId ? (
+                      <motion.h1
+                        layoutId={sharedTitleLayoutId}
+                        transition={springSharedElement}
+                        id={productTitleId}
+                        className="ui-title-serif text-3xl sm:text-4xl"
+                      >
+                        {product.name}
+                      </motion.h1>
+                    ) : (
+                      <h1 id={productTitleId} className="ui-title-serif text-3xl sm:text-4xl">{product.name}</h1>
+                    )}
+                    {product.shortDescription && (
+                      <p className="ui-subtle text-sm leading-relaxed sm:text-base">{product.shortDescription}</p>
+                    )}
+                    {compositionMeta && (
+                      <p className="ui-kicker text-[11px] text-muted-foreground/90">{compositionMeta}</p>
+                    )}
+                  </div>
 
-                {product.shortDescription && (
-                  <p className="ui-subtle text-sm leading-relaxed sm:text-base">{product.shortDescription}</p>
-                )}
+                  <FavoriteToggleButton
+                    onClick={() => toggleFavorite(product.id)}
+                    active={isCurrentProductFavorite}
+                    addLabel={`Добавить ${product.name} в избранное`}
+                    removeLabel={`Убрать ${product.name} из избранного`}
+                    placement="inline"
+                    testId="pdp-toggle-favorite"
+                  />
+                </div>
 
-                {productPageLead && (
-                  <p className="ui-subtle rounded-xl border border-border/45 bg-card/52 px-4 py-3 text-sm leading-relaxed">
-                    {productPageLead}
-                  </p>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-2xl font-medium tracking-tight">{priceFormatted}</span>
+                    {discountPercent && discountPercent > 0 && <Badge tone="muted">-{discountPercent}%</Badge>}
+                  </div>
+                  {comparePriceFormatted && (
+                    <p className="mt-1 text-xs text-muted-foreground line-through">{comparePriceFormatted}</p>
+                  )}
+                </div>
+
+                {product.badges && product.badges.length > 0 && (
+                  <div className="flex flex-wrap gap-1.5">
+                    {product.badges.map((badge) => (
+                      <Badge key={badge.id} tone="muted">{badge.label}</Badge>
+                    ))}
+                  </div>
                 )}
               </header>
 
-              <div
-                className="rounded-xl border border-border/45 bg-card/62 px-4 py-4"
+              <section
+                className="space-y-3 rounded-xl border border-border/45 bg-card/58 px-4 py-4"
                 role="region"
                 aria-label="Покупка товара"
               >
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="ui-kicker">Цена</p>
-                    <div className="mt-1 flex items-center gap-2">
-                      <span className="text-2xl font-medium tracking-tight">{priceFormatted}</span>
-                      {discountPercent && discountPercent > 0 && <Badge tone="muted">-{discountPercent}%</Badge>}
-                    </div>
-                    {comparePriceFormatted && (
-                      <p className="mt-1 text-xs text-muted-foreground line-through">{comparePriceFormatted}</p>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col items-end gap-2">
-                    <FavoriteToggleButton
-                      onClick={() => toggleFavorite(product.id)}
-                      active={isCurrentProductFavorite}
-                      addLabel={`Добавить ${product.name} в избранное`}
-                      removeLabel={`Убрать ${product.name} из избранного`}
-                      placement="inline"
-                      testId="pdp-toggle-favorite"
-                    />
-
-                    {product.badges && product.badges.length > 0 && (
-                      <div className="flex flex-wrap justify-end gap-1">
-                        {product.badges.map((badge) => (
-                          <Badge key={badge.id} tone="muted">{badge.label}</Badge>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-
                 {resolvedColorOptions.length > 0 && (
-                  <div className="mt-3 space-y-2.5">
-                    <p className="ui-kicker">Цвет</p>
+                  <div className="space-y-2.5">
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="ui-kicker">Цвет</p>
+                      {selectedColorOption && (
+                        <p className="text-xs text-muted-foreground">{selectedColorOption.label}</p>
+                      )}
+                    </div>
                     <div className="flex flex-wrap gap-2">
                       {resolvedColorOptions.map((option) => {
                         const isActive = selectedColorOption?.id === option.id;
@@ -444,10 +440,10 @@ export function ProductPageClient({
                             type="button"
                             onClick={() => setSelectedColorId(option.id)}
                             className={[
-                              "inline-flex items-center gap-2 rounded-full border px-2.5 py-1.5 text-xs transition-colors",
+                              "inline-flex h-8 w-8 items-center justify-center rounded-full border transition-colors",
                               isActive
-                                ? "border-border/80 bg-card/88 text-foreground"
-                                : "border-border/45 bg-card/62 text-muted-foreground hover:border-border/70 hover:text-foreground"
+                                ? "border-border/90 bg-card/90"
+                                : "border-border/45 bg-card/65 hover:border-border/70"
                             ].join(" ")}
                             aria-pressed={isActive}
                             aria-label={`Выбрать цвет ${option.label}`}
@@ -459,10 +455,26 @@ export function ProductPageClient({
                               ].join(" ")}
                               aria-hidden="true"
                             />
-                            <span>{option.label}</span>
                           </button>
                         );
                       })}
+                    </div>
+                  </div>
+                )}
+
+                {resolvedColorOptions.length === 0 && swatches.length > 0 && (
+                  <div className="space-y-2">
+                    <p className="ui-kicker">Оттенки</p>
+                    <div className="flex flex-wrap gap-2">
+                      {swatches.map((swatch) => (
+                        <span
+                          key={swatch.id}
+                          className="inline-flex items-center gap-2 rounded-full border border-border/45 bg-card/70 px-2.5 py-1 text-xs text-foreground/88"
+                        >
+                          <span className={`h-3.5 w-3.5 rounded-full border border-border/55 ${swatch.toneClass}`} aria-hidden="true" />
+                          <span>{swatch.label}</span>
+                        </span>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -471,7 +483,7 @@ export function ProductPageClient({
                   initial={false}
                   animate={addedPulse ? { scale: [1, 1.01, 1] } : { scale: 1 }}
                   transition={{ duration: 0.32 }}
-                  className="mt-3"
+                  className="pt-1"
                 >
                   <Button
                     fullWidth
@@ -487,90 +499,107 @@ export function ProductPageClient({
                     {isAdding || isPricing ? "Добавление..." : "Добавить в корзину"}
                   </Button>
                 </motion.div>
-              </div>
+              </section>
 
-              <div className="space-y-3 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
-                <div className="space-y-1">
-                  <p className="ui-kicker">Подбор размера и плотности</p>
-                  <p className="text-sm font-medium tracking-tight">Гайд для окна и карниза</p>
-                </div>
-                <ul className="space-y-1.5 text-xs leading-relaxed text-muted-foreground">
-                  <li>Полнота складок: ориентир 1.8x-2.2x от ширины карниза.</li>
-                  {panelWidthMeta && <li>Ширина одной панели: {panelWidthMeta}.</li>}
-                  {lightControlMeta && <li>Уровень затемнения: {lightControlMeta}.</li>}
-                  {fabricMeta && <li>Фактура: {fabricMeta}.</li>}
-                  {recommendedPanels && (
-                    <li>
-                      Пример: для карниза {exampleCorniceWidthCm} см обычно нужно около {recommendedPanels} панелей.
-                    </li>
-                  )}
-                </ul>
-              </div>
+              <section className="space-y-2 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
+                <p className="ui-kicker">Сервис</p>
+                <a
+                  href={sampleRequestActionHref}
+                  className="block text-sm underline decoration-border/70 underline-offset-4 transition-colors hover:text-foreground/80"
+                >
+                  Запросить образцы ткани
+                </a>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  Консультация по посадке, светопропусканию и размеру карниза.
+                </p>
+              </section>
 
-              <div className="space-y-3 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="space-y-1">
-                    <p className="ui-kicker">Swatches</p>
-                    <p className="text-sm font-medium tracking-tight">Образцы и оттенки ткани</p>
-                    <p className="ui-subtle text-xs">Подберем оттенок к вашему интерьеру перед заказом.</p>
-                  </div>
-                  <a
-                    href={sampleRequestActionHref}
-                    className="inline-flex h-8 shrink-0 items-center rounded-[8px] border border-border/52 bg-card/70 px-2.5 text-xs font-medium transition-colors hover:border-border/70 hover:bg-card/90"
-                  >
-                    Запросить
-                  </a>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {swatches.map((swatch) => (
+              {leadSource && (
+                <section className="space-y-2 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
+                  <p className="ui-kicker">Описание</p>
+                  <p className="ui-subtle text-sm leading-relaxed">
+                    {isLeadExpanded ? leadSource : leadPreview}
+                  </p>
+                  {leadIsCollapsible && (
                     <button
-                      key={swatch.id}
                       type="button"
-                      className="group inline-flex items-center gap-2 rounded-full border border-border/45 bg-card/78 px-2.5 py-1.5 text-xs transition-colors hover:border-border/70 hover:bg-card/92"
-                      aria-label={`Образец ${swatch.label}`}
+                      className="text-xs font-medium text-muted-foreground underline decoration-border/70 underline-offset-4 transition-colors hover:text-foreground"
+                      onClick={() => setIsLeadExpanded((value) => !value)}
                     >
-                      <span className={`h-4 w-4 rounded-full border border-border/55 ${swatch.toneClass}`} aria-hidden="true" />
-                      <span className="text-foreground/88">{swatch.label}</span>
+                      {isLeadExpanded ? "Свернуть" : "Читать дальше"}
                     </button>
-                  ))}
-                </div>
-              </div>
+                  )}
+                </section>
+              )}
 
-              <div className="grid gap-2.5 sm:grid-cols-3">
-                {serviceHighlights.map((item) => (
-                  <div
-                    key={item.id}
-                    className="rounded-xl border border-border/42 bg-card/52 px-3.5 py-3"
-                  >
-                    <p className="ui-kicker">{item.title}</p>
-                    <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{item.description}</p>
+              <section
+                className="overflow-hidden rounded-xl border border-border/45 bg-card/52 [&_summary::-webkit-details-marker]:hidden"
+                aria-label="Дополнительная информация"
+              >
+                <details open className="border-b border-border/45">
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                    Детали изделия
+                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                  </summary>
+                  <div className="space-y-2 px-4 pb-4">
+                    {metadataEntries.length > 0 ? (
+                      metadataEntries.map((entry) => (
+                        <div key={entry.key} className="flex items-start justify-between gap-3 text-sm">
+                          <span className="text-muted-foreground">{entry.label}</span>
+                          <span className="text-right text-foreground">{entry.value}</span>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="text-sm text-muted-foreground">Точные параметры добавляются перед запуском коллекции.</p>
+                    )}
                   </div>
-                ))}
-              </div>
+                </details>
 
-              {metadataEntries.length > 0 && (
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {metadataEntries.map((entry) => (
-                    <div
-                      key={entry.key}
-                      className="rounded-xl border border-border/45 bg-card/55 px-3 py-2.5"
-                    >
-                      <p className="ui-kicker">{entry.label}</p>
-                      <p className="mt-1 text-xs font-medium text-foreground">{entry.value}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
+                <details className="border-b border-border/45">
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                    Размер и посадка
+                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                  </summary>
+                  <div className="space-y-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                    <p>Полнота складок: ориентир 1.8x-2.2x от ширины карниза.</p>
+                    {panelWidthMeta && <p>Ширина одной панели: {panelWidthMeta}.</p>}
+                    {lightControlMeta && <p>Уровень затемнения: {lightControlMeta}.</p>}
+                    {recommendedPanels && (
+                      <p>
+                        Пример: для карниза {exampleCorniceWidthCm} см обычно нужно около {recommendedPanels} панелей.
+                      </p>
+                    )}
+                  </div>
+                </details>
 
-              {productPageSupport.length > 0 && (
-                <div className="space-y-2 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
-                  {productPageSupport.map((text) => (
-                    <p key={text.id} className="ui-subtle text-xs leading-relaxed sm:text-sm">
-                      {text.content}
-                    </p>
-                  ))}
-                </div>
-              )}
+                <details className="border-b border-border/45">
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                    Доставка и оплата
+                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                  </summary>
+                  <div className="space-y-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                    <p>Отправка в течение 1-3 рабочих дней после подтверждения заказа.</p>
+                    <p>Оплата банковской картой, по счету или через персонального менеджера.</p>
+                  </div>
+                </details>
+
+                <details>
+                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                    Возврат и поддержка
+                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                  </summary>
+                  <div className="space-y-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                    <p>Возврат готовых изделий в течение 14 дней, при сохранении товарного вида.</p>
+                    {productPageSupport.length > 0 && (
+                      <div className="space-y-1.5 pt-1">
+                        {productPageSupport.map((text) => (
+                          <p key={text.id}>{text.content}</p>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </details>
+              </section>
             </div>
           </Surface>
         </motion.div>
