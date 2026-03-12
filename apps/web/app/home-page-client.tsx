@@ -12,6 +12,7 @@ import {
 } from "@store-platform/ui";
 import type {
   CtaStripBlock,
+  EditorialRailBlock,
   HeroBlock,
   MediaFeatureBlock,
   PageBlock,
@@ -235,6 +236,63 @@ function renderMediaFeatureBlock(block: MediaFeatureBlock): JSX.Element {
   );
 }
 
+function renderEditorialRailBlock(block: EditorialRailBlock): JSX.Element {
+  return (
+    <section key={block.id} className="space-y-4 rounded-xl border border-border/42 bg-card/74 p-4 sm:p-5">
+      <header className="flex items-end justify-between gap-3">
+        <div className="space-y-1.5">
+          <h2 className="ui-title text-2xl sm:text-3xl">{block.title}</h2>
+          {block.subtitle && (
+            <p className="ui-subtle max-w-3xl text-sm sm:text-base">{block.subtitle}</p>
+          )}
+        </div>
+        <span className="ui-kicker hidden sm:inline">
+          {block.items.length} материалов
+        </span>
+      </header>
+
+      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 md:grid md:grid-cols-2 md:gap-5 md:overflow-visible xl:grid-cols-4">
+        {block.items.map((item) => (
+          <article
+            key={item.id}
+            className="group flex min-w-[78vw] snap-start flex-col gap-3 sm:min-w-[60vw] md:min-w-0"
+          >
+            <a
+              href={item.href}
+              className="relative block overflow-hidden rounded-[8px] border border-border/40 bg-card/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              aria-label={item.title}
+            >
+              <HeroMedia
+                media={item.media}
+                title={item.title}
+                assetClassName="h-full min-h-[260px] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                defaultOverlayOpacity={0.08}
+              />
+            </a>
+
+            <div className="space-y-2">
+              <h3 className="ui-title-serif text-[1.28rem] leading-tight text-foreground">
+                {item.title}
+              </h3>
+              {item.excerpt && (
+                <p className="ui-subtle line-clamp-3 text-sm leading-relaxed">
+                  {item.excerpt}
+                </p>
+              )}
+              <a
+                href={item.href}
+                className="inline-flex items-center text-sm font-medium text-foreground/92 transition-colors hover:text-foreground"
+              >
+                {item.ctaLabel ?? "Читать гид"}
+              </a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
 function renderRichTextBlock(block: RichTextBlock): JSX.Element {
   return (
     <section key={block.id} className="rounded-xl border border-border/45 bg-card/72 px-6 py-5">
@@ -335,6 +393,10 @@ function renderBlock(
 
   if (block.type === "media-feature") {
     return renderMediaFeatureBlock(block);
+  }
+
+  if (block.type === "editorial-rail") {
+    return renderEditorialRailBlock(block);
   }
 
   if (block.type === "rich-text") {

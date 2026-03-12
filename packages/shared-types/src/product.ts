@@ -21,6 +21,14 @@ export type ProductBadge = {
   tone: "accent" | "neutral" | "critical";
 };
 
+export type JsonValue =
+  | string
+  | number
+  | boolean
+  | null
+  | JsonValue[]
+  | { [key: string]: JsonValue };
+
 export type Product = {
   id: string;
   slug: string;
@@ -35,5 +43,5 @@ export type Product = {
   isActive?: boolean;
   sortOrder?: number;
   isFeatured?: boolean;
-  metadata?: Record<string, string | number | boolean>;
+  metadata?: Record<string, JsonValue>;
 };

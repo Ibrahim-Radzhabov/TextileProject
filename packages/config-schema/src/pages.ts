@@ -126,6 +126,23 @@ const productGridBlock = z.object({
     .optional()
 });
 
+const editorialRailItem = z.object({
+  id: z.string().min(1),
+  title: z.string().min(1),
+  excerpt: z.string().optional(),
+  href: hrefSchema,
+  ctaLabel: z.string().min(1).optional(),
+  media: heroMediaSchema
+});
+
+const editorialRailBlock = z.object({
+  id: z.string().min(1),
+  type: z.literal("editorial-rail"),
+  title: z.string().min(1),
+  subtitle: z.string().optional(),
+  items: z.array(editorialRailItem).min(1).max(8)
+});
+
 const richTextBlock = z.object({
   id: z.string().min(1),
   type: z.literal("rich-text"),
@@ -143,6 +160,7 @@ export const pageBlockSchema = z.discriminatedUnion("type", [
   heroBlock,
   mediaFeatureBlock,
   productGridBlock,
+  editorialRailBlock,
   richTextBlock,
   ctaStripBlock
 ]);

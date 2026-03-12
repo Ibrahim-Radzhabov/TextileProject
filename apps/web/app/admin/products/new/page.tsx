@@ -21,6 +21,7 @@ const emptyProductDefaults: AdminProductFormDefaults = {
   mediaJson: "",
   badgesJson: "",
   metadataJson: "",
+  colorOptionsJson: "",
 };
 
 function resolveReturnTo(value: string | undefined): string | undefined {

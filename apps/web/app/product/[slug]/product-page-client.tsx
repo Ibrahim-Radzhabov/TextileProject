@@ -64,6 +64,13 @@ type ProductSwatch = {
   toneClass: string;
 };
 
+type ProductColorOption = {
+  id: string;
+  label: string;
+  tone: string;
+  mediaIds: string[];
+};
+
 const swatchByTag: Record<string, { label: string; toneClass: string }> = {
   linen: { label: "Linen Sand", toneClass: "bg-[#cdbda9]" },
   jacquard: { label: "Jacquard Pearl", toneClass: "bg-[#d8d2c9]" },
@@ -72,6 +79,18 @@ const swatchByTag: Record<string, { label: string; toneClass: string }> = {
   sheer: { label: "Sheer Pearl", toneClass: "bg-[#f2efe8]" },
   tulle: { label: "Tulle Ivory", toneClass: "bg-[#ece7db]" },
   "day-night": { label: "Day-Night Mix", toneClass: "bg-[#9a866d]" }
+};
+
+const colorToneClassByKey: Record<string, string> = {
+  ivory: "bg-[#ebe6dc]",
+  pearl: "bg-[#ede6d9]",
+  linen: "bg-[#d5c6ad]",
+  sand: "bg-[#c4b296]",
+  taupe: "bg-[#9f8d78]",
+  graphite: "bg-[#5a544e]",
+  noir: "bg-[#272626]",
+  black: "bg-[#1f1f1f]",
+  white: "bg-[#f3efe7]",
 };
 
 const serviceHighlights = [
@@ -137,6 +156,39 @@ function deriveSwatches(product: Product, fabricMeta: string | null): ProductSwa
   return resolved.slice(0, 4);
 }
 
+function parseColorOptions(product: Product): ProductColorOption[] {
+  const rawColorOptions = product.metadata?.colorOptions;
+  if (!Array.isArray(rawColorOptions)) {
+    return [];
+  }
+
+  const options: ProductColorOption[] = [];
+
+  for (const rawOption of rawColorOptions) {
+    if (!rawOption || Array.isArray(rawOption) || typeof rawOption !== "object") {
+      continue;
+    }
+
+    const id = typeof rawOption.id === "string" ? rawOption.id.trim() : "";
+    const label = typeof rawOption.label === "string" ? rawOption.label.trim() : "";
+    const tone = typeof rawOption.tone === "string" ? rawOption.tone.trim().toLowerCase() : "";
+    const mediaIds = Array.isArray(rawOption.mediaIds)
+      ? rawOption.mediaIds
+          .filter((value): value is string => typeof value === "string")
+          .map((value) => value.trim())
+          .filter(Boolean)
+      : [];
+
+    if (!id || !label || !tone || mediaIds.length === 0) {
+      continue;
+    }
+
+    options.push({ id, label, tone, mediaIds });
+  }
+
+  return options;
+}
+
 export function ProductPageClient({
   product,
   related,
@@ -193,6 +245,40 @@ export function ProductPageClient({
   const fabricMeta = metadataLookup.get("fabric") ?? metadataLookup.get("ткань") ?? null;
   const lightControlMeta = metadataLookup.get("light control") ?? metadataLookup.get("затемнение") ?? null;
   const panelWidthMeta = metadataLookup.get("width panel") ?? metadataLookup.get("ширина панели") ?? null;
+  const mediaLookup = useMemo(
+    () => new Map(product.media.map((item) => [item.id, item])),
+    [product.media]
+  );
+  const colorOptions = useMemo(() => parseColorOptions(product), [product]);
+  const resolvedColorOptions = useMemo(() => {
+    return colorOptions
+      .map((option) => {
+        const mediaIds = option.mediaIds.filter((mediaId) => mediaLookup.has(mediaId));
+        return mediaIds.length > 0 ? { ...option, mediaIds } : null;
+      })
+      .filter((option): option is ProductColorOption => option !== null);
+  }, [colorOptions, mediaLookup]);
+  const [selectedColorId, setSelectedColorId] = useState<string | null>(
+    resolvedColorOptions[0]?.id ?? null
+  );
+  const selectedColorOption = useMemo(() => {
+    if (resolvedColorOptions.length === 0) {
+      return null;
+    }
+
+    return (
+      resolvedColorOptions.find((option) => option.id === selectedColorId) ?? resolvedColorOptions[0]
+    );
+  }, [resolvedColorOptions, selectedColorId]);
+  const galleryMedia = useMemo(() => {
+    if (!selectedColorOption) {
+      return product.media;
+    }
+    const selectedMedia = selectedColorOption.mediaIds
+      .map((mediaId) => mediaLookup.get(mediaId))
+      .filter((item): item is Product["media"][number] => Boolean(item));
+    return selectedMedia.length > 0 ? selectedMedia : product.media;
+  }, [selectedColorOption, mediaLookup, product.media]);
   const swatches = useMemo(() => deriveSwatches(product, fabricMeta), [fabricMeta, product]);
   const panelWidthCm = useMemo(() => {
     if (!panelWidthMeta) {
@@ -217,6 +303,19 @@ export function ProductPageClient({
   const productPageLead = productPageTexts[0]?.content;
   const productPageSupport = productPageTexts.slice(1);
   const sampleRequestActionHref = withSampleRequestSubject(sampleRequestHref);
+
+  useEffect(() => {
+    if (resolvedColorOptions.length === 0) {
+      if (selectedColorId !== null) {
+        setSelectedColorId(null);
+      }
+      return;
+    }
+
+    if (!selectedColorId || !resolvedColorOptions.some((option) => option.id === selectedColorId)) {
+      setSelectedColorId(resolvedColorOptions[0].id);
+    }
+  }, [resolvedColorOptions, selectedColorId]);
 
   useEffect(() => {
     return () => {
@@ -244,14 +343,14 @@ export function ProductPageClient({
 
   return (
     <div className="space-y-10 pb-[calc(10rem+env(safe-area-inset-bottom))] md:pb-10">
-      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-12">
+      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.46fr)_minmax(18rem,0.66fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.58fr)_minmax(19rem,0.56fr)]">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
           className="space-y-5"
         >
-          <ProductGallery media={product.media} mainImageLayoutId={sharedMediaLayoutId} />
+          <ProductGallery media={galleryMedia} mainImageLayoutId={sharedMediaLayoutId} />
 
           {product.description && (
             <Surface tone="subtle" className="space-y-2 rounded-xl px-5 py-6 sm:px-6">
@@ -265,18 +364,11 @@ export function ProductPageClient({
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, delay: 0.04 }}
-          className="space-y-6 md:sticky md:top-24 md:self-start"
+          className="space-y-6 md:sticky md:top-24 md:w-full md:max-w-[26rem] md:justify-self-end md:self-start xl:max-w-[24.5rem]"
         >
           <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
             <div className="relative z-10 space-y-5">
               <header className="space-y-3">
-                <div className="flex flex-wrap gap-2">
-                  {product.isFeatured && <Badge tone="accent">Featured</Badge>}
-                  {(product.tags ?? []).slice(0, 3).map((tag) => (
-                    <Badge key={tag} tone="muted">#{tag}</Badge>
-                  ))}
-                </div>
-
                 {sharedTitleLayoutId ? (
                   <motion.h1
                     layoutId={sharedTitleLayoutId}
@@ -337,6 +429,43 @@ export function ProductPageClient({
                     )}
                   </div>
                 </div>
+
+                {resolvedColorOptions.length > 0 && (
+                  <div className="mt-3 space-y-2.5">
+                    <p className="ui-kicker">Цвет</p>
+                    <div className="flex flex-wrap gap-2">
+                      {resolvedColorOptions.map((option) => {
+                        const isActive = selectedColorOption?.id === option.id;
+                        const toneClass = colorToneClassByKey[option.tone] ?? "bg-card";
+
+                        return (
+                          <button
+                            key={option.id}
+                            type="button"
+                            onClick={() => setSelectedColorId(option.id)}
+                            className={[
+                              "inline-flex items-center gap-2 rounded-full border px-2.5 py-1.5 text-xs transition-colors",
+                              isActive
+                                ? "border-border/80 bg-card/88 text-foreground"
+                                : "border-border/45 bg-card/62 text-muted-foreground hover:border-border/70 hover:text-foreground"
+                            ].join(" ")}
+                            aria-pressed={isActive}
+                            aria-label={`Выбрать цвет ${option.label}`}
+                          >
+                            <span
+                              className={[
+                                "h-4 w-4 rounded-full border border-border/55",
+                                toneClass
+                              ].join(" ")}
+                              aria-hidden="true"
+                            />
+                            <span>{option.label}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <motion.div
                   initial={false}

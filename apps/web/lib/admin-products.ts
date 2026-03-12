@@ -1,4 +1,4 @@
-import type { Product, ProductBadge, ProductMedia } from "@store-platform/shared-types";
+import type { JsonValue, Product, ProductBadge, ProductMedia } from "@store-platform/shared-types";
 
 function parseRequiredString(value: FormDataEntryValue | null, fieldName: string): string {
   if (typeof value !== "string") {
@@ -101,6 +101,31 @@ function parseJsonObject(raw: string, fieldName: string): Record<string, unknown
   return parsed as Record<string, unknown>;
 }
 
+function normalizeJsonValue(value: unknown, fieldName: string, path: string): JsonValue {
+  if (
+    value === null ||
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  ) {
+    return value;
+  }
+
+  if (Array.isArray(value)) {
+    return value.map((entry, index) => normalizeJsonValue(entry, fieldName, `${path}[${index}]`));
+  }
+
+  if (typeof value === "object") {
+    const normalized: Record<string, JsonValue> = {};
+    for (const [key, entry] of Object.entries(value)) {
+      normalized[key] = normalizeJsonValue(entry, fieldName, `${path}.${key}`);
+    }
+    return normalized;
+  }
+
+  throw new Error(`Поле "${fieldName}" содержит неподдерживаемое значение в "${path}".`);
+}
+
 function parseMediaFromJson(raw: string): ProductMedia[] {
   const items = parseJsonArray<Record<string, unknown>>(raw, "media_json");
   return items.map((item, index) => {
@@ -127,19 +152,48 @@ function parseBadgesFromJson(raw: string): ProductBadge[] {
   });
 }
 
-function parseMetadataFromJson(raw: string): Record<string, string | number | boolean> {
+function parseMetadataFromJson(raw: string): Record<string, JsonValue> {
   const record = parseJsonObject(raw, "metadata_json");
-  const normalized: Record<string, string | number | boolean> = {};
+  const normalized: Record<string, JsonValue> = {};
 
   for (const [key, value] of Object.entries(record)) {
-    if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-      normalized[key] = value;
-      continue;
-    }
-    throw new Error(`metadata_json содержит неподдерживаемый тип для "${key}".`);
+    normalized[key] = normalizeJsonValue(value, "metadata_json", key);
   }
 
   return normalized;
+}
+
+type ProductColorOptionInput = {
+  id: string;
+  label: string;
+  tone: string;
+  mediaIds: string[];
+};
+
+function parseColorOptionsFromJson(raw: string): ProductColorOptionInput[] {
+  const items = parseJsonArray<Record<string, unknown>>(raw, "color_options_json");
+
+  return items.map((item, index) => {
+    const id = typeof item.id === "string" ? item.id.trim() : "";
+    const label = typeof item.label === "string" ? item.label.trim() : "";
+    const tone = typeof item.tone === "string" ? item.tone.trim().toLowerCase() : "";
+    const mediaIds = Array.isArray(item.mediaIds)
+      ? item.mediaIds.filter((mediaId): mediaId is string => typeof mediaId === "string").map((mediaId) => mediaId.trim()).filter(Boolean)
+      : [];
+
+    if (!id || !label || !tone || mediaIds.length === 0) {
+      throw new Error(
+        `color_options_json[${index}] должен содержать id, label, tone и непустой mediaIds[]`
+      );
+    }
+
+    return {
+      id,
+      label,
+      tone,
+      mediaIds,
+    };
+  });
 }
 
 export function resolveStoreApiUrl(): string {
@@ -189,8 +243,14 @@ export function buildProductPayloadFromFormData(formData: FormData): Product {
   const badgesJsonRaw = parseOptionalString(formData.get("badges_json"));
   const badges = badgesJsonRaw ? parseBadgesFromJson(badgesJsonRaw) : undefined;
 
+  const colorOptionsJsonRaw = parseOptionalString(formData.get("color_options_json"));
+  const colorOptions = colorOptionsJsonRaw ? parseColorOptionsFromJson(colorOptionsJsonRaw) : undefined;
+
   const metadataJsonRaw = parseOptionalString(formData.get("metadata_json"));
-  const metadata = metadataJsonRaw ? parseMetadataFromJson(metadataJsonRaw) : undefined;
+  const metadata = metadataJsonRaw ? parseMetadataFromJson(metadataJsonRaw) : {};
+  if (colorOptions && colorOptions.length > 0) {
+    metadata.colorOptions = colorOptions;
+  }
 
   return {
     id,
@@ -215,7 +275,7 @@ export function buildProductPayloadFromFormData(formData: FormData): Product {
     isActive,
     sortOrder,
     isFeatured,
-    metadata,
+    metadata: Object.keys(metadata).length > 0 ? metadata : undefined,
   };
 }
 
@@ -239,8 +299,16 @@ export function productToFormDefaults(product: Product): {
   mediaJson: string;
   badgesJson: string;
   metadataJson: string;
+  colorOptionsJson: string;
 } {
   const firstMedia = product.media[0] ?? { id: "", url: "", alt: "" };
+  const rawColorOptions =
+    product.metadata && typeof product.metadata === "object" && !Array.isArray(product.metadata)
+      ? product.metadata.colorOptions
+      : undefined;
+  const colorOptionsJson = Array.isArray(rawColorOptions)
+    ? JSON.stringify(rawColorOptions, null, 2)
+    : "";
   return {
     id: product.id,
     slug: product.slug,
@@ -261,5 +329,6 @@ export function productToFormDefaults(product: Product): {
     mediaJson: JSON.stringify(product.media ?? [], null, 2),
     badgesJson: JSON.stringify(product.badges ?? [], null, 2),
     metadataJson: JSON.stringify(product.metadata ?? {}, null, 2),
+    colorOptionsJson,
   };
 }

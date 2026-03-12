@@ -20,6 +20,7 @@ export type AdminProductFormDefaults = {
   mediaJson: string;
   badgesJson: string;
   metadataJson: string;
+  colorOptionsJson: string;
 };
 
 type AdminProductFormProps = {
@@ -195,6 +196,19 @@ export function AdminProductForm({
                 rows={4}
                 className="w-full rounded-md border border-border/65 bg-input/80 px-3 py-2 font-mono text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
               />
+            </div>
+            <div className="space-y-1">
+              <FormFieldLabel htmlFor="product-color-options-json">color_options_json</FormFieldLabel>
+              <textarea
+                id="product-color-options-json"
+                name="color_options_json"
+                defaultValue={defaults.colorOptionsJson}
+                rows={6}
+                className="w-full rounded-md border border-border/65 bg-input/80 px-3 py-2 font-mono text-xs text-foreground shadow-inset outline-none transition-all duration-[var(--motion-fast)] focus:border-accent/55 focus:ring-2 focus:ring-ring/60"
+              />
+              <p className="text-[11px] text-muted-foreground">
+                Формат: [{`{ id, label, tone, mediaIds: ["media-id-1"] }`}] — mediaIds должны ссылаться на id из media_json.
+              </p>
             </div>
             <div className="space-y-1">
               <FormFieldLabel htmlFor="product-metadata-json">metadata_json</FormFieldLabel>

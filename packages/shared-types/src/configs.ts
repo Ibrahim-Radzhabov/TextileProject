@@ -60,6 +60,7 @@ export type PageBlockType =
   | "hero"
   | "product-grid"
   | "media-feature"
+  | "editorial-rail"
   | "featured-row"
   | "rich-text"
   | "cta-strip";
@@ -157,6 +158,31 @@ export type ProductGridBlock = PageBlockBase & {
   };
 };
 
+export type EditorialRailItem = {
+  id: string;
+  title: string;
+  excerpt?: string;
+  href: string;
+  ctaLabel?: string;
+  media: {
+    type: "image" | "video";
+    src: string;
+    mobileSrc?: string;
+    poster?: string;
+    alt?: string;
+    overlayOpacity?: number;
+    objectPosition?: string;
+    mobileObjectPosition?: string;
+  };
+};
+
+export type EditorialRailBlock = PageBlockBase & {
+  type: "editorial-rail";
+  title: string;
+  subtitle?: string;
+  items: EditorialRailItem[];
+};
+
 export type RichTextBlock = PageBlockBase & {
   type: "rich-text";
   content: string;
@@ -172,6 +198,7 @@ export type PageBlock =
   | HeroBlock
   | ProductGridBlock
   | MediaFeatureBlock
+  | EditorialRailBlock
   | RichTextBlock
   | CtaStripBlock;
 

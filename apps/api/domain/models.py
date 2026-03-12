@@ -283,6 +283,25 @@ class ProductGridBlock(PageBlockBase):
     filter: Optional[Dict[str, Any]] = None
 
 
+class EditorialRailItem(BaseModel):
+    id: str
+    title: str
+    excerpt: Optional[str] = None
+    href: str
+    cta_label: Optional[str] = Field(default=None, alias="ctaLabel")
+    media: Dict[str, Any]
+
+    class Config:
+        populate_by_name = True
+
+
+class EditorialRailBlock(PageBlockBase):
+    type: Literal["editorial-rail"]
+    title: str
+    subtitle: Optional[str] = None
+    items: List[EditorialRailItem]
+
+
 class RichTextBlock(PageBlockBase):
     type: Literal["rich-text"]
     content: str
@@ -294,7 +313,14 @@ class CtaStripBlock(PageBlockBase):
     href: str
 
 
-PageBlock = HeroBlock | MediaFeatureBlock | ProductGridBlock | RichTextBlock | CtaStripBlock
+PageBlock = (
+    HeroBlock
+    | MediaFeatureBlock
+    | ProductGridBlock
+    | EditorialRailBlock
+    | RichTextBlock
+    | CtaStripBlock
+)
 
 
 class PageConfig(BaseModel):

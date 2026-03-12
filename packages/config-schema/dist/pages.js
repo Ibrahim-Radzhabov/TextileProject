@@ -57,6 +57,9 @@ const heroBlock = z.object({
     type: z.literal("hero"),
     content: heroContentSchema.optional(),
     contentPlacement: z.enum(["overlay", "below"]).optional(),
+    overlayVariant: z.enum(["card", "full"]).optional(),
+    cardTitle: z.string().optional(),
+    introText: z.string().optional(),
     eyebrow: z.string().optional(),
     title: z.string().min(1).optional(),
     subtitle: z.string().optional(),
@@ -112,6 +115,21 @@ const productGridBlock = z.object({
     })
         .optional()
 });
+const editorialRailItem = z.object({
+    id: z.string().min(1),
+    title: z.string().min(1),
+    excerpt: z.string().optional(),
+    href: hrefSchema,
+    ctaLabel: z.string().min(1).optional(),
+    media: heroMediaSchema
+});
+const editorialRailBlock = z.object({
+    id: z.string().min(1),
+    type: z.literal("editorial-rail"),
+    title: z.string().min(1),
+    subtitle: z.string().optional(),
+    items: z.array(editorialRailItem).min(1).max(8)
+});
 const richTextBlock = z.object({
     id: z.string().min(1),
     type: z.literal("rich-text"),
@@ -127,6 +145,7 @@ export const pageBlockSchema = z.discriminatedUnion("type", [
     heroBlock,
     mediaFeatureBlock,
     productGridBlock,
+    editorialRailBlock,
     richTextBlock,
     ctaStripBlock
 ]);
@@ -148,10 +167,10 @@ export const pageSchema = z.object({
             });
         }
         blockIds.add(block.id);
-        if (block.type === "hero" && !block.content?.title && !block.title) {
+        if (block.type === "hero" && !block.content?.title && !block.title && !block.cardTitle) {
             ctx.addIssue({
                 code: z.ZodIssueCode.custom,
-                message: "hero block requires title in content.title (or legacy title)",
+                message: "hero block requires title in content.title, legacy title, or cardTitle",
                 path: ["blocks", index, "content", "title"]
             });
         }

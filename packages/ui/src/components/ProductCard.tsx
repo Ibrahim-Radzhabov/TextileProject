@@ -49,7 +49,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     product.compareAtPrice.currency === product.price.currency &&
     product.compareAtPrice.amount > product.price.amount;
   const roomTag = (product.tags ?? []).find((tag) => ["bedroom", "living-room", "office", "kids"].includes(tag));
-  const overline = product.badges?.[0]?.label ?? roomTag?.replace(/-/g, " ");
+  const rawOverline = product.badges?.[0]?.label ?? roomTag?.replace(/-/g, " ");
+  const normalizedOverline = rawOverline?.trim().toLowerCase();
+  const shouldHideOverline =
+    !!normalizedOverline &&
+    (normalizedOverline.startsWith("#") ||
+      normalizedOverline === "featured" ||
+      normalizedOverline === "feature");
+  const overline = shouldHideOverline ? undefined : rawOverline;
 
   return (
     <motion.div

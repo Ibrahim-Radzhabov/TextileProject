@@ -44,7 +44,27 @@
         "Light control": "95-100%",
         "Fabric": "Linen blend",
         "Width panel": "150 cm",
-        "Care": "Dry clean"
+        "Care": "Dry clean",
+        "colorOptions": [
+          {
+            "id": "p1-ivory",
+            "label": "Ivory Linen",
+            "tone": "ivory",
+            "mediaIds": [
+              "m1",
+              "m1-detail"
+            ]
+          },
+          {
+            "id": "p1-graphite",
+            "label": "Graphite Linen",
+            "tone": "graphite",
+            "mediaIds": [
+              "m1-detail",
+              "m1"
+            ]
+          }
+        ]
       }
     },
     {

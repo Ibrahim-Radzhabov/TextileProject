@@ -78,6 +78,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
         } | undefined;
     }>>;
     contentPlacement: z.ZodOptional<z.ZodEnum<["overlay", "below"]>>;
+    overlayVariant: z.ZodOptional<z.ZodEnum<["card", "full"]>>;
+    cardTitle: z.ZodOptional<z.ZodString>;
+    introText: z.ZodOptional<z.ZodString>;
     eyebrow: z.ZodOptional<z.ZodString>;
     title: z.ZodOptional<z.ZodString>;
     subtitle: z.ZodOptional<z.ZodString>;
@@ -217,6 +220,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
         } | undefined;
     } | undefined;
     contentPlacement?: "overlay" | "below" | undefined;
+    overlayVariant?: "card" | "full" | undefined;
+    cardTitle?: string | undefined;
+    introText?: string | undefined;
 }, {
     type: "hero";
     id: string;
@@ -268,6 +274,9 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
         } | undefined;
     } | undefined;
     contentPlacement?: "overlay" | "below" | undefined;
+    overlayVariant?: "card" | "full" | undefined;
+    cardTitle?: string | undefined;
+    introText?: string | undefined;
 }>, z.ZodObject<{
     id: z.ZodString;
     type: z.ZodLiteral<"media-feature">;
@@ -421,6 +430,149 @@ export declare const pageBlockSchema: z.ZodDiscriminatedUnion<"type", [z.ZodObje
     layout?: "auto-fit" | "3-col" | "4-col" | undefined;
 }>, z.ZodObject<{
     id: z.ZodString;
+    type: z.ZodLiteral<"editorial-rail">;
+    title: z.ZodString;
+    subtitle: z.ZodOptional<z.ZodString>;
+    items: z.ZodArray<z.ZodObject<{
+        id: z.ZodString;
+        title: z.ZodString;
+        excerpt: z.ZodOptional<z.ZodString>;
+        href: z.ZodEffects<z.ZodString, string, string>;
+        ctaLabel: z.ZodOptional<z.ZodString>;
+        media: z.ZodEffects<z.ZodObject<{
+            type: z.ZodEnum<["image", "video"]>;
+            src: z.ZodEffects<z.ZodString, string, string>;
+            mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+            alt: z.ZodOptional<z.ZodString>;
+            overlayOpacity: z.ZodOptional<z.ZodNumber>;
+            overlayPreset: z.ZodOptional<z.ZodEnum<["editorial", "balanced", "contrast"]>>;
+            objectPosition: z.ZodOptional<z.ZodString>;
+            mobileObjectPosition: z.ZodOptional<z.ZodString>;
+        }, "strip", z.ZodTypeAny, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        }>, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        }, {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        }>;
+    }, "strip", z.ZodTypeAny, {
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        };
+        title: string;
+        href: string;
+        excerpt?: string | undefined;
+        ctaLabel?: string | undefined;
+    }, {
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        };
+        title: string;
+        href: string;
+        excerpt?: string | undefined;
+        ctaLabel?: string | undefined;
+    }>, "many">;
+}, "strip", z.ZodTypeAny, {
+    type: "editorial-rail";
+    id: string;
+    title: string;
+    items: {
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        };
+        title: string;
+        href: string;
+        excerpt?: string | undefined;
+        ctaLabel?: string | undefined;
+    }[];
+    subtitle?: string | undefined;
+}, {
+    type: "editorial-rail";
+    id: string;
+    title: string;
+    items: {
+        id: string;
+        media: {
+            type: "image" | "video";
+            src: string;
+            alt?: string | undefined;
+            mobileSrc?: string | undefined;
+            poster?: string | undefined;
+            overlayOpacity?: number | undefined;
+            overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+            objectPosition?: string | undefined;
+            mobileObjectPosition?: string | undefined;
+        };
+        title: string;
+        href: string;
+        excerpt?: string | undefined;
+        ctaLabel?: string | undefined;
+    }[];
+    subtitle?: string | undefined;
+}>, z.ZodObject<{
+    id: z.ZodString;
     type: z.ZodLiteral<"rich-text">;
     content: z.ZodString;
 }, "strip", z.ZodTypeAny, {
@@ -531,6 +683,9 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             } | undefined;
         }>>;
         contentPlacement: z.ZodOptional<z.ZodEnum<["overlay", "below"]>>;
+        overlayVariant: z.ZodOptional<z.ZodEnum<["card", "full"]>>;
+        cardTitle: z.ZodOptional<z.ZodString>;
+        introText: z.ZodOptional<z.ZodString>;
         eyebrow: z.ZodOptional<z.ZodString>;
         title: z.ZodOptional<z.ZodString>;
         subtitle: z.ZodOptional<z.ZodString>;
@@ -670,6 +825,9 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     }, {
         type: "hero";
         id: string;
@@ -721,6 +879,9 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         type: z.ZodLiteral<"media-feature">;
@@ -874,6 +1035,149 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
+        type: z.ZodLiteral<"editorial-rail">;
+        title: z.ZodString;
+        subtitle: z.ZodOptional<z.ZodString>;
+        items: z.ZodArray<z.ZodObject<{
+            id: z.ZodString;
+            title: z.ZodString;
+            excerpt: z.ZodOptional<z.ZodString>;
+            href: z.ZodEffects<z.ZodString, string, string>;
+            ctaLabel: z.ZodOptional<z.ZodString>;
+            media: z.ZodEffects<z.ZodObject<{
+                type: z.ZodEnum<["image", "video"]>;
+                src: z.ZodEffects<z.ZodString, string, string>;
+                mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+                poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+                alt: z.ZodOptional<z.ZodString>;
+                overlayOpacity: z.ZodOptional<z.ZodNumber>;
+                overlayPreset: z.ZodOptional<z.ZodEnum<["editorial", "balanced", "contrast"]>>;
+                objectPosition: z.ZodOptional<z.ZodString>;
+                mobileObjectPosition: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }>, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }>;
+        }, "strip", z.ZodTypeAny, {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }, {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
+    }, {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
+    }>, z.ZodObject<{
+        id: z.ZodString;
         type: z.ZodLiteral<"rich-text">;
         content: z.ZodString;
     }, "strip", z.ZodTypeAny, {
@@ -956,6 +1260,9 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -989,6 +1296,29 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1055,6 +1385,9 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1088,6 +1421,29 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1154,6 +1510,9 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1187,6 +1546,29 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1253,6 +1635,9 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1286,6 +1671,29 @@ export declare const pageSchema: z.ZodEffects<z.ZodObject<{
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1381,6 +1789,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         }>>;
         contentPlacement: z.ZodOptional<z.ZodEnum<["overlay", "below"]>>;
+        overlayVariant: z.ZodOptional<z.ZodEnum<["card", "full"]>>;
+        cardTitle: z.ZodOptional<z.ZodString>;
+        introText: z.ZodOptional<z.ZodString>;
         eyebrow: z.ZodOptional<z.ZodString>;
         title: z.ZodOptional<z.ZodString>;
         subtitle: z.ZodOptional<z.ZodString>;
@@ -1520,6 +1931,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     }, {
         type: "hero";
         id: string;
@@ -1571,6 +1985,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
         type: z.ZodLiteral<"media-feature">;
@@ -1724,6 +2141,149 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
     }>, z.ZodObject<{
         id: z.ZodString;
+        type: z.ZodLiteral<"editorial-rail">;
+        title: z.ZodString;
+        subtitle: z.ZodOptional<z.ZodString>;
+        items: z.ZodArray<z.ZodObject<{
+            id: z.ZodString;
+            title: z.ZodString;
+            excerpt: z.ZodOptional<z.ZodString>;
+            href: z.ZodEffects<z.ZodString, string, string>;
+            ctaLabel: z.ZodOptional<z.ZodString>;
+            media: z.ZodEffects<z.ZodObject<{
+                type: z.ZodEnum<["image", "video"]>;
+                src: z.ZodEffects<z.ZodString, string, string>;
+                mobileSrc: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+                poster: z.ZodOptional<z.ZodEffects<z.ZodString, string, string>>;
+                alt: z.ZodOptional<z.ZodString>;
+                overlayOpacity: z.ZodOptional<z.ZodNumber>;
+                overlayPreset: z.ZodOptional<z.ZodEnum<["editorial", "balanced", "contrast"]>>;
+                objectPosition: z.ZodOptional<z.ZodString>;
+                mobileObjectPosition: z.ZodOptional<z.ZodString>;
+            }, "strip", z.ZodTypeAny, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }>, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }>;
+        }, "strip", z.ZodTypeAny, {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }, {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }>, "many">;
+    }, "strip", z.ZodTypeAny, {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
+    }, {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
+    }>, z.ZodObject<{
+        id: z.ZodString;
         type: z.ZodLiteral<"rich-text">;
         content: z.ZodString;
     }, "strip", z.ZodTypeAny, {
@@ -1806,6 +2366,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1839,6 +2402,29 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1905,6 +2491,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1938,6 +2527,29 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -2004,6 +2616,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -2037,6 +2652,29 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -2103,6 +2741,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -2136,6 +2777,29 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -2202,6 +2866,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -2235,6 +2902,29 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -2301,6 +2991,9 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -2334,6 +3027,29 @@ export declare const pagesSchema: z.ZodEffects<z.ZodArray<z.ZodEffects<z.ZodObje
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;

@@ -445,7 +445,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         };
     }[] | undefined;
 }>>, import("zod").ZodObject<{
-    products: import("zod").ZodArray<import("zod").ZodObject<{
+    products: import("zod").ZodArray<import("zod").ZodEffects<import("zod").ZodObject<{
         id: import("zod").ZodString;
         slug: import("zod").ZodString;
         name: import("zod").ZodString;
@@ -501,7 +501,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         isActive: import("zod").ZodOptional<import("zod").ZodBoolean>;
         sortOrder: import("zod").ZodOptional<import("zod").ZodNumber>;
         isFeatured: import("zod").ZodOptional<import("zod").ZodBoolean>;
-        metadata: import("zod").ZodOptional<import("zod").ZodRecord<import("zod").ZodString, import("zod").ZodUnion<[import("zod").ZodString, import("zod").ZodNumber, import("zod").ZodBoolean]>>>;
+        metadata: import("zod").ZodOptional<import("zod").ZodRecord<import("zod").ZodString, import("zod").ZodType<unknown, import("zod").ZodTypeDef, unknown>>>;
     }, "strip", import("zod").ZodTypeAny, {
         id: string;
         slug: string;
@@ -530,7 +530,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         isActive?: boolean | undefined;
         sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
-        metadata?: Record<string, string | number | boolean> | undefined;
+        metadata?: Record<string, unknown> | undefined;
     }, {
         id: string;
         slug: string;
@@ -559,7 +559,65 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         isActive?: boolean | undefined;
         sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
-        metadata?: Record<string, string | number | boolean> | undefined;
+        metadata?: Record<string, unknown> | undefined;
+    }>, {
+        id: string;
+        slug: string;
+        name: string;
+        price: {
+            currency: string;
+            amount: number;
+        };
+        media: {
+            id: string;
+            url: string;
+            alt: string;
+        }[];
+        description?: string | undefined;
+        shortDescription?: string | undefined;
+        compareAtPrice?: {
+            currency: string;
+            amount: number;
+        } | undefined;
+        badges?: {
+            id: string;
+            label: string;
+            tone: "accent" | "neutral" | "critical";
+        }[] | undefined;
+        tags?: string[] | undefined;
+        isActive?: boolean | undefined;
+        sortOrder?: number | undefined;
+        isFeatured?: boolean | undefined;
+        metadata?: Record<string, unknown> | undefined;
+    }, {
+        id: string;
+        slug: string;
+        name: string;
+        price: {
+            currency: string;
+            amount: number;
+        };
+        media: {
+            id: string;
+            url: string;
+            alt: string;
+        }[];
+        description?: string | undefined;
+        shortDescription?: string | undefined;
+        compareAtPrice?: {
+            currency: string;
+            amount: number;
+        } | undefined;
+        badges?: {
+            id: string;
+            label: string;
+            tone: "accent" | "neutral" | "critical";
+        }[] | undefined;
+        tags?: string[] | undefined;
+        isActive?: boolean | undefined;
+        sortOrder?: number | undefined;
+        isFeatured?: boolean | undefined;
+        metadata?: Record<string, unknown> | undefined;
     }>, "many">;
 }, "strip", import("zod").ZodTypeAny, {
     products: {
@@ -590,7 +648,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         isActive?: boolean | undefined;
         sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
-        metadata?: Record<string, string | number | boolean> | undefined;
+        metadata?: Record<string, unknown> | undefined;
     }[];
 }, {
     products: {
@@ -621,7 +679,7 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         isActive?: boolean | undefined;
         sortOrder?: number | undefined;
         isFeatured?: boolean | undefined;
-        metadata?: Record<string, string | number | boolean> | undefined;
+        metadata?: Record<string, unknown> | undefined;
     }[];
 }>>, import("zod").ZodEffects<import("zod").ZodArray<import("zod").ZodEffects<import("zod").ZodObject<{
     id: import("zod").ZodString;
@@ -707,6 +765,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         }>>;
         contentPlacement: import("zod").ZodOptional<import("zod").ZodEnum<["overlay", "below"]>>;
+        overlayVariant: import("zod").ZodOptional<import("zod").ZodEnum<["card", "full"]>>;
+        cardTitle: import("zod").ZodOptional<import("zod").ZodString>;
+        introText: import("zod").ZodOptional<import("zod").ZodString>;
         eyebrow: import("zod").ZodOptional<import("zod").ZodString>;
         title: import("zod").ZodOptional<import("zod").ZodString>;
         subtitle: import("zod").ZodOptional<import("zod").ZodString>;
@@ -846,6 +907,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     }, {
         type: "hero";
         id: string;
@@ -897,6 +961,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     }>, import("zod").ZodObject<{
         id: import("zod").ZodString;
         type: import("zod").ZodLiteral<"media-feature">;
@@ -1050,6 +1117,149 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
     }>, import("zod").ZodObject<{
         id: import("zod").ZodString;
+        type: import("zod").ZodLiteral<"editorial-rail">;
+        title: import("zod").ZodString;
+        subtitle: import("zod").ZodOptional<import("zod").ZodString>;
+        items: import("zod").ZodArray<import("zod").ZodObject<{
+            id: import("zod").ZodString;
+            title: import("zod").ZodString;
+            excerpt: import("zod").ZodOptional<import("zod").ZodString>;
+            href: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+            ctaLabel: import("zod").ZodOptional<import("zod").ZodString>;
+            media: import("zod").ZodEffects<import("zod").ZodObject<{
+                type: import("zod").ZodEnum<["image", "video"]>;
+                src: import("zod").ZodEffects<import("zod").ZodString, string, string>;
+                mobileSrc: import("zod").ZodOptional<import("zod").ZodEffects<import("zod").ZodString, string, string>>;
+                poster: import("zod").ZodOptional<import("zod").ZodEffects<import("zod").ZodString, string, string>>;
+                alt: import("zod").ZodOptional<import("zod").ZodString>;
+                overlayOpacity: import("zod").ZodOptional<import("zod").ZodNumber>;
+                overlayPreset: import("zod").ZodOptional<import("zod").ZodEnum<["editorial", "balanced", "contrast"]>>;
+                objectPosition: import("zod").ZodOptional<import("zod").ZodString>;
+                mobileObjectPosition: import("zod").ZodOptional<import("zod").ZodString>;
+            }, "strip", import("zod").ZodTypeAny, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }>, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }, {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            }>;
+        }, "strip", import("zod").ZodTypeAny, {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }, {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }>, "many">;
+    }, "strip", import("zod").ZodTypeAny, {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
+    }, {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
+    }>, import("zod").ZodObject<{
+        id: import("zod").ZodString;
         type: import("zod").ZodLiteral<"rich-text">;
         content: import("zod").ZodString;
     }, "strip", import("zod").ZodTypeAny, {
@@ -1132,6 +1342,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1165,6 +1378,29 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1231,6 +1467,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1264,6 +1503,29 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1330,6 +1592,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1363,6 +1628,29 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1429,6 +1717,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1462,6 +1753,29 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1528,6 +1842,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1561,6 +1878,29 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
@@ -1627,6 +1967,9 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
             } | undefined;
         } | undefined;
         contentPlacement?: "overlay" | "below" | undefined;
+        overlayVariant?: "card" | "full" | undefined;
+        cardTitle?: string | undefined;
+        introText?: string | undefined;
     } | {
         type: "media-feature";
         id: string;
@@ -1660,6 +2003,29 @@ export declare const storefrontConfigSchema: import("zod").ZodIntersection<impor
         title?: string | undefined;
         subtitle?: string | undefined;
         layout?: "auto-fit" | "3-col" | "4-col" | undefined;
+    } | {
+        type: "editorial-rail";
+        id: string;
+        title: string;
+        items: {
+            id: string;
+            media: {
+                type: "image" | "video";
+                src: string;
+                alt?: string | undefined;
+                mobileSrc?: string | undefined;
+                poster?: string | undefined;
+                overlayOpacity?: number | undefined;
+                overlayPreset?: "editorial" | "balanced" | "contrast" | undefined;
+                objectPosition?: string | undefined;
+                mobileObjectPosition?: string | undefined;
+            };
+            title: string;
+            href: string;
+            excerpt?: string | undefined;
+            ctaLabel?: string | undefined;
+        }[];
+        subtitle?: string | undefined;
     } | {
         type: "rich-text";
         id: string;
