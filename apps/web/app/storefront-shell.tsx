@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, type ReactNode } from "react";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { LayoutGroup } from "framer-motion";
 import type { StorefrontConfig } from "@store-platform/shared-types";
 import { CartDrawer, Footer, LayoutShell, TopNav, AnimatedDock } from "@store-platform/ui";
@@ -11,7 +11,6 @@ import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
 import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { TopNavSearchFilter } from "@/components/top-nav-search-filter";
-import { HeaderDropdownMenu } from "@/components/header-dropdown-menu";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { AnnouncementTicker } from "../components/AnnouncementTicker";
 import { SidebarMenu } from "./(components)/sidebar-menu";
@@ -51,7 +50,6 @@ type StorefrontShellProps = {
 
 export function StorefrontShell({ children, config, activeThemeVariantId: _activeThemeVariantId }: StorefrontShellProps) {
   const pathname = usePathname();
-  const router = useRouter();
   const [searchOpen, setSearchOpen] = useState(false);
   const {
     cart,
@@ -69,36 +67,14 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
   const isAdminArea = pathname.startsWith("/admin");
   const isCheckoutFlow = pathname.startsWith("/checkout");
   const showMobileBottomNav = !isAdminArea && !isCheckoutFlow;
-  const navLinks = [
-    {
-      label: "Каталог",
-      href: "/catalog",
-      isActive: pathname.startsWith("/catalog") || pathname.startsWith("/product") || pathname === "/"
-    },
-    { label: "Избранное", href: "/favorites", isActive: pathname.startsWith("/favorites") },
+  const sidebarItems = [
+    { label: "Каталог", href: "/catalog" },
+    { label: "Шторы", href: "/catalog?segment=curtains" },
+    { label: "Тюль", href: "/catalog?segment=tulle" },
+    { label: "Комплекты", href: "/catalog?segment=sets" },
+    { label: "Избранное", href: "/favorites" },
     { label: "Контакты", href: "mailto:atelier@textile.studio" }
   ];
-  const dropdownModes =
-    pathname === "/"
-      ? [
-          { id: "curtains", label: "Шторы" },
-          { id: "tulle", label: "Тюль" },
-          { id: "sets", label: "Комплекты" },
-          { id: "custom", label: "Пошив на заказ" }
-        ]
-      : undefined;
-
-  const handleDropdownModeChange = (id: string) => {
-    const segmentToQuery: Record<string, string> = {
-      curtains: "curtains",
-      tulle: "tulle",
-      sets: "sets",
-      custom: "custom"
-    };
-
-    const segment = segmentToQuery[id] ?? id;
-    void router.push(`/catalog?segment=${encodeURIComponent(segment)}`);
-  };
   const footerColumns = [
     {
       title: "Каталог",
@@ -140,7 +116,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
 
   return (
     <>
-      <SidebarMenu />
       <AnnouncementTicker messages={tickerMessages} />
       <LayoutShell
         topNav={
@@ -150,6 +125,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             leftHref="/"
             centerBrand
             links={[]}
+            leftSlot={<SidebarMenu items={sidebarItems} />}
             mobileMenu={{
               primaryLinks: [
                 { label: "Каталог", href: "/catalog", isActive: pathname.startsWith("/catalog") || pathname.startsWith("/product") || pathname === "/" },
@@ -173,15 +149,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             rightSlot={
               <>
                 <div className="hidden md:flex flex-col items-end gap-1.5">
-                  {dropdownModes && (
-                    <HeaderDropdownMenu
-                      links={navLinks}
-                      title="Подбор текстиля"
-                      modes={dropdownModes}
-                      initialModeId={dropdownModes[0]?.id}
-                      onModeChange={handleDropdownModeChange}
-                    />
-                  )}
                   <AnimatedDock
                     items={[
                       { href: "/", icon: iconHome, title: "Главная" },
@@ -192,15 +159,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                   />
                 </div>
                 <div className="md:hidden flex flex-col items-end gap-1.5">
-                  {dropdownModes && (
-                    <HeaderDropdownMenu
-                      links={navLinks}
-                      title="Подбор текстиля"
-                      modes={dropdownModes}
-                      initialModeId={dropdownModes[0]?.id}
-                      onModeChange={handleDropdownModeChange}
-                    />
-                  )}
                   <AnimatedDock
                     items={[
                       { href: "/", icon: iconHome, title: "Главная" },
