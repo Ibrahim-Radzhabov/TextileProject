@@ -13,13 +13,13 @@
         "media": {
           "type": "video",
           "src": "/demo/hero/textile-loop-desktop.mp4",
-          "mobileSrc": "/demo/hero/textile-loop-mobile.mp4",
+          "mobileSrc": "/demo/hero/textile-loop-mobile-portrait.mp4",
           "poster": "/demo/hero/textile-loop-poster.svg",
           "alt": "Мягкая драпировка ткани у окна",
           "overlayOpacity": 0.06,
           "overlayPreset": "editorial",
           "objectPosition": "50% 50%",
-          "mobileObjectPosition": "50% 42%"
+          "mobileObjectPosition": "50% 50%"
         }
       },
       {

@@ -29,7 +29,7 @@ export const AnimatedDock: React.FC<AnimatedDockProps> = ({
   return (
     <nav
       aria-label="Быстрые действия"
-      className={["flex items-center gap-1.5", className ?? ""].filter(Boolean).join(" ")}
+      className={["flex items-center gap-1 sm:gap-1.5", className ?? ""].filter(Boolean).join(" ")}
       onMouseLeave={() => setHoveredIndex(null)}
     >
       {items.map((item, index) => {
@@ -39,7 +39,7 @@ export const AnimatedDock: React.FC<AnimatedDockProps> = ({
 
         const content = (
           <>
-            <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-border/50 bg-card/90 text-muted-foreground transition-colors duration-[var(--motion-fast)] hover:border-border/70 hover:bg-card hover:text-foreground sm:h-10 sm:w-10 [&>svg]:h-4 [&>svg]:w-4 sm:[&>svg]:h-[18px] sm:[&>svg]:w-[18px]">
+            <span className="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-border/50 bg-card/90 text-muted-foreground transition-colors duration-[var(--motion-fast)] hover:border-border/70 hover:bg-card hover:text-foreground sm:h-10 sm:w-10 [&>svg]:h-[15px] [&>svg]:w-[15px] sm:[&>svg]:h-[18px] sm:[&>svg]:w-[18px]">
               {item.icon}
               {item.badge != null && item.badge > 0 && (
                 <span

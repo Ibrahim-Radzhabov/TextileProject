@@ -33,6 +33,7 @@ export type TopNavProps = {
   };
   shopName: string;
   links?: TopNavLink[];
+  leftSlot?: React.ReactNode;
   rightSlot?: React.ReactNode;
   leftHref?: string;
   tagline?: string;
@@ -58,6 +59,7 @@ export const TopNav: React.FC<TopNavProps> = ({
   logo,
   shopName,
   links = [],
+  leftSlot,
   rightSlot,
   leftHref,
   tagline,
@@ -68,7 +70,11 @@ export const TopNav: React.FC<TopNavProps> = ({
   const prefersReducedMotion = useReducedMotion();
   const monogram = buildMonogram(shopName);
   const hasCenterNav = links.length > 0;
-  const shouldCenterBrand = centerBrand && !hasCenterNav;
+  const hasLeftSlot = Boolean(leftSlot);
+  const hasResponsiveLeftNav = hasLeftSlot && centerBrand && hasCenterNav;
+  const shouldCenterBrand = centerBrand && (!hasCenterNav || hasLeftSlot);
+  const showCenterNav = hasCenterNav && !hasResponsiveLeftNav;
+  const showMobileMenuTrigger = Boolean(rightSlot) && !hasLeftSlot;
   const primaryLinks = (mobileMenu?.primaryLinks ?? links).filter((link) => Boolean(link.href));
   const serviceLinks = mobileMenu?.serviceLinks ?? [];
   const contacts = mobileMenu?.contacts;
@@ -101,8 +107,8 @@ export const TopNav: React.FC<TopNavProps> = ({
   }, [isMenuOpen]);
 
   const leftContent = (
-    <div className="flex items-center gap-3.5">
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/45 bg-card/92 shadow-soft-subtle">
+    <div className="flex items-center gap-2.5 sm:gap-3.5">
+      <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/45 bg-card/92 shadow-soft-subtle sm:h-10 sm:w-10">
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -111,13 +117,13 @@ export const TopNav: React.FC<TopNavProps> = ({
             className="h-full w-full object-cover"
           />
         ) : (
-          <span className="text-[0.66rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+          <span className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground sm:text-[0.66rem]">
             {monogram}
           </span>
         )}
       </div>
       <span className="min-w-0">
-        <span className="ui-title-serif block truncate text-[1.32rem] leading-none text-foreground sm:text-[1.46rem]">
+        <span className="ui-title-serif block truncate text-[1.08rem] leading-none text-foreground sm:text-[1.3rem] md:text-[1.46rem]">
           {shopName}
         </span>
         {tagline && (
@@ -131,21 +137,45 @@ export const TopNav: React.FC<TopNavProps> = ({
 
   return (
     <motion.header
-      className="grid w-full grid-cols-[1fr_auto] items-center gap-3 md:grid-cols-[1fr_auto_1fr] md:gap-6"
+      className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 md:gap-6"
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={transitionStandard}
     >
-      <div
-        className={[
-          "min-w-0",
-          shouldCenterBrand ? "md:invisible md:pointer-events-none" : ""
-        ].join(" ").trim()}
-        aria-hidden={shouldCenterBrand ? true : undefined}
-      >
-        {leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent}
+      <div className="flex min-w-0 items-center justify-start gap-3">
+        {!shouldCenterBrand && (leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent)}
+        {hasResponsiveLeftNav && (
+          <>
+            <nav
+              aria-label="Основная навигация"
+              className="hidden min-[1260px]:flex min-w-0 items-center gap-6"
+            >
+              {links.map((link) => (
+                <a
+                  key={`${link.href}-${link.label}`}
+                  href={link.href}
+                  className={[
+                    "inline-flex items-center whitespace-nowrap text-[0.76rem] font-semibold uppercase tracking-[0.12em] transition-colors",
+                    link.isActive ? "text-foreground/62" : "text-foreground hover:text-foreground/62"
+                  ].join(" ")}
+                  aria-current={link.isActive ? "page" : undefined}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </nav>
+            <div className="flex min-[1260px]:hidden items-center">
+              {leftSlot}
+            </div>
+          </>
+        )}
+        {!hasResponsiveLeftNav && shouldCenterBrand && leftSlot && (
+          <div className="flex items-center">
+            {leftSlot}
+          </div>
+        )}
       </div>
-      {hasCenterNav && (
+      {showCenterNav && (
         <nav
           aria-label="Основная навигация"
           className="hidden items-center justify-center gap-1 md:flex"
@@ -172,24 +202,26 @@ export const TopNav: React.FC<TopNavProps> = ({
         </nav>
       )}
       {shouldCenterBrand && (
-        <div className="hidden min-w-0 items-center justify-center md:flex">
+        <div className="flex min-w-0 items-center justify-center px-1 sm:px-2">
           {leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent}
         </div>
       )}
       {rightSlot && (
-        <div className="flex min-w-0 flex-wrap items-center justify-end gap-1.5 text-sm sm:flex-nowrap sm:gap-2.5">
+        <div className="flex min-w-0 flex-wrap items-center justify-end gap-1 text-sm sm:flex-nowrap sm:gap-2.5">
           {rightSlot}
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden"
-            aria-label="Открыть меню"
-            aria-expanded={isMenuOpen}
-            aria-controls="top-nav-mobile-menu"
-            ref={menuTriggerRef}
-            onClick={() => setIsMenuOpen(true)}
-          >
-            <span aria-hidden="true" className="text-lg leading-none">≡</span>
-          </button>
+          {showMobileMenuTrigger && (
+            <button
+              type="button"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden"
+              aria-label="Открыть меню"
+              aria-expanded={isMenuOpen}
+              aria-controls="top-nav-mobile-menu"
+              ref={menuTriggerRef}
+              onClick={() => setIsMenuOpen(true)}
+            >
+              <span aria-hidden="true" className="text-lg leading-none">≡</span>
+            </button>
+          )}
         </div>
       )}
       <AnimatePresence>

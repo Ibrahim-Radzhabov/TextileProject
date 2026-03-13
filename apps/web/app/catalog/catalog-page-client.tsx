@@ -78,6 +78,18 @@ function resolveMiniRailPreset(key: MiniRailKey): MiniRailPreset {
   return miniRailPresets.find((preset) => preset.key === key) ?? miniRailPresets[0];
 }
 
+function resolveTagFilters(rawValue: string | null, availableTags: string[]): string[] {
+  if (!rawValue) {
+    return [];
+  }
+
+  const availableTagSet = new Set(availableTags);
+  return rawValue
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter((entry, index, collection) => entry.length > 0 && availableTagSet.has(entry) && collection.indexOf(entry) === index);
+}
+
 function formatMoney(amount: number | null, currency: string): string {
   if (amount === null) {
     return "—";
@@ -101,9 +113,14 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     () => resolveCatalogViewPreset(searchParams.get("view"), allTags),
     [allTags, searchParams]
   );
+  const queryTags = useMemo(
+    () => resolveTagFilters(searchParams.get("tags"), allTags),
+    [allTags, searchParams]
+  );
+  const queryTagsKey = queryTags.join("|");
   const initialMiniRailValue = searchParams.get("rail");
   const initialMiniRail: MiniRailKey = isMiniRailKey(initialMiniRailValue) ? initialMiniRailValue : "all";
-  const [tagsFilter, setTagsFilter] = useState<string[]>(activePreset?.tags ?? []);
+  const [tagsFilter, setTagsFilter] = useState<string[]>(activePreset?.tags ?? queryTags);
   const [sort, setSort] = useState<CatalogSort>(activePreset?.sort ?? "recommended");
   const initialSearchValue = searchParams.get("q")?.trim() ?? "";
   const [searchValue, setSearchValue] = useState(initialSearchValue);
@@ -114,6 +131,15 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   useEffect(() => {
     const nextPresetKey = activePreset?.key ?? null;
     if (lastPresetKeyRef.current === nextPresetKey) {
+      if (!activePreset) {
+        setTagsFilter((prev) => {
+          if (prev.join("|") === queryTagsKey) {
+            return prev;
+          }
+
+          return queryTags;
+        });
+      }
       return;
     }
 
@@ -124,9 +150,9 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
       return;
     }
 
-    setTagsFilter([]);
+    setTagsFilter(queryTags);
     setSort("recommended");
-  }, [activePreset]);
+  }, [activePreset, queryTags, queryTagsKey]);
 
   useEffect(() => {
     const params = new URLSearchParams(searchParamsValue);
