@@ -12,9 +12,9 @@
         "overlayVariant": "card",
         "media": {
           "type": "video",
-          "src": "/demo/hero/textile-loop-desktop.mp4",
+          "src": "/demo/hero/textile-loop-desktop-v2.mp4",
           "mobileSrc": "/demo/hero/textile-loop-mobile-portrait.mp4",
-          "poster": "/demo/hero/textile-loop-poster.svg",
+          "poster": "/demo/hero/textile-loop-poster-v2.jpg",
           "alt": "Мягкая драпировка ткани у окна",
           "overlayOpacity": 0.06,
           "overlayPreset": "editorial",
