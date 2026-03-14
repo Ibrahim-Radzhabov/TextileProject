@@ -7,10 +7,10 @@ import { HeroMedia, type HeroMediaConfig } from "@store-platform/ui";
 const EASE_SOFT = [0.25, 0.46, 0.45, 0.94] as const;
 const DURATION_ENTER = 0.95;
 const CARD_DELAY = 0.22;
-const SHRINK_PROGRESS_MAX = 0.82;
-const PARALLAX_MAX_X = 34;
-const PARALLAX_MAX_Y = 4;
-const PARALLAX_MAX_SCALE = 1.016;
+const SHRINK_PROGRESS_MAX = 0.62;
+const PARALLAX_MAX_X = 0;
+const PARALLAX_MAX_Y = 0;
+const PARALLAX_MAX_SCALE = 1.001;
 const REVEAL_OFFSET = 22;
 
 export type HeroVideoEditorialProps = {
@@ -47,20 +47,20 @@ export function HeroVideoEditorial({
     damping: 120,
     mass: 0.2
   } : {
-    stiffness: 180,
-    damping: 34,
-    mass: 0.42
+    stiffness: 118,
+    damping: 26,
+    mass: 0.68
   });
 
   const mediaHeight = useTransform(
     smoothScrollProgress,
     [0, SHRINK_PROGRESS_MAX],
-    prefersReducedMotion ? ["78svh", "78svh"] : ["86svh", "60svh"]
+    prefersReducedMotion ? ["82svh", "82svh"] : ["82svh", "81svh"]
   );
   const mediaWidth = useTransform(
     smoothScrollProgress,
     [0, SHRINK_PROGRESS_MAX],
-    prefersReducedMotion ? ["100%", "100%"] : ["93.5%", "100%"]
+    prefersReducedMotion ? ["100%", "100%"] : ["88%", "100%"]
   );
   const parallaxX = useTransform(
     smoothScrollProgress,
