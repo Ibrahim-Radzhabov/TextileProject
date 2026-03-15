@@ -93,11 +93,6 @@
     "title": "Каталог",
     "blocks": [
       {
-        "id": "catalog-header",
-        "type": "rich-text",
-        "content": "Подборка тюля и штор по фактуре, плотности и сценарию освещения комнаты."
-      },
-      {
         "id": "catalog-grid",
         "type": "product-grid",
         "title": "Все позиции",

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { Badge, ProductCard, transitionQuick } from "@store-platform/ui";
+import { ProductCard, transitionQuick } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
@@ -215,38 +215,6 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     });
   }, [miniRail, products, searchValue, sort, tagsFilter]);
 
-  const selectedCount = tagsFilter.length;
-  const featuredCount = useMemo(() => filteredProducts.filter((product) => product.isFeatured).length, [filteredProducts]);
-
-  const firstRichText = page.blocks.find((block) => block.type === "rich-text");
-  const priceRange = useMemo(() => {
-    if (!filteredProducts.length) {
-      return { min: null, max: null };
-    }
-
-    let min = filteredProducts[0].price.amount;
-    let max = filteredProducts[0].price.amount;
-
-    for (const product of filteredProducts) {
-      const amount = product.price.amount;
-      if (amount < min) {
-        min = amount;
-      }
-      if (amount > max) {
-        max = amount;
-      }
-    }
-
-    return { min, max };
-  }, [filteredProducts]);
-
-  const currency = filteredProducts[0]?.price.currency ?? products[0]?.price.currency ?? "USD";
-  const activeMiniRailPreset = useMemo(() => resolveMiniRailPreset(miniRail), [miniRail]);
-
-  const toggleTag = (tag: string) => {
-    setTagsFilter((prev) => (prev.includes(tag) ? prev.filter((entry) => entry !== tag) : [...prev, tag]));
-  };
-
   const clearActivePreset = () => {
     setTagsFilter([]);
     setSort("recommended");
@@ -275,24 +243,10 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
       <header className="rounded-md border border-border/34 bg-card/90 px-4 py-5 sm:px-6 sm:py-6">
         <div className="space-y-2">
           <h1 className="ui-title-display text-[clamp(2rem,4.4vw,3.2rem)] leading-[0.95]">{page.title}</h1>
-          {firstRichText?.type === "rich-text" && (
-            <p className="ui-subtle max-w-2xl text-sm sm:text-base">{firstRichText.content}</p>
-          )}
         </div>
       </header>
 
       <section className="space-y-4 rounded-md border border-border/34 bg-card/90 p-4 sm:p-5">
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge tone="accent">Показано: {filteredProducts.length}</Badge>
-          {searchValue.trim().length > 0 && <Badge tone="muted">Запрос: {searchValue.trim()}</Badge>}
-          {selectedCount > 0 && <Badge tone="muted">Фильтры: {selectedCount}</Badge>}
-          {activeMiniRailPreset.key !== "all" && <Badge tone="muted">Поток: {activeMiniRailPreset.label}</Badge>}
-          <Badge tone="muted">
-            {formatMoney(priceRange.min, currency)} - {formatMoney(priceRange.max, currency)}
-          </Badge>
-          {featuredCount > 0 && <Badge tone="muted">Featured: {featuredCount}</Badge>}
-        </div>
-
         {activePreset && (
           <div
             className="rounded-md border border-border/34 bg-card/72 px-3 py-3"
@@ -342,39 +296,6 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
           </label>
         </div>
 
-        <AnimatePresence initial={false}>
-          {showTagFilters && (
-            <motion.div
-              key="catalog-tags"
-              initial={{ opacity: 0, height: 0, y: -6 }}
-              animate={{ opacity: 1, height: "auto", y: 0 }}
-              exit={{ opacity: 0, height: 0, y: -6 }}
-              transition={transitionQuick}
-              className="overflow-hidden"
-            >
-              <div className="flex flex-wrap gap-1.5 pt-0.5">
-                {allTags.slice(0, 14).map((tag) => {
-                  const active = tagsFilter.includes(tag);
-                  return (
-                    <button
-                      key={tag}
-                      type="button"
-                      onClick={() => toggleTag(tag)}
-                      className={[
-                        "rounded-[6px] border px-2.5 py-1 text-[11px] transition-colors",
-                        active
-                          ? "border-accent/80 bg-accent text-white"
-                          : "border-border/45 bg-card/72 text-foreground/90 hover:border-border/70 hover:bg-card/86"
-                      ].join(" ")}
-                    >
-                      #{tag}
-                    </button>
-                  );
-                })}
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </section>
 
       <section className="sticky top-[4.2rem] z-20 rounded-md border border-border/34 bg-card/90 p-2 shadow-soft-subtle backdrop-blur-xl sm:top-[4.8rem] sm:p-2.5">
@@ -413,6 +334,10 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
       </section>
 
       {page.blocks.map((block) => {
+        if (block.type === "rich-text") {
+          return null;
+        }
+
         if (block.type !== "product-grid") {
           return renderNonProductGridBlock(block);
         }
@@ -425,10 +350,9 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
             transition={transitionQuick}
             className="space-y-4 rounded-md border border-border/34 bg-card/90 p-4 sm:p-5"
           >
-            {(block.title || block.subtitle) && (
+            {block.title && (
               <header className="space-y-1.5">
-                {block.title && <h2 className="ui-title text-[1.45rem] sm:text-[1.7rem]">{block.title}</h2>}
-                {block.subtitle && <p className="ui-subtle text-sm">{block.subtitle}</p>}
+                <h2 className="ui-title text-[1.45rem] sm:text-[1.7rem]">{block.title}</h2>
               </header>
             )}
 

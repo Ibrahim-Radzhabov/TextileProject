@@ -140,6 +140,7 @@ function renderHeroBlock(block: HeroBlock, revealContent?: React.ReactNode): JSX
             primaryCta={primaryCta}
             introText={block.introText}
             revealContent={revealContent}
+            desktopBreakout
           />
         </section>
       );

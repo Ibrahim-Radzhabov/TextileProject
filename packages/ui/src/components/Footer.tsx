@@ -1,4 +1,5 @@
 import * as React from "react";
+import { FooterTrustGlowCard } from "./FooterTrustGlowCard";
 
 export type FooterLink = {
   label: string;
@@ -49,13 +50,7 @@ export const Footer: React.FC<FooterProps> = ({
       <div className="space-y-8 px-1 py-8 sm:space-y-10 sm:py-10">
         <section className="grid gap-3 md:grid-cols-3 md:gap-4">
           {trustItems.map((item) => (
-            <article
-              key={item.title}
-              className="rounded-xl border border-border/40 bg-card/72 p-4 sm:p-5"
-            >
-              <p className="ui-label text-[11px] text-foreground">{item.title}</p>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.text}</p>
-            </article>
+            <FooterTrustGlowCard key={item.title} title={item.title} text={item.text} />
           ))}
         </section>
 

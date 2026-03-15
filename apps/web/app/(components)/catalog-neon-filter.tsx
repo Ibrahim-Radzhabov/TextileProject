@@ -34,6 +34,10 @@ export function CatalogNeonFilter({
       aria-disabled={disabled}
     >
       <div className={styles.frame}>
+        <span className={styles.glow} aria-hidden="true" />
+        <span className={styles.darkBorderBg} aria-hidden="true" />
+        <span className={styles.lightBorder} aria-hidden="true" />
+        <span className={styles.fineBorder} aria-hidden="true" />
         <span className={styles.orbs} aria-hidden="true" />
 
         <div className={styles.inner}>
@@ -57,6 +61,9 @@ export function CatalogNeonFilter({
             className={styles.input}
             disabled={disabled}
           />
+
+          <span className={styles.inputMask} aria-hidden="true" />
+          <span className={styles.accentMask} aria-hidden="true" />
 
           {value.trim().length > 0 && (
             <button
@@ -91,6 +98,8 @@ export function CatalogNeonFilter({
               />
             </svg>
           </button>
+
+          <span className={styles.filterBorder} aria-hidden="true" />
         </div>
       </div>
     </div>
