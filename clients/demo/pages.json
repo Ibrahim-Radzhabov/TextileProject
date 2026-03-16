@@ -42,7 +42,7 @@
             "ctaLabel": "Читать гид",
             "media": {
               "type": "image",
-              "src": "/demo/linen-blackout-drape.svg",
+              "src": "/demo/journal/journal-light-control.jpg",
               "alt": "Плотность ткани и контроль света"
             }
           },
@@ -54,7 +54,7 @@
             "ctaLabel": "Смотреть сценарий",
             "media": {
               "type": "image",
-              "src": "/demo/jacquard-day-night-set.svg",
+              "src": "/demo/satin_one.jpeg",
               "alt": "Day/Night комплект для окна"
             }
           },
@@ -66,7 +66,7 @@
             "ctaLabel": "Открыть подборку",
             "media": {
               "type": "image",
-              "src": "/demo/airy-voile-tulle.svg",
+              "src": "/demo/journal/journal-by-room.jpg",
               "alt": "Подбор тканей по типу комнаты"
             }
           },
@@ -78,7 +78,7 @@
             "ctaLabel": "Читать рекомендации",
             "media": {
               "type": "image",
-              "src": "/demo/ripple-fold-sheer.svg",
+              "src": "/demo/satin_two.jpeg",
               "alt": "Уход за шторами и тюлем"
             }
           }

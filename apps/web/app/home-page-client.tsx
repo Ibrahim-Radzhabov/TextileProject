@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import {
   Button,
@@ -237,52 +238,161 @@ function renderMediaFeatureBlock(block: MediaFeatureBlock): JSX.Element {
   );
 }
 
-function renderEditorialRailBlock(block: EditorialRailBlock): JSX.Element {
+function EditorialRailSection({ block }: { block: EditorialRailBlock }): JSX.Element {
+  const items = block.items;
+  const railRef = useRef<HTMLDivElement | null>(null);
+  const itemRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    const rail = railRef.current;
+    if (!rail) {
+      return undefined;
+    }
+
+    let frame = 0;
+
+    const syncActiveIndex = () => {
+      frame = 0;
+
+      const railRect = rail.getBoundingClientRect();
+      let closestIndex = 0;
+      let bestVisibleWidth = 0;
+
+      itemRefs.current.forEach((item, index) => {
+        if (!item) {
+          return;
+        }
+
+        const itemRect = item.getBoundingClientRect();
+        const visibleWidth = Math.max(
+          0,
+          Math.min(itemRect.right, railRect.right) - Math.max(itemRect.left, railRect.left)
+        );
+
+        if (visibleWidth > bestVisibleWidth) {
+          bestVisibleWidth = visibleWidth;
+          closestIndex = index;
+        }
+      });
+
+      setActiveIndex(closestIndex);
+    };
+
+    const handleScroll = () => {
+      if (frame) {
+        return;
+      }
+
+      frame = window.requestAnimationFrame(syncActiveIndex);
+    };
+
+    syncActiveIndex();
+    rail.addEventListener("scroll", handleScroll, { passive: true });
+
+    return () => {
+      rail.removeEventListener("scroll", handleScroll);
+      if (frame) {
+        window.cancelAnimationFrame(frame);
+      }
+    };
+  }, [items.length]);
+
+  const scrollToIndex = (index: number) => {
+    const safeIndex = Math.max(0, Math.min(index, items.length - 1));
+    setActiveIndex(safeIndex);
+
+    const rail = railRef.current;
+    const target = itemRefs.current[safeIndex];
+    if (!rail || !target) {
+      return;
+    }
+
+    const maxScrollLeft = rail.scrollWidth - rail.clientWidth;
+    const nextScrollLeft = Math.min(target.offsetLeft, maxScrollLeft);
+
+    rail.scrollTo({
+      left: nextScrollLeft,
+      behavior: "smooth",
+    });
+  };
+
   return (
-    <section key={block.id} className="space-y-4 rounded-xl border border-border/42 bg-card/74 p-4 sm:p-5">
-      <header className="flex items-end justify-between gap-3">
-        <div className="space-y-1.5">
-          <h2 className="ui-title text-2xl sm:text-3xl">{block.title}</h2>
+    <section className="overflow-hidden space-y-5 rounded-[1.35rem] border border-border/28 bg-[linear-gradient(180deg,rgb(var(--color-accent-soft)/0.24),rgb(var(--color-background)/0.94))] p-4 sm:p-5 lg:space-y-6 lg:p-6">
+      <header className="flex items-start justify-between gap-4">
+        <div className="space-y-2">
+          <h2 className="ui-title-serif text-[2rem] leading-[0.98] text-foreground sm:text-[2.5rem]">
+            {block.title}
+          </h2>
           {block.subtitle && (
-            <p className="ui-subtle max-w-3xl text-sm sm:text-base">{block.subtitle}</p>
+            <p className="ui-subtle max-w-2xl text-sm leading-relaxed sm:text-base">
+              {block.subtitle}
+            </p>
           )}
         </div>
-        <span className="ui-kicker hidden sm:inline">
-          {block.items.length} материалов
-        </span>
+
+        <div className="hidden items-center gap-2.5 sm:flex">
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
+            aria-label="Предыдущий материал"
+            disabled={activeIndex === 0}
+            onClick={() => scrollToIndex(activeIndex - 1)}
+          >
+            ‹
+          </button>
+          <span className="ui-kicker min-w-[3.5rem] text-center text-muted-foreground/78">
+            {items.length === 0 ? "0/0" : `${activeIndex + 1}/${items.length}`}
+          </span>
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
+            aria-label="Следующий материал"
+            disabled={activeIndex >= items.length - 1}
+            onClick={() => scrollToIndex(activeIndex + 1)}
+          >
+            ›
+          </button>
+        </div>
       </header>
 
-      <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-1 md:grid md:grid-cols-2 md:gap-5 md:overflow-visible xl:grid-cols-4">
-        {block.items.map((item) => (
+      <div
+        ref={railRef}
+        className="-mr-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-2 pr-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mr-5 sm:pr-5 lg:-mr-6 lg:gap-5 lg:pr-6"
+      >
+        {items.map((item, index) => (
           <article
             key={item.id}
-            className="group flex min-w-[78vw] snap-start flex-col gap-3 sm:min-w-[60vw] md:min-w-0"
+            className="group flex min-w-[78vw] snap-start flex-col gap-3 sm:min-w-[42vw] lg:min-w-[32rem] xl:min-w-[34rem]"
           >
             <a
+              ref={(node) => {
+                itemRefs.current[index] = node;
+              }}
               href={item.href}
-              className="relative block overflow-hidden rounded-[8px] border border-border/40 bg-card/55 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="relative block overflow-hidden rounded-[2px] bg-card/44 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               aria-label={item.title}
             >
               <HeroMedia
                 media={item.media}
                 title={item.title}
-                assetClassName="h-full min-h-[260px] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
-                defaultOverlayOpacity={0.08}
+                assetClassName="h-full min-h-[320px] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.016] sm:min-h-[420px] lg:min-h-[560px]"
+                defaultOverlayOpacity={0.04}
               />
             </a>
 
-            <div className="space-y-2">
-              <h3 className="ui-title-serif text-[1.28rem] leading-tight text-foreground">
+            <div className="space-y-2 pr-3">
+              <h3 className="ui-title-serif text-[1.18rem] leading-[1.08] text-foreground sm:text-[1.34rem]">
                 {item.title}
               </h3>
               {item.excerpt && (
-                <p className="ui-subtle line-clamp-3 text-sm leading-relaxed">
+                <p className="ui-subtle line-clamp-4 max-w-[38ch] text-sm leading-relaxed sm:text-[0.98rem]">
                   {item.excerpt}
                 </p>
               )}
               <a
                 href={item.href}
-                className="inline-flex items-center text-sm font-medium text-foreground/92 transition-colors hover:text-foreground"
+                className="inline-flex items-center gap-2 text-sm font-medium text-foreground/92 transition-colors hover:text-foreground"
               >
                 {item.ctaLabel ?? "Читать гид"}
               </a>
@@ -290,8 +400,38 @@ function renderEditorialRailBlock(block: EditorialRailBlock): JSX.Element {
           </article>
         ))}
       </div>
+
+      <div className="flex items-center justify-between gap-3 sm:hidden">
+        <span className="ui-kicker text-muted-foreground/78">
+          {items.length === 0 ? "0/0" : `${activeIndex + 1}/${items.length}`}
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
+            aria-label="Предыдущий материал"
+            disabled={activeIndex === 0}
+            onClick={() => scrollToIndex(activeIndex - 1)}
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
+            aria-label="Следующий материал"
+            disabled={activeIndex >= items.length - 1}
+            onClick={() => scrollToIndex(activeIndex + 1)}
+          >
+            ›
+          </button>
+        </div>
+      </div>
     </section>
   );
+}
+
+function renderEditorialRailBlock(block: EditorialRailBlock): JSX.Element {
+  return <EditorialRailSection key={block.id} block={block} />;
 }
 
 function renderRichTextBlock(block: RichTextBlock): JSX.Element {
