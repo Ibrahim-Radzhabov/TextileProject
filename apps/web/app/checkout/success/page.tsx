@@ -46,7 +46,7 @@ function SuccessContent() {
             />
           </svg>
         </motion.div>
-        <p className="ui-kicker mb-2">Checkout complete</p>
+        <p className="ui-kicker mb-2">Order confirmed</p>
         <h1 className="ui-title mb-2 text-[1.6rem] leading-tight sm:text-[1.9rem]">Заказ оформлен</h1>
         <p className="mx-auto mb-4 max-w-[34ch] text-sm text-muted-foreground sm:text-[15px]">
           Мы отправили подтверждение на email. Дальше можно вернуться к подбору тканей и продолжить комплектование.
@@ -66,7 +66,7 @@ function SuccessContent() {
           </Link>
           <Link
             href="/"
-            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-accent/70 bg-accent px-5 text-sm font-medium text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="inline-flex h-11 items-center justify-center rounded-[10px] border border-border/55 bg-card/70 px-5 text-sm font-medium text-foreground transition-colors hover:border-border/78 hover:bg-card/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
             На главную
           </Link>

@@ -74,7 +74,10 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
           >
             <div className="relative shrink-0 overflow-hidden border-b border-border/40 px-4 py-4 sm:px-5">
               <div className="relative z-10 flex items-center justify-between gap-3">
-                <h2 className="ui-title-display text-[2rem] leading-none text-foreground">Ваш заказ</h2>
+                <div className="space-y-1">
+                  <p className="ui-kicker text-[10px] text-muted-foreground/76">Корзина</p>
+                  <h2 className="ui-title-display text-[2rem] leading-none text-foreground">Ваш заказ</h2>
+                </div>
                 <button
                   type="button"
                   onClick={onClose}
@@ -106,22 +109,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
               )}
               {!hasItems && !isUpdating && (
-                <Surface tone="subtle" className="relative overflow-hidden px-5 py-9 text-center">
+                <Surface tone="subtle" className="relative overflow-hidden rounded-[20px] px-5 py-9 text-center">
                   <div className="relative z-10 mx-auto flex max-w-[250px] flex-col items-center gap-3">
                     <div className="flex h-14 w-14 items-center justify-center rounded-xl border border-border/45 bg-card/55">
-                      <span className="ui-kicker">
-                        Cart
-                      </span>
+                      <span className="ui-kicker">Cart</span>
                     </div>
-                    <p className="text-sm font-medium">Корзина пуста</p>
+                    <p className="text-sm font-medium">Корзина пока пуста</p>
                     <p className="text-xs leading-relaxed text-muted-foreground">
-                      Добавьте товары из каталога. Здесь появятся позиции, сумма и оформление.
+                      Добавьте ткани или готовые комплекты из каталога. Здесь появятся позиции, итог и переход к оформлению.
                     </p>
                   </div>
                 </Surface>
               )}
               {hasItems && cart && (
-                <div className="space-y-2.5">
+                <div className="space-y-3">
                   <AnimatePresence mode="sync">
                     {cart.items.map((item, index) => (
                       <motion.div
@@ -133,33 +134,33 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                         exit="exit"
                         layout
                       >
-                        <Surface tone="subtle" className="flex items-center gap-3 px-3 py-3 sm:px-3.5">
+                        <Surface tone="subtle" className="flex items-start gap-3 rounded-[16px] px-3 py-3.5 sm:px-3.5">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img
                             src={item.productSnapshot.media[0]?.url}
                             alt={item.productSnapshot.media[0]?.alt ?? item.productSnapshot.name}
-                            className="h-16 w-16 shrink-0 rounded-md object-cover"
+                            className="h-[4.75rem] w-[4.25rem] shrink-0 rounded-[12px] object-cover"
                           />
-                          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-                            <p className="truncate text-sm font-medium tracking-tight text-foreground">
+                          <div className="flex min-w-0 flex-1 flex-col gap-1">
+                            <p className="line-clamp-2 text-sm font-medium leading-snug tracking-tight text-foreground">
                               {item.productSnapshot.name}
                             </p>
-                            <p className="text-xs text-muted-foreground">
+                            <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground/78">
                               {item.quantity} шт.
                             </p>
-                            <div className="mt-1 flex items-center gap-1.5 text-[11px]">
+                            <div className="mt-0.5 flex items-center gap-1.5 text-[11px]">
                               <button
                                 type="button"
-                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+                                className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border/55 text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
                                 onClick={() => onDecrement?.(item.productId)}
                                 disabled={isUpdating}
                               >
                                 -
                               </button>
-                              <span className="min-w-4 text-center text-muted-foreground">{item.quantity}</span>
+                              <span className="min-w-5 text-center text-muted-foreground">{item.quantity}</span>
                               <button
                                 type="button"
-                                className="rounded-md border border-border/60 px-1.5 py-0.5 text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
+                                className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-border/55 text-muted-foreground transition-colors hover:border-border/80 hover:text-foreground"
                                 onClick={() => onIncrement?.(item.productId)}
                                 disabled={isUpdating}
                               >
@@ -175,7 +176,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                               </button>
                             </div>
                           </div>
-                          <div className="shrink-0 text-base font-semibold tracking-tight text-foreground">
+                          <div className="shrink-0 pt-0.5 text-[1rem] font-semibold tracking-tight text-foreground">
                             {formatMoney(item.lineTotal.amount, item.lineTotal.currency)}
                           </div>
                         </Surface>
@@ -187,7 +188,7 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
             </div>
             <div className="shrink-0 border-t border-border/40 px-4 py-4 sm:px-5 sm:py-5">
               {cart && (
-                <div className="mb-4 space-y-2.5 rounded-md border border-border/38 bg-card/70 px-3.5 py-3">
+                <div className="mb-4 space-y-2.5 rounded-[16px] border border-border/38 bg-card/70 px-3.5 py-3.5">
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                     <span>Товаров</span>
                     <span>{itemsCount}</span>
@@ -199,8 +200,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                     </div>
                   )}
                   {grandTotal && (
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-muted-foreground">Итого:</span>
+                    <div className="flex items-end justify-between gap-3 pt-1 text-sm">
+                      <span className="text-muted-foreground">Итого</span>
                       <motion.span
                         key={grandTotal.amount}
                         initial={{ opacity: 0, y: 4 }}
@@ -219,16 +220,16 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 ripple
                 disabled={!hasItems || isUpdating}
                 onClick={onCheckout}
-                className="h-11 rounded-[6px] bg-accent text-white hover:bg-accent/92"
+                className="h-11 rounded-[8px] bg-accent text-white hover:bg-accent/92"
               >
                 {isUpdating ? "Обновление…" : "Оформить заказ"}
               </Button>
               <button
                 type="button"
                 onClick={onClose}
-                className="mt-2.5 h-10 w-full rounded-[6px] border border-accent/70 bg-accent px-3 text-sm font-medium text-white transition-colors hover:bg-accent/90"
+                className="mt-2.5 h-10 w-full rounded-[8px] border border-border/52 bg-card/72 px-3 text-sm font-medium text-foreground transition-colors hover:border-border/72 hover:bg-card/92"
               >
-                Перейти в корзину
+                Вернуться к покупкам
               </button>
             </div>
           </motion.aside>

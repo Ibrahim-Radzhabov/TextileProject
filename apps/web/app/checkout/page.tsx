@@ -105,18 +105,19 @@ export default function CheckoutPage() {
   const isSubmitDisabled = submitting || !hasItems || isPricing;
 
   return (
-    <div className="grid gap-6 pb-28 sm:gap-8 sm:pb-32 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:pb-10">
+    <div className="grid gap-6 pb-28 sm:gap-8 sm:pb-32 md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] md:pb-10">
       <motion.form
         id="checkout-form"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-6"
+        className="space-y-5 md:space-y-6"
       >
-        <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
+        <Surface tone="elevated" className="relative overflow-hidden rounded-[20px] px-5 py-6 sm:px-6">
           <div className="relative z-10 space-y-3">
             <div>
+              <p className="ui-kicker text-[10px] text-muted-foreground/76">Checkout</p>
               <h1 className="ui-title text-2xl sm:text-3xl">Оформление заказа</h1>
               <p className="ui-subtle mt-1 text-sm">
                 Контакты и адрес. В корзине {itemCount} поз.
@@ -125,7 +126,7 @@ export default function CheckoutPage() {
             <div className="flex flex-wrap gap-2">
               <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Безопасная оплата</span>
               <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Поддержка магазина</span>
-              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Fast checkout</span>
+              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Подтверждение на email</span>
             </div>
           </div>
         </Surface>
@@ -141,7 +142,7 @@ export default function CheckoutPage() {
         )}
 
         {!hasItems && (
-          <Surface tone="subtle" className="space-y-4 px-5 py-5">
+          <Surface tone="subtle" className="space-y-4 rounded-[18px] px-5 py-5">
             <div className="space-y-1">
               <h2 className="text-sm font-semibold tracking-tight">Корзина пуста</h2>
               <p className="text-sm text-muted-foreground">
@@ -155,7 +156,7 @@ export default function CheckoutPage() {
         )}
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-          <Surface tone="subtle" className="space-y-4 rounded-xl px-5 py-5">
+          <Surface tone="subtle" className="space-y-4 rounded-[18px] px-5 py-5">
             <p className="ui-kicker">Контакт</p>
             <div className="space-y-4">
               <div className="space-y-1">
@@ -166,7 +167,7 @@ export default function CheckoutPage() {
                   id="checkout-email"
                   type="email"
                   autoComplete="email"
-                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
+                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("email")}
                 />
                 {errors.email && <p className="text-xs text-red-400">{errors.email.message}</p>}
@@ -179,7 +180,7 @@ export default function CheckoutPage() {
                   id="checkout-name"
                   type="text"
                   autoComplete="name"
-                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
+                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("name")}
                 />
                 {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
@@ -189,7 +190,7 @@ export default function CheckoutPage() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Surface tone="subtle" className="space-y-4 rounded-xl px-5 py-5">
+          <Surface tone="subtle" className="space-y-4 rounded-[18px] px-5 py-5">
             <p className="ui-kicker">Адрес доставки</p>
             <div className="space-y-4">
               <div className="space-y-1">
@@ -200,7 +201,7 @@ export default function CheckoutPage() {
                   id="checkout-address-line1"
                   type="text"
                   autoComplete="address-line1"
-                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
+                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("addressLine1")}
                 />
                 {errors.addressLine1 && <p className="text-xs text-red-400">{errors.addressLine1.message}</p>}
@@ -214,7 +215,7 @@ export default function CheckoutPage() {
                     id="checkout-city"
                     type="text"
                     autoComplete="address-level2"
-                    className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
+                    className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                     {...register("addressCity")}
                   />
                   {errors.addressCity && <p className="text-xs text-red-400">{errors.addressCity.message}</p>}
@@ -227,7 +228,7 @@ export default function CheckoutPage() {
                     id="checkout-postal-code"
                     type="text"
                     autoComplete="postal-code"
-                    className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
+                    className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                     {...register("postalCode")}
                   />
                   {errors.postalCode && <p className="text-xs text-red-400">{errors.postalCode.message}</p>}
@@ -241,7 +242,7 @@ export default function CheckoutPage() {
                   id="checkout-country"
                   type="text"
                   autoComplete="country-name"
-                  className="h-10 w-full rounded-[10px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
+                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
                   {...register("addressCountry")}
                 />
                 {errors.addressCountry && <p className="text-xs text-red-400">{errors.addressCountry.message}</p>}
@@ -262,23 +263,26 @@ export default function CheckoutPage() {
         </Button>
       </motion.form>
 
-      <motion.div
+      <motion.aside
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.06 }}
       >
-        <Surface tone="subtle" className="h-fit space-y-4 rounded-xl px-4 py-4 sm:px-5 md:sticky md:top-24">
-          <div className="flex items-center justify-between">
-            <span className="ui-kicker">Итого</span>
-            <span className="text-sm font-semibold">{totalFormatted}</span>
+        <Surface tone="subtle" className="h-fit space-y-4 rounded-[20px] px-4 py-4 sm:px-5 md:sticky md:top-24">
+          <div className="space-y-1 border-b border-border/35 pb-3">
+            <p className="ui-kicker">Ваш заказ</p>
+            <div className="flex items-end justify-between gap-3">
+              <span className="text-sm text-muted-foreground">Итого к оплате</span>
+              <span className="text-[1.45rem] font-semibold leading-none tracking-tight">{totalFormatted}</span>
+            </div>
           </div>
 
-          <div className="max-h-56 space-y-2 overflow-auto pr-1 md:max-h-none md:overflow-visible md:pr-0">
+          <div className="max-h-56 space-y-2.5 overflow-auto pr-1 md:max-h-none md:overflow-visible md:pr-0">
             {cart?.items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between gap-2 rounded-[10px] border border-border/45 px-3 py-2">
+              <div key={item.id} className="flex items-center justify-between gap-3 rounded-[14px] border border-border/38 px-3 py-2.5">
                 <div className="min-w-0">
-                  <p className="truncate text-xs font-medium">{item.productSnapshot.name}</p>
-                  <p className="text-[11px] text-muted-foreground">x{item.quantity}</p>
+                  <p className="truncate text-sm font-medium tracking-tight">{item.productSnapshot.name}</p>
+                  <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground/78">x{item.quantity}</p>
                 </div>
                 <p className="text-xs text-muted-foreground">
                   {formatMoney(item.lineTotal.amount, item.lineTotal.currency)}
@@ -295,16 +299,20 @@ export default function CheckoutPage() {
             )}
           </div>
 
-          <div className="rounded-[10px] border border-border/45 bg-card/45 px-3 py-2 text-xs text-muted-foreground">
-            Оплата безопасна. Подтверждение и трекинг придут на email.
+          <div className="space-y-2 rounded-[14px] border border-border/40 bg-card/45 px-3.5 py-3 text-xs text-muted-foreground">
+            <div className="flex items-center justify-between">
+              <span>Товаров</span>
+              <span className="text-foreground/88">{itemCount}</span>
+            </div>
+            <p>Оплата безопасна. Подтверждение и трекинг придут на email.</p>
           </div>
         </Surface>
-      </motion.div>
+      </motion.aside>
 
       <div className="fixed inset-x-3 bottom-3 z-40 md:hidden">
         <Surface
           tone="elevated"
-          className="rounded-xl border border-border/45 bg-card/90 px-3 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_14px_36px_rgba(0,0,0,0.2)] backdrop-blur-sm"
+          className="rounded-[18px] border border-border/45 bg-card/90 px-3 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_14px_36px_rgba(0,0,0,0.2)] backdrop-blur-sm"
         >
           <div className="mb-2 flex items-center justify-between">
             <span className="ui-kicker">Итого</span>
