@@ -338,18 +338,18 @@ export function ProductPageClient({
   };
 
   return (
-    <div className="space-y-10 pb-[calc(10rem+env(safe-area-inset-bottom))] md:pb-10">
+    <div className="space-y-8 pb-[calc(10.75rem+env(safe-area-inset-bottom))] md:space-y-10 md:pb-10">
       <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.58fr)_minmax(18rem,0.54fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.72fr)_minmax(19rem,0.48fr)]">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="space-y-5"
+          className="space-y-4 md:space-y-5"
         >
           <ProductGallery media={galleryMedia} mainImageLayoutId={sharedMediaLayoutId} />
 
           {product.description && (
-            <Surface tone="subtle" className="space-y-2 rounded-xl px-5 py-6 sm:px-6">
+            <Surface tone="subtle" className="hidden space-y-2 rounded-xl px-5 py-6 sm:px-6 md:block">
               <p className="ui-kicker">Описание</p>
               <p className="ui-subtle text-sm leading-relaxed">{product.description}</p>
             </Surface>
@@ -360,11 +360,11 @@ export function ProductPageClient({
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, delay: 0.04 }}
-          className="space-y-6 md:sticky md:top-24 md:w-full md:max-w-[26rem] md:justify-self-end md:self-start xl:max-w-[24.5rem]"
+          className="space-y-5 md:space-y-6 md:sticky md:top-24 md:w-full md:max-w-[26rem] md:justify-self-end md:self-start xl:max-w-[24.5rem]"
         >
-          <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
+          <Surface tone="elevated" className="relative overflow-hidden rounded-[20px] px-4 py-5 sm:px-6 sm:py-6 md:rounded-xl">
             <div className="relative z-10 space-y-5">
-              <header className="space-y-4 pb-2">
+              <header className="space-y-3.5 pb-1 md:space-y-4 md:pb-2">
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-2">
                     {sharedTitleLayoutId ? (
@@ -372,12 +372,12 @@ export function ProductPageClient({
                         layoutId={sharedTitleLayoutId}
                         transition={springSharedElement}
                         id={productTitleId}
-                        className="ui-title-serif text-3xl sm:text-4xl"
+                        className="ui-title-serif text-[2rem] leading-none sm:text-4xl"
                       >
                         {product.name}
                       </motion.h1>
                     ) : (
-                      <h1 id={productTitleId} className="ui-title-serif text-3xl sm:text-4xl">{product.name}</h1>
+                      <h1 id={productTitleId} className="ui-title-serif text-[2rem] leading-none sm:text-4xl">{product.name}</h1>
                     )}
                     {product.shortDescription && (
                       <p className="ui-subtle text-sm leading-relaxed sm:text-base">{product.shortDescription}</p>
@@ -440,7 +440,7 @@ export function ProductPageClient({
                             type="button"
                             onClick={() => setSelectedColorId(option.id)}
                             className={[
-                              "inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors",
+                              "inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors md:h-9 md:w-9",
                               isActive
                                 ? "border-foreground/38 bg-card/90"
                                 : "border-border/35 bg-card/52 hover:border-border/62"
@@ -450,7 +450,7 @@ export function ProductPageClient({
                           >
                             <span
                               className={[
-                                "h-4 w-4 rounded-full border border-border/55",
+                                "h-[18px] w-[18px] rounded-full border border-border/55 md:h-4 md:w-4",
                                 toneClass
                               ].join(" ")}
                               aria-hidden="true"
@@ -606,15 +606,18 @@ export function ProductPageClient({
       </div>
 
       <motion.div
-        className="fixed inset-x-3 bottom-[calc(4.4rem+env(safe-area-inset-bottom))] z-40 rounded-[12px] border border-border/48 bg-card/94 p-2.5 shadow-soft backdrop-blur-xl md:hidden"
+        className="fixed inset-x-3 bottom-[calc(4.55rem+env(safe-area-inset-bottom))] z-40 rounded-[16px] border border-border/48 bg-card/94 px-3 py-3 shadow-soft backdrop-blur-xl md:hidden"
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.22, delay: 0.08 }}
       >
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           <div className="min-w-0">
+            <p className="truncate text-[11px] uppercase tracking-[0.16em] text-muted-foreground/80">
+              {product.name}
+            </p>
             <p className="ui-kicker">Итого</p>
-            <p className="text-[1rem] font-semibold tracking-tight text-foreground">{priceFormatted}</p>
+            <p className="text-[1.05rem] font-semibold tracking-tight text-foreground">{priceFormatted}</p>
             {comparePriceFormatted && (
               <p className="text-[11px] text-muted-foreground line-through">{comparePriceFormatted}</p>
             )}
@@ -623,7 +626,7 @@ export function ProductPageClient({
             fullWidth
             size="sm"
             ripple
-            className="h-11 flex-1 rounded-[8px]"
+            className="h-12 flex-1 rounded-[10px] px-4"
             aria-label={`Добавить ${product.name} в корзину`}
             aria-busy={isAdding || isPricing}
             onClick={() => {

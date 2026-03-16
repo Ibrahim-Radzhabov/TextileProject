@@ -17,6 +17,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   const [activeId, setActiveId] = React.useState<string | null>(media[0]?.id ?? null);
   const thumbnailRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
   const active = media.find((m) => m.id === activeId) ?? media[0];
+  const activeIndex = active ? media.findIndex((item) => item.id === active.id) : -1;
   const activeLayoutId = active?.id === media[0]?.id ? mainImageLayoutId : undefined;
   const galleryLabel = "Галерея товара";
   const panelId = `product-gallery-panel-${media[0]?.id ?? "main"}`;
@@ -164,30 +165,40 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
 
       <div className="grid gap-3 md:hidden">
         <Surface
-          className="relative overflow-hidden rounded-xl border border-border/45 bg-card/82"
+          className="relative overflow-hidden rounded-[20px] border border-border/45 bg-card/84 shadow-soft"
           role="tabpanel"
           id={panelId}
           aria-labelledby={activeTabId}
           aria-label={galleryLabel}
         >
-          {active && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <motion.img
-              key={active.id}
-              layoutId={activeLayoutId}
-              src={active.url}
-              alt={active.alt}
-              className="h-full w-full max-h-[560px] object-cover"
-              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0.6, scale: 1.02 }}
-              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-              transition={activeLayoutId ? springSharedElement : transitionQuick}
-            />
-          )}
+          <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px]">
+            {active && (
+              // eslint-disable-next-line @next/next/no-img-element
+              <motion.img
+                key={active.id}
+                layoutId={activeLayoutId}
+                src={active.url}
+                alt={active.alt}
+                className="absolute inset-0 h-full w-full object-cover"
+                initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0.6, scale: 1.02 }}
+                animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                transition={activeLayoutId ? springSharedElement : transitionQuick}
+              />
+            )}
+
+            {media.length > 1 && activeIndex >= 0 ? (
+              <div className="pointer-events-none absolute inset-x-0 top-0 flex items-start justify-between p-3">
+                <span className="rounded-full border border-border/40 bg-card/82 px-2.5 py-1 text-[11px] font-medium tracking-[0.18em] text-foreground/84 backdrop-blur-md">
+                  {String(activeIndex + 1).padStart(2, "0")} / {String(media.length).padStart(2, "0")}
+                </span>
+              </div>
+            ) : null}
+          </div>
         </Surface>
 
         {media.length > 1 && (
           <div
-            className="flex gap-2 overflow-x-auto pb-1"
+            className="flex snap-x snap-mandatory gap-2.5 overflow-x-auto pb-1.5"
             role="tablist"
             aria-label={`${galleryLabel}: превью`}
           >
@@ -209,10 +220,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
                 aria-label={`Превью ${index + 1}: ${item.alt}`}
                 tabIndex={active?.id === item.id ? 0 : -1}
                 className={[
-                  "relative h-16 w-20 flex-none overflow-hidden rounded-[8px] border transition-all",
+                  "relative h-20 w-24 flex-none snap-start overflow-hidden rounded-[12px] border transition-all duration-200",
                   active?.id === item.id
-                    ? "border-border/80 bg-card/84"
-                    : "border-border/42 hover:border-border/75",
+                    ? "translate-y-[-1px] border-foreground/30 bg-card/90 shadow-soft"
+                    : "border-border/38 bg-card/62 hover:border-border/72",
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 ]
                   .filter(Boolean)
