@@ -363,30 +363,28 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ ...transitionQuick, delay: 0.01 }}
-                  className="rounded-[8px] border border-border/30 bg-card/92 p-3"
+                  className="rounded-[14px] border border-border/30 bg-card/94 p-3.5 shadow-soft-subtle"
                 >
-                  <div className="flex items-center gap-3.5">
+                  <div className="flex items-center gap-4">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={product.media[0]?.url}
                       alt={product.media[0]?.alt ?? product.name}
-                      className="h-[5.5rem] w-[5.5rem] rounded-[6px] object-cover"
+                      className="h-[6rem] w-[6rem] rounded-[10px] object-cover"
                     />
-                    <div className="min-w-0 flex-1 space-y-0.5">
+                    <div className="min-w-0 flex-1 space-y-1">
                       <a
                         href={`/product/${encodeURIComponent(product.slug)}`}
-                        className="ui-title line-clamp-2 text-[1rem]"
+                        className="ui-title-serif line-clamp-2 text-[1.12rem] leading-[1.05] text-foreground"
                       >
                         {product.name}
                       </a>
                       {product.shortDescription && (
-                        <p className="line-clamp-2 text-xs text-muted-foreground/88">
+                        <p className="line-clamp-2 text-[0.82rem] leading-relaxed text-muted-foreground/78">
                           {product.shortDescription}
                         </p>
                       )}
-                    </div>
-                    <div className="text-right">
-                      <p className="text-[1.02rem] font-semibold text-foreground">
+                      <p className="text-[1rem] font-semibold tracking-tight text-foreground">
                         {formatMoney(product.price.amount, product.price.currency)}
                       </p>
                     </div>
@@ -396,7 +394,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
             </div>
 
             <div className="hidden sm:block">
-              <div className="grid auto-rows-fr grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
+              <div className="grid auto-rows-fr grid-cols-2 gap-x-4 gap-y-6 lg:grid-cols-3 lg:gap-x-5 lg:gap-y-8 xl:grid-cols-4 xl:gap-x-6 xl:gap-y-9">
                 {filteredProducts.map((product) => (
                   <ProductCard
                     key={product.id}

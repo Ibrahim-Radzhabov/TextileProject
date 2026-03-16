@@ -60,7 +60,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
   return (
     <motion.div
-      whileHover={prefersReducedMotion ? undefined : isEditorial ? undefined : { y: -2 }}
+      whileHover={prefersReducedMotion ? undefined : isEditorial ? { y: -3 } : { y: -2 }}
       transition={springSnappy}
       className="group h-full"
       data-testid={`product-card-${product.slug}`}
@@ -98,7 +98,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div
             className={[
               "aspect-[4/5] overflow-hidden",
-              isEditorial ? "rounded-[6px] bg-card/32" : "bg-muted/20"
+              isEditorial
+                ? "rounded-[6px] border border-border/18 bg-card/20 shadow-soft-subtle"
+                : "bg-muted/20"
             ].join(" ")}
           >
             {primaryImage && (
@@ -112,7 +114,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     className={[
                       "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
                       canCrossfade
-                        ? "opacity-0 scale-[1.035] group-hover:scale-100 group-hover:opacity-100"
+                        ? "opacity-0 scale-[1.028] group-hover:scale-100 group-hover:opacity-100"
                         : "opacity-0"
                     ].join(" ")}
                   />
@@ -126,8 +128,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     className={[
                       "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
                       canCrossfade
-                        ? "opacity-100 group-hover:scale-[1.02] group-hover:opacity-0"
-                        : "opacity-100 group-hover:scale-[1.03]"
+                        ? "opacity-100 group-hover:scale-[1.018] group-hover:opacity-0"
+                        : "opacity-100 group-hover:scale-[1.018]"
                     ].join(" ")}
                     transition={springSharedElement}
                   />
@@ -139,8 +141,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     className={[
                       "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
                       canCrossfade
-                        ? "opacity-100 group-hover:scale-[1.02] group-hover:opacity-0"
-                        : "opacity-100 group-hover:scale-[1.03]"
+                        ? "opacity-100 group-hover:scale-[1.018] group-hover:opacity-0"
+                        : "opacity-100 group-hover:scale-[1.018]"
                     ].join(" ")}
                   />
                 )}
@@ -152,7 +154,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div
           className={[
             "relative z-20 flex flex-1 flex-col",
-            isEditorial ? "gap-3 px-0 pb-1 pt-5" : "gap-2.5 p-3.5 sm:p-3.5"
+            isEditorial ? "gap-2.5 px-0 pb-1 pt-4.5" : "gap-2.5 p-3.5 sm:p-3.5"
           ].join(" ")}
         >
           <div className={isEditorial ? "space-y-2" : isNamePrice ? "space-y-1" : "space-y-1.5"}>
@@ -168,7 +170,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 className={[
                   "line-clamp-2",
                   isEditorial
-                    ? "ui-title-serif text-[1.38rem] leading-[1.02] text-foreground"
+                    ? "ui-title-serif text-[1.3rem] leading-[1.04] text-foreground"
                     : isNamePrice
                       ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
                       : "ui-title text-[1.04rem]"
@@ -183,7 +185,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 className={[
                   "line-clamp-2",
                   isEditorial
-                    ? "ui-title-serif text-[1.38rem] leading-[1.02] text-foreground"
+                    ? "ui-title-serif text-[1.3rem] leading-[1.04] text-foreground"
                     : isNamePrice
                       ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
                       : "ui-title text-[1.04rem]"
@@ -197,7 +199,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 className={[
                   "text-muted-foreground/86",
                   isEditorial
-                    ? "line-clamp-2 text-[0.89rem] leading-relaxed"
+                    ? "line-clamp-2 text-[0.88rem] leading-relaxed text-muted-foreground/78"
                     : "line-clamp-2 text-[0.88rem] leading-relaxed"
                 ].join(" ")}
               >
@@ -209,7 +211,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           <div
             className={[
               "mt-auto flex items-end justify-between gap-2",
-              isEditorial || isNamePrice ? "border-t border-border/20 pt-3" : "pt-1.5"
+              isEditorial || isNamePrice ? "border-t border-border/18 pt-3" : "pt-1.5"
             ].join(" ")}
           >
             <div className="space-y-0.5">
@@ -218,7 +220,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 id={priceId}
                 className={[
                   "font-semibold text-foreground",
-                  isEditorial || isNamePrice ? "text-[1.2rem] tracking-tight" : "text-[1.12rem]"
+                  isEditorial || isNamePrice ? "text-[1.14rem] tracking-tight" : "text-[1.12rem]"
                 ].join(" ")}
               >
                 {formatMoney(product.price.amount, product.price.currency)}
@@ -236,11 +238,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               asChild
               size="sm"
               fullWidth
-              variant="primary"
+              variant={isEditorial ? "ghost" : "primary"}
               ripple
               className={[
-                "relative z-20 rounded-[6px] border-border/45 bg-accent text-white transition-[transform,box-shadow,background-color] duration-300 hover:bg-accent/92 hover:shadow-soft-subtle",
-                isEditorial ? "h-10 text-[0.87rem] sm:h-9" : "h-10 sm:h-9"
+                "relative z-20 rounded-[6px] border-border/45 transition-[transform,box-shadow,background-color,border-color,color] duration-300",
+                isEditorial
+                  ? "h-10 border-border/36 bg-card/66 text-foreground hover:border-border/62 hover:bg-card/92 hover:text-foreground sm:h-9 sm:opacity-0 sm:translate-y-1 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+                  : "h-10 bg-accent text-white hover:bg-accent/92 hover:shadow-soft-subtle sm:h-9"
               ].join(" ")}
               data-testid={`product-details-${product.slug}`}
             >

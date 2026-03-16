@@ -20,21 +20,24 @@
 
 .button[data-placement="overlay"] {
   position: absolute;
-  top: 0;
-  right: 0;
-  border: none;
-  background: transparent;
-  color: rgb(var(--color-muted-foreground) / 0.92);
+  top: 12px;
+  right: 12px;
+  border: 1px solid rgb(var(--color-border) / 0.4);
+  background: rgb(var(--color-background) / 0.72);
+  color: rgb(var(--color-muted-foreground) / 0.88);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 28px rgb(15 12 8 / 0.12);
 }
 
 .button[data-placement="overlay"]:hover {
-  background: transparent;
+  border-color: rgb(var(--color-border) / 0.62);
+  background: rgb(var(--color-card) / 0.88);
   color: rgb(var(--color-foreground) / 0.95);
 }
 
 .button[data-placement="overlay"][data-active="true"] {
-  border: none;
-  background: transparent;
+  border-color: rgb(var(--color-accent) / 0.52);
+  background: rgb(var(--color-card) / 0.92);
   color: rgb(var(--color-foreground) / 1);
 }
 
@@ -45,8 +48,8 @@
 }
 
 .button[data-placement="overlay"]:hover {
-  border: none;
-  background: transparent;
+  border-color: rgb(var(--color-border) / 0.62);
+  background: rgb(var(--color-card) / 0.88);
   color: rgb(var(--color-foreground) / 0.95);
 }
 
@@ -170,8 +173,8 @@
   }
 
   .button[data-placement="overlay"] {
-    top: 0;
-    right: 0;
+    top: 14px;
+    right: 14px;
   }
 
   .icon {
