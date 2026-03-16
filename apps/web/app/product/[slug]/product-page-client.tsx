@@ -339,7 +339,7 @@ export function ProductPageClient({
 
   return (
     <div className="space-y-10 pb-[calc(10rem+env(safe-area-inset-bottom))] md:pb-10">
-      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.46fr)_minmax(18rem,0.66fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.58fr)_minmax(19rem,0.56fr)]">
+      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.58fr)_minmax(18rem,0.54fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.72fr)_minmax(19rem,0.48fr)]">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -364,7 +364,7 @@ export function ProductPageClient({
         >
           <Surface tone="elevated" className="relative overflow-hidden rounded-xl px-5 py-6 sm:px-6">
             <div className="relative z-10 space-y-5">
-              <header className="space-y-4 pb-1">
+              <header className="space-y-4 pb-2">
                 <div className="flex items-start justify-between gap-3">
                   <div className="space-y-2">
                     {sharedTitleLayoutId ? (
@@ -417,12 +417,12 @@ export function ProductPageClient({
               </header>
 
               <section
-                className="space-y-3 rounded-xl border border-border/45 bg-card/58 px-4 py-4"
+                className="space-y-4 border-t border-border/42 pt-4"
                 role="region"
                 aria-label="Покупка товара"
               >
                 {resolvedColorOptions.length > 0 && (
-                  <div className="space-y-2.5">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between gap-2">
                       <p className="ui-kicker">Цвет</p>
                       {selectedColorOption && (
@@ -440,10 +440,10 @@ export function ProductPageClient({
                             type="button"
                             onClick={() => setSelectedColorId(option.id)}
                             className={[
-                              "inline-flex h-8 w-8 items-center justify-center rounded-full border transition-colors",
+                              "inline-flex h-9 w-9 items-center justify-center rounded-full border transition-colors",
                               isActive
-                                ? "border-border/90 bg-card/90"
-                                : "border-border/45 bg-card/65 hover:border-border/70"
+                                ? "border-foreground/38 bg-card/90"
+                                : "border-border/35 bg-card/52 hover:border-border/62"
                             ].join(" ")}
                             aria-pressed={isActive}
                             aria-label={`Выбрать цвет ${option.label}`}
@@ -463,7 +463,7 @@ export function ProductPageClient({
                 )}
 
                 {resolvedColorOptions.length === 0 && swatches.length > 0 && (
-                  <div className="space-y-2">
+                  <div className="space-y-2.5">
                     <p className="ui-kicker">Оттенки</p>
                     <div className="flex flex-wrap gap-2">
                       {swatches.map((swatch) => (
@@ -501,11 +501,11 @@ export function ProductPageClient({
                 </motion.div>
               </section>
 
-              <section className="space-y-2 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
+              <section className="space-y-2 border-t border-border/42 pt-4">
                 <p className="ui-kicker">Сервис</p>
                 <a
                   href={sampleRequestActionHref}
-                  className="block text-sm underline decoration-border/70 underline-offset-4 transition-colors hover:text-foreground/80"
+                  className="inline-flex items-center gap-2 text-sm underline decoration-border/70 underline-offset-4 transition-colors hover:text-foreground/80"
                 >
                   Запросить образцы ткани
                 </a>
@@ -515,7 +515,7 @@ export function ProductPageClient({
               </section>
 
               {leadSource && (
-                <section className="space-y-2 rounded-xl border border-border/45 bg-card/52 px-4 py-4">
+                <section className="space-y-2 border-t border-border/42 pt-4">
                   <p className="ui-kicker">Описание</p>
                   <p className="ui-subtle text-sm leading-relaxed">
                     {isLeadExpanded ? leadSource : leadPreview}
@@ -533,15 +533,15 @@ export function ProductPageClient({
               )}
 
               <section
-                className="overflow-hidden rounded-xl border border-border/45 bg-card/52 [&_summary::-webkit-details-marker]:hidden"
+                className="overflow-hidden border-t border-border/42 pt-1 [&_summary::-webkit-details-marker]:hidden"
                 aria-label="Дополнительная информация"
               >
-                <details open className="border-b border-border/45">
-                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                <details open className="border-b border-border/38">
+                  <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Детали изделия
                     <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
                   </summary>
-                  <div className="space-y-2 px-4 pb-4">
+                  <div className="space-y-2 pb-4">
                     {metadataEntries.length > 0 ? (
                       metadataEntries.map((entry) => (
                         <div key={entry.key} className="flex items-start justify-between gap-3 text-sm">
@@ -555,12 +555,12 @@ export function ProductPageClient({
                   </div>
                 </details>
 
-                <details className="border-b border-border/45">
-                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                <details className="border-b border-border/38">
+                  <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Размер и посадка
                     <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
                   </summary>
-                  <div className="space-y-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                  <div className="space-y-2 pb-4 text-sm leading-relaxed text-muted-foreground">
                     <p>Полнота складок: ориентир 1.8x-2.2x от ширины карниза.</p>
                     {panelWidthMeta && <p>Ширина одной панели: {panelWidthMeta}.</p>}
                     {lightControlMeta && <p>Уровень затемнения: {lightControlMeta}.</p>}
@@ -572,23 +572,23 @@ export function ProductPageClient({
                   </div>
                 </details>
 
-                <details className="border-b border-border/45">
-                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                <details className="border-b border-border/38">
+                  <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Доставка и оплата
                     <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
                   </summary>
-                  <div className="space-y-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                  <div className="space-y-2 pb-4 text-sm leading-relaxed text-muted-foreground">
                     <p>Отправка в течение 1-3 рабочих дней после подтверждения заказа.</p>
                     <p>Оплата банковской картой, по счету или через персонального менеджера.</p>
                   </div>
                 </details>
 
                 <details>
-                  <summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 text-sm font-medium">
+                  <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Возврат и поддержка
                     <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
                   </summary>
-                  <div className="space-y-2 px-4 pb-4 text-sm leading-relaxed text-muted-foreground">
+                  <div className="space-y-2 pb-4 text-sm leading-relaxed text-muted-foreground">
                     <p>Возврат готовых изделий в течение 14 дней, при сохранении товарного вида.</p>
                     {productPageSupport.length > 0 && (
                       <div className="space-y-1.5 pt-1">
