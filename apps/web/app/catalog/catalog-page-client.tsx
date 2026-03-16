@@ -226,25 +226,9 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
   };
 
-  const selectMiniRailPreset = (nextPreset: MiniRailKey) => {
-    setMiniRail(nextPreset);
-    const nextSearch = new URLSearchParams(searchParams.toString());
-    if (nextPreset === "all") {
-      nextSearch.delete("rail");
-    } else {
-      nextSearch.set("rail", nextPreset);
-    }
-    const nextQuery = nextSearch.toString();
-    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
-  };
-
   return (
-    <div className="min-h-0 space-y-6 pb-10">
-      <header className="rounded-md border border-border/34 bg-card/90 px-4 py-5 sm:px-6 sm:py-6">
-        <div className="space-y-2">
-          <h1 className="ui-title-display text-[clamp(2rem,4.4vw,3.2rem)] leading-[0.95]">{page.title}</h1>
-        </div>
-      </header>
+    <div className="min-h-0 space-y-5 pb-10">
+      <h1 className="sr-only">{page.title}</h1>
 
       <section className="space-y-3.5 rounded-md border border-border/34 bg-card/90 p-4 sm:space-y-4 sm:p-5">
         {activePreset && (
@@ -296,41 +280,6 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
           </label>
         </div>
 
-      </section>
-
-      <section className="sticky top-[4.2rem] z-20 rounded-md border border-border/34 bg-card/90 p-2 shadow-soft-subtle backdrop-blur-xl sm:top-[4.8rem] sm:p-2.5">
-        <div className="overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          <div className="flex min-w-max snap-x snap-mandatory gap-2 sm:gap-2.5">
-            {miniRailPresets.map((preset) => {
-              const active = preset.key === miniRail;
-              return (
-                <button
-                  key={preset.key}
-                  type="button"
-                  onClick={() => selectMiniRailPreset(preset.key)}
-                  className={[
-                    "group min-h-[40px] min-w-[124px] snap-start rounded-[8px] border px-3 py-1.5 text-left transition-colors sm:min-h-[40px] sm:min-w-0",
-                    active
-                      ? "border-accent/80 bg-accent text-white"
-                      : "border-border/45 bg-card/72 text-foreground hover:border-border/70 hover:bg-card/90"
-                  ].join(" ")}
-                >
-                  <p className="ui-label text-[11px] normal-case leading-tight tracking-[0.01em]">
-                    {preset.label}
-                  </p>
-                  <p
-                    className={[
-                      "mt-0.5 hidden text-[10px] leading-relaxed sm:block",
-                      active ? "text-white/88" : "text-muted-foreground/82"
-                    ].join(" ")}
-                  >
-                    {preset.description}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        </div>
       </section>
 
       {page.blocks.map((block) => {
