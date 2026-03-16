@@ -246,7 +246,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
         </div>
       </header>
 
-      <section className="space-y-4 rounded-md border border-border/34 bg-card/90 p-4 sm:p-5">
+      <section className="space-y-3.5 rounded-md border border-border/34 bg-card/90 p-4 sm:space-y-4 sm:p-5">
         {activePreset && (
           <div
             className="rounded-md border border-border/34 bg-card/72 px-3 py-3"
@@ -270,7 +270,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
           </div>
         )}
 
-        <div className="grid gap-3 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-center">
+        <div className="grid gap-2.5 sm:grid-cols-[minmax(0,1fr)_220px] sm:items-center sm:gap-3">
           <CatalogNeonFilter
             value={searchValue}
             onChange={setSearchValue}
@@ -279,13 +279,13 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
             filterActive={showTagFilters}
           />
 
-          <label className="flex items-center gap-2">
-            <span className="ui-kicker whitespace-nowrap">Сортировать</span>
+          <label className="flex items-center gap-2 rounded-[10px] border border-border/36 bg-card/64 px-3 py-2 sm:border-0 sm:bg-transparent sm:px-0 sm:py-0">
+            <span className="ui-kicker whitespace-nowrap text-[10px]">Сортировать</span>
             <select
               aria-label="Сортировка каталога"
               value={sort}
               onChange={(event) => setSort(event.target.value as CatalogSort)}
-              className="h-9 w-full rounded-[6px] border border-border/55 bg-input/85 px-2.5 text-sm text-foreground outline-none transition-all duration-[var(--motion-fast)] focus:border-border/80 focus:ring-1 focus:ring-ring/60"
+              className="h-9 w-full rounded-[8px] border border-border/45 bg-input/86 px-2.5 text-sm text-foreground outline-none transition-all duration-[var(--motion-fast)] focus:border-border/80 focus:ring-1 focus:ring-ring/60"
             >
               {sortOptions.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -309,7 +309,7 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   type="button"
                   onClick={() => selectMiniRailPreset(preset.key)}
                   className={[
-                    "group min-h-[38px] min-w-[128px] snap-start rounded-[6px] border px-3 py-1.5 text-left transition-colors sm:min-h-[40px] sm:min-w-0",
+                    "group min-h-[40px] min-w-[124px] snap-start rounded-[8px] border px-3 py-1.5 text-left transition-colors sm:min-h-[40px] sm:min-w-0",
                     active
                       ? "border-accent/80 bg-accent text-white"
                       : "border-border/45 bg-card/72 text-foreground hover:border-border/70 hover:bg-card/90"

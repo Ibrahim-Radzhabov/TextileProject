@@ -137,7 +137,7 @@ export const TopNav: React.FC<TopNavProps> = ({
 
   return (
     <motion.header
-      className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 md:gap-6"
+      className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 md:gap-5"
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={transitionStandard}
@@ -148,7 +148,7 @@ export const TopNav: React.FC<TopNavProps> = ({
           <>
             <nav
               aria-label="Основная навигация"
-              className="hidden min-[1260px]:flex min-w-0 items-center gap-6"
+            className="hidden min-[1260px]:flex min-w-0 items-center gap-5"
             >
               {links.map((link) => (
                 <a
@@ -178,14 +178,14 @@ export const TopNav: React.FC<TopNavProps> = ({
       {showCenterNav && (
         <nav
           aria-label="Основная навигация"
-          className="hidden items-center justify-center gap-1 md:flex"
+          className="hidden items-center justify-center gap-0.5 lg:flex"
         >
           {links.map((link) => (
             <a
               key={`${link.href}-${link.label}`}
               href={link.href}
               className={[
-                "group relative inline-flex h-10 items-center rounded-full px-3.5 text-[0.93rem] transition-colors",
+                "group relative inline-flex h-10 items-center rounded-full px-3 text-[0.9rem] transition-colors xl:px-3.5 xl:text-[0.93rem]",
                 link.isActive ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"
               ].join(" ")}
               aria-current={link.isActive ? "page" : undefined}
@@ -207,7 +207,7 @@ export const TopNav: React.FC<TopNavProps> = ({
         </div>
       )}
       {rightSlot && (
-        <div className="flex min-w-0 flex-wrap items-center justify-end gap-1 text-sm sm:flex-nowrap sm:gap-2.5">
+        <div className="flex min-w-0 items-center justify-end gap-1 text-sm sm:gap-2.5">
           {rightSlot}
           {showMobileMenuTrigger && (
             <button
