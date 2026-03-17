@@ -253,15 +253,33 @@ export function ProductPageClient({
       resolvedColorOptions.find((option) => option.id === selectedColorId) ?? resolvedColorOptions[0]
     );
   }, [resolvedColorOptions, selectedColorId]);
-  const galleryMedia = useMemo(() => {
+  const selectedColorMedia = useMemo(() => {
     if (!selectedColorOption) {
       return product.media;
     }
+
     const selectedMedia = selectedColorOption.mediaIds
       .map((mediaId) => mediaLookup.get(mediaId))
       .filter((item): item is Product["media"][number] => Boolean(item));
     return selectedMedia.length > 0 ? selectedMedia : product.media;
   }, [selectedColorOption, mediaLookup, product.media]);
+  const galleryMedia = useMemo(() => {
+    if (!selectedColorOption) {
+      return product.media;
+    }
+
+    if (selectedColorMedia.length > 1) {
+      return selectedColorMedia;
+    }
+
+    if (selectedColorMedia.length === 1) {
+      const leadMedia = selectedColorMedia[0];
+      const fallbackMedia = product.media.filter((item) => item.id !== leadMedia.id);
+      return [leadMedia, ...fallbackMedia];
+    }
+
+    return product.media;
+  }, [selectedColorOption, product.media, selectedColorMedia]);
   const swatches = useMemo(() => deriveSwatches(product, fabricMeta), [fabricMeta, product]);
   const panelWidthCm = useMemo(() => {
     if (!panelWidthMeta) {
@@ -339,28 +357,25 @@ export function ProductPageClient({
 
   return (
     <div className="space-y-8 pb-[calc(10.75rem+env(safe-area-inset-bottom))] md:space-y-10 md:pb-10">
-      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1.58fr)_minmax(18rem,0.54fr)] lg:gap-10 xl:grid-cols-[minmax(0,1.72fr)_minmax(19rem,0.48fr)]">
+      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
           className="space-y-4 md:space-y-5"
         >
-          <ProductGallery media={galleryMedia} mainImageLayoutId={sharedMediaLayoutId} />
-
-          {product.description && (
-            <Surface tone="subtle" className="hidden space-y-2 rounded-xl px-5 py-6 sm:px-6 md:block">
-              <p className="ui-kicker">Описание</p>
-              <p className="ui-subtle text-sm leading-relaxed">{product.description}</p>
-            </Surface>
-          )}
+          <ProductGallery
+            key={`${product.id}:${selectedColorOption?.id ?? "default"}`}
+            media={galleryMedia}
+            mainImageLayoutId={sharedMediaLayoutId}
+          />
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, delay: 0.04 }}
-          className="space-y-5 md:space-y-6 md:sticky md:top-24 md:w-full md:max-w-[26rem] md:justify-self-end md:self-start xl:max-w-[24.5rem]"
+          className="space-y-5 md:space-y-6 md:sticky md:top-24 md:w-full md:max-w-[20rem] md:justify-self-end md:self-start lg:max-w-[22rem] xl:max-w-[24rem]"
         >
           <Surface tone="elevated" className="relative overflow-hidden rounded-[20px] px-4 py-5 sm:px-6 sm:py-6 md:rounded-xl">
             <div className="relative z-10 space-y-5">
@@ -650,8 +665,6 @@ export function ProductPageClient({
                 <ProductCard
                   product={candidate}
                   onQuickAdd={(next) => void addProduct(next.id)}
-                  isFavorite={favoriteProductIds.includes(candidate.id)}
-                  onToggleFavorite={(next) => toggleFavorite(next.id)}
                 />
               </div>
             ))}

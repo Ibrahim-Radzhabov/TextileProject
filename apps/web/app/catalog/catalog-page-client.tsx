@@ -3,10 +3,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { ProductCard, transitionQuick } from "@store-platform/ui";
+import { Button, ProductCard, transitionQuick } from "@store-platform/ui";
 import type { PageConfig, Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
-import { useFavoritesStore } from "@/store/favorites-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { resolveCatalogViewPreset, type CatalogSort } from "@/lib/catalog-view-presets";
 import { renderNonProductGridBlock } from "@/lib/page-block-renderers";
@@ -107,8 +106,6 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
   const searchParams = useSearchParams();
   const searchParamsValue = searchParams.toString();
   const { addProduct } = useCartStore();
-  const favoriteProductIds = useFavoritesStore((state) => state.productIds);
-  const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
   const activePreset = useMemo(
     () => resolveCatalogViewPreset(searchParams.get("view"), allTags),
     [allTags, searchParams]
@@ -315,27 +312,33 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                   className="rounded-[14px] border border-border/30 bg-card/94 p-3.5 shadow-soft-subtle"
                 >
                   <div className="flex items-center gap-4">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={product.media[0]?.url}
-                      alt={product.media[0]?.alt ?? product.name}
-                      className="h-[6rem] w-[6rem] rounded-[10px] object-cover"
-                    />
-                    <div className="min-w-0 flex-1 space-y-1">
+                    <div className="h-[6rem] w-[6rem] shrink-0 overflow-hidden rounded-[10px]">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={product.media[0]?.url}
+                        alt={product.media[0]?.alt ?? product.name}
+                        className="h-full w-full object-cover"
+                      />
+                    </div>
+                    <div className="min-w-0 flex-1 space-y-1.5">
                       <a
                         href={`/product/${encodeURIComponent(product.slug)}`}
-                        className="ui-title-serif line-clamp-2 text-[1.12rem] leading-[1.05] text-foreground"
+                        className="ui-title-serif line-clamp-2 min-w-0 flex-1 text-[1.12rem] leading-[1.05] text-foreground"
                       >
                         {product.name}
                       </a>
-                      {product.shortDescription && (
-                        <p className="line-clamp-2 text-[0.82rem] leading-relaxed text-muted-foreground/78">
-                          {product.shortDescription}
-                        </p>
-                      )}
                       <p className="text-[1rem] font-semibold tracking-tight text-foreground">
                         {formatMoney(product.price.amount, product.price.currency)}
                       </p>
+                      <Button
+                        asChild
+                        size="sm"
+                        variant="ghost"
+                        ripple
+                        className="h-9 rounded-[8px] border-border/36 bg-card/66 px-3 text-foreground hover:border-border/62 hover:bg-card/92 hover:text-foreground"
+                      >
+                        <a href={`/product/${encodeURIComponent(product.slug)}`}>Подробнее</a>
+                      </Button>
                     </div>
                   </div>
                 </motion.div>
@@ -351,8 +354,6 @@ export function CatalogPageClient({ page, products, allTags }: CatalogPageClient
                     variant="editorial"
                     onQuickAdd={(entry) => addProduct(entry.id)}
                     enableSharedTransition={enableSharedProductTransition}
-                    isFavorite={favoriteProductIds.includes(product.id)}
-                    onToggleFavorite={(entry) => toggleFavorite(entry.id)}
                   />
                 ))}
               </div>

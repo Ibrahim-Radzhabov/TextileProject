@@ -56,7 +56,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     (normalizedOverline.startsWith("#") ||
       normalizedOverline === "featured" ||
       normalizedOverline === "feature");
-  const overline = shouldHideOverline ? undefined : rawOverline;
+  const overline = isEditorial || shouldHideOverline ? undefined : rawOverline;
 
   return (
     <motion.div
@@ -87,6 +87,12 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               active={isFavorite}
               addLabel={`Добавить ${product.name} в избранное`}
               removeLabel={`Убрать ${product.name} из избранного`}
+              tone={isEditorial ? "bare" : "default"}
+              className={
+                isEditorial
+                  ? "!top-0 !right-0 !h-8 !w-8 sm:!h-9 sm:!w-9"
+                  : undefined
+              }
               onClick={(event) => {
                 event.preventDefault();
                 event.stopPropagation();
@@ -154,47 +160,57 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div
           className={[
             "relative z-20 flex flex-1 flex-col",
-            isEditorial ? "gap-2.5 px-0 pb-1 pt-4.5" : "gap-2.5 p-3.5 sm:p-3.5"
+            isEditorial ? "gap-2.5 px-0 pb-1 pt-3.5" : "gap-2.5 p-3.5 sm:p-3.5"
           ].join(" ")}
         >
-          <div className={isEditorial ? "space-y-2" : isNamePrice ? "space-y-1" : "space-y-1.5"}>
+          <div
+            className={
+              isEditorial
+                ? "min-h-[3.15rem] space-y-1"
+                : isNamePrice
+                  ? "space-y-1"
+                  : "space-y-1.5"
+            }
+          >
             {overline && !isNamePrice && (
               <p className={isEditorial ? "ui-meta" : "ui-kicker text-muted-foreground/78"}>
                 {overline}
               </p>
             )}
-            {enableSharedTransition ? (
-              <motion.p
-                layoutId={sharedTitleLayoutId}
-                id={titleId}
-                className={[
-                  "line-clamp-2",
-                  isEditorial
-                    ? "ui-title-serif text-[1.3rem] leading-[1.04] text-foreground"
-                    : isNamePrice
-                      ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
-                      : "ui-title text-[1.04rem]"
-                ].join(" ")}
-                transition={springSharedElement}
-              >
-                {product.name}
-              </motion.p>
-            ) : (
-              <p
-                id={titleId}
-                className={[
-                  "line-clamp-2",
-                  isEditorial
-                    ? "ui-title-serif text-[1.3rem] leading-[1.04] text-foreground"
-                    : isNamePrice
-                      ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
-                      : "ui-title text-[1.04rem]"
-                ].join(" ")}
-              >
-                {product.name}
-              </p>
-            )}
-            {product.shortDescription && !isNamePrice && (
+            <div className={isEditorial ? "block" : ""}>
+              {enableSharedTransition ? (
+                <motion.p
+                  layoutId={sharedTitleLayoutId}
+                  id={titleId}
+                  className={[
+                    "line-clamp-2",
+                    isEditorial
+                      ? "ui-title-serif text-[1.3rem] leading-[1.04] text-foreground"
+                      : isNamePrice
+                        ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
+                        : "ui-title text-[1.04rem]"
+                  ].join(" ")}
+                  transition={springSharedElement}
+                >
+                  {product.name}
+                </motion.p>
+              ) : (
+                <p
+                  id={titleId}
+                  className={[
+                    "line-clamp-2",
+                    isEditorial
+                      ? "ui-title-serif text-[1.3rem] leading-[1.04] text-foreground"
+                      : isNamePrice
+                        ? "ui-title-serif text-[1.24rem] leading-[1.06] text-foreground"
+                        : "ui-title text-[1.04rem]"
+                  ].join(" ")}
+                >
+                  {product.name}
+                </p>
+              )}
+            </div>
+            {product.shortDescription && !isNamePrice && !isEditorial && (
               <p
                 className={[
                   "text-muted-foreground/86",
@@ -210,8 +226,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           <div
             className={[
-              "mt-auto flex items-end justify-between gap-2",
-              isEditorial || isNamePrice ? "border-t border-border/18 pt-3" : "pt-1.5"
+              "mt-auto flex items-end gap-2",
+              isEditorial || isNamePrice ? "border-t border-border/18 pt-2.5" : "pt-1.5"
             ].join(" ")}
           >
             <div className="space-y-0.5">
@@ -225,7 +241,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               >
                 {formatMoney(product.price.amount, product.price.currency)}
               </p>
-              {hasComparePrice && product.compareAtPrice && !isNamePrice && (
+              {hasComparePrice && product.compareAtPrice && !isNamePrice && !isEditorial && (
                 <p className="text-xs text-muted-foreground line-through">
                   {formatMoney(product.compareAtPrice.amount, product.compareAtPrice.currency)}
                 </p>
@@ -243,7 +259,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               className={[
                 "relative z-20 rounded-[6px] border-border/45 transition-[transform,box-shadow,background-color,border-color,color] duration-300",
                 isEditorial
-                  ? "h-10 border-border/36 bg-card/66 text-foreground hover:border-border/62 hover:bg-card/92 hover:text-foreground sm:h-9 sm:opacity-0 sm:translate-y-1 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+                  ? "h-10 border-border/36 bg-card/66 text-foreground hover:border-border/62 hover:bg-card/92 hover:text-foreground sm:h-9"
                   : "h-10 bg-accent text-white hover:bg-accent/92 hover:shadow-soft-subtle sm:h-9"
               ].join(" ")}
               data-testid={`product-details-${product.slug}`}

@@ -245,13 +245,13 @@
     },
     {
       "id": "p6",
-      "slug": "linen-sheer-sand",
+      "slug": "Tulle-krujevo",
       "name": "Linen Sheer Sand",
       "description": "Легкий льняной тюль песочного тона для мягкого естественного света.",
       "shortDescription": "Теплый полупрозрачный лен для спокойной спальни.",
       "price": {
         "currency": "USD",
-        "amount": 89
+        "amount": 1200
       },
       "badges": [
         {
@@ -269,13 +269,23 @@
       "media": [
         {
           "id": "m6",
-          "url": "/demo/airy-voile-tulle.svg",
+          "url": "/demo/tulle_1.png",
           "alt": "Linen sheer sand tulle"
         },
         {
           "id": "m6-detail",
-          "url": "/demo/airy-voile-tulle-detail.svg",
+          "url": "/demo/tulle_2.png",
           "alt": "Linen Sheer Sand detail"
+        },
+        {
+          "id": "m6-alt-3",
+          "url": "/demo/tulle_3.png",
+          "alt": "Linen Sheer Sand alternative color"
+        },
+        {
+          "id": "m6-alt-4",
+          "url": "/demo/tulle_4.png",
+          "alt": "Linen Sheer Sand fourth color"
         }
       ],
       "isFeatured": false,
@@ -283,7 +293,45 @@
         "Light control": "35-50%",
         "Fabric": "Linen voile",
         "Width panel": "280 cm",
-        "Care": "Machine 30C"
+        "Care": "Machine 30C",
+        "colorOptions": [
+          {
+            "id": "p6-sand",
+            "label": "Sand",
+            "tone": "sand",
+            "mediaIds": [
+              "m6",
+              "m6-detail"
+            ]
+          },
+          {
+            "id": "p6-ivory",
+            "label": "Ivory",
+            "tone": "ivory",
+            "mediaIds": [
+              "m6-detail",
+              "m6"
+            ]
+          },
+          {
+            "id": "p6-linen",
+            "label": "Linen",
+            "tone": "linen",
+            "mediaIds": [
+              "m6-alt-3",
+              "m6-alt-4"
+            ]
+          },
+          {
+            "id": "p6-taupe",
+            "label": "Taupe",
+            "tone": "taupe",
+            "mediaIds": [
+              "m6-alt-4",
+              "m6-alt-3"
+            ]
+          }
+        ]
       }
     },
     {

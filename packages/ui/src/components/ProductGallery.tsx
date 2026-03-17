@@ -92,75 +92,30 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
 
   return (
     <div className="space-y-2.5 md:space-y-3">
-      <div
-        className={[
-          "hidden gap-4 md:grid lg:gap-5",
-          media.length > 1
-            ? "md:grid-cols-[5.1rem_minmax(0,1fr)] lg:grid-cols-[5.75rem_minmax(0,1fr)]"
-            : "md:grid-cols-1"
-        ].join(" ")}
-        aria-label={galleryLabel}
-      >
-        {media.length > 1 ? (
-          <div
-            className="flex max-h-[min(72rem,calc(100svh-10rem))] flex-col gap-2 overflow-y-auto pr-1"
-            role="tablist"
-            aria-label={`${galleryLabel}: превью`}
-          >
-            {media.map((item, index) => (
-              <button
-                key={item.id}
-                type="button"
-                ref={(node) => {
-                  thumbnailRefs.current[index] = node;
-                }}
-                onClick={() => setActiveId(item.id)}
-                onKeyDown={(event) => {
-                  handleThumbKeyDown(event, index);
-                }}
-                role="tab"
-                id={`product-gallery-tab-${item.id}`}
-                aria-controls={panelId}
-                aria-selected={active?.id === item.id}
-                aria-label={`Превью ${index + 1}: ${item.alt}`}
-                tabIndex={active?.id === item.id ? 0 : -1}
-                className={[
-                  "relative aspect-[4/5] overflow-hidden rounded-[4px] border transition-all",
-                  active?.id === item.id
-                    ? "border-foreground/30 bg-card/80"
-                    : "border-border/20 bg-card/52 hover:border-border/45",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                ].join(" ")}
-                data-testid={`product-gallery-thumb-${index + 1}`}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={item.url} alt={item.alt} className="h-full w-full object-cover" />
-              </button>
-            ))}
+      <div className="hidden flex-col gap-5 md:flex xl:gap-6" aria-label={galleryLabel}>
+        {media.map((item, index) => (
+          <div key={item.id} className="relative aspect-[4/5] overflow-hidden bg-card/18">
+            {index === 0 ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <motion.img
+                layoutId={mainImageLayoutId}
+                src={item.url}
+                alt={item.alt}
+                className="absolute inset-0 h-full w-full object-cover"
+                initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0.72, scale: 1.01 }}
+                animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
+                transition={mainImageLayoutId ? springSharedElement : transitionQuick}
+              />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={item.url}
+                alt={item.alt}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+            )}
           </div>
-        ) : null}
-
-        <Surface
-          className="relative overflow-hidden rounded-[6px] border border-border/22 bg-card/52"
-          role="tabpanel"
-          id={panelId}
-          aria-labelledby={activeTabId}
-          aria-label={galleryLabel}
-        >
-          {active && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <motion.img
-              key={active.id}
-              layoutId={activeLayoutId}
-              src={active.url}
-              alt={active.alt}
-              className="h-full max-h-[72rem] min-h-[38rem] w-full object-cover xl:min-h-[42rem]"
-              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0.7, scale: 1.015 }}
-              animate={prefersReducedMotion ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-              transition={activeLayoutId ? springSharedElement : transitionQuick}
-            />
-          )}
-        </Surface>
+        ))}
       </div>
 
       <div className="grid gap-3 md:hidden">

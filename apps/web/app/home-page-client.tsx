@@ -23,7 +23,6 @@ import type {
   RichTextBlock
 } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
-import { useFavoritesStore } from "@/store/favorites-store";
 import { HeroPinnedVideo } from "@/components/hero-pinned-video";
 import { HeroVideoEditorial } from "@/components/hero-video-editorial";
 import { TextileTypeSwitcher } from "@/components/textile-type-switcher";
@@ -449,9 +448,7 @@ function renderCtaStripBlock(block: CtaStripBlock): JSX.Element {
 function renderProductGridBlock(
   block: ProductGridBlock,
   visibleProducts: Product[],
-  onQuickAdd: (product: Product) => void,
-  favoriteProductIds: string[],
-  onToggleFavorite: (product: Product) => void
+  onQuickAdd: (product: Product) => void
 ): JSX.Element {
   const isHomeFeatured = block.id === "home-featured";
   const productsToRender = isHomeFeatured ? visibleProducts.slice(0, 8) : visibleProducts;
@@ -499,8 +496,6 @@ function renderProductGridBlock(
               <ProductCard
                 product={product}
                 onQuickAdd={onQuickAdd}
-                isFavorite={favoriteProductIds.includes(product.id)}
-                onToggleFavorite={onToggleFavorite}
                 variant="name-price"
               />
             </motion.div>
@@ -514,9 +509,7 @@ function renderProductGridBlock(
 function renderBlock(
   block: PageBlock,
   products: Product[],
-  onQuickAdd: (product: Product) => void,
-  favoriteProductIds: string[],
-  onToggleFavorite: (product: Product) => void
+  onQuickAdd: (product: Product) => void
 ): JSX.Element | null {
   if (block.type === "hero") {
     return renderHeroBlock(block);
@@ -526,9 +519,7 @@ function renderBlock(
     return renderProductGridBlock(
       block,
       filterProducts(products, block),
-      onQuickAdd,
-      favoriteProductIds,
-      onToggleFavorite
+      onQuickAdd
     );
   }
 
@@ -553,8 +544,6 @@ function renderBlock(
 
 export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const { addProduct } = useCartStore();
-  const favoriteProductIds = useFavoritesStore((state) => state.productIds);
-  const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
 
   return (
     <div className="home-concept-editorial space-y-8 sm:space-y-9 lg:space-y-11">
@@ -566,9 +555,7 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
         const blockNode = renderBlock(
           block,
           products,
-          (product) => addProduct(product.id),
-          favoriteProductIds,
-          (product) => toggleFavorite(product.id)
+          (product) => addProduct(product.id)
         );
 
         if (!blockNode) {

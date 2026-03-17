@@ -16,7 +16,6 @@ type FavoritesPageClientProps = {
 export function FavoritesPageClient({ products }: FavoritesPageClientProps) {
   const { addProduct } = useCartStore();
   const favoriteProductIds = useFavoritesStore((state) => state.productIds);
-  const toggleFavorite = useFavoritesStore((state) => state.toggleProduct);
   const clearFavorites = useFavoritesStore((state) => state.clearFavorites);
   const syncId = useFavoritesStore((state) => state.syncId);
   const initSync = useFavoritesStore((state) => state.initSync);
@@ -47,7 +46,7 @@ export function FavoritesPageClient({ products }: FavoritesPageClientProps) {
           <p className="ui-kicker">Избранное</p>
           <h1 className="ui-title text-2xl sm:text-3xl">Сохраненные позиции</h1>
           <p className="ui-subtle text-sm sm:text-base">
-            Отмечайте товары сердцем на карточке, чтобы быстро вернуться к ним позже.
+            Сохраняйте позиции из страницы товара, чтобы быстро вернуться к ним позже.
           </p>
           <Button asChild>
             <Link href="/catalog">Перейти в каталог</Link>
@@ -83,8 +82,6 @@ export function FavoritesPageClient({ products }: FavoritesPageClientProps) {
         products={favorites}
         onQuickAdd={(product) => addProduct(product.id)}
         enableSharedTransition={enableSharedProductTransition}
-        favoriteProductIds={favoriteProductIds}
-        onToggleFavorite={(product) => toggleFavorite(product.id)}
       />
     </section>
   );
