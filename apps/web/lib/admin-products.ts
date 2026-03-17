@@ -1,4 +1,5 @@
 import type { JsonValue, Product, ProductBadge, ProductMedia } from "@store-platform/shared-types";
+import { ADMIN_COOKIE_NAME } from "@/lib/admin-auth";
 
 function parseRequiredString(value: FormDataEntryValue | null, fieldName: string): string {
   if (typeof value !== "string") {
@@ -200,11 +201,51 @@ export function resolveStoreApiUrl(): string {
   return process.env.STORE_API_URL ?? process.env.NEXT_PUBLIC_STORE_API_URL ?? "http://127.0.0.1:8000";
 }
 
-export function buildAdminApiHeaders(): HeadersInit {
-  const token = process.env.ADMIN_TOKEN?.trim();
+function extractBearerToken(value: string | null): string | null {
+  if (!value) {
+    return null;
+  }
+  const match = value.match(/^Bearer\s+(.+)$/i);
+  return match ? match[1]?.trim() ?? null : null;
+}
+
+function parseCookieValue(cookieHeader: string | null, cookieName: string): string | null {
+  if (!cookieHeader) {
+    return null;
+  }
+
+  for (const chunk of cookieHeader.split(";")) {
+    const [rawName, ...rest] = chunk.split("=");
+    if (rawName?.trim() !== cookieName) {
+      continue;
+    }
+
+    const value = rest.join("=").trim();
+    if (!value) {
+      return null;
+    }
+
+    try {
+      return decodeURIComponent(value);
+    } catch {
+      return value;
+    }
+  }
+
+  return null;
+}
+
+export function buildAdminApiHeaders(request?: Request): HeadersInit {
+  const token =
+    process.env.ADMIN_TOKEN?.trim() ||
+    request?.headers.get("x-admin-token")?.trim() ||
+    extractBearerToken(request?.headers.get("authorization") ?? null) ||
+    parseCookieValue(request?.headers.get("cookie") ?? null, ADMIN_COOKIE_NAME);
+
   if (!token) {
     return {};
   }
+
   return { "x-admin-token": token };
 }
 

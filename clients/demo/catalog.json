@@ -8,11 +8,11 @@
       "shortDescription": "Плотный лен blackout с мягкой архитектурной драпировкой.",
       "price": {
         "currency": "USD",
-        "amount": 189
+        "amount": 189.0
       },
       "compareAtPrice": {
         "currency": "USD",
-        "amount": 229
+        "amount": 229.0
       },
       "badges": [
         {
@@ -75,7 +75,7 @@
       "shortDescription": "Воздушный тюль voile с мягким рассеиванием света.",
       "price": {
         "currency": "USD",
-        "amount": 74
+        "amount": 74.0
       },
       "badges": [
         {
@@ -118,7 +118,7 @@
       "shortDescription": "Day-night комплект для гибкого сценария освещения.",
       "price": {
         "currency": "USD",
-        "amount": 239
+        "amount": 239.0
       },
       "badges": [
         {
@@ -161,7 +161,7 @@
       "shortDescription": "Ровная волна и легкая полупрозрачность для современного интерьера.",
       "price": {
         "currency": "USD",
-        "amount": 128
+        "amount": 128.0
       },
       "badges": [
         {
@@ -204,11 +204,11 @@
       "shortDescription": "Плотный velvet blackout для домашнего кино и уюта вечером.",
       "price": {
         "currency": "USD",
-        "amount": 212
+        "amount": 212.0
       },
       "compareAtPrice": {
         "currency": "USD",
-        "amount": 249
+        "amount": 249.0
       },
       "badges": [
         {
@@ -251,7 +251,7 @@
       "shortDescription": "Теплый полупрозрачный лен для спокойной спальни.",
       "price": {
         "currency": "USD",
-        "amount": 1200
+        "amount": 1200.0
       },
       "badges": [
         {
@@ -342,7 +342,7 @@
       "shortDescription": "Фактурная драпировка с акцентом на акустический комфорт.",
       "price": {
         "currency": "USD",
-        "amount": 176
+        "amount": 176.0
       },
       "badges": [
         {
@@ -385,7 +385,7 @@
       "shortDescription": "Широкий voile с ровными мягкими складками.",
       "price": {
         "currency": "USD",
-        "amount": 102
+        "amount": 102.0
       },
       "badges": [
         {
@@ -428,7 +428,7 @@
       "shortDescription": "Теплосбережение и мягкое затемнение для ежедневного режима.",
       "price": {
         "currency": "USD",
-        "amount": 158
+        "amount": 158.0
       },
       "badges": [
         {
@@ -471,7 +471,7 @@
       "shortDescription": "Легкий slub cotton для уютной кухни и breakfast-зоны.",
       "price": {
         "currency": "USD",
-        "amount": 68
+        "amount": 68.0
       },
       "badges": [
         {
@@ -514,11 +514,11 @@
       "shortDescription": "Двухслойный бархатный сет с аккуратной складкой.",
       "price": {
         "currency": "USD",
-        "amount": 264
+        "amount": 264.0
       },
       "compareAtPrice": {
         "currency": "USD",
-        "amount": 299
+        "amount": 299.0
       },
       "badges": [
         {
@@ -561,7 +561,7 @@
       "shortDescription": "Нежный mesh-тюль для дневного света и приватности.",
       "price": {
         "currency": "USD",
-        "amount": 54
+        "amount": 54.0
       },
       "badges": [
         {
@@ -604,7 +604,7 @@
       "shortDescription": "Натуральная фактура и мягкое движение ткани.",
       "price": {
         "currency": "USD",
-        "amount": 144
+        "amount": 144.0
       },
       "badges": [
         {
@@ -647,7 +647,7 @@
       "shortDescription": "Надежное затемнение в кофейном оттенке.",
       "price": {
         "currency": "USD",
-        "amount": 171
+        "amount": 171.0
       },
       "badges": [
         {
@@ -690,7 +690,7 @@
       "shortDescription": "Глубокий рисунок и выразительные складки.",
       "price": {
         "currency": "USD",
-        "amount": 198
+        "amount": 198.0
       },
       "badges": [
         {
@@ -733,7 +733,7 @@
       "shortDescription": "Изящная волна и прозрачная фактура.",
       "price": {
         "currency": "USD",
-        "amount": 118
+        "amount": 118.0
       },
       "badges": [
         {
@@ -776,7 +776,7 @@
       "shortDescription": "Лаконичная форма и теплый sandstone оттенок.",
       "price": {
         "currency": "USD",
-        "amount": 134
+        "amount": 134.0
       },
       "badges": [
         {
@@ -819,7 +819,7 @@
       "shortDescription": "Плотный acoustic blackout для тихого сна.",
       "price": {
         "currency": "USD",
-        "amount": 205
+        "amount": 205.0
       },
       "badges": [
         {
@@ -862,7 +862,7 @@
       "shortDescription": "Теплый льняной сет для живого интерьерного акцента.",
       "price": {
         "currency": "USD",
-        "amount": 167
+        "amount": 167.0
       },
       "badges": [
         {
@@ -905,7 +905,7 @@
       "shortDescription": "Легкий второй слой для day-to-evening сценария.",
       "price": {
         "currency": "USD",
-        "amount": 76
+        "amount": 76.0
       },
       "badges": [
         {
@@ -948,7 +948,7 @@
       "shortDescription": "Мягкий sunset-оттенок и выразительный рисунок.",
       "price": {
         "currency": "USD",
-        "amount": 149
+        "amount": 149.0
       },
       "badges": [
         {
@@ -991,7 +991,7 @@
       "shortDescription": "Быстрый старт для day-night оформления окна.",
       "price": {
         "currency": "USD",
-        "amount": 222
+        "amount": 222.0
       },
       "badges": [
         {
@@ -1034,7 +1034,7 @@
       "shortDescription": "Dimout для кабинета и рабочих пространств.",
       "price": {
         "currency": "USD",
-        "amount": 139
+        "amount": 139.0
       },
       "badges": [
         {
@@ -1077,7 +1077,7 @@
       "shortDescription": "Спокойный световой режим для детской комнаты.",
       "price": {
         "currency": "USD",
-        "amount": 129
+        "amount": 129.0
       },
       "badges": [
         {
@@ -1111,6 +1111,83 @@
         "Width panel": "140 cm",
         "Care": "Machine 30C"
       }
+    },
+    {
+      "id": "product-tyul-batist",
+      "slug": "tyul-batist",
+      "name": "Тюль Батист",
+      "description": "qqq",
+      "shortDescription": "Тут потом будет",
+      "price": {
+        "currency": "USD",
+        "amount": 555.0
+      },
+      "badges": [],
+      "media": [
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-0-8b6a970a",
+          "url": "/uploads/demo/1773743621965-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-0-8b6a970a.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-1-e1a4d573",
+          "url": "/uploads/demo/1773743621968-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-1-e1a4d573.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-2-c139cf76",
+          "url": "/uploads/demo/1773743621971-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-2-c139cf76.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-3-06880586",
+          "url": "/uploads/demo/1773743621973-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-3-06880586.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-0-8a6aad46",
+          "url": "/uploads/demo/1773750895837-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-0-8a6aad46.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-1-aa3bfee1",
+          "url": "/uploads/demo/1773750895839-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-1-aa3bfee1.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-2-1c3ed4da",
+          "url": "/uploads/demo/1773750895840-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-2-1c3ed4da.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-3-8e309e15",
+          "url": "/uploads/demo/1773750895841-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-3-8e309e15.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-0-2bef7d1a",
+          "url": "/uploads/demo/1773750895841-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-0-2bef7d1a.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-1-08f40ffd",
+          "url": "/uploads/demo/1773750895842-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-1-08f40ffd.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-2-c66f923d",
+          "url": "/uploads/demo/1773750895844-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-2-c66f923d.png",
+          "alt": "Fofteuolstore"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-3-3a94ce57",
+          "url": "/uploads/demo/1773750895846-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-3-3a94ce57.png",
+          "alt": "Fofteuolstore"
+        }
+      ],
+      "isActive": true,
+      "sortOrder": 0,
+      "isFeatured": false
     }
   ]
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { resolveRequestUrl } from "@/lib/admin-auth";
 import { buildAdminApiHeaders, resolveStoreApiUrl } from "@/lib/admin-products";
 
 type BulkAction = "activate" | "deactivate" | "sort_up" | "sort_down";
@@ -102,7 +103,7 @@ function buildBulkPayload(action: BulkAction, productIds: string[]): {
 
 export async function POST(request: Request): Promise<NextResponse> {
   const formData = await request.formData();
-  const baseUrl = new URL(request.url);
+  const baseUrl = resolveRequestUrl(request);
   const returnTo = resolveProductsReturnUrl(baseUrl, formData.get("return_to"));
 
   const action = parseBulkAction(formData.get("bulk_action"));
@@ -120,7 +121,7 @@ export async function POST(request: Request): Promise<NextResponse> {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      ...buildAdminApiHeaders(),
+      ...buildAdminApiHeaders(request),
     },
     body: JSON.stringify(payload),
     cache: "no-store",

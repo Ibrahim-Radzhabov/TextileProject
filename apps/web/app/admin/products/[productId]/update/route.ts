@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { resolveRequestUrl } from "@/lib/admin-auth";
 import {
   buildAdminApiHeaders,
   buildProductPayloadFromFormData,
@@ -46,7 +47,7 @@ function parseApiDetail(payload: unknown): string | null {
 
 export async function POST(request: Request, { params }: RouteParams): Promise<NextResponse> {
   const formData = await request.formData();
-  const baseUrl = new URL(request.url);
+  const baseUrl = resolveRequestUrl(request);
   const returnTo = resolveProductsReturnUrl(baseUrl, formData.get("return_to"));
 
   let payload;
@@ -63,7 +64,7 @@ export async function POST(request: Request, { params }: RouteParams): Promise<N
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        ...buildAdminApiHeaders(),
+        ...buildAdminApiHeaders(request),
       },
       body: JSON.stringify(payload),
       cache: "no-store",

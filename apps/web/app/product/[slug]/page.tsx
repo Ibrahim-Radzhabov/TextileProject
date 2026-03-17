@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { cache } from "react";
 import type { Metadata } from "next";
 import type { Product, StorefrontConfig } from "@store-platform/shared-types";
 import { fetchProduct, fetchStorefrontConfig } from "@/lib/api-client";
@@ -11,15 +10,17 @@ import {
 } from "@/lib/seo";
 import { ProductPageClient } from "./product-page-client";
 
-const getProduct = cache(async (slug: string): Promise<Product | null> => {
+async function getProduct(slug: string): Promise<Product | null> {
   try {
     return await fetchProduct(slug);
   } catch {
     return null;
   }
-});
+}
 
-const getConfig = cache(async (): Promise<StorefrontConfig> => fetchStorefrontConfig());
+async function getConfig(): Promise<StorefrontConfig> {
+  return fetchStorefrontConfig();
+}
 
 export async function generateMetadata({
   params

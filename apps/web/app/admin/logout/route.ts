@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { ADMIN_COOKIE_NAME, ADMIN_LOGIN_PATH } from "@/lib/admin-auth";
+import { ADMIN_COOKIE_NAME, ADMIN_LOGIN_PATH, resolveRequestUrl } from "@/lib/admin-auth";
 
 function clearAdminCookie(response: NextResponse, secure: boolean) {
   response.cookies.set({
@@ -14,7 +14,7 @@ function clearAdminCookie(response: NextResponse, secure: boolean) {
 }
 
 export async function GET(request: Request): Promise<NextResponse> {
-  const loginUrl = new URL(ADMIN_LOGIN_PATH, request.url);
+  const loginUrl = new URL(ADMIN_LOGIN_PATH, resolveRequestUrl(request));
   const response = NextResponse.redirect(loginUrl);
   clearAdminCookie(response, loginUrl.protocol === "https:");
   return response;

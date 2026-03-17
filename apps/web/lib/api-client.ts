@@ -765,7 +765,9 @@ export async function fetchCatalogProductsAdmin(): Promise<Product[]> {
 }
 
 export async function fetchProduct(slug: string): Promise<Product> {
-  const res = await fetch(`${resolveApiUrl()}/catalog/${slug}`);
+  const res = await fetch(`${resolveApiUrl()}/catalog/${slug}`, {
+    cache: "no-store"
+  });
   const dto = await handleJson<ProductDto>(res);
   return normalizeProduct(dto);
 }

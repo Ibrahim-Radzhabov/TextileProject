@@ -1,7 +1,7 @@
 import Link from "next/link";
-import { ApiError, fetchProductByIdAdmin } from "@/lib/api-client";
+import { ApiError, fetchCatalogProductsAdmin, fetchProductByIdAdmin } from "@/lib/api-client";
 import { productToFormDefaults } from "@/lib/admin-products";
-import { AdminProductForm } from "../product-form";
+import { AdminProductForm, type ExistingAdminProductIdentity } from "../product-form";
 
 function resolveReturnTo(value: string | undefined): string {
   if (!value) {
@@ -12,6 +12,20 @@ function resolveReturnTo(value: string | undefined): string {
     return "/admin/products";
   }
   return normalized;
+}
+
+async function fetchExistingProducts(excludedProductId: string): Promise<ExistingAdminProductIdentity[]> {
+  try {
+    const products = await fetchCatalogProductsAdmin();
+    return products
+      .filter((product) => product.id !== excludedProductId)
+      .map((product) => ({
+        id: product.id,
+        slug: product.slug
+      }));
+  } catch {
+    return [];
+  }
 }
 
 export default async function AdminEditProductPage({
@@ -28,6 +42,7 @@ export default async function AdminEditProductPage({
   try {
     const product = await fetchProductByIdAdmin(params.productId);
     const defaults = productToFormDefaults(product);
+    const existingProducts = await fetchExistingProducts(product.id);
 
     return (
       <div className="space-y-6 pb-8">
@@ -59,6 +74,7 @@ export default async function AdminEditProductPage({
           defaults={defaults}
           readOnlyId
           returnTo={returnTo}
+          existingProducts={existingProducts}
         />
       </div>
     );

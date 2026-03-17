@@ -1,5 +1,10 @@
 import Link from "next/link";
-import { AdminProductForm, type AdminProductFormDefaults } from "../product-form";
+import { fetchCatalogProductsAdmin } from "@/lib/api-client";
+import {
+  AdminProductForm,
+  type AdminProductFormDefaults,
+  type ExistingAdminProductIdentity
+} from "../product-form";
 
 const emptyProductDefaults: AdminProductFormDefaults = {
   id: "",
@@ -35,7 +40,19 @@ function resolveReturnTo(value: string | undefined): string | undefined {
   return normalized;
 }
 
-export default function AdminNewProductPage({
+async function fetchExistingProducts(): Promise<ExistingAdminProductIdentity[]> {
+  try {
+    const products = await fetchCatalogProductsAdmin();
+    return products.map((product) => ({
+      id: product.id,
+      slug: product.slug
+    }));
+  } catch {
+    return [];
+  }
+}
+
+export default async function AdminNewProductPage({
   searchParams,
 }: {
   searchParams?: {
@@ -43,6 +60,7 @@ export default function AdminNewProductPage({
   };
 }) {
   const returnTo = resolveReturnTo(searchParams?.return_to) ?? "/admin/products";
+  const existingProducts = await fetchExistingProducts();
 
   return (
     <div className="space-y-6 pb-8">
@@ -71,6 +89,7 @@ export default function AdminNewProductPage({
         submitLabel="Создать товар"
         defaults={emptyProductDefaults}
         returnTo={returnTo}
+        existingProducts={existingProducts}
       />
     </div>
   );

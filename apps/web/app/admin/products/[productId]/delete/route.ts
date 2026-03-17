@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { resolveRequestUrl } from "@/lib/admin-auth";
 import { buildAdminApiHeaders, resolveStoreApiUrl } from "@/lib/admin-products";
 
 type RouteParams = {
@@ -42,7 +43,7 @@ function parseApiDetail(payload: unknown): string | null {
 
 export async function POST(request: Request, { params }: RouteParams): Promise<NextResponse> {
   const formData = await request.formData();
-  const baseUrl = new URL(request.url);
+  const baseUrl = resolveRequestUrl(request);
   const returnTo = resolveProductsReturnUrl(baseUrl, formData.get("return_to"));
 
   const response = await fetch(
@@ -50,7 +51,7 @@ export async function POST(request: Request, { params }: RouteParams): Promise<N
     {
       method: "DELETE",
       headers: {
-        ...buildAdminApiHeaders(),
+        ...buildAdminApiHeaders(request),
       },
       cache: "no-store",
     }
