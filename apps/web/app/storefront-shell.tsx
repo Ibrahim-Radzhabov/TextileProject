@@ -8,18 +8,12 @@ import { CartDrawer, Footer, LayoutShell, TopNav, AnimatedDock } from "@store-pl
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { PwaInstallPrompt } from "@/components/pwa-install-prompt";
-import { PwaInstallNavButton } from "@/components/pwa-install-nav-button";
 import { MobileBottomNav } from "@/components/mobile-bottom-nav";
 import { TopNavSearchFilter } from "@/components/top-nav-search-filter";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
 import { AnnouncementTicker } from "../components/AnnouncementTicker";
 import { SidebarMenu, type SidebarMenuItem } from "./(components)/sidebar-menu";
 
-const iconHome = (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M4 10v10h6v-6h4v6h6V10L12 4 4 10Z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
 const iconSearch = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
@@ -286,14 +280,6 @@ const sidebarMenuSections: SidebarMenuItem[] = [
   }
 ];
 
-const primaryNavigationItems = sidebarMenuSections
-  .filter((section) => section.id !== "contacts")
-  .slice(0, 5)
-  .map((section) => ({
-    label: section.label,
-    href: section.href ?? "/catalog"
-  }));
-
 type StorefrontShellProps = {
   children: ReactNode;
   config: StorefrontConfig;
@@ -368,7 +354,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             logo={config.shop.logo}
             leftHref="/"
             centerBrand
-            links={primaryNavigationItems}
             leftSlot={
               <SidebarMenu
                 items={sidebarMenuSections}
@@ -378,37 +363,24 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
               />
             }
             rightSlot={
-              <>
-                <div className="hidden md:flex flex-col items-end gap-1.5">
-                  <AnimatedDock
-                    items={[
-                      { href: "/", icon: iconHome, title: "Главная" },
-                      { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
-                      { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
-                      { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
-                    ]}
-                  />
-                </div>
-                <div className="md:hidden flex flex-col items-end gap-1.5">
-                  <AnimatedDock
-                    items={[
-                      { href: "/", icon: iconHome, title: "Главная" },
-                      { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
-                      { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
-                      { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
-                    ]}
-                  />
-                </div>
+              <div className="flex items-center justify-end gap-2 sm:gap-2.5">
                 <TopNavSearchFilter
                   intensity="balanced"
                   open={searchOpen}
                   onOpenChange={setSearchOpen}
                   hideTrigger
                 />
-                <div className="hidden sm:block">
-                  <PwaInstallNavButton />
-                </div>
-              </>
+                <AnimatedDock
+                  variant="capsule"
+                  distribution="between"
+                  className="w-[10.5rem] sm:w-[11.75rem]"
+                  items={[
+                    { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
+                    { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
+                    { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
+                  ]}
+                />
+              </div>
             }
           />
         }

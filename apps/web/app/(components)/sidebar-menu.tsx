@@ -489,7 +489,7 @@ export function SidebarMenu({
       <motion.button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="inline-flex h-10 w-10 items-center justify-center text-foreground transition-colors hover:text-foreground/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground shadow-soft-subtle backdrop-blur-sm transition-colors hover:border-border/68 hover:bg-card/96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         aria-label={isOpen ? "Close menu" : "Open menu"}
         whileTap={{ scale: 0.98 }}
       >

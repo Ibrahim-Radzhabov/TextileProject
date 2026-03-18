@@ -137,12 +137,12 @@ export const TopNav: React.FC<TopNavProps> = ({
 
   return (
     <motion.header
-      className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 md:gap-5"
+      className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-4"
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={transitionStandard}
     >
-      <div className="flex min-w-0 items-center justify-start gap-3">
+      <div className="flex min-w-0 items-center justify-start gap-3 lg:pr-4">
         {!shouldCenterBrand && (leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent)}
         {hasResponsiveLeftNav && (
           <>
@@ -164,7 +164,7 @@ export const TopNav: React.FC<TopNavProps> = ({
                 </a>
               ))}
             </nav>
-            <div className="flex min-[1260px]:hidden items-center">
+            <div className="flex items-center">
               {leftSlot}
             </div>
           </>
@@ -202,12 +202,12 @@ export const TopNav: React.FC<TopNavProps> = ({
         </nav>
       )}
       {shouldCenterBrand && (
-        <div className="flex min-w-0 items-center justify-center px-1 sm:px-2">
+        <div className="flex min-w-0 items-center justify-center px-1 sm:px-2 lg:px-4">
           {leftHref ? <a className={leftLinkClassName} href={leftHref}>{leftContent}</a> : leftContent}
         </div>
       )}
       {rightSlot && (
-        <div className="flex min-w-0 items-center justify-end gap-1 text-sm sm:gap-2.5">
+        <div className="flex min-w-0 items-center justify-end text-sm lg:pl-4">
           {rightSlot}
           {showMobileMenuTrigger && (
             <button
