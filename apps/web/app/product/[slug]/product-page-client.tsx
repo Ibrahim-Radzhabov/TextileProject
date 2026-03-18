@@ -356,13 +356,13 @@ export function ProductPageClient({
   };
 
   return (
-    <div className="space-y-8 pb-[calc(10.75rem+env(safe-area-inset-bottom))] md:space-y-10 md:pb-10">
-      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1fr)_20rem] lg:gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
+    <div className="space-y-8 pb-[calc(10.75rem+env(safe-area-inset-bottom))] md:relative md:left-1/2 md:w-[min(1520px,calc(100vw-2rem))] md:-translate-x-1/2 md:space-y-10 md:pb-10 lg:w-[min(1560px,calc(100vw-3rem))]">
+      <div className="grid gap-7 sm:gap-8 md:grid-cols-[minmax(0,1fr)_21.5rem] md:gap-2 lg:gap-3 xl:gap-4">
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.25 }}
-          className="space-y-4 md:space-y-5"
+          className="space-y-4 md:space-y-0"
         >
           <ProductGallery
             key={`${product.id}:${selectedColorOption?.id ?? "default"}`}
@@ -375,9 +375,12 @@ export function ProductPageClient({
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, delay: 0.04 }}
-          className="space-y-5 md:space-y-6 md:sticky md:top-24 md:w-full md:max-w-[20rem] md:justify-self-end md:self-start lg:max-w-[22rem] xl:max-w-[24rem]"
+          className="space-y-5 md:sticky md:top-24 md:w-full md:max-w-[21.5rem] md:justify-self-end md:self-start md:space-y-6"
         >
-          <Surface tone="elevated" className="relative overflow-hidden rounded-[20px] px-4 py-5 sm:px-6 sm:py-6 md:rounded-xl">
+          <Surface
+            tone="subtle"
+            className="relative overflow-hidden rounded-[18px] border-border/24 bg-card/72 px-4 py-5 shadow-none sm:px-6 sm:py-6 md:rounded-[14px]"
+          >
             <div className="relative z-10 space-y-5">
               <header className="space-y-3.5 pb-1 md:space-y-4 md:pb-2">
                 <div className="flex items-start justify-between gap-3">
