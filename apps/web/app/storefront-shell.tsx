@@ -413,15 +413,14 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                     { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
                   ]}
                 />
-                <AnimatedDock
-                  variant="capsule"
-                  className="lg:hidden"
-                  items={[
-                    { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
-                    { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
-                    { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
-                  ]}
-                />
+                <button
+                  type="button"
+                  onClick={() => setSearchOpen(true)}
+                  aria-label="Поиск"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:hidden"
+                >
+                  <span className="[&>svg]:h-[18px] [&>svg]:w-[18px]">{iconSearch}</span>
+                </button>
               </div>
             }
           />

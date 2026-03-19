@@ -564,7 +564,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
     }
   };
 
-  const openZoom = (mediaId: string, trigger?: HTMLButtonElement | null) => {
+  const openZoom = (mediaId: string, trigger?: HTMLButtonElement | null, sharedReturn = true) => {
     if (zoomCloseTimerRef.current !== null) {
       window.clearTimeout(zoomCloseTimerRef.current);
       zoomCloseTimerRef.current = null;
@@ -574,9 +574,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
     trigger?.blur();
     setActiveId(mediaId);
     setZoomActiveId(mediaId);
-    setSharedTransitionMediaId(mediaId);
+    setSharedTransitionMediaId(sharedReturn ? mediaId : null);
     setZoomClosing(false);
-    setAllowSharedReturn(true);
+    setAllowSharedReturn(sharedReturn);
     resetZoomInteraction();
     setZoomOpen(true);
   };
@@ -1039,13 +1039,21 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
         >
           <div className="relative aspect-[4/5] w-full overflow-hidden rounded-[20px]">
             {active ? (
-              <div className="absolute inset-0 overflow-hidden rounded-[20px]">
-                <img
-                  src={active.url}
-                  alt={active.alt}
-                  className="absolute inset-0 h-full w-full object-cover"
+              <>
+                <button
+                  type="button"
+                  onClick={(event) => openZoom(active.id, event.currentTarget, false)}
+                  className="absolute inset-0 z-10 cursor-zoom-in"
+                  aria-label={`Открыть изображение ${activeIndex + 1} крупно`}
                 />
-              </div>
+                <div className="absolute inset-0 overflow-hidden rounded-[20px]">
+                  <img
+                    src={active.url}
+                    alt={active.alt}
+                    className="absolute inset-0 h-full w-full object-cover"
+                  />
+                </div>
+              </>
             ) : null}
 
             {media.length > 1 && activeIndex >= 0 ? (
