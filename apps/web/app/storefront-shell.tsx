@@ -376,13 +376,13 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                     <button
                       type="button"
                       onClick={() => setSearchOpen(true)}
-                      className="inline-flex items-center gap-3.5 text-[1rem] font-normal tracking-[0.01em] text-foreground/86 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      className="inline-flex items-center gap-3 text-[0.95rem] font-normal tracking-[0.01em] text-foreground/72 transition-colors hover:text-foreground/9 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                       aria-label="Открыть поиск по каталогу"
                     >
-                      <span className="text-foreground/82 [&>svg]:h-5 [&>svg]:w-5">
+                      <span className="text-foreground/7 [&>svg]:h-[18px] [&>svg]:w-[18px]">
                         {desktopSearchIcon}
                       </span>
-                      <span>Search</span>
+                      <span>Поиск</span>
                     </button>
                   )}
                   <TopNavSearchFilter
