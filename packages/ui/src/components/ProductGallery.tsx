@@ -56,7 +56,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   const thumbnailRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
   const desktopImageRefs = React.useRef<Array<HTMLDivElement | null>>([]);
   const zoomStageRef = React.useRef<HTMLDivElement | null>(null);
+  const zoomDialogRef = React.useRef<HTMLDivElement | null>(null);
   const zoomFrameRef = React.useRef<HTMLDivElement | null>(null);
+  const zoomTriggerRef = React.useRef<HTMLButtonElement | null>(null);
   const zoomCurrentOffsetRef = React.useRef<Point>({ x: 0, y: 0 });
   const zoomTargetOffsetRef = React.useRef<Point>({ x: 0, y: 0 });
   const zoomPanFrameRef = React.useRef<number | null>(null);
@@ -486,6 +488,20 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   }, [zoomOpen]);
 
   React.useEffect(() => {
+    if (!zoomOpen) {
+      return;
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      zoomDialogRef.current?.focus({ preventScroll: true });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+    };
+  }, [zoomOpen]);
+
+  React.useEffect(() => {
     if (!zoomClosing || zoomOpen) {
       return;
     }
@@ -548,12 +564,14 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
     }
   };
 
-  const openZoom = (mediaId: string) => {
+  const openZoom = (mediaId: string, trigger?: HTMLButtonElement | null) => {
     if (zoomCloseTimerRef.current !== null) {
       window.clearTimeout(zoomCloseTimerRef.current);
       zoomCloseTimerRef.current = null;
     }
 
+    zoomTriggerRef.current = trigger ?? null;
+    trigger?.blur();
     setActiveId(mediaId);
     setZoomActiveId(mediaId);
     setSharedTransitionMediaId(mediaId);
@@ -567,6 +585,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
     if (zoomCloseTimerRef.current !== null) {
       window.clearTimeout(zoomCloseTimerRef.current);
       zoomCloseTimerRef.current = null;
+    }
+
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
     }
 
     const finalizeClose = () => {
@@ -770,9 +792,11 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   const zoomDialog = zoomOpen && zoomActive ? (
     <motion.div
       key="product-gallery-lightbox"
+      ref={zoomDialogRef}
       role="dialog"
       aria-modal="true"
       aria-label="Просмотр изображений товара"
+      tabIndex={-1}
       className="fixed inset-0 z-[71] overflow-hidden overscroll-none bg-[rgba(247,243,236,0.998)]"
       onClick={closeZoom}
       initial={{ opacity: 1 }}
@@ -976,7 +1000,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
             >
               <button
                 type="button"
-                onClick={() => openZoom(item.id)}
+                onClick={(event) => openZoom(item.id, event.currentTarget)}
                 className="absolute inset-0 z-10 cursor-zoom-in"
                 aria-label={`Открыть изображение ${index + 1} крупно`}
               />
