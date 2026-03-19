@@ -133,10 +133,53 @@ function parseMediaFromJson(raw: string): ProductMedia[] {
     const id = typeof item.id === "string" ? item.id.trim() : "";
     const url = typeof item.url === "string" ? item.url.trim() : "";
     const alt = typeof item.alt === "string" ? item.alt.trim() : "";
+    const thumbnailUrl = typeof item.thumbnailUrl === "string" ? item.thumbnailUrl.trim() : "";
+    const zoomUrl = typeof item.zoomUrl === "string" ? item.zoomUrl.trim() : "";
+    const width = item.width;
+    const height = item.height;
     if (!id || !url || !alt) {
       throw new Error(`media_json[${index}] должен содержать id, url и alt.`);
     }
-    return { id, url, alt };
+    const normalizedWidth =
+      width === undefined || width === null || width === ""
+        ? undefined
+        : typeof width === "number"
+          ? width
+          : typeof width === "string" && /^\d+$/.test(width.trim())
+            ? Number.parseInt(width.trim(), 10)
+            : Number.NaN;
+    const normalizedHeight =
+      height === undefined || height === null || height === ""
+        ? undefined
+        : typeof height === "number"
+          ? height
+          : typeof height === "string" && /^\d+$/.test(height.trim())
+            ? Number.parseInt(height.trim(), 10)
+            : Number.NaN;
+
+    if (
+      normalizedWidth !== undefined &&
+      (!Number.isInteger(normalizedWidth) || normalizedWidth <= 0)
+    ) {
+      throw new Error(`media_json[${index}].width должен быть положительным целым числом.`);
+    }
+
+    if (
+      normalizedHeight !== undefined &&
+      (!Number.isInteger(normalizedHeight) || normalizedHeight <= 0)
+    ) {
+      throw new Error(`media_json[${index}].height должен быть положительным целым числом.`);
+    }
+
+    return {
+      id,
+      url,
+      alt,
+      thumbnailUrl: thumbnailUrl || undefined,
+      zoomUrl: zoomUrl || undefined,
+      width: normalizedWidth,
+      height: normalizedHeight,
+    };
   });
 }
 

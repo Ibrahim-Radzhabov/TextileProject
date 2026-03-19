@@ -7,7 +7,6 @@ import {
   Button,
   FavoriteToggleButton,
   ProductCard,
-  ProductGallery,
   Surface,
   springSharedElement
 } from "@store-platform/ui";
@@ -15,6 +14,7 @@ import type { Product } from "@store-platform/shared-types";
 import { useCartStore } from "@/store/cart-store";
 import { useFavoritesStore } from "@/store/favorites-store";
 import { enableSharedProductTransition } from "@/lib/feature-flags";
+import ProductGalleryLightbox from "./product-gallery-lightbox";
 
 type ProductPageClientProps = {
   product: Product;
@@ -364,7 +364,7 @@ export function ProductPageClient({
           transition={{ duration: 0.25 }}
           className="space-y-4 md:space-y-0"
         >
-          <ProductGallery
+          <ProductGalleryLightbox
             key={`${product.id}:${selectedColorOption?.id ?? "default"}`}
             media={galleryMedia}
             mainImageLayoutId={sharedMediaLayoutId}

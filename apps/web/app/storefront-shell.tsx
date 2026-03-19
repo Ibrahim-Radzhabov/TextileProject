@@ -36,6 +36,12 @@ const tickerMessages = [
   "E-Concierging Availability, Monday to Sunday from 9 am to 7 pm"
 ];
 
+const desktopSearchIcon = (
+  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+  </svg>
+);
+
 const sidebarMenuSections: SidebarMenuItem[] = [
   {
     id: "catalog",
@@ -344,6 +350,14 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     void initFavoritesSync();
   }, [initFavoritesSync]);
 
+  const topNavLinks = [
+    { label: "Каталог", href: "/catalog", isActive: pathname === "/catalog" },
+    { label: "Шторы", href: "/catalog?tags=drape" },
+    { label: "Тюль", href: "/catalog?tags=tulle" },
+    { label: "Комплекты", href: "/catalog?view=kits" },
+    { label: "О студии", href: "/guides" }
+  ];
+
   return (
     <>
       <AnnouncementTicker messages={tickerMessages} />
@@ -354,26 +368,54 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             logo={config.shop.logo}
             leftHref="/"
             centerBrand
+            links={topNavLinks}
             leftSlot={
-              <SidebarMenu
-                items={sidebarMenuSections}
-                footerLabel="atelier@textile.studio"
-                footerHref="mailto:atelier@textile.studio"
-                footerSecondary="Москва, Кутузовский проспект, 18"
-              />
+              <>
+                <div className="hidden lg:flex items-center gap-3">
+                  {!searchOpen && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchOpen(true)}
+                      className="inline-flex items-center gap-3.5 text-[1rem] font-normal tracking-[0.01em] text-foreground/86 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      aria-label="Открыть поиск по каталогу"
+                    >
+                      <span className="text-foreground/82 [&>svg]:h-5 [&>svg]:w-5">
+                        {desktopSearchIcon}
+                      </span>
+                      <span>Search</span>
+                    </button>
+                  )}
+                  <TopNavSearchFilter
+                    intensity="balanced"
+                    open={searchOpen}
+                    onOpenChange={setSearchOpen}
+                    hideTrigger
+                    className="w-[min(28rem,34vw)]"
+                  />
+                </div>
+                <div className="lg:hidden">
+                  <SidebarMenu
+                    items={sidebarMenuSections}
+                    footerLabel="atelier@textile.studio"
+                    footerHref="mailto:atelier@textile.studio"
+                    footerSecondary="Москва, Кутузовский проспект, 18"
+                  />
+                </div>
+              </>
             }
             rightSlot={
-              <div className="flex items-center justify-end gap-2 sm:gap-2.5">
-                <TopNavSearchFilter
-                  intensity="balanced"
-                  open={searchOpen}
-                  onOpenChange={setSearchOpen}
-                  hideTrigger
+              <div className="flex items-center justify-end">
+                <AnimatedDock
+                  variant="minimal"
+                  className="hidden lg:flex"
+                  items={[
+                    { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
+                    { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
+                  ]}
                 />
                 <AnimatedDock
                   variant="capsule"
-                  distribution="between"
-                  className="w-[10.5rem] sm:w-[11.75rem]"
+                  className="lg:hidden"
                   items={[
                     { onClick: () => setSearchOpen(true), icon: iconSearch, title: "Поиск" },
                     { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },

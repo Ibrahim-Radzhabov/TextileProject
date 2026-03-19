@@ -123,7 +123,7 @@ export function TopNavSearchFilter({
       className={[
         styles.container,
         hideTrigger && !open ? styles.containerCollapsed : "",
-        className
+        !hideTrigger || open ? className : ""
       ].filter(Boolean).join(" ")}
       data-intensity={intensity}
     >

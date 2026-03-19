@@ -27,6 +27,13 @@ class ProductMedia(BaseModel):
     id: str
     url: str
     alt: str
+    thumbnail_url: Optional[str] = Field(default=None, alias="thumbnailUrl")
+    zoom_url: Optional[str] = Field(default=None, alias="zoomUrl")
+    width: Optional[int] = None
+    height: Optional[int] = None
+
+    class Config:
+        populate_by_name = True
 
 
 class ProductBadge(BaseModel):

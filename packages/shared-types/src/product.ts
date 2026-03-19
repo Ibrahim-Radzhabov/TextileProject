@@ -13,6 +13,10 @@ export type ProductMedia = {
   id: string;
   url: string;
   alt: string;
+  thumbnailUrl?: string;
+  zoomUrl?: string;
+  width?: number;
+  height?: number;
 };
 
 export type ProductBadge = {
