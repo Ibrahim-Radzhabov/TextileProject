@@ -422,19 +422,6 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                   >
                     <span className="[&>svg]:h-[18px] [&>svg]:w-[18px]">{iconSearch}</span>
                   </button>
-                  <button
-                    type="button"
-                    onClick={() => setOpen(true)}
-                    aria-label="Корзина"
-                    className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-[color,background-color] duration-[160ms] ease-out hover:bg-[rgba(34,28,24,0.035)] hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
-                  >
-                    <span className="[&>svg]:h-5 [&>svg]:w-5">{iconCart}</span>
-                    {itemCount > 0 && (
-                      <span className="pointer-events-none absolute right-0 top-0 flex h-[14px] min-w-[14px] -translate-y-[3px] translate-x-[5px] items-center justify-center rounded-full border border-white/86 bg-[linear-gradient(180deg,#261f1a,#382920)] px-[3px] text-[9px] font-medium leading-[9px] text-[#f6eee5] shadow-[0_8px_14px_-12px_rgba(0,0,0,0.5)]">
-                        {itemCount > 99 ? "99+" : itemCount}
-                      </span>
-                    )}
-                  </button>
                 </div>
               </div>
             }

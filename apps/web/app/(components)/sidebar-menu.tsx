@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { createPortal } from "react-dom";
@@ -61,6 +61,20 @@ const DEFAULT_MENU_ITEMS: SidebarMenuItem[] = [
 
 const DESKTOP_DETAIL_QUERY = "(min-width: 1280px)";
 const SOFT_TEXTILE_EASE = [0.22, 1, 0.36, 1] as const;
+
+function getFocusableElements(root: HTMLElement): HTMLElement[] {
+  return Array.from(
+    root.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+  ).filter((element) => {
+    if (element.getAttribute("aria-hidden") === "true") {
+      return false;
+    }
+
+    return !element.hasAttribute("disabled");
+  });
+}
 
 function hasSectionDetails(item: SidebarMenuItem): boolean {
   return Boolean(item.summary || item.items?.length || item.promos?.length);
@@ -137,10 +151,14 @@ export function SidebarMenu({
   footerHref,
   footerSecondary
 }: SidebarMenuProps) {
+  const panelId = useId();
   const [isOpen, setIsOpen] = useState(false);
   const [activeItemId, setActiveItemId] = useState<string | null>(null);
   const [supportsDesktopDetail, setSupportsDesktopDetail] = useState(false);
   const [portalNode, setPortalNode] = useState<HTMLElement | null>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLElement>(null);
+  const previousFocusRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const searchParamsKey = searchParams.toString();
@@ -217,8 +235,71 @@ export function SidebarMenu({
 
     const previous = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+
+    previousFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : triggerRef.current;
+
+    const focusInitialTarget = () => {
+      const panel = panelRef.current;
+      if (!panel) {
+        return;
+      }
+
+      const firstTarget = panel.querySelector<HTMLElement>("[data-sidebar-close]")
+        ?? getFocusableElements(panel)[0];
+      firstTarget?.focus({ preventScroll: true });
+    };
+
+    focusInitialTarget();
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setIsOpen(false);
+        return;
+      }
+
+      if (event.key !== "Tab") {
+        return;
+      }
+
+      const panel = panelRef.current;
+      if (!panel) {
+        return;
+      }
+
+      const focusableElements = getFocusableElements(panel);
+      if (focusableElements.length === 0) {
+        event.preventDefault();
+        return;
+      }
+
+      const firstElement = focusableElements[0];
+      const lastElement = focusableElements[focusableElements.length - 1];
+      const activeElement = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      const activeInsidePanel = activeElement ? panel.contains(activeElement) : false;
+
+      if (event.shiftKey) {
+        if (!activeInsidePanel || activeElement === firstElement) {
+          event.preventDefault();
+          lastElement.focus();
+        }
+        return;
+      }
+
+      if (!activeInsidePanel || activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previous;
+      window.removeEventListener("keydown", onKeyDown);
+      const focusTarget = previousFocusRef.current ?? triggerRef.current;
+      focusTarget?.focus({ preventScroll: true });
     };
   }, [defaultDesktopItemId, isOpen, menuItems, supportsDesktopDetail]);
 
@@ -244,6 +325,7 @@ export function SidebarMenu({
         <button
           type="button"
           onClick={() => setIsOpen(false)}
+          data-sidebar-close
           className="inline-flex items-center gap-2 text-[12px] font-normal tracking-[0.02em] text-black/72 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
         >
           Закрыть
@@ -489,8 +571,13 @@ export function SidebarMenu({
       <motion.button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
+        ref={triggerRef}
         className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-[color,background-color] duration-[160ms] ease-out hover:bg-[rgba(34,28,24,0.035)] hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
-        aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
+        aria-label="Открыть меню"
+        aria-expanded={isOpen}
+        aria-controls={panelId}
+        aria-hidden={isOpen ? true : undefined}
+        tabIndex={isOpen ? -1 : 0}
         whileTap={{ scale: 0.98 }}
       >
         <svg
@@ -500,18 +587,9 @@ export function SidebarMenu({
           stroke="currentColor"
           aria-hidden="true"
         >
-          {isOpen ? (
-            <>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 6l12 12" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 6 6 18" />
-            </>
-          ) : (
-            <>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 6.5h17" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 12h14" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 17.5h17" />
-            </>
-          )}
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 6.5h17" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 12h14" />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 17.5h17" />
         </svg>
       </motion.button>
 
@@ -519,10 +597,9 @@ export function SidebarMenu({
         <AnimatePresence>
           {isOpen && (
             <>
-              <motion.button
-                type="button"
+              <motion.div
                 className="fixed inset-0 z-[58] bg-[rgba(71,62,52,0.18)] backdrop-blur-[2px]"
-                aria-label="Закрыть меню"
+                aria-hidden="true"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -531,7 +608,11 @@ export function SidebarMenu({
               />
 
               <motion.aside
+                id={panelId}
+                ref={panelRef}
                 className="fixed left-0 top-0 z-[59] h-full overflow-hidden border-r border-black/10 bg-[#F6F4F1] shadow-[14px_0_48px_-30px_rgba(64,52,43,0.28)]"
+                role="dialog"
+                aria-modal="true"
                 aria-label="Основная навигация"
                 initial={shouldReduceMotion ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: -24, scale: 0.985 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -566,6 +647,7 @@ export function SidebarMenu({
                           <button
                             type="button"
                             onClick={() => setIsOpen(false)}
+                            data-sidebar-close
                             className="text-[12px] font-normal tracking-[0.02em] text-black/72 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
                           >
                             Закрыть
