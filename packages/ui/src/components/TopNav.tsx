@@ -1,29 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { motion } from "framer-motion";
 import { transitionStandard } from "../motion/presets";
 
 export type TopNavLink = {
   label: string;
   href: string;
   isActive?: boolean;
-};
-
-export type TopNavMobileMenu = {
-  primaryLinks?: TopNavLink[];
-  serviceLinks?: TopNavLink[];
-  contacts?: {
-    phoneLabel?: string;
-    phoneHref?: string;
-    emailLabel?: string;
-    emailHref?: string;
-    address?: string;
-  };
-  cta?: {
-    label: string;
-    href: string;
-  };
 };
 
 export type TopNavProps = {
@@ -38,7 +22,6 @@ export type TopNavProps = {
   leftHref?: string;
   tagline?: string;
   centerBrand?: boolean;
-  mobileMenu?: TopNavMobileMenu;
 };
 
 function buildMonogram(shopName: string): string {
@@ -63,45 +46,12 @@ export const TopNav: React.FC<TopNavProps> = ({
   rightSlot,
   leftHref,
   tagline,
-  centerBrand = false,
-  mobileMenu
+  centerBrand = false
 }) => {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const prefersReducedMotion = useReducedMotion();
   const monogram = buildMonogram(shopName);
   const hasCenterNav = links.length > 0;
-  const hasLeftSlot = Boolean(leftSlot);
-  const showMobileMenuTrigger = Boolean(rightSlot) && !hasLeftSlot;
-  const primaryLinks = (mobileMenu?.primaryLinks ?? links).filter((link) => Boolean(link.href));
-  const serviceLinks = mobileMenu?.serviceLinks ?? [];
-  const contacts = mobileMenu?.contacts;
-  const menuTriggerRef = React.useRef<HTMLButtonElement>(null);
-  const closeButtonRef = React.useRef<HTMLButtonElement>(null);
   const leftLinkClassName =
     "inline-flex rounded-[0.375rem] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]";
-
-  React.useEffect(() => {
-    if (!isMenuOpen) {
-      return undefined;
-    }
-
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    closeButtonRef.current?.focus({ preventScroll: true });
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMenuOpen(false);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-      menuTriggerRef.current?.focus({ preventScroll: true });
-    };
-  }, [isMenuOpen]);
 
   const leftContent = (
     <div className="flex items-center gap-2.5 min-[1280px]:gap-[14px]">
@@ -182,135 +132,8 @@ export const TopNav: React.FC<TopNavProps> = ({
 
           <div className="flex min-w-0 items-center justify-end gap-2 text-sm sm:gap-3">
             {rightSlot}
-            {showMobileMenuTrigger && (
-              <button
-                type="button"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1] min-[1280px]:hidden"
-                aria-label="Открыть меню"
-                aria-expanded={isMenuOpen}
-                aria-controls="top-nav-mobile-menu"
-                ref={menuTriggerRef}
-                onClick={() => setIsMenuOpen(true)}
-              >
-                <span aria-hidden="true" className="text-lg leading-none">≡</span>
-              </button>
-            )}
           </div>
         </motion.header>
-        <AnimatePresence>
-          {isMenuOpen && (
-            <>
-              <motion.button
-                type="button"
-                aria-label="Закрыть меню"
-                className="fixed inset-0 z-[58] bg-foreground/20 backdrop-blur-[2px] min-[1280px]:hidden"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={prefersReducedMotion ? { duration: 0 } : { duration: 0.18 }}
-                onClick={() => setIsMenuOpen(false)}
-              />
-              <motion.aside
-                id="top-nav-mobile-menu"
-                role="dialog"
-                aria-modal="true"
-                aria-label="Мобильная навигация"
-                className="fixed bottom-2 right-2 top-2 z-[59] flex w-[min(92vw,23rem)] flex-col overflow-hidden rounded-[1.4rem] border border-border/50 bg-card/96 p-5 shadow-soft min-[1280px]:hidden"
-                initial={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 26 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 26 }}
-                transition={prefersReducedMotion ? { duration: 0 } : { type: "spring", stiffness: 340, damping: 34, mass: 0.9 }}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <div className="min-w-0">
-                    <p className="ui-title-serif truncate text-[1.05rem] text-foreground">{shopName}</p>
-                    {tagline && <p className="ui-kicker truncate pt-1 text-[10px] text-muted-foreground/78">{tagline}</p>}
-                  </div>
-                  <button
-                    type="button"
-                    ref={closeButtonRef}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    aria-label="Закрыть меню"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <span aria-hidden="true" className="text-lg leading-none">×</span>
-                  </button>
-                </div>
-
-                <div className="mt-6 flex-1 space-y-6 overflow-y-auto pr-1">
-                  {primaryLinks.length > 0 && (
-                    <section>
-                      <p className="ui-kicker text-[10px] text-muted-foreground/78">Навигация</p>
-                      <nav className="mt-2 space-y-1.5" aria-label="Основная навигация">
-                        {primaryLinks.map((link) => (
-                          <a
-                            key={`${link.href}-${link.label}`}
-                            href={link.href}
-                            aria-current={link.isActive ? "page" : undefined}
-                            className={[
-                              "flex min-h-11 items-center rounded-xl border border-border/42 px-3.5 text-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                              link.isActive ? "bg-accent/12 text-foreground" : "bg-card/70 text-muted-foreground hover:text-foreground"
-                            ].join(" ")}
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {link.label}
-                          </a>
-                        ))}
-                      </nav>
-                    </section>
-                  )}
-
-                  {serviceLinks.length > 0 && (
-                    <section>
-                      <p className="ui-kicker text-[10px] text-muted-foreground/78">Клиентам</p>
-                      <div className="mt-2 space-y-1.5">
-                        {serviceLinks.map((link) => (
-                          <a
-                            key={`${link.href}-${link.label}`}
-                            href={link.href}
-                            className="flex min-h-11 items-center rounded-xl border border-border/42 bg-card/70 px-3.5 text-sm text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                            onClick={() => setIsMenuOpen(false)}
-                          >
-                            {link.label}
-                          </a>
-                        ))}
-                      </div>
-                    </section>
-                  )}
-
-                  {contacts && (
-                    <section>
-                      <p className="ui-kicker text-[10px] text-muted-foreground/78">Контакты</p>
-                      <div className="mt-2 space-y-2 text-sm">
-                        {contacts.phoneLabel && contacts.phoneHref && (
-                          <a href={contacts.phoneHref} className="block text-foreground/90 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-                            {contacts.phoneLabel}
-                          </a>
-                        )}
-                        {contacts.emailLabel && contacts.emailHref && (
-                          <a href={contacts.emailHref} className="block text-foreground/90 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-                            {contacts.emailLabel}
-                          </a>
-                        )}
-                        {contacts.address && <p className="ui-subtle text-sm">{contacts.address}</p>}
-                      </div>
-                    </section>
-                  )}
-                </div>
-
-                {mobileMenu?.cta && (
-                  <a
-                    href={mobileMenu.cta.href}
-                    className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl border border-border/48 bg-foreground px-4 text-sm font-medium text-background transition-colors hover:bg-foreground/92 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {mobileMenu.cta.label}
-                  </a>
-                )}
-              </motion.aside>
-            </>
-          )}
-        </AnimatePresence>
       </>
     );
   }
