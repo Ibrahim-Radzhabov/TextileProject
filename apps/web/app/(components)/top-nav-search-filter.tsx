@@ -106,7 +106,7 @@ export function TopNavSearchFilter({
 
   const openSearch = useCallback(() => {
     setOpen(true);
-  }, []);
+  }, [setOpen]);
 
   const submitSearch = useCallback(
     (openFilters: boolean) => {
@@ -135,7 +135,7 @@ export function TopNavSearchFilter({
           onClick={openSearch}
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+            <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
           </svg>
         </button>
       )}
@@ -143,12 +143,12 @@ export function TopNavSearchFilter({
       <AnimatePresence initial={false}>
         {open && (
           <motion.form
-            key="top-nav-neon-search"
+            key="top-nav-search"
             className={[styles.frame, intensity === "vivid" ? styles.vivid : styles.balanced].join(" ")}
-            initial={{ opacity: 0, x: 12, scale: 0.98 }}
+            initial={{ opacity: 0, x: 8, scale: 0.985 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 10, scale: 0.985 }}
-            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+            exit={{ opacity: 0, x: 6, scale: 0.99 }}
+            transition={{ duration: 0.16, ease: "easeOut" }}
             onSubmit={(event) => {
               event.preventDefault();
               submitSearch(false);
@@ -160,7 +160,7 @@ export function TopNavSearchFilter({
             <div className={styles.inner}>
               <span className={styles.searchIcon} aria-hidden>
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                  <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </span>
 
@@ -182,7 +182,7 @@ export function TopNavSearchFilter({
                   aria-label="Очистить поиск"
                 >
                   <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+                    <path d="M6 6l12 12M18 6L6 18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                   </svg>
                 </button>
               )}

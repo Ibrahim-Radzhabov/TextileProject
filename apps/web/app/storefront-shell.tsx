@@ -16,17 +16,17 @@ import { SidebarMenu, type SidebarMenuItem } from "./(components)/sidebar-menu";
 
 const iconSearch = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
 const iconHeart = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M12 20c-3.4-2.7-6.5-5.2-6.5-8.7A3.8 3.8 0 0 1 9.3 7.5c1.1 0 2.1.5 2.7 1.4.6-.9 1.6-1.4 2.7-1.4a3.8 3.8 0 0 1 3.8 3.8c0 3.5-3.1 6-6.5 8.7Z" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" />
+    <path d="M12 20c-3.4-2.7-6.5-5.2-6.5-8.7A3.8 3.8 0 0 1 9.3 7.5c1.1 0 2.1.5 2.7 1.4.6-.9 1.6-1.4 2.7-1.4a3.8 3.8 0 0 1 3.8 3.8c0 3.5-3.1 6-6.5 8.7Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
   </svg>
 );
 const iconCart = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M4.5 6h1.7l1.4 8.2h8.7l1.6-6.3H8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M4.5 6h1.7l1.4 8.2h8.7l1.6-6.3H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
     <circle cx="10.4" cy="18.2" r="1.2" fill="currentColor" />
     <circle cx="16.4" cy="18.2" r="1.2" fill="currentColor" />
   </svg>
@@ -38,7 +38,7 @@ const tickerMessages = [
 
 const desktopSearchIcon = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
   </svg>
 );
 
@@ -371,15 +371,15 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
             links={topNavLinks}
             leftSlot={
               <>
-                <div className="hidden lg:flex items-center gap-3">
+                <div className="hidden min-[1280px]:flex min-w-[160px] items-center gap-3">
                   {!searchOpen && (
                     <button
                       type="button"
                       onClick={() => setSearchOpen(true)}
-                      className="inline-flex items-center gap-3 text-[0.95rem] font-normal tracking-[0.01em] text-foreground/72 transition-colors hover:text-foreground/9 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      className="inline-flex w-40 items-center gap-3 text-[16px] font-normal leading-5 tracking-[0px] text-[rgba(34,28,24,0.82)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
                       aria-label="Открыть поиск по каталогу"
                     >
-                      <span className="text-foreground/7 [&>svg]:h-[18px] [&>svg]:w-[18px]">
+                      <span className="text-[rgba(34,28,24,0.82)] [&>svg]:h-[18px] [&>svg]:w-[18px]">
                         {desktopSearchIcon}
                       </span>
                       <span>Поиск</span>
@@ -390,10 +390,10 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                     open={searchOpen}
                     onOpenChange={setSearchOpen}
                     hideTrigger
-                    className="w-[min(28rem,34vw)]"
+                    className="w-40"
                   />
                 </div>
-                <div className="lg:hidden">
+                <div className="min-[1280px]:hidden">
                   <SidebarMenu
                     items={sidebarMenuSections}
                     footerLabel="atelier@textile.studio"
@@ -407,20 +407,35 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
               <div className="flex items-center justify-end">
                 <AnimatedDock
                   variant="minimal"
-                  className="hidden lg:flex"
+                  className="hidden min-[1280px]:flex"
                   items={[
                     { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
                     { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
                   ]}
                 />
-                <button
-                  type="button"
-                  onClick={() => setSearchOpen(true)}
-                  aria-label="Поиск"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:hidden"
-                >
-                  <span className="[&>svg]:h-[18px] [&>svg]:w-[18px]">{iconSearch}</span>
-                </button>
+                <div className="flex items-center gap-3 min-[1280px]:hidden">
+                  <button
+                    type="button"
+                    onClick={() => setSearchOpen(true)}
+                    aria-label="Поиск"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-[color,background-color] duration-[160ms] ease-out hover:bg-[rgba(34,28,24,0.035)] hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+                  >
+                    <span className="[&>svg]:h-[18px] [&>svg]:w-[18px]">{iconSearch}</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setOpen(true)}
+                    aria-label="Корзина"
+                    className="relative inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-[color,background-color] duration-[160ms] ease-out hover:bg-[rgba(34,28,24,0.035)] hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+                  >
+                    <span className="[&>svg]:h-5 [&>svg]:w-5">{iconCart}</span>
+                    {itemCount > 0 && (
+                      <span className="pointer-events-none absolute right-0 top-0 flex h-[14px] min-w-[14px] -translate-y-[3px] translate-x-[5px] items-center justify-center rounded-full border border-white/86 bg-[linear-gradient(180deg,#261f1a,#382920)] px-[3px] text-[9px] font-medium leading-[9px] text-[#f6eee5] shadow-[0_8px_14px_-12px_rgba(0,0,0,0.5)]">
+                        {itemCount > 99 ? "99+" : itemCount}
+                      </span>
+                    )}
+                  </button>
+                </div>
               </div>
             }
           />

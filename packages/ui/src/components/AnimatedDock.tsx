@@ -41,7 +41,7 @@ export const AnimatedDock: React.FC<AnimatedDockProps> = ({
         isDistributed
           ? "w-full justify-between gap-0"
           : isMinimal
-            ? "gap-2.5 sm:gap-3"
+            ? "gap-4 min-[1280px]:gap-6"
           : isCapsule
             ? "gap-2 sm:gap-2.5"
             : "gap-1 sm:gap-1.5",
@@ -51,16 +51,16 @@ export const AnimatedDock: React.FC<AnimatedDockProps> = ({
     >
       {items.map((item, index) => {
         const isHovered = hoveredIndex === index;
-        const scale = prefersReducedMotion ? 1 : isHovered ? (isCapsule ? 1.06 : isMinimal ? 1.012 : 1.14) : 1;
-        const y = prefersReducedMotion ? 0 : isHovered ? (isCapsule ? -2 : isMinimal ? -0.25 : -4) : 0;
+        const scale = prefersReducedMotion ? 1 : isHovered ? (isCapsule ? 1.06 : isMinimal ? 1.008 : 1.14) : 1;
+        const y = prefersReducedMotion ? 0 : isHovered ? (isCapsule ? -2 : isMinimal ? -0.5 : -4) : 0;
 
         const content = (
           <>
             <span
               className={[
-                "relative flex shrink-0 items-center justify-center rounded-full transition-colors duration-[var(--motion-fast)]",
+                "relative flex shrink-0 items-center justify-center rounded-full transition-[color,background-color,transform] duration-[160ms] ease-out",
                 isMinimal
-                  ? "h-[2.5rem] w-[2.5rem] border border-transparent bg-transparent text-foreground/72 shadow-none backdrop-blur-0 hover:bg-card/36 hover:text-foreground/9 [&>svg]:h-[17px] [&>svg]:w-[17px] sm:h-[2.75rem] sm:w-[2.75rem] sm:[&>svg]:h-[18px] sm:[&>svg]:w-[18px]"
+                  ? "h-10 w-10 border border-transparent bg-transparent text-[rgba(34,28,24,0.82)] shadow-none hover:bg-[rgba(34,28,24,0.035)] hover:text-[#221C18] [&>svg]:h-5 [&>svg]:w-5 min-[1280px]:h-11 min-[1280px]:w-11"
                   :
                 isCapsule
                   ? "h-[2.875rem] w-[2.875rem] border border-[rgba(134,111,88,0.26)] bg-[linear-gradient(180deg,rgba(255,255,255,0.94),rgba(243,237,227,0.88))] text-foreground/80 shadow-[0_10px_26px_-18px_rgba(79,58,38,0.52),inset_0_1px_0_rgba(255,255,255,0.96)] backdrop-blur-sm hover:border-[rgba(151,118,85,0.4)] hover:bg-[linear-gradient(180deg,rgba(255,255,255,0.98),rgba(245,238,226,0.94))] hover:text-foreground [&>svg]:h-[18px] [&>svg]:w-[18px] sm:h-[3rem] sm:w-[3rem] sm:[&>svg]:h-[19px] sm:[&>svg]:w-[19px]"
@@ -71,9 +71,9 @@ export const AnimatedDock: React.FC<AnimatedDockProps> = ({
               {item.badge != null && item.badge > 0 && (
                 <span
                   className={[
-                    "pointer-events-none absolute right-[1px] top-[1px] flex min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-medium",
+                    "pointer-events-none absolute flex items-center justify-center rounded-full",
                     isMinimal
-                      ? "h-[15px] min-w-[15px] border border-white/86 bg-[linear-gradient(180deg,#251e19,#37291f)] px-[3px] text-[8px] font-semibold tracking-[0.02em] text-[#f6eee5] shadow-[0_8px_14px_-12px_rgba(0,0,0,0.56)]"
+                      ? "right-0 top-0 h-4 min-w-[16px] -translate-y-1/4 translate-x-[6px] border border-white/86 bg-[linear-gradient(180deg,#261f1a,#382920)] px-[3px] text-[10px] font-medium leading-[10px] tracking-[0.01em] text-[#f6eee5] shadow-[0_8px_14px_-12px_rgba(0,0,0,0.5)]"
                       :
                     isCapsule
                       ? "h-[19px] min-w-[19px] border border-white/85 bg-[linear-gradient(180deg,#231b17,#3b2a21)] px-1.5 text-[9px] font-semibold tracking-[0.03em] text-[#f8f2ea] shadow-[0_10px_18px_-12px_rgba(0,0,0,0.62)]"
@@ -93,7 +93,7 @@ export const AnimatedDock: React.FC<AnimatedDockProps> = ({
           "aria-label": item.title,
           className: [
             isMinimal
-              ? "inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              ? "inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
               : "inline-flex rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
             itemClassName ?? ""
           ].filter(Boolean).join(" "),

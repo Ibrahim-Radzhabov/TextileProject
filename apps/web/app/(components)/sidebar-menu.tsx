@@ -59,7 +59,7 @@ const DEFAULT_MENU_ITEMS: SidebarMenuItem[] = [
   }
 ];
 
-const DESKTOP_DETAIL_QUERY = "(min-width: 960px)";
+const DESKTOP_DETAIL_QUERY = "(min-width: 1280px)";
 const SOFT_TEXTILE_EASE = [0.22, 1, 0.36, 1] as const;
 
 function hasSectionDetails(item: SidebarMenuItem): boolean {
@@ -239,22 +239,22 @@ export function SidebarMenu({
   };
 
   const rootPanel = (
-    <div className="flex h-full w-[23rem] max-w-full shrink-0 flex-col">
-      <div className="flex h-16 items-center px-6">
+    <div className="flex h-full w-[20rem] max-w-full shrink-0 flex-col">
+      <div className="flex h-[72px] items-center px-6">
         <button
           type="button"
           onClick={() => setIsOpen(false)}
-          className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.17em] text-black/85 transition-colors hover:text-black/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4f4f2]"
+          className="inline-flex items-center gap-2 text-[12px] font-normal tracking-[0.02em] text-black/72 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
         >
-          Close
+          Закрыть
           <svg className="h-3 w-3 -rotate-45" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 10l7-7m0 0l7 7m-7-7v18" />
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M5 10l7-7m0 0l7 7m-7-7v18" />
           </svg>
         </button>
       </div>
 
       <motion.nav
-        className="mt-4 flex-1 overflow-y-auto px-6 pb-8"
+        className="mt-2 flex-1 overflow-y-auto px-6 pb-8"
         initial="hidden"
         animate="visible"
         exit="hidden"
@@ -265,7 +265,7 @@ export function SidebarMenu({
           }
         }}
       >
-        <ul className="divide-y divide-black/12">
+        <ul className="space-y-1.5">
           {menuItems.map((item) => {
             const hasDetails = hasSectionDetails(item);
             const matchesCurrentLocation = hrefMatchesLocation(item.href, pathname, searchParams)
@@ -293,8 +293,8 @@ export function SidebarMenu({
                     onMouseEnter={() => handleRootItemPreview(item)}
                     onFocus={() => handleRootItemPreview(item)}
                     className={[
-                      "group flex w-full items-center justify-between rounded-2xl px-3 py-4 text-left text-[12px] font-semibold uppercase tracking-[0.16em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4f4f2]",
-                      isSelected ? "bg-[#ece7d5]/90 text-black/68" : "text-black/88 hover:bg-[#efebe0]/55 hover:text-black/62"
+                      "group flex w-full items-center justify-between rounded-2xl px-3 py-3.5 text-left text-[20px] font-normal leading-7 tracking-[0.01em] transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]",
+                      isSelected ? "bg-[#efeae0] text-black/68" : "text-black/88 hover:bg-[#f1ece3] hover:text-black/68"
                     ].join(" ")}
                     aria-expanded={isSelected}
                   >
@@ -317,7 +317,7 @@ export function SidebarMenu({
                 ) : item.href ? (
                   <SidebarHref
                     href={item.href}
-                    className="flex items-center justify-between py-4 text-[12px] font-semibold uppercase tracking-[0.16em] text-black/88 transition-colors hover:text-black/62 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4f4f2]"
+                    className="flex items-center justify-between rounded-2xl px-3 py-3.5 text-[20px] font-normal leading-7 tracking-[0.01em] text-black/88 transition-colors hover:bg-[#f1ece3] hover:text-black/68 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
                     onClick={() => setIsOpen(false)}
                   >
                     <span className={labelClassName}>{item.label}</span>
@@ -328,11 +328,11 @@ export function SidebarMenu({
                       viewBox="0 0 24 24"
                       aria-hidden="true"
                     >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M9 5l7 7-7 7" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5l7 7-7 7" />
                     </svg>
                   </SidebarHref>
                 ) : (
-                  <div className="py-4 text-[12px] font-semibold uppercase tracking-[0.16em] text-black/88">{item.label}</div>
+                  <div className="px-3 py-3.5 text-[20px] font-normal leading-7 tracking-[0.01em] text-black/88">{item.label}</div>
                 )}
               </motion.li>
             );
@@ -345,16 +345,16 @@ export function SidebarMenu({
           {footerLabel && footerHref ? (
             <SidebarHref
               href={footerHref}
-              className="text-[11px] font-semibold uppercase tracking-[0.14em] text-black/72 transition-colors hover:text-black"
+              className="text-[12px] font-normal tracking-[0.02em] text-black/72 transition-colors hover:text-black"
               onClick={() => setIsOpen(false)}
             >
               {footerLabel}
             </SidebarHref>
           ) : footerLabel ? (
-            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-black/72">{footerLabel}</p>
+            <p className="text-[12px] font-normal tracking-[0.02em] text-black/72">{footerLabel}</p>
           ) : null}
           {footerSecondary && (
-            <p className="mt-1 text-xs text-black/48">{footerSecondary}</p>
+            <p className="mt-1 text-sm text-black/48">{footerSecondary}</p>
           )}
         </div>
       )}
@@ -366,7 +366,7 @@ export function SidebarMenu({
       <div className="border-b border-black/8 px-6 py-6">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.17em] text-black/45">Section</p>
+            <p className="text-[11px] font-medium uppercase tracking-[0.12em] text-black/45">Раздел</p>
             <h2 className="text-xl font-medium tracking-[0.01em] text-black">{item.label}</h2>
             {item.summary && (
               <p className="max-w-md text-sm leading-relaxed text-black/62">{item.summary}</p>
@@ -375,7 +375,7 @@ export function SidebarMenu({
           {item.href && (
             <SidebarHref
               href={item.href}
-              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-black/12 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-black/80 transition-colors hover:border-black/22 hover:text-black"
+              className="inline-flex shrink-0 items-center gap-2 rounded-full border border-black/12 px-4 py-2 text-[12px] font-normal tracking-[0.02em] text-black/80 transition-colors hover:border-black/22 hover:text-black"
               onClick={() => setIsOpen(false)}
             >
               Открыть раздел
@@ -405,7 +405,7 @@ export function SidebarMenu({
                     className="block rounded-2xl border border-black/10 bg-white/55 px-4 py-3 transition-colors duration-300 hover:border-black/18 hover:bg-white/72 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[#f7f6f3]"
                     onClick={() => setIsOpen(false)}
                   >
-                    <span className={["block text-[12px] font-semibold uppercase tracking-[0.15em]", isCurrent ? "text-black/62" : "text-black/88"].join(" ")}>
+                    <span className={["block text-[16px] font-normal tracking-[0.01em]", isCurrent ? "text-black/62" : "text-black/88"].join(" ")}>
                       {link.label}
                     </span>
                     {link.description && (
@@ -447,7 +447,7 @@ export function SidebarMenu({
                     </div>
                   </div>
                   <div className="pt-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-black/88 transition-colors duration-300 group-hover:text-black/74">{promo.title}</p>
+                    <p className="text-[12px] font-medium uppercase tracking-[0.12em] text-black/88 transition-colors duration-300 group-hover:text-black/74">{promo.title}</p>
                     <p className="pt-1 text-sm leading-relaxed text-black/56 transition-colors duration-300 group-hover:text-black/50">{promo.subtitle}</p>
                   </div>
                 </SidebarHref>
@@ -489,12 +489,12 @@ export function SidebarMenu({
       <motion.button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="inline-flex h-[2.875rem] w-[2.875rem] items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground shadow-soft-subtle backdrop-blur-sm transition-colors hover:border-border/68 hover:bg-card/96 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:h-12 sm:w-12"
-        aria-label={isOpen ? "Close menu" : "Open menu"}
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-[color,background-color] duration-[160ms] ease-out hover:bg-[rgba(34,28,24,0.035)] hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+        aria-label={isOpen ? "Закрыть меню" : "Открыть меню"}
         whileTap={{ scale: 0.98 }}
       >
         <svg
-          className="h-5 w-5 sm:h-[21px] sm:w-[21px]"
+          className="h-5 w-5"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -502,14 +502,14 @@ export function SidebarMenu({
         >
           {isOpen ? (
             <>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M6 6l12 12" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M18 6 6 18" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M6 6l12 12" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M18 6 6 18" />
             </>
           ) : (
             <>
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3.5 6.5h17" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3.5 12h14" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3.5 17.5h17" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 6.5h17" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 12h14" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3.5 17.5h17" />
             </>
           )}
         </svg>
@@ -531,14 +531,14 @@ export function SidebarMenu({
               />
 
               <motion.aside
-                className="fixed left-0 top-0 z-[59] h-full overflow-hidden border-r border-black/10 bg-[#f4f4f2] shadow-[14px_0_48px_-30px_rgba(64,52,43,0.34)]"
+                className="fixed left-0 top-0 z-[59] h-full overflow-hidden border-r border-black/10 bg-[#F6F4F1] shadow-[14px_0_48px_-30px_rgba(64,52,43,0.28)]"
                 aria-label="Основная навигация"
                 initial={shouldReduceMotion ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: -24, scale: 0.985 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={shouldReduceMotion ? { opacity: 1, x: 0, scale: 1 } : { opacity: 0, x: -18, scale: 0.992 }}
                 transition={panelTransition}
                 style={{
-                  width: showDesktopDetail ? "min(50rem, calc(100vw - 2.5rem))" : "min(23rem, 88vw)"
+                  width: showDesktopDetail ? "min(56rem, calc(100vw - 3rem))" : "min(20rem, 88vw)"
                 }}
               >
                 {!supportsDesktopDetail ? (
@@ -552,26 +552,26 @@ export function SidebarMenu({
                         exit={shouldReduceMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                         transition={mobileStageTransition}
                       >
-                        <div className="flex h-16 items-center justify-between border-b border-black/8 px-5">
+                        <div className="flex h-[72px] items-center justify-between border-b border-black/8 px-6">
                           <button
                             type="button"
                             onClick={() => setActiveItemId(null)}
-                            className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.17em] text-black/72 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4f4f2]"
+                            className="inline-flex items-center gap-2 text-[12px] font-normal tracking-[0.02em] text-black/72 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
                           >
                             <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 18l-6-6 6-6" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.6} d="M15 18l-6-6 6-6" />
                             </svg>
-                            Back
+                            Назад
                           </button>
                           <button
                             type="button"
                             onClick={() => setIsOpen(false)}
-                            className="text-[11px] font-semibold uppercase tracking-[0.17em] text-black/72 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-[#f4f4f2]"
+                            className="text-[12px] font-normal tracking-[0.02em] text-black/72 transition-colors hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
                           >
-                            Close
+                            Закрыть
                           </button>
                         </div>
-                        <div className="min-h-0 flex-1 overflow-hidden bg-[#f7f6f3]">
+                        <div className="min-h-0 flex-1 overflow-hidden bg-[#fbfaf7]">
                           <AnimatePresence mode="wait" initial={false}>
                             {mobileDetailContent}
                           </AnimatePresence>
@@ -594,7 +594,7 @@ export function SidebarMenu({
                   <div className="flex h-full min-w-0">
                     {rootPanel}
                     {showDesktopDetail && activeItem && (
-                      <div className="hidden min-[960px]:block min-w-0 flex-1 border-l border-black/8 bg-[#f7f6f3]">
+                      <div className="hidden min-[1280px]:block min-w-0 flex-1 border-l border-black/8 bg-[#fbfaf7]">
                         {desktopDetailContent}
                       </div>
                     )}

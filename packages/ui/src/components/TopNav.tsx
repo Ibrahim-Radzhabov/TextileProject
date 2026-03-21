@@ -78,7 +78,7 @@ export const TopNav: React.FC<TopNavProps> = ({
   const menuTriggerRef = React.useRef<HTMLButtonElement>(null);
   const closeButtonRef = React.useRef<HTMLButtonElement>(null);
   const leftLinkClassName =
-    "inline-flex rounded-xl transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+    "inline-flex rounded-[0.375rem] transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]";
 
   React.useEffect(() => {
     if (!isMenuOpen) {
@@ -104,8 +104,8 @@ export const TopNav: React.FC<TopNavProps> = ({
   }, [isMenuOpen]);
 
   const leftContent = (
-    <div className="flex items-center gap-2.5 sm:gap-3.5">
-      <div className="flex h-9 w-9 shrink-0 items-center justify-center overflow-hidden rounded-full border border-border/45 bg-card/92 shadow-soft-subtle sm:h-10 sm:w-10">
+    <div className="flex items-center gap-2.5 min-[1280px]:gap-[14px]">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-full border border-[rgba(34,28,24,0.14)] bg-[rgba(255,255,255,0.62)] min-[1280px]:h-[44px] min-[1280px]:w-[44px]">
         {logo ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img
@@ -114,17 +114,17 @@ export const TopNav: React.FC<TopNavProps> = ({
             className="h-full w-full object-cover"
           />
         ) : (
-          <span className="text-[0.58rem] font-semibold uppercase tracking-[0.22em] text-muted-foreground sm:text-[0.66rem]">
+          <span className="text-[0.58rem] font-medium uppercase tracking-[0.16em] text-[rgba(34,28,24,0.82)] min-[1280px]:text-[0.78rem]">
             {monogram}
           </span>
         )}
       </div>
       <span className="min-w-0">
-        <span className="ui-title-serif block truncate text-[1.08rem] leading-none text-foreground sm:text-[1.3rem] md:text-[1.46rem]">
+        <span className="ui-title-serif block truncate text-[1.5rem] leading-[1.08] font-semibold tracking-[-0.1px] text-[#221C18] min-[1280px]:text-[30px] min-[1280px]:leading-8 min-[1280px]:tracking-[-0.2px]">
           {shopName}
         </span>
         {tagline && (
-          <span className="ui-kicker block truncate pt-1 text-[10px] text-muted-foreground/78">
+          <span className="ui-kicker block truncate pt-1 text-[10px] text-[rgba(34,28,24,0.52)]">
             {tagline}
           </span>
         )}
@@ -138,7 +138,7 @@ export const TopNav: React.FC<TopNavProps> = ({
     return (
       <>
         <motion.header
-          className="grid w-full grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-3 sm:gap-4 lg:gap-6"
+          className="grid w-full grid-cols-[1fr_auto_1fr] items-center gap-4 min-[1280px]:grid-cols-[minmax(160px,1fr)_auto_minmax(160px,1fr)] min-[1280px]:gap-[72px]"
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={transitionStandard}
@@ -147,25 +147,32 @@ export const TopNav: React.FC<TopNavProps> = ({
             {leftSlot}
           </div>
 
-          <div className="flex min-w-0 items-center justify-center px-1 sm:px-2">
-            <div className="flex min-w-0 items-center justify-center gap-6 xl:gap-9">
+          <div className="flex min-w-0 items-center justify-center px-1">
+            <div className="flex min-w-0 items-center justify-center gap-0 min-[1280px]:gap-12">
               {brandNode}
               {hasCenterNav && (
                 <nav
                   aria-label="Основная навигация"
-                  className="hidden lg:flex items-center justify-center gap-5 xl:gap-7"
+                  className="hidden min-[1280px]:flex items-center justify-center gap-[42px]"
                 >
                   {links.map((link) => (
                     <a
                       key={`${link.href}-${link.label}`}
                       href={link.href}
                       className={[
-                        "inline-flex items-center whitespace-nowrap text-[0.92rem] font-normal tracking-[0.01em] transition-colors",
-                        link.isActive ? "text-foreground/66" : "text-foreground hover:text-foreground/66"
+                        "group relative inline-flex items-center whitespace-nowrap text-[15px] font-normal leading-5 tracking-[0.1px] transition-colors duration-[160ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]",
+                        link.isActive ? "text-[#221C18]" : "text-[rgba(34,28,24,0.82)] hover:text-[#221C18]"
                       ].join(" ")}
                       aria-current={link.isActive ? "page" : undefined}
                     >
                       {link.label}
+                      <span
+                        aria-hidden="true"
+                        className={[
+                          "absolute inset-x-0 -bottom-3 h-px origin-center bg-[rgba(34,28,24,0.18)] transition-transform duration-[160ms] ease-out",
+                          link.isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
+                        ].join(" ")}
+                      />
                     </a>
                   ))}
                 </nav>
@@ -178,7 +185,7 @@ export const TopNav: React.FC<TopNavProps> = ({
             {showMobileMenuTrigger && (
               <button
                 type="button"
-                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/45 bg-card/84 text-foreground transition-colors hover:border-border/65 hover:bg-card/94 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:hidden"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1] min-[1280px]:hidden"
                 aria-label="Открыть меню"
                 aria-expanded={isMenuOpen}
                 aria-controls="top-nav-mobile-menu"
@@ -196,7 +203,7 @@ export const TopNav: React.FC<TopNavProps> = ({
               <motion.button
                 type="button"
                 aria-label="Закрыть меню"
-                className="fixed inset-0 z-[58] bg-foreground/20 backdrop-blur-[2px] md:hidden"
+                className="fixed inset-0 z-[58] bg-foreground/20 backdrop-blur-[2px] min-[1280px]:hidden"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
@@ -208,7 +215,7 @@ export const TopNav: React.FC<TopNavProps> = ({
                 role="dialog"
                 aria-modal="true"
                 aria-label="Мобильная навигация"
-                className="fixed bottom-2 right-2 top-2 z-[59] flex w-[min(92vw,23rem)] flex-col overflow-hidden rounded-[1.4rem] border border-border/50 bg-card/96 p-5 shadow-soft md:hidden"
+                className="fixed bottom-2 right-2 top-2 z-[59] flex w-[min(92vw,23rem)] flex-col overflow-hidden rounded-[1.4rem] border border-border/50 bg-card/96 p-5 shadow-soft min-[1280px]:hidden"
                 initial={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 26 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={prefersReducedMotion ? { opacity: 1, x: 0 } : { opacity: 0, x: 26 }}
@@ -310,7 +317,7 @@ export const TopNav: React.FC<TopNavProps> = ({
 
   return (
     <motion.header
-      className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 sm:gap-3 md:gap-5"
+      className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 min-[1280px]:gap-8"
       initial={{ opacity: 0, y: -6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={transitionStandard}
@@ -320,20 +327,20 @@ export const TopNav: React.FC<TopNavProps> = ({
         {leftSlot}
       </div>
       {hasCenterNav && (
-        <nav aria-label="Основная навигация" className="hidden items-center justify-center gap-0.5 lg:flex">
+        <nav aria-label="Основная навигация" className="hidden items-center justify-center gap-[42px] min-[1280px]:flex">
           {links.map((link) => (
             <a
               key={`${link.href}-${link.label}`}
               href={link.href}
               className={[
-                "group relative inline-flex h-10 items-center rounded-full px-3 text-[0.9rem] transition-colors xl:px-3.5 xl:text-[0.93rem]",
-                link.isActive ? "font-medium text-foreground" : "text-muted-foreground hover:text-foreground"
+                "group relative inline-flex h-10 items-center text-[15px] font-normal leading-5 tracking-[0.1px] transition-colors duration-[160ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]",
+                link.isActive ? "text-[#221C18]" : "text-[rgba(34,28,24,0.82)] hover:text-[#221C18]"
               ].join(" ")}
               aria-current={link.isActive ? "page" : undefined}
             >
               <span>{link.label}</span>
               <span className={[
-                "absolute inset-x-3 bottom-[0.35rem] h-px rounded-full bg-accent transition-transform duration-200",
+                "absolute inset-x-0 -bottom-3 h-px rounded-full bg-[rgba(34,28,24,0.18)] transition-transform duration-[160ms] ease-out",
                 link.isActive ? "scale-x-100" : "scale-x-0 group-hover:scale-x-100"
               ].join(" ")} />
             </a>

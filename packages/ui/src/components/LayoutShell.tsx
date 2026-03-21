@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
-import { Surface } from "./Surface";
 import { transitionStandard } from "../motion/presets";
 
 export type LayoutShellProps = {
@@ -44,34 +43,29 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
   });
 
   return (
-    <div className="page-shell">
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-[1360px] flex-col px-4 pb-24 pt-2 sm:px-6 sm:pb-12 sm:pt-3 lg:px-10 lg:pt-4">
-        {topNav && (
-          <motion.div
-            className="sticky top-0 z-40 mb-2 sm:mb-3"
-            initial={{ opacity: 0, y: -4 }}
-            animate={
-              prefersReducedMotion
-                ? { opacity: 1, y: 0 }
-                : { opacity: isTopNavHidden ? 0 : 1, y: isTopNavHidden ? "-115%" : 0 }
-            }
-            transition={transitionStandard}
-          >
-            <Surface
-              tone={isScrolled ? "elevated" : "ghost"}
-              className={[
-                "mx-auto flex min-h-[3.25rem] w-[93.5%] items-center justify-between rounded-md border px-3 py-2 shadow-none backdrop-blur-0 transition-[border-color,background-color,backdrop-filter,box-shadow] duration-[var(--motion-normal)] sm:min-h-[3.5rem] sm:px-4 sm:py-2.5",
-                isScrolled
-                  ? "border-border/42 bg-card/88 shadow-soft-subtle backdrop-blur-xl"
-                  : "border-transparent bg-transparent"
-              ].join(" ")}
-            >
-              {topNav}
-            </Surface>
-          </motion.div>
-        )}
+    <div className="page-shell min-h-screen">
+      {topNav && (
+        <motion.div
+          className={[
+            "sticky top-0 z-40 border-b border-[rgba(34,28,24,0.06)] bg-[#F6F4F1]/92 transition-[background-color,backdrop-filter] duration-[var(--motion-normal)]",
+            isScrolled ? "backdrop-blur-xl" : "backdrop-blur-0"
+          ].join(" ")}
+          initial={{ opacity: 0, y: -4 }}
+          animate={
+            prefersReducedMotion
+              ? { opacity: 1, y: 0 }
+              : { opacity: isTopNavHidden ? 0 : 1, y: isTopNavHidden ? "-108%" : 0 }
+          }
+          transition={transitionStandard}
+        >
+          <div className="mx-auto flex min-h-[4.5rem] w-full max-w-[1680px] items-center px-5 sm:px-8 min-[1280px]:min-h-[7rem] min-[1280px]:px-16">
+            {topNav}
+          </div>
+        </motion.div>
+      )}
 
-        <main className="min-h-0 flex-1 pb-3 pt-0 sm:pb-4 sm:pt-0 lg:pb-6 lg:pt-0">{children}</main>
+      <div className="relative z-10 mx-auto flex min-h-[calc(100vh-4.5rem)] w-full max-w-[1680px] flex-col px-5 pb-24 pt-4 sm:px-8 sm:pb-12 sm:pt-5 min-[1280px]:min-h-[calc(100vh-7rem)] min-[1280px]:px-16 min-[1280px]:pt-7">
+        <main className="min-h-0 flex-1 pb-3 pt-0 sm:pb-4 min-[1280px]:pb-6">{children}</main>
 
         {footer && (
           <motion.div
