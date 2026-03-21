@@ -350,6 +350,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     void initFavoritesSync();
   }, [initFavoritesSync]);
 
+  const isHomepage = pathname === "/";
   const topNavLinks = [
     { label: "Каталог", href: "/catalog", isActive: pathname === "/catalog" },
     { label: "Шторы", href: "/catalog?tags=drape" },
@@ -376,13 +377,17 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                     <button
                       type="button"
                       onClick={() => setSearchOpen(true)}
-                      className="inline-flex w-40 items-center gap-3 text-[16px] font-normal leading-5 tracking-[0px] text-[rgba(34,28,24,0.82)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+                      className={
+                        isHomepage
+                          ? "inline-flex h-10 w-10 items-center justify-center text-[rgba(34,28,24,0.72)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+                          : "inline-flex w-40 items-center gap-3 text-[16px] font-normal leading-5 tracking-[0px] text-[rgba(34,28,24,0.82)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+                      }
                       aria-label="Открыть поиск по каталогу"
                     >
                       <span className="text-[rgba(34,28,24,0.82)] [&>svg]:h-[18px] [&>svg]:w-[18px]">
                         {desktopSearchIcon}
                       </span>
-                      <span>Поиск</span>
+                      {!isHomepage && <span>Поиск</span>}
                     </button>
                   )}
                   <TopNavSearchFilter
