@@ -352,7 +352,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
 
   const isHomepage = pathname === "/";
   const topNavLinks = [
-    { label: "Каталог", href: "/catalog", isActive: pathname === "/catalog" },
+    { label: "Каталог", href: "/catalog", isActive: pathname === "/catalog", isPriority: isHomepage },
     { label: "Шторы", href: "/catalog?tags=drape" },
     { label: "Тюль", href: "/catalog?tags=tulle" },
     { label: "Комплекты", href: "/catalog?view=kits" },

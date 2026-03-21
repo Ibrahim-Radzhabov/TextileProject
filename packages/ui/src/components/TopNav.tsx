@@ -8,6 +8,7 @@ export type TopNavLink = {
   label: string;
   href: string;
   isActive?: boolean;
+  isPriority?: boolean;
 };
 
 export type TopNavProps = {
@@ -111,7 +112,11 @@ export const TopNav: React.FC<TopNavProps> = ({
                       href={link.href}
                       className={[
                         "group relative inline-flex items-center whitespace-nowrap text-[15px] font-normal leading-5 tracking-[0.1px] transition-colors duration-[160ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]",
-                        link.isActive ? "text-[#221C18]" : "text-[rgba(34,28,24,0.82)] hover:text-[#221C18]"
+                        link.isActive
+                          ? "text-[#221C18]"
+                          : link.isPriority
+                            ? "font-medium text-[rgba(34,28,24,0.94)] hover:text-[#221C18]"
+                            : "text-[rgba(34,28,24,0.82)] hover:text-[#221C18]"
                       ].join(" ")}
                       aria-current={link.isActive ? "page" : undefined}
                     >
@@ -157,7 +162,11 @@ export const TopNav: React.FC<TopNavProps> = ({
               href={link.href}
               className={[
                 "group relative inline-flex h-10 items-center text-[15px] font-normal leading-5 tracking-[0.1px] transition-colors duration-[160ms] ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]",
-                link.isActive ? "text-[#221C18]" : "text-[rgba(34,28,24,0.82)] hover:text-[#221C18]"
+                link.isActive
+                  ? "text-[#221C18]"
+                  : link.isPriority
+                    ? "font-medium text-[rgba(34,28,24,0.94)] hover:text-[#221C18]"
+                    : "text-[rgba(34,28,24,0.82)] hover:text-[#221C18]"
               ].join(" ")}
               aria-current={link.isActive ? "page" : undefined}
             >
