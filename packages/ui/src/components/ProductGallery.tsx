@@ -1,14 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { AnimatePresence, LayoutGroup, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { createPortal } from "react-dom";
 import type { ProductMedia } from "@store-platform/shared-types";
 import { Surface } from "./Surface";
 
 export type ProductGalleryProps = {
   media: ProductMedia[];
-  mainImageLayoutId?: string;
 };
 
 type Size = {
@@ -34,7 +33,7 @@ const ZOOM_DRAG_THRESHOLD = 6;
 
 const clamp = (value: number, min: number, max: number) => Math.min(max, Math.max(min, value));
 
-export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImageLayoutId }) => {
+export const ProductGallery: React.FC<ProductGalleryProps> = ({ media }) => {
   const prefersReducedMotion = useReducedMotion();
   const hasMedia = media.length > 0;
   const hasMultipleMedia = media.length > 1;
@@ -50,9 +49,6 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   const [portalRoot, setPortalRoot] = React.useState<HTMLElement | null>(null);
   const [zoomStageSize, setZoomStageSize] = React.useState<Size | null>(null);
   const [zoomImageNaturalSizes, setZoomImageNaturalSizes] = React.useState<Record<string, Size>>({});
-  const [sharedTransitionMediaId, setSharedTransitionMediaId] = React.useState<string | null>(null);
-  const [zoomClosing, setZoomClosing] = React.useState(false);
-  const [allowSharedReturn, setAllowSharedReturn] = React.useState(true);
   const thumbnailRefs = React.useRef<Array<HTMLButtonElement | null>>([]);
   const desktopImageRefs = React.useRef<Array<HTMLDivElement | null>>([]);
   const zoomStageRef = React.useRef<HTMLDivElement | null>(null);
@@ -94,17 +90,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   const chromeTransition = prefersReducedMotion
     ? { duration: 0 }
     : { duration: 0.14, ease: [0.22, 1, 0.36, 1] as [number, number, number, number], delay: 0.08 };
-  const sharedFrameTransition = prefersReducedMotion
-    ? { duration: 0 }
-    : { duration: 0.3, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
   const frameTransition = prefersReducedMotion
     ? { duration: 0 }
     : { duration: 0.2, ease: [0.22, 1, 0.36, 1] as [number, number, number, number] };
 
-  const getMediaLayoutId = React.useCallback(
-    (mediaId: string) => (mainImageLayoutId && mediaId === media[0]?.id ? mainImageLayoutId : `product-gallery-media-${mediaId}`),
-    [mainImageLayoutId, media]
-  );
 
   const setZoomImageNaturalSize = React.useCallback((mediaId: string, image: HTMLImageElement) => {
     const nextWidth = image.naturalWidth;
@@ -501,28 +490,6 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
     };
   }, [zoomOpen]);
 
-  React.useEffect(() => {
-    if (!zoomClosing || zoomOpen) {
-      return;
-    }
-
-    const cleanupTimer = window.setTimeout(() => {
-      setZoomClosing(false);
-      setSharedTransitionMediaId(null);
-    }, prefersReducedMotion ? 0 : 360);
-
-    return () => {
-      window.clearTimeout(cleanupTimer);
-    };
-  }, [prefersReducedMotion, zoomClosing, zoomOpen]);
-
-  React.useEffect(() => {
-    if (!zoomOpen || zoomMode !== "fit") {
-      return;
-    }
-
-    setSharedTransitionMediaId(zoomActive?.id ?? null);
-  }, [zoomActive?.id, zoomMode, zoomOpen]);
 
   const focusThumbByIndex = (index: number) => {
     thumbnailRefs.current[index]?.focus();
@@ -564,7 +531,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
     }
   };
 
-  const openZoom = (mediaId: string, trigger?: HTMLButtonElement | null, sharedReturn = true) => {
+  const openZoom = (mediaId: string, trigger?: HTMLButtonElement | null) => {
     if (zoomCloseTimerRef.current !== null) {
       window.clearTimeout(zoomCloseTimerRef.current);
       zoomCloseTimerRef.current = null;
@@ -574,9 +541,6 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
     trigger?.blur();
     setActiveId(mediaId);
     setZoomActiveId(mediaId);
-    setSharedTransitionMediaId(sharedReturn ? mediaId : null);
-    setZoomClosing(false);
-    setAllowSharedReturn(sharedReturn);
     resetZoomInteraction();
     setZoomOpen(true);
   };
@@ -591,36 +555,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
       document.activeElement.blur();
     }
 
-    const finalizeClose = () => {
-      setZoomClosing(true);
-      setZoomOpen(false);
-    };
-
-    if (!allowSharedReturn) {
-      setSharedTransitionMediaId(null);
-      setZoomClosing(false);
-      resetZoomInteraction();
-      setZoomOpen(false);
-      return;
-    }
-
-    if (zoomMagnified) {
-      resetZoomInteraction();
-
-      if (prefersReducedMotion) {
-        finalizeClose();
-        return;
-      }
-
-      zoomCloseTimerRef.current = window.setTimeout(() => {
-        finalizeClose();
-        zoomCloseTimerRef.current = null;
-      }, 170);
-      return;
-    }
-
-    finalizeClose();
-  }, [allowSharedReturn, prefersReducedMotion, resetZoomInteraction, zoomMagnified]);
+    resetZoomInteraction();
+    setZoomOpen(false);
+  }, [resetZoomInteraction]);
 
   const handleZoomImageClick = React.useCallback(
     (event: React.MouseEvent<HTMLDivElement>) => {
@@ -654,7 +591,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
       const deltaY = localY - rect.height / 2;
       const nextScale = zoomFrame.zoomMultiplier;
 
-      setAllowSharedReturn(false);
+
       setZoomMagnified(true);
       setZoomOffsetImmediate(
         clampZoomOffset(
@@ -666,7 +603,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
         )
       );
     },
-    [clampZoomOffset, setAllowSharedReturn, setZoomOffsetImmediate, zoomFrame, zoomMagnified]
+    [clampZoomOffset, setZoomOffsetImmediate, zoomFrame, zoomMagnified]
   );
 
   const handleZoomMouseMove = React.useCallback(
@@ -729,7 +666,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
 
       event.stopPropagation();
       event.currentTarget.setPointerCapture(event.pointerId);
-      setAllowSharedReturn(false);
+
       setZoomDragging(true);
       zoomDragRef.current = {
         active: true,
@@ -739,7 +676,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
         startOffset: zoomOffset,
       };
     },
-    [setAllowSharedReturn, zoomMode, zoomOffset]
+    [zoomMode, zoomOffset]
   );
 
   const handleZoomPointerMove = React.useCallback(
@@ -786,9 +723,6 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   }, []);
 
   const canMagnify = zoomFrame?.canMagnify ?? false;
-  const sharedFrameLayoutId = zoomActive ? getMediaLayoutId(zoomActive.id) : undefined;
-  const useSharedFrame = allowSharedReturn && zoomMode === "fit" && Boolean(sharedFrameLayoutId);
-  const usePresencePortal = zoomOpen || allowSharedReturn || zoomClosing;
   const zoomDialog = zoomOpen && zoomActive ? (
     <motion.div
       key="product-gallery-lightbox"
@@ -840,7 +774,6 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
                 "relative overflow-hidden bg-card/8",
                 hasFinePointer && (canMagnify || zoomMode === "zoom") ? "cursor-none" : "",
               ].join(" ")}
-              layoutId={useSharedFrame ? sharedFrameLayoutId : undefined}
               onClick={handleZoomImageClick}
               onMouseEnter={handleZoomMouseEnter}
               onMouseLeave={handleZoomMouseLeave}
@@ -857,17 +790,10 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
                     }
                   : undefined
               }
-              initial={useSharedFrame ? false : prefersReducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.992 }}
-              animate={useSharedFrame ? { opacity: 1 } : { opacity: 1, scale: 1 }}
-              exit={useSharedFrame ? { opacity: 1 } : prefersReducedMotion ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.996 }}
-              transition={
-                useSharedFrame
-                  ? {
-                      layout: sharedFrameTransition,
-                      opacity: { duration: 0 },
-                    }
-                  : frameTransition
-              }
+              initial={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={prefersReducedMotion ? { opacity: 1 } : { opacity: 0 }}
+              transition={frameTransition}
             >
               <motion.img
                 src={zoomActive.url}
@@ -985,7 +911,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
   }
 
   return (
-    <LayoutGroup id="product-gallery-lightbox">
+    <>
       <div className="space-y-2.5 md:space-y-0">
       <div className="hidden md:block">
         <div className={`grid w-full md:gap-2 ${desktopGridClass}`} aria-label={galleryLabel}>
@@ -1004,26 +930,13 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
                 className="absolute inset-0 z-10 cursor-zoom-in"
                 aria-label={`Открыть изображение ${index + 1} крупно`}
               />
-              <motion.div
-                className="absolute inset-0 overflow-hidden"
-                layoutId={getMediaLayoutId(item.id)}
-                animate={{
-                  opacity:
-                    allowSharedReturn && sharedTransitionMediaId === item.id && (zoomOpen || zoomClosing)
-                      ? 0
-                      : 1,
-                }}
-                transition={{
-                  opacity: { duration: prefersReducedMotion ? 0 : 0.12 },
-                  layout: sharedFrameTransition,
-                }}
-              >
+              <div className="absolute inset-0 overflow-hidden">
                 <img
                   src={item.url}
                   alt={item.alt}
                   className="absolute inset-0 h-full w-full object-cover"
                 />
-              </motion.div>
+              </div>
             </div>
           ))}
         </div>
@@ -1042,7 +955,7 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
               <>
                 <button
                   type="button"
-                  onClick={(event) => openZoom(active.id, event.currentTarget, false)}
+                  onClick={(event) => openZoom(active.id, event.currentTarget)}
                   className="absolute inset-0 z-10 cursor-zoom-in"
                   aria-label={`Открыть изображение ${activeIndex + 1} крупно`}
                 />
@@ -1111,13 +1024,9 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
 
       {portalRoot
         ? createPortal(
-            usePresencePortal ? (
+            zoomOpen ? (
               <AnimatePresence
                 initial={false}
-                onExitComplete={() => {
-                  setZoomClosing(false);
-                  setSharedTransitionMediaId(null);
-                }}
               >
                 {zoomDialog}
               </AnimatePresence>
@@ -1128,6 +1037,6 @@ export const ProductGallery: React.FC<ProductGalleryProps> = ({ media, mainImage
           )
         : null}
       </div>
-    </LayoutGroup>
+    </>
   );
 };

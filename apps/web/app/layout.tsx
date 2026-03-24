@@ -178,7 +178,7 @@ export async function generateViewport(): Promise<Viewport> {
 
   return {
     themeColor: activeTheme.colors.background,
-    colorScheme: "dark",
+    colorScheme: "light",
     width: "device-width",
     initialScale: 1
   };

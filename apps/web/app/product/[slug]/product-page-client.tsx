@@ -188,7 +188,7 @@ export function ProductPageClient({
 
   const priceFormatted = formatMoney(product.price.amount, product.price.currency);
   const productTitleId = `product-title-${product.id}`;
-  const sharedMediaLayoutId = enableSharedProductTransition ? `product-media-${product.id}` : undefined;
+
   const sharedTitleLayoutId = enableSharedProductTransition ? `product-title-${product.id}` : undefined;
   const compareAtPrice = product.compareAtPrice;
   const hasComparePrice =
@@ -367,7 +367,7 @@ export function ProductPageClient({
           <ProductGalleryLightbox
             key={`${product.id}:${selectedColorOption?.id ?? "default"}`}
             media={galleryMedia}
-            mainImageLayoutId={sharedMediaLayoutId}
+
           />
         </motion.div>
 
