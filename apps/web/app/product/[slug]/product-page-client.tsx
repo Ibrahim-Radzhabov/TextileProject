@@ -375,7 +375,7 @@ export function ProductPageClient({
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.28, delay: 0.04 }}
-          className="space-y-5 md:sticky md:top-24 md:w-full md:max-w-[21.5rem] md:justify-self-end md:self-start md:space-y-6"
+          className="space-y-5 md:sticky md:top-24 md:w-full md:max-w-[24rem] md:justify-self-end md:self-start md:space-y-6"
         >
           <Surface
             tone="subtle"
@@ -557,7 +557,7 @@ export function ProductPageClient({
                 <details open className="border-b border-border/38">
                   <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Детали изделия
-                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                    <svg aria-hidden="true" className="h-4 w-4 text-muted-foreground transition-transform duration-200 [[open]>summary_&]:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6l4 4 4-4"/></svg>
                   </summary>
                   <div className="space-y-2 pb-4">
                     {metadataEntries.length > 0 ? (
@@ -576,7 +576,7 @@ export function ProductPageClient({
                 <details className="border-b border-border/38">
                   <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Размер и посадка
-                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                    <svg aria-hidden="true" className="h-4 w-4 text-muted-foreground transition-transform duration-200 [[open]>summary_&]:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6l4 4 4-4"/></svg>
                   </summary>
                   <div className="space-y-2 pb-4 text-sm leading-relaxed text-muted-foreground">
                     <p>Полнота складок: ориентир 1.8x-2.2x от ширины карниза.</p>
@@ -593,7 +593,7 @@ export function ProductPageClient({
                 <details className="border-b border-border/38">
                   <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Доставка и оплата
-                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                    <svg aria-hidden="true" className="h-4 w-4 text-muted-foreground transition-transform duration-200 [[open]>summary_&]:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6l4 4 4-4"/></svg>
                   </summary>
                   <div className="space-y-2 pb-4 text-sm leading-relaxed text-muted-foreground">
                     <p>Отправка в течение 1-3 рабочих дней после подтверждения заказа.</p>
@@ -604,7 +604,7 @@ export function ProductPageClient({
                 <details>
                   <summary className="flex cursor-pointer list-none items-center justify-between py-3 text-sm font-medium">
                     Возврат и поддержка
-                    <span aria-hidden="true" className="text-xs text-muted-foreground">▾</span>
+                    <svg aria-hidden="true" className="h-4 w-4 text-muted-foreground transition-transform duration-200 [[open]>summary_&]:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M4 6l4 4 4-4"/></svg>
                   </summary>
                   <div className="space-y-2 pb-4 text-sm leading-relaxed text-muted-foreground">
                     <p>Возврат готовых изделий в течение 14 дней, при сохранении товарного вида.</p>

@@ -356,7 +356,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     { label: "Шторы", href: "/catalog?tags=drape" },
     { label: "Тюль", href: "/catalog?tags=tulle" },
     { label: "Комплекты", href: "/catalog?view=kits" },
-    { label: "О студии", href: "/guides" }
+    { label: "Журнал", href: "/guides", isActive: pathname.startsWith("/guides"), isPriority: isHomepage }
   ];
 
   return (
@@ -379,12 +379,12 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                       onClick={() => setSearchOpen(true)}
                       className={
                         isHomepage
-                          ? "inline-flex h-10 w-10 items-center justify-center text-[rgba(34,28,24,0.72)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
-                          : "inline-flex w-40 items-center gap-3 text-[16px] font-normal leading-5 tracking-[0px] text-[rgba(34,28,24,0.82)] transition-colors duration-[160ms] ease-out hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+                          ? "inline-flex h-10 w-10 items-center justify-center text-foreground/70 transition-colors duration-[160ms] ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+                          : "inline-flex w-40 items-center gap-3 text-[16px] font-normal leading-5 tracking-[0px] text-foreground/80 transition-colors duration-[160ms] ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                       }
                       aria-label="Открыть поиск по каталогу"
                     >
-                      <span className="text-[rgba(34,28,24,0.82)] [&>svg]:h-[18px] [&>svg]:w-[18px]">
+                      <span className="text-foreground/80 [&>svg]:h-[18px] [&>svg]:w-[18px]">
                         {desktopSearchIcon}
                       </span>
                       {!isHomepage && <span>Поиск</span>}
@@ -423,7 +423,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                     type="button"
                     onClick={() => setSearchOpen(true)}
                     aria-label="Поиск"
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-full text-[rgba(34,28,24,0.82)] transition-[color,background-color] duration-[160ms] ease-out hover:bg-[rgba(34,28,24,0.035)] hover:text-[#221C18] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(34,28,24,0.18)] focus-visible:ring-offset-4 focus-visible:ring-offset-[#F6F4F1]"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-[color,background-color] duration-[160ms] ease-out hover:bg-foreground/[0.035] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                   >
                     <span className="[&>svg]:h-[18px] [&>svg]:w-[18px]">{iconSearch}</span>
                   </button>

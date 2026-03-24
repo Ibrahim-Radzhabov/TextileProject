@@ -27,9 +27,9 @@ const variantClasses: Record<ButtonVariant, string> = {
   primary:
     "border-accent/70 bg-accent text-white hover:border-accent/80 hover:bg-accent/90 active:translate-y-px",
   secondary:
-    "border-accent/65 bg-accent text-white hover:border-accent/80 hover:bg-accent/90",
+    "border-foreground/20 bg-transparent text-foreground hover:border-foreground/30 hover:bg-foreground/5 active:translate-y-px",
   ghost:
-    "border-accent/55 bg-accent text-white hover:border-accent/75 hover:bg-accent/88"
+    "border-transparent bg-transparent text-foreground hover:bg-foreground/5 active:translate-y-px"
 };
 
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

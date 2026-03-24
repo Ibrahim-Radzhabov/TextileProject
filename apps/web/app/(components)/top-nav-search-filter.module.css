@@ -22,19 +22,19 @@
   border-radius: 999px;
   border: 1px solid transparent;
   background: transparent;
-  color: rgb(34 28 24 / 0.82);
+  color: rgb(var(--color-foreground) / 0.82);
   transition:
     color var(--motion-fast),
     background-color var(--motion-fast);
 }
 
 .trigger:hover {
-  color: #221c18;
-  background: rgb(34 28 24 / 0.035);
+  color: rgb(var(--color-foreground));
+  background: rgb(var(--color-foreground) / 0.035);
 }
 
 .trigger:focus-visible {
-  outline: 2px solid rgb(34 28 24 / 0.18);
+  outline: 2px solid rgb(var(--color-foreground) / 0.18);
   outline-offset: 3px;
 }
 
@@ -47,19 +47,19 @@
   height: 2.75rem;
   transform: translateY(-50%);
   border-radius: 14px;
-  border: 1px solid rgb(34 28 24 / 0.1);
-  background: linear-gradient(180deg, rgb(255 255 255 / 0.88), rgb(246 244 241 / 0.96));
+  border: 1px solid rgb(var(--color-foreground) / 0.1);
+  background: linear-gradient(180deg, rgb(255 255 255 / 0.88), rgb(var(--color-background) / 0.96));
   box-shadow:
-    0 12px 30px -24px rgb(53 42 34 / 0.3),
+    0 12px 30px -24px rgb(var(--color-foreground) / 0.12),
     inset 0 1px 0 rgb(255 255 255 / 0.78);
 }
 
 .balanced {
-  border-color: rgb(34 28 24 / 0.1);
+  border-color: rgb(var(--color-foreground) / 0.1);
 }
 
 .vivid {
-  border-color: rgb(34 28 24 / 0.14);
+  border-color: rgb(var(--color-foreground) / 0.14);
 }
 
 .orbs {
@@ -77,7 +77,7 @@
 
 .searchIcon {
   display: inline-flex;
-  color: rgb(34 28 24 / 0.64);
+  color: rgb(var(--color-foreground) / 0.64);
 }
 
 .input {
@@ -85,14 +85,14 @@
   width: 100%;
   border: 0;
   background: transparent;
-  color: #221c18;
+  color: rgb(var(--color-foreground));
   font-size: 0.95rem;
   line-height: 1.25rem;
   outline: none;
 }
 
 .input::placeholder {
-  color: rgb(34 28 24 / 0.5);
+  color: rgb(var(--color-foreground) / 0.5);
 }
 
 .clearBtn {
@@ -104,19 +104,19 @@
   border-radius: 9px;
   border: 1px solid transparent;
   background: transparent;
-  color: rgb(34 28 24 / 0.58);
+  color: rgb(var(--color-foreground) / 0.58);
   transition:
     color var(--motion-fast),
     background-color var(--motion-fast);
 }
 
 .clearBtn:hover {
-  color: #221c18;
-  background: rgb(34 28 24 / 0.035);
+  color: rgb(var(--color-foreground));
+  background: rgb(var(--color-foreground) / 0.035);
 }
 
 .clearBtn:focus-visible {
-  outline: 2px solid rgb(34 28 24 / 0.18);
+  outline: 2px solid rgb(var(--color-foreground) / 0.18);
   outline-offset: 2px;
 }
 
@@ -126,9 +126,9 @@
   width: 2rem;
   height: 2rem;
   border-radius: 10px;
-  border: 1px solid rgb(34 28 24 / 0.12);
+  border: 1px solid rgb(var(--color-foreground) / 0.12);
   background: rgb(255 255 255 / 0.42);
-  color: rgb(34 28 24 / 0.82);
+  color: rgb(var(--color-foreground) / 0.82);
   transition:
     transform 110ms ease,
     color var(--motion-fast),
@@ -137,8 +137,8 @@
 }
 
 .filterBtn:hover {
-  color: #221c18;
-  border-color: rgb(34 28 24 / 0.18);
+  color: rgb(var(--color-foreground));
+  border-color: rgb(var(--color-foreground) / 0.18);
   background: rgb(255 255 255 / 0.68);
 }
 
@@ -147,7 +147,7 @@
 }
 
 .filterBtn:focus-visible {
-  outline: 2px solid rgb(34 28 24 / 0.18);
+  outline: 2px solid rgb(var(--color-foreground) / 0.18);
   outline-offset: 2px;
 }
 

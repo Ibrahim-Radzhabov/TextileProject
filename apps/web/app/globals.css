@@ -9,13 +9,13 @@
   --type-label-size: 12px;
   --type-meta-size: 12px;
   --type-body-size: clamp(1rem, 0.96rem + 0.18vw, 1.08rem);
-  --type-body-leading: 1.55;
-  --type-subtle-leading: 1.58;
+  --type-body-leading: 1.65;
+  --type-subtle-leading: 1.68;
   --type-h1-size: clamp(2rem, 5.2vw, 4.4rem);
   --type-h2-size: clamp(1.75rem, 3.15vw, 2.95rem);
   --type-h1-weight: 600;
-  --type-h2-weight: 560;
-  --type-title-weight: 530;
+  --type-h2-weight: 600;
+  --type-title-weight: 500;
   --type-meta-weight: 700;
   --type-meta-tracking: 0.08em;
   --type-kicker-tracking: 0.08em;
@@ -120,13 +120,13 @@ body {
 .ui-title-serif {
   font-family: var(--font-velura-display), "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
   letter-spacing: -0.02em;
-  font-weight: 430;
+  font-weight: 400;
 }
 
 .ui-title-display {
   font-family: var(--font-velura-display), "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
   letter-spacing: -0.03em;
-  font-weight: 460;
+  font-weight: 500;
   line-height: 0.96;
   text-wrap: balance;
 }

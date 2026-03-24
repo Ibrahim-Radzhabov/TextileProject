@@ -1,7 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+
 import {
   Button,
   CtaStrip,
@@ -26,11 +28,13 @@ import { useCartStore } from "@/store/cart-store";
 import { HeroPinnedVideo } from "@/components/hero-pinned-video";
 import { HeroVideoEditorial } from "@/components/hero-video-editorial";
 import { TextileTypeSwitcher } from "@/components/textile-type-switcher";
+import styles from "./home-page-editorial-rail.module.css";
 
 type HomePageClientProps = {
   homePage: PageConfig;
   products: Product[];
 };
+
 
 function resolveHeroContent(block: HeroBlock) {
   return {
@@ -318,40 +322,49 @@ function EditorialRailSection({ block }: { block: EditorialRailBlock }): JSX.Ele
 
   return (
     <section className="overflow-hidden space-y-5 rounded-[1.35rem] border border-border/28 bg-[linear-gradient(180deg,rgb(var(--color-accent-soft)/0.24),rgb(var(--color-background)/0.94))] p-4 sm:p-5 lg:space-y-6 lg:p-6">
-      <header className="flex items-start justify-between gap-4">
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-2">
-          <h2 className="ui-title-serif text-[2rem] leading-[0.98] text-foreground sm:text-[2.5rem]">
+          <h2 className={[styles.sectionTitle, "text-[2rem] leading-[0.98] text-foreground sm:text-[2.5rem]"].join(" ")}>
             {block.title}
           </h2>
           {block.subtitle && (
-            <p className="ui-subtle max-w-2xl text-sm leading-relaxed sm:text-base">
+            <p className={[styles.sectionSubtitle, "max-w-2xl text-sm leading-relaxed text-[rgb(var(--color-muted-foreground)/0.78)] sm:text-base"].join(" ")}>
               {block.subtitle}
             </p>
           )}
         </div>
 
-        <div className="hidden items-center gap-2.5 sm:flex">
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
-            aria-label="Предыдущий материал"
-            disabled={activeIndex === 0}
-            onClick={() => scrollToIndex(activeIndex - 1)}
+        <div className="flex flex-col items-start gap-3 sm:items-end">
+          <Link
+            href="/guides"
+            className={[styles.sectionLink, "inline-flex items-center gap-2 text-sm text-foreground/88 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"].join(" ")}
           >
-            ‹
-          </button>
-          <span className="ui-kicker min-w-[3.5rem] text-center text-muted-foreground/78">
-            {items.length === 0 ? "0/0" : `${activeIndex + 1}/${items.length}`}
-          </span>
-          <button
-            type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
-            aria-label="Следующий материал"
-            disabled={activeIndex >= items.length - 1}
-            onClick={() => scrollToIndex(activeIndex + 1)}
-          >
-            ›
-          </button>
+            Смотреть все материалы
+          </Link>
+
+          <div className="hidden items-center gap-2.5 sm:flex">
+            <button
+              type="button"
+              className={[styles.navControl, "inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"].join(" ")}
+              aria-label="Предыдущий материал"
+              disabled={activeIndex === 0}
+              onClick={() => scrollToIndex(activeIndex - 1)}
+            >
+              ‹
+            </button>
+            <span className={[styles.navControl, "min-w-[3.5rem] text-center text-[12px] uppercase leading-[1.3] tracking-[0.08em] text-muted-foreground/78"].join(" ")}>
+              {items.length === 0 ? "0/0" : `${activeIndex + 1}/${items.length}`}
+            </span>
+            <button
+              type="button"
+              className={[styles.navControl, "inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"].join(" ")}
+              aria-label="Следующий материал"
+              disabled={activeIndex >= items.length - 1}
+              onClick={() => scrollToIndex(activeIndex + 1)}
+            >
+              ›
+            </button>
+          </div>
         </div>
       </header>
 
@@ -362,36 +375,36 @@ function EditorialRailSection({ block }: { block: EditorialRailBlock }): JSX.Ele
         {items.map((item, index) => (
           <article
             key={item.id}
-            className="group flex min-w-[78vw] snap-start flex-col gap-3 sm:min-w-[42vw] lg:min-w-[32rem] xl:min-w-[34rem]"
+            className="group flex min-w-[72vw] snap-start flex-col gap-3 sm:min-w-[38vw] lg:min-w-[28rem] xl:min-w-[30rem]"
           >
             <a
               ref={(node) => {
                 itemRefs.current[index] = node;
               }}
               href={item.href}
-              className="relative block overflow-hidden rounded-[2px] bg-card/44 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="relative block min-h-[300px] overflow-hidden rounded-[2px] bg-card/44 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/80 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:min-h-[380px] lg:min-h-[500px]"
               aria-label={item.title}
             >
               <HeroMedia
                 media={item.media}
                 title={item.title}
-                assetClassName="h-full min-h-[320px] w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.016] sm:min-h-[420px] lg:min-h-[560px]"
+                assetClassName="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.016]"
                 defaultOverlayOpacity={0.04}
               />
             </a>
 
             <div className="space-y-2 pr-3">
-              <h3 className="ui-title-serif text-[1.18rem] leading-[1.08] text-foreground sm:text-[1.34rem]">
+              <h3 className={[styles.cardTitle, "text-[1.18rem] leading-[1.08] text-foreground sm:text-[1.34rem]"].join(" ")}>
                 {item.title}
               </h3>
               {item.excerpt && (
-                <p className="ui-subtle line-clamp-4 max-w-[38ch] text-sm leading-relaxed sm:text-[0.98rem]">
+                <p className={[styles.cardExcerpt, "line-clamp-4 max-w-[38ch] text-sm text-[rgb(var(--color-muted-foreground)/0.78)] leading-relaxed sm:text-[0.98rem]"].join(" ")}>
                   {item.excerpt}
                 </p>
               )}
               <a
                 href={item.href}
-                className="inline-flex items-center gap-2 text-sm font-medium text-foreground/92 transition-colors hover:text-foreground"
+                className={[styles.cardLink, "inline-flex items-center gap-2 text-sm text-foreground/92 transition-colors hover:text-foreground"].join(" ")}
               >
                 {item.ctaLabel ?? "Читать гид"}
               </a>
@@ -401,13 +414,13 @@ function EditorialRailSection({ block }: { block: EditorialRailBlock }): JSX.Ele
       </div>
 
       <div className="flex items-center justify-between gap-3 sm:hidden">
-        <span className="ui-kicker text-muted-foreground/78">
+        <span className={[styles.navControl, "text-[12px] uppercase leading-[1.3] tracking-[0.08em] text-muted-foreground/78"].join(" ")}>
           {items.length === 0 ? "0/0" : `${activeIndex + 1}/${items.length}`}
         </span>
         <div className="flex items-center gap-2">
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
+            className={[styles.navControl, "inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"].join(" ")}
             aria-label="Предыдущий материал"
             disabled={activeIndex === 0}
             onClick={() => scrollToIndex(activeIndex - 1)}
@@ -416,7 +429,7 @@ function EditorialRailSection({ block }: { block: EditorialRailBlock }): JSX.Ele
           </button>
           <button
             type="button"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"
+            className={[styles.navControl, "inline-flex h-10 w-10 items-center justify-center rounded-full text-xl text-foreground transition-colors hover:text-foreground/72 disabled:cursor-not-allowed disabled:opacity-28"].join(" ")}
             aria-label="Следующий материал"
             disabled={activeIndex >= items.length - 1}
             onClick={() => scrollToIndex(activeIndex + 1)}
@@ -482,7 +495,7 @@ function renderProductGridBlock(
         />
       ) : (
         <motion.div
-          className="grid auto-rows-fr grid-cols-2 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+          className="grid auto-rows-fr grid-cols-2 gap-5 sm:grid-cols-2 sm:gap-6 lg:gap-8 xl:grid-cols-4"
           variants={gridContainerVariants}
           initial="hidden"
           animate="visible"
@@ -546,7 +559,7 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
   const { addProduct } = useCartStore();
 
   return (
-    <div className="home-concept-editorial space-y-8 sm:space-y-9 lg:space-y-11">
+    <div className="home-concept-editorial space-y-16 sm:space-y-20 lg:space-y-28">
       {homePage.blocks.flatMap((block) => {
         if (block.type === "hero") {
           return [renderHeroBlock(block, <TextileTypeSwitcher key={`${block.id}-textile-switcher`} />)];
@@ -562,7 +575,17 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
           return [];
         }
 
-        return [blockNode];
+        return [
+          <motion.div
+            key={`reveal-${block.id}`}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-80px" }}
+            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {blockNode}
+          </motion.div>
+        ];
       })}
     </div>
   );

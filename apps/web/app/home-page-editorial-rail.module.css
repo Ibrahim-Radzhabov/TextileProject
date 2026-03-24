@@ -1,0 +1,40 @@
+.sectionTitle {
+  font-family: var(--font-velura-display), "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  font-family: var(--font-velura-ui), var(--font-sans), sans-serif;
+  font-weight: 400;
+  line-height: 1.68;
+}
+
+.sectionLink {
+  font-family: var(--font-velura-ui), var(--font-sans), sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.navControl {
+  font-family: var(--font-velura-ui), var(--font-sans), sans-serif;
+  font-weight: 500;
+}
+
+.cardTitle {
+  font-family: var(--font-velura-display), "Iowan Old Style", "Palatino Linotype", "Book Antiqua", Palatino, serif;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.cardExcerpt {
+  font-family: var(--font-velura-ui), var(--font-sans), sans-serif;
+  font-weight: 400;
+  line-height: 1.72;
+}
+
+.cardLink {
+  font-family: var(--font-velura-ui), var(--font-sans), sans-serif;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
