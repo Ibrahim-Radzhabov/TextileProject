@@ -18,9 +18,9 @@ export async function generateMetadata(): Promise<Metadata> {
   const config = await getStorefrontConfig();
 
   return buildStorefrontMetadata(config, {
-    title: `Гайды по шторам и тюлю — ${config.shop.name}`,
+    title: `Журнал — ${config.shop.name}`,
     description:
-      "Практические руководства Velura: как выбрать плотность ткани, собрать day/night сценарий, подобрать текстиль по комнатам и ухаживать за шторами.",
+      "Журнал Velura: материалы о свете, ткани, сценариях окна и подборе текстиля для разных пространств.",
     path: "/guides",
     image: config.seo.openGraphImage
   });
@@ -33,14 +33,14 @@ export default async function GuidesPage() {
   const schemas = [
     buildBreadcrumbJsonLd([
       { name: "Главная", path: "/" },
-      { name: "Гайды", path: "/guides" }
+      { name: "Журнал", path: "/guides" }
     ]),
     {
       "@context": "https://schema.org",
       "@type": "CollectionPage",
-      name: `Гайды ${config.shop.name}`,
+      name: `Журнал ${config.shop.name}`,
       description:
-        "Подборка экспертных материалов по шторам, тюлю, плотности ткани и уходу.",
+        "Подборка материалов о шторах, тюле, сценариях света и подборе ткани.",
       url: resolveAbsoluteUrl("/guides"),
       mainEntity: {
         "@type": "ItemList",
@@ -66,19 +66,18 @@ export default async function GuidesPage() {
 
       <div className="space-y-6">
         <header className="rounded-xl border border-border/34 bg-card/90 px-5 py-6 sm:px-6 sm:py-7">
-          <p className="ui-kicker">Velura Guides</p>
+          <p className="ui-kicker">Журнал Velura</p>
           <h1 className="ui-title-display mt-2 text-[clamp(2rem,4.2vw,3.2rem)] leading-[0.96]">
-            Гайды по шторам и тюлю
+            Материалы о свете, ткани и сценариях окна
           </h1>
           <p className="ui-subtle mt-3 max-w-3xl text-sm sm:text-base">
-            Сценарии выбора ткани, плотности и света. Каждый материал заканчивается
-            практичным переходом к подходящим позициям каталога.
+            Спокойные разборы фактур, плотности и интерьерных сценариев, которые помогают выбрать ткань без магазинного шума.
           </p>
         </header>
 
         {guides.length === 0 ? (
           <section className="rounded-xl border border-border/34 bg-card/90 px-5 py-8 sm:px-6">
-            <p className="ui-subtle">Гайды пока не опубликованы.</p>
+            <p className="ui-subtle">Материалы пока не опубликованы.</p>
           </section>
         ) : (
           <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">

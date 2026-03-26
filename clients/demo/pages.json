@@ -32,54 +32,62 @@
         "id": "home-editorial-rail",
         "type": "editorial-rail",
         "title": "Журнал Velura",
-        "subtitle": "Сценарии света, фактуры и ухода для штор и тюля.",
+        "subtitle": "Текстиль, свет и фактура как язык пространства, где роскошь звучит тихо.",
         "items": [
           {
-            "id": "guide-light-control",
-            "title": "Как выбрать плотность ткани",
-            "excerpt": "От voile до blackout: как выбрать степень затемнения для спальни, гостиной и детской.",
-            "href": "/guides/light-control",
+            "id": "architecture-of-light",
+            "title": "Свет, смягченный тканью",
+            "excerpt": "Полупрозрачный текстиль превращает дневной свет в мягкую архитектуру покоя и глубины.",
+            "href": "/guides/architecture-of-light",
             "ctaLabel": "Подробнее",
             "media": {
               "type": "image",
-              "src": "/demo/journal/journal-light-control.jpg",
-              "alt": "Плотность ткани и контроль света"
+              "src": "/demo/journal/architecture-of-light.png",
+              "alt": "Полупрозрачный тюль мягко рассеивает утренний свет в спокойном минималистичном интерьере.",
+              "objectPosition": "40% center",
+              "mobileObjectPosition": "42% center"
             }
           },
           {
-            "id": "guide-day-night",
-            "title": "Day/Night: двухслойный сценарий",
-            "excerpt": "Тюль днем, приватность вечером: как собрать спокойную двухслойную сцену у окна.",
-            "href": "/guides/day-night",
+            "id": "philosophy-of-texture",
+            "title": "Фактура, которая успокаивает",
+            "excerpt": "Благородные переплетения и плотные ткани раскрывают ремесло, вес материала и тихую роскошь.",
+            "href": "/guides/philosophy-of-texture",
             "ctaLabel": "Подробнее",
             "media": {
               "type": "image",
-              "src": "/demo/satin_one.jpeg",
-              "alt": "Day/Night комплект для окна"
+              "src": "/demo/journal/philosophy-of-texture.png",
+              "alt": "Крупный план плотной портьерной ткани с выразительной фактурой и мягкими складками.",
+              "objectPosition": "52% center",
+              "mobileObjectPosition": "52% center"
             }
           },
           {
-            "id": "guide-by-room",
-            "title": "Ткани по комнатам",
-            "excerpt": "Какая фактура и светопропускание работают в спальне, гостиной и рабочем пространстве.",
-            "href": "/guides/by-room",
+            "id": "art-of-layering",
+            "title": "Глубина многослойного текстиля",
+            "excerpt": "Сочетание тюля и портьер создает интерьер с мягкой глубиной, ритмом и сложным характером.",
+            "href": "/guides/art-of-layering",
             "ctaLabel": "Подробнее",
             "media": {
               "type": "image",
-              "src": "/demo/journal/journal-by-room.jpg",
-              "alt": "Подбор тканей по типу комнаты"
+              "src": "/demo/journal/art-of-layering.png",
+              "alt": "Слой полупрозрачного тюля и плотных портьер в спокойном luxury-интерьере.",
+              "objectPosition": "44% center",
+              "mobileObjectPosition": "46% center"
             }
           },
           {
-            "id": "guide-care",
-            "title": "Уход за текстилем",
-            "excerpt": "Стирка, отпаривание и хранение без потери мягкости, объема и фактуры ткани.",
-            "href": "/guides/care",
+            "id": "vertical-scale-and-drape",
+            "title": "Масштаб и идеальная драпировка",
+            "excerpt": "Струящиеся полотна меняют архитектуру пространства, добавляя высоту, ритм и спокойную выразительность.",
+            "href": "/guides/vertical-scale-and-drape",
             "ctaLabel": "Подробнее",
             "media": {
               "type": "image",
-              "src": "/demo/satin_two.jpeg",
-              "alt": "Уход за шторами и тюлем"
+              "src": "/demo/journal/vertical-scale-and-drape.png",
+              "alt": "Длинные портьеры ниспадают ровными складками на пол в просторном интерьере с высокими потолками.",
+              "objectPosition": "54% bottom",
+              "mobileObjectPosition": "54% bottom"
             }
           }
         ]
@@ -115,146 +123,154 @@
     ]
   },
   {
-    "id": "guide-light-control",
-    "slug": "/guides/light-control",
+    "id": "guide-architecture-of-light",
+    "slug": "/guides/architecture-of-light",
     "kind": "custom",
-    "title": "Как выбрать плотность ткани для штор",
+    "title": "Свет, смягченный тканью",
     "blocks": [
       {
-        "id": "guide-light-hero",
+        "id": "guide-architecture-of-light-hero",
         "type": "media-feature",
-        "eyebrow": "GUIDE",
-        "title": "Плотность ткани и контроль света",
-        "subtitle": "От мягкой вуали до полного blackout: выбираем режим под ваш ритм дня.",
-        "body": "Sheer и voile дают воздушный свет днем, dimout убирает лишний блик, а blackout помогает создать глубокую темноту вечером. Важно учитывать сторону света комнаты и сценарий сна.",
+        "eyebrow": "ЖУРНАЛ",
+        "title": "Архитектура мягкого света",
+        "subtitle": "Полупрозрачный текстиль превращает дневной поток в мягкую атмосферу, где интерьер дышит тише и глубже.",
+        "body": "Свет становится первым материалом комнаты, а ткань задает ему дисциплину. Хороший тюль не спорит с солнцем, а переводит его в полутона, в которых стены, дерево и фактура мебели звучат спокойнее.",
         "media": {
           "type": "image",
-          "src": "/demo/linen-blackout-drape.svg",
-          "alt": "Плотная драпировка штор"
+          "src": "/demo/journal/architecture-of-light.png",
+          "alt": "Полупрозрачный тюль мягко рассеивает утренний свет в спокойном минималистичном интерьере.",
+          "objectPosition": "40% center",
+          "mobileObjectPosition": "42% center"
         },
         "cta": {
-          "label": "Смотреть blackout решения",
-          "href": "/catalog?rail=blackout"
+          "label": "Смотреть тюль и sheer",
+          "href": "/catalog?tags=tulle"
         }
       },
       {
-        "id": "guide-light-text",
+        "id": "guide-architecture-of-light-text",
         "type": "rich-text",
-        "content": "Для спальни чаще выбирают dimout или blackout, для гостиной — комбинацию тюля и портьеры. Если окна выходят на юг, добавьте более плотный слой, чтобы не перегревать интерьер днем."
+        "content": "Когда ткань подобрана верно, резкий луч превращается в мягкую геометрию дня. Пространство не теряет свет, но приобретает покой: на полу появляются растянутые тени, а воздух становится почти осязаемым. Именно в этом эффекте quiet luxury проявляется точнее всего — не в декоративности, а в умении смягчать реальность."
       },
       {
-        "id": "guide-light-cta",
+        "id": "guide-architecture-of-light-cta",
         "type": "cta-strip",
-        "title": "Открыть каталог по уровню затемнения",
-        "href": "/catalog?rail=blackout"
+        "title": "Открыть подборку для мягкого дневного света",
+        "href": "/catalog?tags=tulle"
       }
     ]
   },
   {
-    "id": "guide-day-night",
-    "slug": "/guides/day-night",
+    "id": "guide-philosophy-of-texture",
+    "slug": "/guides/philosophy-of-texture",
     "kind": "custom",
-    "title": "Day/Night: двухслойный сценарий для окна",
+    "title": "Фактура, которая успокаивает",
     "blocks": [
       {
-        "id": "guide-day-night-hero",
+        "id": "guide-philosophy-of-texture-hero",
         "type": "media-feature",
-        "eyebrow": "GUIDE",
-        "title": "Сценарий день/ночь",
-        "subtitle": "Днем мягкий свет через тюль, вечером — приватность через плотную портьеру.",
-        "body": "Двухслойная система работает как капсульный гардероб: один слой для света и глубины интерьера, второй — для уюта и затемнения. Это самый гибкий формат для квартиры и дома.",
+        "eyebrow": "ЖУРНАЛ",
+        "title": "Материя тихой роскоши",
+        "subtitle": "Благородная ткань не требует громкого рисунка: ее характер раскрывается через вес, переплетение и деликатный рельеф.",
+        "body": "В премиальном интерьере фактура работает почти на уровне интонации. Лен с сухим касанием, матовый бархат, плотная портьерная ткань с мягкой глубиной переплетения создают ощущение собранности еще до того, как вы замечаете цвет.",
         "media": {
           "type": "image",
-          "src": "/demo/jacquard-day-night-set.svg",
-          "alt": "Комплект day-night для окна"
+          "src": "/demo/journal/philosophy-of-texture.png",
+          "alt": "Крупный план плотной портьерной ткани с выразительной фактурой и мягкими складками.",
+          "objectPosition": "52% center",
+          "mobileObjectPosition": "52% center"
         },
         "cta": {
-          "label": "Посмотреть day-night подборку",
-          "href": "/catalog?rail=day-night"
+          "label": "Смотреть фактурные портьеры",
+          "href": "/catalog?tags=drape"
         }
       },
       {
-        "id": "guide-day-night-text",
+        "id": "guide-philosophy-of-texture-text",
         "type": "rich-text",
-        "content": "Оптимальная полнота складок для портьер — 1.8x–2.2x от ширины карниза. Тюль лучше брать чуть шире для более мягкой волны и ровной посадки по всей высоте."
+        "content": "Хорошая фактура читается не только вблизи. Она собирает свет, держит складку и дает интерьеру глубину без лишнего визуального шума. Именно поэтому тихие, сложные ткани так уверенно работают в пространствах, где важны не эффекты, а ощущение меры."
       },
       {
-        "id": "guide-day-night-cta",
+        "id": "guide-philosophy-of-texture-cta",
         "type": "cta-strip",
-        "title": "Подобрать комплект day/night",
-        "href": "/catalog?rail=day-night"
+        "title": "Перейти к подборке спокойных фактур",
+        "href": "/catalog?tags=drape"
       }
     ]
   },
   {
-    "id": "guide-by-room",
-    "slug": "/guides/by-room",
+    "id": "guide-art-of-layering",
+    "slug": "/guides/art-of-layering",
     "kind": "custom",
-    "title": "Как подобрать ткани по комнатам",
+    "title": "Глубина многослойного текстиля",
     "blocks": [
       {
-        "id": "guide-by-room-hero",
+        "id": "guide-art-of-layering-hero",
         "type": "media-feature",
-        "eyebrow": "GUIDE",
-        "title": "Ткани под задачи комнаты",
-        "subtitle": "Для спальни, гостиной, детской и кабинета нужны разные уровни света и фактуры.",
-        "body": "В спальне важнее приватность и затемнение, в гостиной — баланс света и мягкая фактура, в кабинете — контроль бликов. Подбор всегда стоит делать от функции, а затем от цвета.",
+        "eyebrow": "ЖУРНАЛ",
+        "title": "Слой, который создает глубину",
+        "subtitle": "Тюль и портьера работают как два регистра одного пространства: воздух и защита, прозрачность и собранность.",
+        "body": "Многослойный сценарий ценен не только своей практичностью. Он создает интерьерную глубину, в которой окно перестает быть плоскостью и становится мягкой архитектурной сценой.",
         "media": {
           "type": "image",
-          "src": "/demo/airy-voile-tulle.svg",
-          "alt": "Тюль в светлом интерьере"
+          "src": "/demo/journal/art-of-layering.png",
+          "alt": "Слой полупрозрачного тюля и плотных портьер в спокойном luxury-интерьере.",
+          "objectPosition": "44% center",
+          "mobileObjectPosition": "46% center"
         },
         "cta": {
-          "label": "Открыть каталог по комнате",
-          "href": "/catalog"
+          "label": "Смотреть тюль и портьеры",
+          "href": "/catalog?view=kits"
         }
       },
       {
-        "id": "guide-by-room-text",
+        "id": "guide-art-of-layering-text",
         "type": "rich-text",
-        "content": "Если помещение с панорамными окнами, используйте двойную ширину тюля, чтобы избежать лишних стыков. Для северной стороны выбирайте более светлые и мягкие фактуры, усиливающие дневной свет."
+        "content": "Когда легкая ткань берет на себя свет, а более плотная — ритм и приватность, интерьер начинает звучать сложнее. В этом сочетании появляется та редкая мягкость, которая делает пространство не просто красивым, а обволакивающим."
       },
       {
-        "id": "guide-by-room-cta",
+        "id": "guide-art-of-layering-cta",
         "type": "cta-strip",
-        "title": "Перейти к подборке по комнатам",
-        "href": "/catalog"
+        "title": "Открыть подборку для многослойного окна",
+        "href": "/catalog?view=kits"
       }
     ]
   },
   {
-    "id": "guide-care",
-    "slug": "/guides/care",
+    "id": "guide-vertical-scale-and-drape",
+    "slug": "/guides/vertical-scale-and-drape",
     "kind": "custom",
-    "title": "Уход за шторами и тюлем",
+    "title": "Масштаб и идеальная драпировка",
     "blocks": [
       {
-        "id": "guide-care-hero",
+        "id": "guide-vertical-scale-and-drape-hero",
         "type": "media-feature",
-        "eyebrow": "GUIDE",
-        "title": "Как сохранить фактуру и посадку",
-        "subtitle": "Базовые правила ухода, которые продлевают жизнь ткани и сохраняют форму складок.",
-        "body": "Деликатная стирка, мягкое отпаривание и правильное сезонное хранение помогают избежать усадки и заломов. Всегда учитывайте рекомендации по составу и плотности материала.",
+        "eyebrow": "ЖУРНАЛ",
+        "title": "Вертикаль, которая собирает комнату",
+        "subtitle": "Длинные полотна меняют масштаб интерьера, добавляя ему высоту, ритм и ощущение архитектурной точности.",
+        "body": "Идеальная драпировка начинается не с ткани самой по себе, а с отношения к пропорциям. Когда портьера работает от потолка до пола и держит ясную линию падения, пространство выглядит спокойнее, выше и дороже.",
         "media": {
           "type": "image",
-          "src": "/demo/ripple-fold-sheer.svg",
-          "alt": "Уход за текстилем для окна"
+          "src": "/demo/journal/vertical-scale-and-drape.png",
+          "alt": "Длинные портьеры ниспадают ровными складками на пол в просторном интерьере с высокими потолками.",
+          "objectPosition": "54% bottom",
+          "mobileObjectPosition": "54% bottom"
         },
         "cta": {
-          "label": "Смотреть ткани с простым уходом",
-          "href": "/catalog?q=linen"
+          "label": "Смотреть длинные портьеры",
+          "href": "/catalog?tags=drape"
         }
       },
       {
-        "id": "guide-care-text",
+        "id": "guide-vertical-scale-and-drape-text",
         "type": "rich-text",
-        "content": "Плотные портьеры лучше отпаривать вертикально, не прижимая ткань утюгом. Легкий тюль сушите в расправленном виде, чтобы сохранить чистую линию волны и прозрачность полотна."
+        "content": "Даже сдержанный интерьер начинает звучать статусно, когда окно собрано в уверенную вертикаль. Глубокая складка, точная длина и спокойная полнота ткани дают тот самый эффект private residence, в котором роскошь считывается не как жест, а как мера."
       },
       {
-        "id": "guide-care-cta",
+        "id": "guide-vertical-scale-and-drape-cta",
         "type": "cta-strip",
-        "title": "Открыть каталог и выбрать материал",
-        "href": "/catalog"
+        "title": "Перейти к подборке портьерных полотен",
+        "href": "/catalog?tags=drape"
       }
     ]
   }

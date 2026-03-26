@@ -69,7 +69,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
   const schemas = [
     buildBreadcrumbJsonLd([
       { name: "Главная", path: "/" },
-      { name: "Гайды", path: "/guides" },
+      { name: "Журнал", path: "/guides" },
       { name: page.title, path: page.slug }
     ]),
     {
@@ -104,7 +104,7 @@ export default async function GuidePage({ params }: GuidePageProps) {
 
       <article className="space-y-6">
         <header className="rounded-xl border border-border/34 bg-card/90 px-5 py-6 sm:px-6 sm:py-7">
-          <p className="ui-kicker">Guide</p>
+          <p className="ui-kicker">Журнал</p>
           <h1 className="ui-title-display mt-2 text-[clamp(2rem,4.2vw,3.2rem)] leading-[0.96]">
             {page.title}
           </h1>
