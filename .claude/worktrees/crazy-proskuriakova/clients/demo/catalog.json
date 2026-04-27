@@ -1,0 +1,1049 @@
+{
+  "products": [
+    {
+      "id": "p1",
+      "slug": "linen-blackout-drape",
+      "name": "Льняная портьера Blackout",
+      "description": "Плотная льняная портьера для полного затемнения спальни или кино-зоны.",
+      "shortDescription": "Плотный лен blackout с мягкой архитектурной драпировкой.",
+      "price": {
+        "currency": "RUB",
+        "amount": 18900
+      },
+      "compareAtPrice": {
+        "currency": "RUB",
+        "amount": 22900
+      },
+      "badges": [],
+      "tags": [
+        "featured",
+        "blackout",
+        "linen",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "m1",
+          "url": "/demo/satin_one.jpeg",
+          "alt": "Льняная портьера blackout в интерьере"
+        },
+        {
+          "id": "m1-detail",
+          "url": "/demo/satin_two.jpeg",
+          "alt": "Льняная портьера blackout — деталь ткани"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Светопропускание": "95-100%",
+        "Ткань": "Linen blend",
+        "Ширина полотна": "150 cm",
+        "Уход": "Химчистка",
+        "colorOptions": [
+          {
+            "id": "p1-ivory",
+            "label": "Ivory Linen",
+            "tone": "ivory",
+            "mediaIds": [
+              "m1",
+              "m1-detail"
+            ]
+          },
+          {
+            "id": "p1-graphite",
+            "label": "Graphite Linen",
+            "tone": "graphite",
+            "mediaIds": [
+              "m1-detail",
+              "m1"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "p2",
+      "slug": "airy-voile-tulle",
+      "name": "Тюль Voile воздушный",
+      "description": "Полупрозрачный тюль для дневного света и приватности без утяжеления интерьера.",
+      "shortDescription": "Воздушный тюль voile с мягким рассеиванием света.",
+      "price": {
+        "currency": "RUB",
+        "amount": 7400
+      },
+      "badges": [],
+      "tags": [
+        "featured",
+        "tulle",
+        "sheer",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "m2",
+          "url": "/demo/products/airy-voile-tulle/01.jpg",
+          "alt": "Воздушный тюль voile в светлой гостиной с мягким утренним светом"
+        },
+        {
+          "id": "m2-detail",
+          "url": "/demo/products/airy-voile-tulle/02.jpg",
+          "alt": "Деталь ткани — прозрачная структура voile крупным планом"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Светопропускание": "40-55%",
+        "Ткань": "Voile",
+        "Ширина полотна": "300 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p3",
+      "slug": "jacquard-day-night-set",
+      "name": "Комплект Day-Night жаккард",
+      "description": "Двухслойный комплект: полупрозрачный слой днем и более плотный для вечерней приватности.",
+      "shortDescription": "Day-night комплект для гибкого сценария освещения.",
+      "price": {
+        "currency": "RUB",
+        "amount": 23900
+      },
+      "badges": [],
+      "tags": [
+        "featured",
+        "jacquard",
+        "day-night",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "m3",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Комплект жаккард day-night в интерьере"
+        },
+        {
+          "id": "m3-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Комплект жаккард day-night — деталь ткани"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Светопропускание": "60-95%",
+        "Ткань": "Jacquard + voile",
+        "Ширина полотна": "200 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p4",
+      "slug": "ripple-fold-sheer",
+      "name": "Тюль Ripple Fold",
+      "description": "Современный ripple fold с ровной волной по всей ширине, идеален для панорамных окон.",
+      "shortDescription": "Ровная волна и легкая полупрозрачность для современного интерьера.",
+      "price": {
+        "currency": "RUB",
+        "amount": 12800
+      },
+      "badges": [],
+      "tags": [
+        "sheer",
+        "ripple-fold",
+        "minimal",
+        "office"
+      ],
+      "media": [
+        {
+          "id": "m4",
+          "url": "/demo/products/ripple-fold-sheer/01.jpg",
+          "alt": "Тюль ripple fold с ровной волной в минималистичном офисе"
+        },
+        {
+          "id": "m4-detail",
+          "url": "/demo/products/ripple-fold-sheer/02.jpg",
+          "alt": "Деталь ткани — ритмичные S-образные складки ripple fold"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "35-45%",
+        "Ткань": "Poly sheer",
+        "Ширина полотна": "320 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p5",
+      "slug": "velvet-theater-blackout",
+      "name": "Бархатная портьера Blackout",
+      "description": "Бархатные портьеры для глубокой затемняющей сцены и мягкой акустики гостиной.",
+      "shortDescription": "Плотный velvet blackout для домашнего кино и уюта вечером.",
+      "price": {
+        "currency": "RUB",
+        "amount": 21200
+      },
+      "compareAtPrice": {
+        "currency": "RUB",
+        "amount": 24900
+      },
+      "badges": [],
+      "tags": [
+        "featured",
+        "blackout",
+        "velvet",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "m5",
+          "url": "/demo/products/velvet-theater-blackout/01.jpg",
+          "alt": "Бархатные портьеры антрацит в гостиной с домашним кинотеатром"
+        },
+        {
+          "id": "m5-detail",
+          "url": "/demo/products/velvet-theater-blackout/02.jpg",
+          "alt": "Деталь ткани — бархатный ворс с серебристым отливом"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Светопропускание": "98-100%",
+        "Ткань": "Velvet",
+        "Ширина полотна": "140 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p6",
+      "slug": "Tulle-krujevo",
+      "name": "Тюль льняной Sand",
+      "description": "Легкий льняной тюль песочного тона для мягкого естественного света.",
+      "shortDescription": "Теплый полупрозрачный лен для спокойной спальни.",
+      "price": {
+        "currency": "RUB",
+        "amount": 14500
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer",
+        "linen",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "m6",
+          "url": "/demo/tulle_1.png",
+          "alt": "Тюль льняной sand в интерьере"
+        },
+        {
+          "id": "m6-detail",
+          "url": "/demo/tulle_2.png",
+          "alt": "Тюль льняной sand — деталь ткани"
+        },
+        {
+          "id": "m6-alt-3",
+          "url": "/demo/tulle_3.png",
+          "alt": "Тюль льняной sand — альтернативный цвет"
+        },
+        {
+          "id": "m6-alt-4",
+          "url": "/demo/tulle_4.png",
+          "alt": "Тюль льняной sand — четвёртый цвет"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "35-50%",
+        "Ткань": "Linen voile",
+        "Ширина полотна": "280 cm",
+        "Уход": "Стирка 30°C",
+        "colorOptions": [
+          {
+            "id": "p6-sand",
+            "label": "Sand",
+            "tone": "sand",
+            "mediaIds": [
+              "m6",
+              "m6-detail"
+            ]
+          },
+          {
+            "id": "p6-ivory",
+            "label": "Ivory",
+            "tone": "ivory",
+            "mediaIds": [
+              "m6-detail",
+              "m6"
+            ]
+          },
+          {
+            "id": "p6-linen",
+            "label": "Linen",
+            "tone": "linen",
+            "mediaIds": [
+              "m6-alt-3",
+              "m6-alt-4"
+            ]
+          },
+          {
+            "id": "p6-taupe",
+            "label": "Taupe",
+            "tone": "taupe",
+            "mediaIds": [
+              "m6-alt-4",
+              "m6-alt-3"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "id": "p7",
+      "slug": "acoustic-weave-drape",
+      "name": "Портьера акустическая",
+      "description": "Плотное плетение снижает эхо и добавляет приватность в рабочем пространстве.",
+      "shortDescription": "Фактурная драпировка с акцентом на акустический комфорт.",
+      "price": {
+        "currency": "RUB",
+        "amount": 17600
+      },
+      "badges": [],
+      "tags": [
+        "acoustic",
+        "drape",
+        "office",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m7",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Портьера акустическая в интерьере"
+        },
+        {
+          "id": "m7-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Портьера акустическая — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "80-90%",
+        "Ткань": "Dense weave",
+        "Ширина полотна": "150 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p8",
+      "slug": "pearl-voile-double-width",
+      "name": "Тюль Voile Pearl двойная ширина",
+      "description": "Тюль двойной ширины для панорамных окон без лишних стыков.",
+      "shortDescription": "Широкий voile с ровными мягкими складками.",
+      "price": {
+        "currency": "RUB",
+        "amount": 10200
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer",
+        "living-room",
+        "wide"
+      ],
+      "media": [
+        {
+          "id": "m8",
+          "url": "/demo/products/pearl-voile-double-width/01.jpg",
+          "alt": "Жемчужный тюль двойной ширины на панорамном окне"
+        },
+        {
+          "id": "m8-detail",
+          "url": "/demo/products/pearl-voile-double-width/02.jpg",
+          "alt": "Деталь ткани — жемчужный voile с наложением слоёв"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "40-55%",
+        "Ткань": "Voile",
+        "Ширина полотна": "320 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p9",
+      "slug": "thermal-dimout-curtain",
+      "name": "Портьера термо Dimout",
+      "description": "Dimout портьера с термослоем для комфортной температуры в спальне.",
+      "shortDescription": "Теплосбережение и мягкое затемнение для ежедневного режима.",
+      "price": {
+        "currency": "RUB",
+        "amount": 15800
+      },
+      "badges": [],
+      "tags": [
+        "dimout",
+        "thermal",
+        "bedroom",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m9",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Портьера термо dimout в интерьере"
+        },
+        {
+          "id": "m9-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Портьера термо dimout — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "75-85%",
+        "Ткань": "Thermal blend",
+        "Ширина полотна": "145 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p10",
+      "slug": "cotton-slub-cafe-curtain",
+      "name": "Штора кухонная Cotton Slub",
+      "description": "Короткая текстурная штора для кухни и утреннего мягкого света.",
+      "shortDescription": "Легкий slub cotton для уютной кухни и breakfast-зоны.",
+      "price": {
+        "currency": "RUB",
+        "amount": 6800
+      },
+      "badges": [],
+      "tags": [
+        "cotton",
+        "cafe",
+        "kitchen",
+        "sheer"
+      ],
+      "media": [
+        {
+          "id": "m10",
+          "url": "/demo/airy-voile-tulle.svg",
+          "alt": "Штора кухонная cotton slub в интерьере"
+        },
+        {
+          "id": "m10-detail",
+          "url": "/demo/airy-voile-tulle-detail.svg",
+          "alt": "Штора кухонная cotton slub — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "30-45%",
+        "Ткань": "Cotton slub",
+        "Ширина полотна": "180 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p11",
+      "slug": "velvet-pleat-set",
+      "name": "Комплект бархатный со складкой",
+      "description": "Комплект из плотных портьер и дополнительного легкого слоя для day-night сценария.",
+      "shortDescription": "Двухслойный бархатный сет с аккуратной складкой.",
+      "price": {
+        "currency": "RUB",
+        "amount": 26400
+      },
+      "compareAtPrice": {
+        "currency": "RUB",
+        "amount": 29900
+      },
+      "badges": [],
+      "tags": [
+        "featured",
+        "velvet",
+        "day-night",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "m11",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Комплект бархатный со складкой в интерьере"
+        },
+        {
+          "id": "m11-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Комплект бархатный со складкой — деталь ткани"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Светопропускание": "65-100%",
+        "Ткань": "Velvet + voile",
+        "Ширина полотна": "150 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p12",
+      "slug": "soft-mesh-tulle-white",
+      "name": "Тюль Mesh мягкий белый",
+      "description": "Мягкая сетчатая структура для детской и гостевой комнаты с деликатным светом.",
+      "shortDescription": "Нежный mesh-тюль для дневного света и приватности.",
+      "price": {
+        "currency": "RUB",
+        "amount": 5400
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer",
+        "kids",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m12",
+          "url": "/demo/products/soft-mesh-tulle-white/01.jpg",
+          "alt": "Мягкий mesh-тюль в спокойной детской комнате"
+        },
+        {
+          "id": "m12-detail",
+          "url": "/demo/products/soft-mesh-tulle-white/02.jpg",
+          "alt": "Деталь ткани — мелкая сетчатая структура mesh"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "25-40%",
+        "Ткань": "Mesh tulle",
+        "Ширина полотна": "300 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p13",
+      "slug": "natural-flax-curtain",
+      "name": "Портьера натуральный лён",
+      "description": "Портьера из льняного микса с теплым натуральным оттенком для спокойного интерьера.",
+      "shortDescription": "Натуральная фактура и мягкое движение ткани.",
+      "price": {
+        "currency": "RUB",
+        "amount": 14400
+      },
+      "badges": [],
+      "tags": [
+        "linen",
+        "drape",
+        "living-room",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m13",
+          "url": "/demo/products/natural-flax-curtain/01.jpg",
+          "alt": "Льняная портьера натурального цвета в тёплой гостиной"
+        },
+        {
+          "id": "m13-detail",
+          "url": "/demo/products/natural-flax-curtain/02.jpg",
+          "alt": "Деталь ткани — натуральные волокна льна с характерными узелками"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "55-70%",
+        "Ткань": "Flax blend",
+        "Ширина полотна": "150 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p14",
+      "slug": "mocha-blackout-panel",
+      "name": "Панель Blackout мокко",
+      "description": "Однотонная blackout-панель с плотным полотном для спокойного сна.",
+      "shortDescription": "Надежное затемнение в кофейном оттенке.",
+      "price": {
+        "currency": "RUB",
+        "amount": 17100
+      },
+      "badges": [],
+      "tags": [
+        "blackout",
+        "bedroom",
+        "minimal",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m14",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Панель blackout мокко в интерьере"
+        },
+        {
+          "id": "m14-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Панель blackout мокко — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "95-100%",
+        "Ткань": "Poly blackout",
+        "Ширина полотна": "140 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p15",
+      "slug": "herringbone-drape-duo",
+      "name": "Портьера ёлочка Duo",
+      "description": "Фактурный herringbone рисунок для живой, но сдержанной интерьерной подачи.",
+      "shortDescription": "Глубокий рисунок и выразительные складки.",
+      "price": {
+        "currency": "RUB",
+        "amount": 19800
+      },
+      "badges": [],
+      "tags": [
+        "featured",
+        "jacquard",
+        "living-room",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m15",
+          "url": "/demo/products/herringbone-drape-duo/01.jpg",
+          "alt": "Портьеры herringbone в утончённой гостиной mid-century"
+        },
+        {
+          "id": "m15-detail",
+          "url": "/demo/products/herringbone-drape-duo/02.jpg",
+          "alt": "Деталь ткани — жаккардовый рисунок ёлочкой крупным планом"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Светопропускание": "70-85%",
+        "Ткань": "Jacquard weave",
+        "Ширина полотна": "160 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p16",
+      "slug": "ivory-ripple-track-sheer",
+      "name": "Тюль Ripple Track слоновая кость",
+      "description": "Ровный ripple track для современной гостиной и панорамного света.",
+      "shortDescription": "Изящная волна и прозрачная фактура.",
+      "price": {
+        "currency": "RUB",
+        "amount": 11800
+      },
+      "badges": [],
+      "tags": [
+        "sheer",
+        "ripple-fold",
+        "office",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "m16",
+          "url": "/demo/ripple-fold-sheer.svg",
+          "alt": "Тюль ripple track слоновая кость в интерьере"
+        },
+        {
+          "id": "m16-detail",
+          "url": "/demo/ripple-fold-sheer-detail.svg",
+          "alt": "Тюль ripple track слоновая кость — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "30-45%",
+        "Ткань": "Sheer poly",
+        "Ширина полотна": "320 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p17",
+      "slug": "sandstone-roman-curtain",
+      "name": "Римская штора Sandstone",
+      "description": "Римская штора с чистой геометрией для кабинета и небольших окон.",
+      "shortDescription": "Лаконичная форма и теплый sandstone оттенок.",
+      "price": {
+        "currency": "RUB",
+        "amount": 13400
+      },
+      "badges": [],
+      "tags": [
+        "roman",
+        "minimal",
+        "office",
+        "linen"
+      ],
+      "media": [
+        {
+          "id": "m17",
+          "url": "/demo/ripple-fold-sheer.svg",
+          "alt": "Римская штора sandstone в интерьере"
+        },
+        {
+          "id": "m17-detail",
+          "url": "/demo/ripple-fold-sheer-detail.svg",
+          "alt": "Римская штора sandstone — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "60-75%",
+        "Ткань": "Linen blend",
+        "Ширина полотна": "120 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p18",
+      "slug": "noise-shield-curtain",
+      "name": "Портьера шумозащитная",
+      "description": "Усиленная плотность ткани для спальни у активной улицы и лучшей приватности.",
+      "shortDescription": "Плотный acoustic blackout для тихого сна.",
+      "price": {
+        "currency": "RUB",
+        "amount": 20500
+      },
+      "badges": [],
+      "tags": [
+        "acoustic",
+        "blackout",
+        "bedroom",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m18",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Портьера шумозащитная в интерьере"
+        },
+        {
+          "id": "m18-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Портьера шумозащитная — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "95-100%",
+        "Ткань": "Acoustic weave",
+        "Ширина полотна": "145 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p19",
+      "slug": "olive-linen-blend-set",
+      "name": "Комплект льняной оливковый",
+      "description": "Мягкий оливковый тон и натуральная фактура для светлой гостиной.",
+      "shortDescription": "Теплый льняной сет для живого интерьерного акцента.",
+      "price": {
+        "currency": "RUB",
+        "amount": 16700
+      },
+      "badges": [],
+      "tags": [
+        "linen",
+        "living-room",
+        "drape",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "m19",
+          "url": "/demo/linen-blackout-drape.svg",
+          "alt": "Комплект льняной оливковый в интерьере"
+        },
+        {
+          "id": "m19-detail",
+          "url": "/demo/linen-blackout-drape-detail.svg",
+          "alt": "Комплект льняной оливковый — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "55-70%",
+        "Ткань": "Linen blend",
+        "Ширина полотна": "150 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p20",
+      "slug": "cloud-sheer-layer",
+      "name": "Тюль Cloud невесомый слой",
+      "description": "Невесомый слой тюля для второго ряда штор и мягкого рассеивания света.",
+      "shortDescription": "Легкий второй слой для day-to-evening сценария.",
+      "price": {
+        "currency": "RUB",
+        "amount": 7600
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer",
+        "bedroom",
+        "day-night"
+      ],
+      "media": [
+        {
+          "id": "m20",
+          "url": "/demo/products/cloud-sheer-layer/01.jpg",
+          "alt": "Невесомый тюль cloud sheer как второй слой в спальне"
+        },
+        {
+          "id": "m20-detail",
+          "url": "/demo/products/cloud-sheer-layer/02.jpg",
+          "alt": "Деталь ткани — ультратонкая прозрачная структура gossamer"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "20-35%",
+        "Ткань": "Soft voile",
+        "Ширина полотна": "300 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p21",
+      "slug": "sunset-jacquard-panel",
+      "name": "Панель жаккард Sunset",
+      "description": "Жаккардовая панель с теплым переходом оттенков для акцентной стены с окном.",
+      "shortDescription": "Мягкий sunset-оттенок и выразительный рисунок.",
+      "price": {
+        "currency": "RUB",
+        "amount": 14900
+      },
+      "badges": [],
+      "tags": [
+        "jacquard",
+        "living-room",
+        "drape",
+        "accent"
+      ],
+      "media": [
+        {
+          "id": "m21",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Панель жаккард sunset в интерьере"
+        },
+        {
+          "id": "m21-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Панель жаккард sunset — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "65-80%",
+        "Ткань": "Jacquard",
+        "Ширина полотна": "155 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p22",
+      "slug": "dual-track-daylight-kit",
+      "name": "Комплект Day-Night двухрядный",
+      "description": "Готовый комплект для двухрядного карниза: тюль + плотный слой.",
+      "shortDescription": "Быстрый старт для day-night оформления окна.",
+      "price": {
+        "currency": "RUB",
+        "amount": 22200
+      },
+      "badges": [],
+      "tags": [
+        "featured",
+        "day-night",
+        "living-room",
+        "set"
+      ],
+      "media": [
+        {
+          "id": "m22",
+          "url": "/demo/jacquard-day-night-set.svg",
+          "alt": "Комплект day-night двухрядный в интерьере"
+        },
+        {
+          "id": "m22-detail",
+          "url": "/demo/jacquard-day-night-set-detail.svg",
+          "alt": "Комплект day-night двухрядный — деталь ткани"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Светопропускание": "40-95%",
+        "Ткань": "Voile + dimout",
+        "Ширина полотна": "200 cm",
+        "Уход": "Химчистка"
+      }
+    },
+    {
+      "id": "p23",
+      "slug": "studio-dimout-office",
+      "name": "Портьера офисная Dimout",
+      "description": "Сдержанная офисная портьера для контроля бликов и комфортной работы у окна.",
+      "shortDescription": "Dimout для кабинета и рабочих пространств.",
+      "price": {
+        "currency": "RUB",
+        "amount": 13900
+      },
+      "badges": [],
+      "tags": [
+        "dimout",
+        "office",
+        "minimal",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m23",
+          "url": "/demo/ripple-fold-sheer.svg",
+          "alt": "Портьера офисная dimout в интерьере"
+        },
+        {
+          "id": "m23-detail",
+          "url": "/demo/ripple-fold-sheer-detail.svg",
+          "alt": "Портьера офисная dimout — деталь ткани"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "70-85%",
+        "Ткань": "Dimout poly",
+        "Ширина полотна": "150 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "p24",
+      "slug": "kids-room-soft-blackout",
+      "name": "Портьера детская мягкий Blackout",
+      "description": "Мягкое blackout-полотно для детской: дневной сон, вечерний режим и приватность.",
+      "shortDescription": "Спокойный световой режим для детской комнаты.",
+      "price": {
+        "currency": "RUB",
+        "amount": 12900
+      },
+      "badges": [],
+      "tags": [
+        "blackout",
+        "kids",
+        "bedroom",
+        "drape"
+      ],
+      "media": [
+        {
+          "id": "m24",
+          "url": "/demo/products/kids-room-soft-blackout/01.jpg",
+          "alt": "Мягкая blackout-штора кремового цвета в спокойной детской"
+        },
+        {
+          "id": "m24-detail",
+          "url": "/demo/products/kids-room-soft-blackout/02.jpg",
+          "alt": "Деталь ткани — гладкая матовая blackout поверхность"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Светопропускание": "90-98%",
+        "Ткань": "Soft blackout",
+        "Ширина полотна": "140 cm",
+        "Уход": "Стирка 30°C"
+      }
+    },
+    {
+      "id": "product-tyul-batist",
+      "slug": "tyul-batist",
+      "name": "Тюль Батист",
+      "description": "Тюль из тонкого батиста с деликатной текстурой для мягкого рассеивания дневного света.",
+      "shortDescription": "Нежный батистовый тюль для спальни и гостиной.",
+      "price": {
+        "currency": "RUB",
+        "amount": 8500
+      },
+      "badges": [],
+      "media": [
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-0-8b6a970a",
+          "url": "/uploads/demo/1773743621965-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-0-8b6a970a.png",
+          "alt": "Тюль батист — вид 1"
+        },
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-1-e1a4d573",
+          "url": "/uploads/demo/1773743621968-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-1-e1a4d573.png",
+          "alt": "Тюль батист — вид 2"
+        },
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-2-c139cf76",
+          "url": "/uploads/demo/1773743621971-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-2-c139cf76.png",
+          "alt": "Тюль батист — вид 3"
+        },
+        {
+          "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-3-06880586",
+          "url": "/uploads/demo/1773743621973-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-3-06880586.png",
+          "alt": "Тюль батист — вид 4"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-0-8a6aad46",
+          "url": "/uploads/demo/1773750895837-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-0-8a6aad46.png",
+          "alt": "Тюль батист — деталь 1"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-1-aa3bfee1",
+          "url": "/uploads/demo/1773750895839-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-1-aa3bfee1.png",
+          "alt": "Тюль батист — деталь 2"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-2-1c3ed4da",
+          "url": "/uploads/demo/1773750895840-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-2-1c3ed4da.png",
+          "alt": "Тюль батист — деталь 3"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-3-8e309e15",
+          "url": "/uploads/demo/1773750895841-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-3-8e309e15.png",
+          "alt": "Тюль батист — деталь 4"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-0-2bef7d1a",
+          "url": "/uploads/demo/1773750895841-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-0-2bef7d1a.png",
+          "alt": "Тюль батист — деталь 5"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-1-08f40ffd",
+          "url": "/uploads/demo/1773750895842-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-1-08f40ffd.png",
+          "alt": "Тюль батист — деталь 6"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-2-c66f923d",
+          "url": "/uploads/demo/1773750895844-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-2-c66f923d.png",
+          "alt": "Тюль батист — деталь 7"
+        },
+        {
+          "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-3-3a94ce57",
+          "url": "/uploads/demo/1773750895846-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-3-3a94ce57.png",
+          "alt": "Тюль батист — деталь 8"
+        }
+      ],
+      "isActive": true,
+      "sortOrder": 0,
+      "isFeatured": false
+    }
+  ]
+}

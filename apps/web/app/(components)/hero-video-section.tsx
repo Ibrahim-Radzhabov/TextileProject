@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import { Button, HeroMedia, type HeroMediaConfig } from "@store-platform/ui";
 
 type HeroLink = {
@@ -38,16 +38,38 @@ export function HeroVideoSection({
   className
 }: HeroVideoSectionProps): JSX.Element {
   const sectionRef = useRef<HTMLElement | null>(null);
+  const mediaRef = useRef<HTMLDivElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const hasContent = Boolean(
     title || subtitle || trustLine || primaryCta || secondaryCta || quickLinks.length > 0
   );
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"]
-  });
-  const mediaY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 24]);
-  const mediaScale = useTransform(scrollYProgress, [0, 1], [1, prefersReducedMotion ? 1 : 1.03]);
+
+  useEffect(() => {
+    if (prefersReducedMotion || typeof window === "undefined") return;
+    const section = sectionRef.current;
+    const media = mediaRef.current;
+    if (!section || !media) return;
+
+    let frame = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const rect = section.getBoundingClientRect();
+        const vh = window.innerHeight;
+        const progress = Math.max(0, Math.min(1, -rect.top / (rect.height + vh)));
+        const y = progress * 24;
+        const scale = 1 + progress * 0.03;
+        media.style.transform = `translateY(${y}px) scale(${scale})`;
+      });
+    };
+
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, [prefersReducedMotion]);
 
   return (
     <section
@@ -63,8 +85,9 @@ export function HeroVideoSection({
         transition={{ duration: 0.95, ease: [0.25, 0.1, 0.25, 1] }}
         className="relative min-h-[66svh] overflow-hidden rounded-md sm:min-h-[72svh] lg:min-h-[78svh]"
       >
-        <motion.div
-          style={{ y: mediaY, scale: mediaScale }}
+        <div
+          ref={mediaRef}
+          style={{ willChange: "transform" }}
           className="absolute inset-0 origin-center"
         >
           <HeroMedia
@@ -73,14 +96,13 @@ export function HeroVideoSection({
             defaultOverlayOpacity={0.02}
             overlayClassName="bg-background/8"
           />
-        </motion.div>
+        </div>
       </motion.div>
 
       {hasContent && (
         <motion.div
           initial={prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.28 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.82, ease: [0.25, 0.1, 0.25, 1] }}
           className="px-4 pb-6 pt-20 sm:px-6 sm:pb-8 sm:pt-24 lg:px-8 lg:pb-9 lg:pt-28"
         >

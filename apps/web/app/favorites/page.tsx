@@ -3,6 +3,7 @@ import { fetchStorefrontConfig } from "@/lib/api-client";
 import { FavoritesPageClient } from "./favorites-page-client";
 
 export const metadata: Metadata = {
+  title: "Избранное",
   robots: {
     index: false,
     follow: false

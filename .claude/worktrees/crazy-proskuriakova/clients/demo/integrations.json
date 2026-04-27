@@ -1,0 +1,13 @@
+{
+  "stripe": {
+    "type": "stripe",
+    "publishableKey": "pk_test_placeholder",
+    "secretKey": "sk_test_placeholder",
+    "webhookSecret": "whsec_placeholder"
+  },
+  "telegram": {
+    "type": "telegram",
+    "botToken": "placeholder",
+    "chatId": "placeholder"
+  }
+}

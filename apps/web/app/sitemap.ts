@@ -34,7 +34,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: new URL(`/product/${encodeURIComponent(product.slug)}`, siteUrl).toString(),
       lastModified,
       changeFrequency: "weekly" as const,
-      priority: product.isFeatured ? 0.85 : 0.75
+      priority: 0.8
     }));
 
   const guides = getGuidePages(config.pages);
@@ -42,7 +42,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     url: new URL(guide.slug, siteUrl).toString(),
     lastModified,
     changeFrequency: "weekly" as const,
-    priority: 0.78
+    priority: 0.7
   }));
 
   const guidesHubRoute: MetadataRoute.Sitemap =
@@ -52,7 +52,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
             url: new URL("/guides", siteUrl).toString(),
             lastModified,
             changeFrequency: "weekly",
-            priority: 0.82
+            priority: 0.8
           }
         ]
       : [];

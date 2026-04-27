@@ -1,0 +1,315 @@
+.container {
+  position: relative;
+  height: 2.25rem;
+  width: 2.25rem;
+  flex: 0 0 auto;
+}
+
+.containerCollapsed {
+  width: 0;
+  min-width: 0;
+  overflow: visible;
+}
+
+.trigger {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  border: 1px solid rgb(var(--color-border) / 0.35);
+  background: rgb(var(--color-card) / 0.76);
+  color: rgb(var(--color-muted-foreground) / 0.96);
+  transition:
+    color var(--motion-fast),
+    border-color var(--motion-fast),
+    background-color var(--motion-fast);
+}
+
+.trigger:hover {
+  color: rgb(var(--color-foreground) / 1);
+  border-color: rgb(var(--color-accent) / 0.6);
+}
+
+.trigger:focus-visible {
+  outline: 2px solid rgb(var(--color-ring) / 0.65);
+  outline-offset: 2px;
+}
+
+.frame {
+  --radius: 18px;
+  --border-width: 1.35px;
+  --trace-opacity: 0.96;
+  --orb-opacity: 0.76;
+  --trace-speed: 4.8s;
+  --drift-speed: 4.2s;
+
+  position: absolute;
+  right: 0;
+  top: 50%;
+  z-index: 30;
+  width: clamp(15rem, 32vw, 21rem);
+  height: 52px;
+  transform: translateY(-50%);
+  border-radius: var(--radius);
+  padding: var(--border-width);
+  box-shadow: 0 0 0 1px rgb(var(--color-accent) / 0.44);
+  contain: paint;
+}
+
+.balanced {
+  --trace-opacity: 0.92;
+  --orb-opacity: 0.74;
+  --trace-speed: 5.4s;
+  --drift-speed: 4.6s;
+}
+
+.vivid {
+  --trace-opacity: 1;
+  --orb-opacity: 0.9;
+  --trace-speed: 4.2s;
+  --drift-speed: 3.8s;
+}
+
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  border-radius: inherit;
+  background:
+    radial-gradient(
+      130px 90px at 22% 16%,
+      rgb(var(--color-accent-soft) / 0.88),
+      transparent 70%
+    ),
+    radial-gradient(
+      150px 100px at 78% 84%,
+      rgb(var(--color-accent) / 0.84),
+      transparent 72%
+    );
+  filter: blur(14px);
+  opacity: var(--orb-opacity);
+  pointer-events: none;
+  animation: drift var(--drift-speed) ease-in-out infinite alternate;
+  transition: opacity var(--motion-normal);
+  transform-origin: center;
+  will-change: transform, opacity;
+}
+
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: var(--border-width);
+  pointer-events: none;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 24deg,
+    rgb(var(--color-accent) / 0.98) 46deg,
+    transparent 68deg,
+    transparent 150deg,
+    rgb(var(--color-accent-soft) / 0.95) 190deg,
+    transparent 220deg,
+    transparent 286deg,
+    rgb(var(--color-ring) / 0.94) 320deg,
+    transparent 360deg
+  );
+  opacity: var(--trace-opacity);
+  animation: spin-transform var(--trace-speed) linear infinite;
+  transform-origin: center;
+  will-change: transform;
+
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+
+.orbs {
+  position: absolute;
+  inset: -20px;
+  border-radius: 26px;
+  pointer-events: none;
+  filter: blur(17px);
+  opacity: calc(var(--orb-opacity) + 0.04);
+  background:
+    radial-gradient(
+      150px 90px at 28% 12%,
+      rgb(var(--color-accent-soft) / 0.78),
+      transparent 72%
+    ),
+    radial-gradient(
+      180px 110px at 72% 88%,
+      rgb(var(--color-accent) / 0.64),
+      transparent 74%
+    );
+  animation: drift var(--drift-speed) ease-in-out infinite alternate;
+  transition: opacity var(--motion-normal);
+}
+
+.inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 100%;
+  padding: 0 10px 0 12px;
+  border-radius: calc(var(--radius) - var(--border-width));
+  border: 1px solid rgb(var(--color-border) / 0.35);
+  background: linear-gradient(
+    180deg,
+    rgb(var(--color-input) / 0.96),
+    rgb(var(--color-card) / 0.94)
+  );
+}
+
+.searchIcon {
+  display: inline-flex;
+  color: rgb(var(--color-muted-foreground) / 0.86);
+}
+
+.input {
+  height: 100%;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: rgb(var(--color-foreground) / 0.96);
+  font-size: 0.95rem;
+  outline: none;
+}
+
+.input::placeholder {
+  color: rgb(var(--color-muted-foreground) / 0.78);
+}
+
+.clearBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  border: 1px solid rgb(var(--color-border) / 0.4);
+  background: rgb(var(--color-card) / 0.72);
+  color: rgb(var(--color-muted-foreground) / 0.9);
+  transition:
+    color var(--motion-fast),
+    border-color var(--motion-fast);
+}
+
+.clearBtn:hover {
+  color: rgb(var(--color-foreground) / 0.98);
+  border-color: rgb(var(--color-border) / 0.6);
+}
+
+.clearBtn:focus-visible {
+  outline: 2px solid rgb(var(--color-ring) / 0.65);
+  outline-offset: 2px;
+}
+
+.filterBtn {
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgb(var(--color-accent) / 0.46);
+  background: linear-gradient(
+    180deg,
+    rgb(var(--color-accent) / 0.23),
+    rgb(var(--color-accent) / 0.12)
+  );
+  color: rgb(var(--color-foreground) / 0.96);
+  transition:
+    transform 110ms ease,
+    border-color var(--motion-fast),
+    background-color var(--motion-fast);
+}
+
+.filterBtn:hover {
+  border-color: rgb(var(--color-accent) / 0.68);
+  background: linear-gradient(
+    180deg,
+    rgb(var(--color-accent) / 0.32),
+    rgb(var(--color-accent) / 0.18)
+  );
+}
+
+.filterBtn:active {
+  transform: scale(0.98);
+}
+
+.filterBtn:focus-visible {
+  outline: 2px solid rgb(var(--color-ring) / 0.65);
+  outline-offset: 2px;
+}
+
+.frame:hover::before,
+.frame:focus-within::before {
+  opacity: 1;
+}
+
+.frame:hover .orbs,
+.frame:focus-within .orbs {
+  opacity: 0.98;
+}
+
+.frame:hover::after,
+.frame:focus-within::after {
+  opacity: 1;
+}
+
+@keyframes spin-transform {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(-10px, -2px, 0);
+  }
+
+  to {
+    transform: translate3d(10px, 2px, 0);
+  }
+}
+
+@media (max-width: 640px) {
+  .frame {
+    width: min(76vw, 18rem);
+    height: 48px;
+  }
+
+  .inner {
+    gap: 8px;
+    padding-right: 8px;
+  }
+
+  .input {
+    font-size: 0.9rem;
+  }
+
+  .filterBtn {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .frame::before,
+  .frame::after,
+  .orbs {
+    animation: none !important;
+  }
+
+  .frame::after {
+    opacity: 0.75;
+  }
+}

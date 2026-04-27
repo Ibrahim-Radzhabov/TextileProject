@@ -1,8 +1,16 @@
 import type { Metadata } from "next";
+import { getStorefrontConfig } from "@/lib/get-storefront-config";
+import { buildStorefrontMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Политика конфиденциальности"
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getStorefrontConfig();
+  return buildStorefrontMetadata(config, {
+    title: `Политика конфиденциальности — ${config.shop.name}`,
+    description:
+      "Политика конфиденциальности Velura: как мы обрабатываем персональные данные, для каких целей и как обеспечиваем их защиту.",
+    path: "/privacy"
+  });
+}
 
 export default function PrivacyPage(): JSX.Element {
   return (

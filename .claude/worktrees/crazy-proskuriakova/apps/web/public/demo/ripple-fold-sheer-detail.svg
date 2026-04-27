@@ -1,0 +1,26 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="600" y1="0" x2="600" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F5F1EB"/>
+      <stop offset="1" stop-color="#DDD1C2"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FFFFFF" stop-opacity="0.82"/>
+      <stop offset="1" stop-color="#EFE7DB" stop-opacity="0.48"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <rect x="104" y="112" width="992" height="1276" rx="30" fill="#FFFFFF" fill-opacity="0.2" stroke="#C3B49E" stroke-opacity="0.36"/>
+  <rect x="188" y="170" width="824" height="92" rx="16" fill="#E4D7C5" fill-opacity="0.7"/>
+  <rect x="220" y="202" width="760" height="24" rx="12" fill="#D1C0AA" fill-opacity="0.85"/>
+  <path d="M174 260C248 360 248 1288 176 1384H314C388 1282 388 360 314 260H174Z" fill="url(#fold)"/>
+  <path d="M330 260C404 360 404 1288 332 1384H470C544 1282 544 360 470 260H330Z" fill="url(#fold)"/>
+  <path d="M486 260C560 360 560 1288 488 1384H626C700 1282 700 360 626 260H486Z" fill="url(#fold)"/>
+  <path d="M642 260C716 360 716 1288 644 1384H782C856 1282 856 360 782 260H642Z" fill="url(#fold)"/>
+  <path d="M798 260C872 360 872 1288 800 1384H938C1012 1282 1012 360 938 260H798Z" fill="url(#fold)"/>
+  <rect x="180" y="1080" width="438" height="178" rx="28" fill="#F5EBDD" fill-opacity="0.86"/>
+  <rect x="212" y="1112" width="144" height="118" rx="16" fill="#EFE3D1"/>
+  <rect x="384" y="1116" width="194" height="28" rx="14" fill="#9E8B76" fill-opacity="0.26"/>
+  <rect x="384" y="1160" width="148" height="18" rx="9" fill="#9E8B76" fill-opacity="0.18"/>
+  <rect x="384" y="1194" width="210" height="18" rx="9" fill="#9E8B76" fill-opacity="0.14"/>
+</svg>

@@ -3,41 +3,36 @@
 import * as React from "react";
 import {
   motion,
-  useInView,
   useReducedMotion
 } from "framer-motion";
 import { HeroMedia, type HeroMediaConfig } from "@store-platform/ui";
 
+/* ── constants ─────────────────────────────────────────────── */
+const EASE_PREMIUM = [0.16, 1, 0.3, 1] as const;
 const EASE_SOFT = [0.25, 0.46, 0.45, 0.94] as const;
-const DURATION_ENTER = 0.95;
-const CARD_DELAY = 0.22;
-const WIDTH_PROGRESS_MAX = 1;
-const HEIGHT_PROGRESS_MAX = 1;
-const PARALLAX_MAX_X = 0;
-const PARALLAX_MAX_Y = 0;
-const PARALLAX_MAX_SCALE = 1.001;
-const REVEAL_OFFSET = 22;
-const FRAME_START_INSET_PERCENT = 5;
-const FRAME_START_OFFSET_VH = 0.18;
-const FRAME_EXTRA_SCROLL_VH = 0.28;
 
+/* stagger delays for text reveal */
+const STAGGER_TITLE = 0.3;
+const STAGGER_LINKS = 0.5;
+const STAGGER_LINK_STEP = 0.1;
+const STAGGER_CTA = 0.8;
+const STAGGER_INTRO = 1.0;
+
+/* scroll fadeout range (viewport fraction) */
+const FADEOUT_START = 0.05; /* start fading when 5% scrolled past top */
+const FADEOUT_END = 0.45; /* fully faded at 45% scrolled */
+
+/* ── helpers ───────────────────────────────────────────────── */
 function clamp(value: number, min: number, max: number): number {
   return Math.min(Math.max(value, min), max);
 }
 
-function lerp(start: number, end: number, progress: number): number {
-  return start + (end - start) * progress;
-}
-
-function easeInOutSine(progress: number): number {
-  return -(Math.cos(Math.PI * progress) - 1) / 2;
-}
-
+/* ── types ─────────────────────────────────────────────────── */
 export type HeroVideoEditorialProps = {
   media: HeroMediaConfig;
   title: string;
   cardTitle?: string;
-  cardLinks?: Array< { label: string; href: string; subtitle?: string }>;
+  cardLinks?: Array<{ label: string; href: string; subtitle?: string }>;
   primaryCta?: { label: string; href: string };
   introText?: string;
   revealContent?: React.ReactNode;
@@ -45,6 +40,7 @@ export type HeroVideoEditorialProps = {
   className?: string;
 };
 
+/* ── component ─────────────────────────────────────────────── */
 export function HeroVideoEditorial({
   media,
   title,
@@ -56,356 +52,235 @@ export function HeroVideoEditorial({
   desktopBreakout = false,
   className
 }: HeroVideoEditorialProps): JSX.Element {
-  const desktopScrollRef = React.useRef<HTMLDivElement>(null);
-  const desktopFrameRef = React.useRef<HTMLElement>(null);
-  const introRef = React.useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useReducedMotion();
-  const [desktopProgress, setDesktopProgress] = React.useState(0);
+  const heroRef = React.useRef<HTMLDivElement>(null);
+  const overlayRef = React.useRef<HTMLDivElement>(null);
 
-  const updateDesktopProgress = React.useCallback(() => {
-    if (typeof window === "undefined") {
-      setDesktopProgress(0);
-      return;
-    }
-    const wrapper = desktopScrollRef.current;
-    if (!wrapper) {
-      setDesktopProgress(0);
-      return;
-    }
-
-    const viewportHeight = window.innerHeight;
-    const wrapperRect = wrapper.getBoundingClientRect();
-    const stickySpan = Math.max(
-      wrapper.offsetHeight - viewportHeight + viewportHeight * FRAME_EXTRA_SCROLL_VH,
-      1
-    );
-    const next = clamp(
-      (viewportHeight * FRAME_START_OFFSET_VH - wrapperRect.top) / stickySpan,
-      0,
-      1
-    );
-    setDesktopProgress((prev) => (Math.abs(prev - next) < 0.001 ? prev : next));
-  }, []);
-
+  /* ── scroll-linked fadeout for overlay content ── */
   React.useEffect(() => {
-    if (typeof window === "undefined") {
-      return undefined;
-    }
+    if (prefersReducedMotion || typeof window === "undefined") return;
 
     let frame = 0;
-
-    const requestMeasure = () => {
+    const onScroll = () => {
       cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        updateDesktopProgress();
+      frame = requestAnimationFrame(() => {
+        const el = heroRef.current;
+        const overlay = overlayRef.current;
+        if (!el || !overlay) return;
+        const rect = el.getBoundingClientRect();
+        const vh = window.innerHeight;
+        /* progress: 0 = hero top at viewport top, 1 = hero bottom at viewport top */
+        const scrolled = -rect.top / vh;
+        const progress = clamp(
+          (scrolled - FADEOUT_START) / (FADEOUT_END - FADEOUT_START),
+          0,
+          1
+        );
+        const opacity = 1 - progress;
+        const y = -progress * 40; /* moves up 40px as it fades */
+        overlay.style.opacity = String(opacity);
+        overlay.style.transform = `translateY(${y}px)`;
       });
     };
 
-    const requestProgress = () => {
-      cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        updateDesktopProgress();
-      });
-    };
-
-    requestMeasure();
-    window.addEventListener("scroll", requestProgress, { passive: true });
-    window.addEventListener("resize", requestMeasure);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", requestProgress);
-      window.removeEventListener("resize", requestMeasure);
+      window.removeEventListener("scroll", onScroll);
     };
-  }, [updateDesktopProgress]);
-  const widthProgress = prefersReducedMotion ? 1 : easeInOutSine(clamp(desktopProgress / WIDTH_PROGRESS_MAX, 0, 1));
-  const heightProgress = prefersReducedMotion ? 1 : easeInOutSine(clamp(desktopProgress / HEIGHT_PROGRESS_MAX, 0, 1));
-  const mediaHeight = prefersReducedMotion ? "82svh" : `${lerp(82, 81.15, heightProgress).toFixed(3)}svh`;
-  const mediaWidth = "100%";
-  const frameInset = prefersReducedMotion ? 0 : lerp(FRAME_START_INSET_PERCENT, 0, widthProgress);
-  const parallaxX = prefersReducedMotion ? 0 : lerp(0, PARALLAX_MAX_X, widthProgress);
-  const parallaxY = prefersReducedMotion ? 0 : lerp(0, PARALLAX_MAX_Y, heightProgress);
-  const parallaxScale = prefersReducedMotion ? 1 : lerp(1, PARALLAX_MAX_SCALE, widthProgress);
-  const revealProgress = prefersReducedMotion ? 1 : clamp((desktopProgress - 0.28) / (0.54 - 0.28), 0, 1);
-  const revealOpacity = prefersReducedMotion ? 1 : revealProgress;
-  const revealY = prefersReducedMotion ? 0 : lerp(REVEAL_OFFSET, 0, revealProgress);
+  }, [prefersReducedMotion]);
 
-  const isIntroInView = useInView(introRef, { once: true, amount: 0.2 });
+  const hasCardContent = Boolean(
+    cardTitle || (cardLinks && cardLinks.length > 0) || primaryCta
+  );
 
-  const hasCardContent = Boolean(cardTitle || (cardLinks && cardLinks.length > 0) || primaryCta);
-  const hasRevealContent = Boolean(revealContent);
-  const hasMobileOverlapCard = hasCardContent || hasRevealContent;
-  const stickySceneClassName = hasRevealContent
-    ? "relative min-h-[118svh] sm:min-h-[124svh] lg:min-h-[134svh]"
-    : "relative";
+  /* ── shared text overlay ── */
+  const renderOverlayContent = (isMobile: boolean) => {
+    if (!hasCardContent) return null;
 
-  const renderIntroBlock = () => {
-    if (!introText) {
-      return null;
-    }
+    const baseDuration = prefersReducedMotion ? 0.15 : 0.7;
+    const baseDelay = (d: number) => (prefersReducedMotion ? 0 : d);
 
     return (
       <motion.div
-        ref={introRef}
-        className="border-t border-border/30 px-4 py-6 sm:px-6 sm:py-8 lg:px-8 lg:py-9"
-        initial={false}
-        animate={{
-          opacity: isIntroInView ? 1 : 0,
-          y: isIntroInView ? 0 : 24
-        }}
+        ref={!isMobile ? overlayRef : undefined}
+        className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex flex-col items-center pb-8 sm:pb-12 lg:pb-16"
+        style={
+          !isMobile && !prefersReducedMotion
+            ? { willChange: "opacity, transform" }
+            : undefined
+        }
+      >
+        <div className="pointer-events-auto text-center">
+          {/* title / season */}
+          {cardTitle && (
+            <motion.p
+              className="font-display text-lg tracking-wide text-white sm:text-xl lg:text-2xl"
+              style={{ textShadow: "0 1px 8px rgba(0,0,0,0.25)" }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: baseDuration,
+                delay: baseDelay(STAGGER_TITLE),
+                ease: EASE_PREMIUM
+              }}
+            >
+              {cardTitle}
+            </motion.p>
+          )}
+
+          {/* navigation links (Women / Men) */}
+          {cardLinks && cardLinks.length > 0 && (
+            <div className="mt-5 flex items-center gap-8 sm:mt-6 lg:mt-8">
+              {cardLinks.map((link, i) => (
+                <motion.a
+                  key={link.href + link.label}
+                  href={link.href}
+                  className="text-sm tracking-[0.14em] uppercase text-white/90 transition-colors duration-300 hover:text-white sm:text-[13px]"
+                  style={{ textShadow: "0 1px 6px rgba(0,0,0,0.2)" }}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: baseDuration,
+                    delay: baseDelay(STAGGER_LINKS + i * STAGGER_LINK_STEP),
+                    ease: EASE_PREMIUM
+                  }}
+                >
+                  — {link.label} —
+                </motion.a>
+              ))}
+            </div>
+          )}
+
+          {/* CTA */}
+          {primaryCta && (
+            <motion.div
+              className="mt-6 sm:mt-8"
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: baseDuration,
+                delay: baseDelay(STAGGER_CTA),
+                ease: EASE_PREMIUM
+              }}
+            >
+              <a
+                href={primaryCta.href}
+                className="inline-block border-b border-white/50 pb-0.5 text-xs tracking-[0.16em] uppercase text-white/90 transition-all duration-300 hover:border-white hover:text-white sm:text-[11px]"
+              >
+                {primaryCta.label}
+              </a>
+            </motion.div>
+          )}
+        </div>
+      </motion.div>
+    );
+  };
+
+  /* ── intro text block below hero ── */
+  const renderIntroBlock = () => {
+    if (!introText) return null;
+
+    return (
+      <motion.div
+        className="px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12"
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.3 }}
         transition={{
-          duration: prefersReducedMotion ? 0.25 : 0.6,
+          duration: prefersReducedMotion ? 0.2 : 0.6,
+          delay: prefersReducedMotion ? 0 : STAGGER_INTRO,
           ease: EASE_SOFT
         }}
       >
-        <p className="ui-subtle max-w-2xl text-sm leading-relaxed sm:text-base">
+        <p className="ui-subtle mx-auto max-w-2xl text-center text-sm leading-relaxed sm:text-base">
           {introText}
         </p>
       </motion.div>
     );
   };
 
-  const renderDesktopScene = (sceneClassName: string) => (
-    <section className={sceneClassName}>
-      <div className={stickySceneClassName}>
-        <div className="sticky top-0 flex min-h-svh items-start justify-center">
-          <motion.section
-            ref={desktopFrameRef}
-            className="relative isolate overflow-hidden rounded-[2px] lg:rounded-none"
-            style={{ height: mediaHeight, width: mediaWidth }}
-            initial={{ opacity: 0, y: 24, scale: 0.985 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: DURATION_ENTER, ease: EASE_SOFT }}
-          >
-            <motion.div
-              className="absolute inset-0 origin-center"
-              style={{
-                clipPath: `inset(0 ${frameInset.toFixed(3)}% 0 ${frameInset.toFixed(3)}%)`,
-                x: parallaxX,
-                y: parallaxY,
-                scale: parallaxScale
-              }}
-            >
-              <HeroMedia
-                media={media}
-                title={title}
-                defaultOverlayOpacity={0.06}
-                overlayClassName="bg-background/8"
-              />
-            </motion.div>
-
-            {hasCardContent && (
-              <motion.div
-                className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 sm:px-4"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: prefersReducedMotion ? 0.2 : 0.5,
-                  delay: CARD_DELAY,
-                  ease: EASE_SOFT
-                }}
-              >
-                <div className="-mb-6 pointer-events-auto w-[min(92vw,320px)] rounded-xl border border-border/30 bg-card/98 px-4 py-4 shadow-soft-subtle backdrop-blur-sm sm:w-[300px] sm:px-5 sm:py-5 lg:w-[320px]">
-                  {cardTitle && (
-                    <p className="ui-title-serif text-base leading-tight text-foreground sm:text-[1.05rem]">
-                      {cardTitle}
-                    </p>
-                  )}
-                  {cardLinks && cardLinks.length > 0 && (
-                    <ul className="mt-4 space-y-2">
-                      {cardLinks.map((link) => (
-                        <li key={link.href + link.label}>
-                          <a
-                            href={link.href}
-                            className="flex flex-col rounded-lg border border-border/25 bg-card/60 px-3 py-2.5 transition-colors hover:border-border/45 hover:bg-card/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                          >
-                            <span className="text-sm font-medium text-foreground">
-                              {link.label}
-                            </span>
-                            {link.subtitle && (
-                              <span className="mt-0.5 text-xs text-muted-foreground">
-                                {link.subtitle}
-                              </span>
-                            )}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {primaryCta && (
-                    <a
-                      href={primaryCta.href}
-                      className="mt-4 inline-flex h-9 items-center justify-center rounded-lg border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    >
-                      {primaryCta.label}
-                    </a>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </motion.section>
+  /* ── mobile hero ── */
+  const renderMobile = () => (
+    <section className="relative md:hidden">
+      <motion.div
+        className="relative isolate overflow-hidden"
+        style={{ height: "85svh", minHeight: "480px" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: prefersReducedMotion ? 0.2 : 0.8, ease: EASE_SOFT }}
+      >
+        {/* video/image with Ken Burns */}
+        <div className={`absolute inset-0 ${prefersReducedMotion ? "" : "hero-ken-burns"}`}>
+          <HeroMedia
+            media={media}
+            title={title}
+            defaultOverlayOpacity={0.12}
+            overlayClassName="bg-gradient-to-t from-black/30 via-black/5 to-transparent"
+            assetClassName="h-full w-full object-cover"
+          />
         </div>
 
-        {hasRevealContent && (
-          <motion.div
-            className="pointer-events-none absolute inset-x-0 bottom-6 z-10 flex justify-center px-3 sm:bottom-8 sm:px-4"
-            style={{ opacity: revealOpacity, y: revealY }}
-          >
-            <div className="pointer-events-auto w-full max-w-[min(92vw,36rem)]">
-              {revealContent}
-            </div>
-          </motion.div>
-        )}
-      </div>
+        {/* overlay content */}
+        {renderOverlayContent(true)}
+      </motion.div>
     </section>
   );
 
-  return (
-    <div className={["relative isolate overflow-visible rounded-md", className ?? ""].filter(Boolean).join(" ")}>
-      <section
-        className={[
-          "relative md:hidden",
-          hasMobileOverlapCard ? (hasCardContent ? "pb-28" : "pb-16") : ""
-        ].filter(Boolean).join(" ")}
-      >
-        <motion.section
-          className="relative isolate overflow-hidden rounded-[2px] bg-transparent"
-          initial={{ opacity: 0, y: 18, scale: 0.992 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: prefersReducedMotion ? 0.2 : 0.55, ease: EASE_SOFT }}
+  /* ── desktop hero ── */
+  const renderDesktop = () => {
+    const scene = (
+      <section ref={heroRef} className="relative">
+        <motion.div
+          className="relative isolate overflow-hidden"
+          style={{ height: "100svh", minHeight: "600px" }}
+          initial={{ opacity: 0, scale: 1.01 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: prefersReducedMotion ? 0.2 : 1.0, ease: EASE_SOFT }}
         >
-          <div className="relative min-h-[58svh] overflow-hidden">
+          {/* video/image with Ken Burns zoom */}
+          <div className={`absolute inset-0 ${prefersReducedMotion ? "" : "hero-ken-burns"}`}>
             <HeroMedia
               media={media}
               title={title}
-              defaultOverlayOpacity={0.06}
-              overlayClassName="bg-background/8"
-              assetClassName="h-full w-full object-cover"
+              defaultOverlayOpacity={0.08}
+              overlayClassName="bg-gradient-to-t from-black/28 via-black/4 to-transparent"
             />
-
-            {hasCardContent && (
-              <motion.div
-                className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3"
-                initial={{ opacity: 0, y: 14 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{
-                  duration: prefersReducedMotion ? 0.2 : 0.4,
-                  delay: CARD_DELAY,
-                  ease: EASE_SOFT
-                }}
-              >
-                <div className="-mb-6 pointer-events-auto w-[min(92vw,320px)] rounded-xl border border-border/30 bg-card/98 px-4 py-4 shadow-soft-subtle backdrop-blur-sm">
-                  {cardTitle && (
-                    <p className="ui-title-serif text-base leading-tight text-foreground">
-                      {cardTitle}
-                    </p>
-                  )}
-                  {cardLinks && cardLinks.length > 0 && (
-                    <ul className="mt-4 space-y-2">
-                      {cardLinks.map((link) => (
-                        <li key={link.href + link.label}>
-                          <a
-                            href={link.href}
-                            className="flex flex-col rounded-lg border border-border/25 bg-card/60 px-3 py-2.5 transition-colors hover:border-border/45 hover:bg-card/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                          >
-                            <span className="text-sm font-medium text-foreground">
-                              {link.label}
-                            </span>
-                            {link.subtitle && (
-                              <span className="mt-0.5 text-xs text-muted-foreground">
-                                {link.subtitle}
-                              </span>
-                            )}
-                          </a>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {primaryCta && (
-                    <a
-                      href={primaryCta.href}
-                      className="mt-4 inline-flex h-9 items-center justify-center rounded-lg border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    >
-                      {primaryCta.label}
-                    </a>
-                  )}
-                </div>
-              </motion.div>
-            )}
           </div>
-        </motion.section>
 
-        {hasMobileOverlapCard && (
-          <motion.div
-            className="pointer-events-none absolute inset-x-0 bottom-0 z-20 flex justify-center px-3 translate-y-[44%]"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: prefersReducedMotion ? 0.2 : 0.42, delay: 0.12, ease: EASE_SOFT }}
-          >
-            {hasCardContent ? (
-              <div className="pointer-events-auto w-[min(92vw,320px)] rounded-xl border border-border/30 bg-card/98 px-4 py-4 shadow-soft-subtle backdrop-blur-sm">
-                {cardTitle && (
-                  <p className="ui-title-serif text-base leading-tight text-foreground">
-                    {cardTitle}
-                  </p>
-                )}
-                {cardLinks && cardLinks.length > 0 && (
-                  <ul className="mt-4 space-y-2">
-                    {cardLinks.map((link) => (
-                      <li key={link.href + link.label}>
-                        <a
-                          href={link.href}
-                          className="flex flex-col rounded-lg border border-border/25 bg-card/60 px-3 py-2.5 transition-colors hover:border-border/45 hover:bg-card/80 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                        >
-                          <span className="text-sm font-medium text-foreground">
-                            {link.label}
-                          </span>
-                          {link.subtitle && (
-                            <span className="mt-0.5 text-xs text-muted-foreground">
-                              {link.subtitle}
-                            </span>
-                          )}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {primaryCta && (
-                  <a
-                    href={primaryCta.href}
-                    className="mt-4 inline-flex h-9 items-center justify-center rounded-lg border border-accent/70 bg-accent px-4 text-sm font-medium text-white transition-colors hover:bg-accent/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                  >
-                    {primaryCta.label}
-                  </a>
-                )}
-                {hasRevealContent && (
-                  <div className="mt-4 border-t border-border/22 pt-4">
-                    {revealContent}
-                  </div>
-                )}
-              </div>
-            ) : (
-              <div className="pointer-events-auto w-full max-w-[min(92vw,36rem)]">
-                {revealContent}
-              </div>
-            )}
-          </motion.div>
-        )}
+          {/* overlay content with scroll fadeout */}
+          {renderOverlayContent(false)}
+        </motion.div>
       </section>
+    );
 
-      {desktopBreakout ? (
-        <div
-          ref={desktopScrollRef}
-          className="relative hidden md:block md:left-1/2 md:w-screen md:-translate-x-1/2 md:px-2 lg:px-3 xl:px-4"
-        >
-          {renderDesktopScene("relative")}
+    if (desktopBreakout) {
+      return (
+        <div className="relative hidden md:block md:left-1/2 md:w-screen md:-translate-x-1/2">
+          {scene}
         </div>
-      ) : (
-        <div ref={desktopScrollRef} className="relative hidden md:block">
-          {renderDesktopScene("relative")}
-        </div>
-      )}
+      );
+    }
 
+    return (
+      <div className="relative hidden md:block">
+        {scene}
+      </div>
+    );
+  };
+
+  return (
+    <div
+      className={[
+        "relative isolate overflow-visible",
+        className ?? ""
+      ].filter(Boolean).join(" ")}
+    >
+      {renderMobile()}
+      {renderDesktop()}
       {renderIntroBlock()}
+      {revealContent}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 .root {
-  --radius: 19px;
+  --radius: 0;
   position: relative;
   width: 100%;
 }
@@ -32,18 +32,19 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-height: 54px;
+  min-height: 44px;
   width: 100%;
-  padding: 0 10px 0 14px;
-  border-radius: var(--radius);
-  border: 1px solid rgb(var(--color-border) / 0.32);
-  background: rgb(var(--color-card) / 0.96);
+  padding: 0 10px 0 0;
+  border-radius: 0;
+  border: none;
+  border-bottom: 1px solid rgb(var(--color-border) / 0.25);
+  background: transparent;
   transition: border-color var(--motion-fast);
 }
 
 .root:hover .inner,
 .root:focus-within .inner {
-  border-color: rgb(var(--color-border) / 0.52);
+  border-color: rgb(var(--color-foreground) / 0.4);
 }
 
 .searchIcon {
@@ -69,20 +70,17 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 9px;
-  border: 1px solid rgb(var(--color-border) / 0.32);
+  width: 28px;
+  height: 28px;
+  border-radius: 0;
+  border: none;
   background: transparent;
-  color: rgb(var(--color-muted-foreground) / 0.9);
-  transition:
-    color var(--motion-fast),
-    border-color var(--motion-fast);
+  color: rgb(var(--color-muted-foreground) / 0.7);
+  transition: color var(--motion-fast);
 }
 
 .clearBtn:hover {
-  color: rgb(var(--color-foreground) / 0.98);
-  border-color: rgb(var(--color-border) / 0.5);
+  color: rgb(var(--color-foreground));
 }
 
 .clearBtn:focus-visible {
@@ -93,22 +91,17 @@
 .filterBtn {
   display: inline-grid;
   place-items: center;
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  border: 1px solid rgb(var(--color-border) / 0.32);
+  width: 32px;
+  height: 32px;
+  border-radius: 0;
+  border: none;
   background: transparent;
-  color: rgb(var(--color-foreground) / 0.86);
-  transition:
-    color var(--motion-fast),
-    border-color var(--motion-fast),
-    background-color var(--motion-fast);
+  color: rgb(var(--color-foreground) / 0.5);
+  transition: color var(--motion-fast);
 }
 
 .filterBtn:hover {
-  border-color: rgb(var(--color-border) / 0.5);
-  background: rgb(var(--color-foreground) / 0.03);
-  color: rgb(var(--color-foreground) / 0.96);
+  color: rgb(var(--color-foreground));
 }
 
 .filterBtn:active {
@@ -121,9 +114,7 @@
 }
 
 .filterBtnActive {
-  border-color: rgb(var(--color-accent) / 0.6);
-  background: rgb(var(--color-accent) / 0.08);
-  color: rgb(var(--color-foreground) / 1);
+  color: rgb(var(--color-foreground));
 }
 
 @media (prefers-reduced-motion: reduce) {

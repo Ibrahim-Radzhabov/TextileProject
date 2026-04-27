@@ -3,10 +3,11 @@
   "configurations": [
     {
       "name": "web",
-      "runtimeExecutable": "corepack",
-      "runtimeArgs": ["pnpm", "--filter", "web", "dev", "--hostname", "127.0.0.1", "--port", "3001"],
-      "port": 3001,
+      "runtimeExecutable": "/Users/ibragimibragimov/.nvm/versions/node/v24.13.1/bin/pnpm",
+      "runtimeArgs": ["--filter", "web", "dev", "--hostname", "127.0.0.1", "--port", "3002"],
+      "port": 3002,
       "env": {
+        "PATH": "/Users/ibragimibragimov/.nvm/versions/node/v24.13.1/bin:/usr/bin:/bin:/usr/sbin:/sbin",
         "CLIENT_ID": "demo",
         "STORE_API_URL": "http://127.0.0.1:8000",
         "NEXT_PUBLIC_STORE_API_URL": "http://127.0.0.1:8000",

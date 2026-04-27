@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
+import { getStorefrontConfig } from "@/lib/get-storefront-config";
+import { buildStorefrontMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Публичная оферта"
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const config = await getStorefrontConfig();
+  return buildStorefrontMetadata(config, {
+    title: `Публичная оферта — ${config.shop.name}`,
+    description:
+      "Публичная оферта Velura: условия продажи, оплаты, доставки и возврата текстильных изделий.",
+    path: "/offer",
+    noIndex: true
+  });
+}
 
 export default function OfferPage(): JSX.Element {
   return (

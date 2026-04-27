@@ -14,6 +14,8 @@ export type ProductCardProps = {
   isFavorite?: boolean;
   onToggleFavorite?: (product: Product) => void;
   variant?: "default" | "editorial" | "name-price";
+  /** Set true for above-the-fold cards to disable lazy loading */
+  priority?: boolean;
 };
 
 const CURRENCY_LOCALE = "ru-RU";
@@ -31,7 +33,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   enableSharedTransition = false,
   isFavorite = false,
   onToggleFavorite,
-  variant = "default"
+  variant = "default",
+  priority = false
 }) => {
   const prefersReducedMotion = useReducedMotion();
   const isEditorial = variant === "editorial";
@@ -117,6 +120,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     src={secondaryImage.url}
                     alt=""
                     aria-hidden="true"
+                    loading="lazy"
+                    decoding="async"
                     className={[
                       "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
                       canCrossfade
@@ -131,6 +136,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                     layoutId={sharedMediaLayoutId}
                     src={primaryImage.url}
                     alt={primaryImage.alt}
+                    loading={priority ? "eager" : "lazy"}
+                    decoding={priority ? "sync" : "async"}
                     className={[
                       "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
                       canCrossfade
@@ -144,6 +151,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                   <img
                     src={primaryImage.url}
                     alt={primaryImage.alt}
+                    loading={priority ? "eager" : "lazy"}
+                    decoding={priority ? "sync" : "async"}
                     className={[
                       "absolute inset-0 h-full w-full object-cover transition-[opacity,transform] duration-[850ms] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:transition-none",
                       canCrossfade

@@ -1,0 +1,224 @@
+import type { ThemeConfig } from "./theme";
+import type { Product } from "./product";
+
+export type ShopConfig = {
+  id: string;
+  name: string;
+  logo?: {
+    src: string;
+    alt: string;
+  };
+  primaryLocale: string;
+  currency: string;
+  contacts?: {
+    phoneLabel?: string;
+    phoneHref?: string;
+    emailLabel?: string;
+    emailHref?: string;
+    address?: string;
+  };
+  socialLinks?: Array<{
+    label: string;
+    href: string;
+  }>;
+  supportLinks?: Array<{
+    label: string;
+    href: string;
+  }>;
+  primaryCta?: {
+    label: string;
+    href: string;
+  };
+};
+
+export type SeoConfig = {
+  titleTemplate: string;
+  defaultTitle: string;
+  description: string;
+  openGraphImage?: string;
+};
+
+export type IntegrationStripe = {
+  type: "stripe";
+  publishableKey: string;
+  secretKey: string;
+  webhookSecret?: string;
+};
+
+export type IntegrationTelegram = {
+  type: "telegram";
+  botToken: string;
+  chatId: string;
+};
+
+export type IntegrationsConfig = {
+  stripe?: IntegrationStripe;
+  telegram?: IntegrationTelegram;
+};
+
+export type PageBlockType =
+  | "hero"
+  | "product-grid"
+  | "media-feature"
+  | "editorial-rail"
+  | "featured-row"
+  | "rich-text"
+  | "cta-strip";
+
+export type PageBlockBase = {
+  id: string;
+  type: PageBlockType;
+};
+
+export type HeroQuickLink = {
+  label: string;
+  subtitle?: string;
+  href: string;
+};
+
+export type HeroCta = {
+  label: string;
+  href: string;
+};
+
+export type HeroContent = {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  trustLine?: string;
+  quickLinks?: HeroQuickLink[];
+  primaryCta?: HeroCta;
+  secondaryCta?: HeroCta;
+};
+
+export type HeroBlock = PageBlockBase & {
+  type: "hero";
+  // Preferred format: keep textual/call-to-action content together.
+  content?: HeroContent;
+  // Controls where textual hero content is rendered.
+  contentPlacement?: "overlay" | "below";
+  // "card" = narrow white card at bottom center (Loro Piana style), "full" = wide overlay.
+  overlayVariant?: "card" | "full";
+  // Short title/label for the overlay card when overlayVariant is "card".
+  cardTitle?: string;
+  // Text block that appears below hero with scroll reveal.
+  introText?: string;
+  // Legacy fields kept for backward compatibility with old page configs.
+  eyebrow?: string;
+  title?: string;
+  subtitle?: string;
+  trustLine?: string;
+  quickLinks?: HeroQuickLink[];
+  media?: {
+    type: "image" | "video";
+    src: string;
+    mobileSrc?: string;
+    poster?: string;
+    alt?: string;
+    overlayOpacity?: number;
+    overlayPreset?: "editorial" | "balanced" | "contrast";
+    objectPosition?: string;
+    mobileObjectPosition?: string;
+  };
+  primaryCta?: HeroCta;
+  secondaryCta?: HeroCta;
+};
+
+export type MediaFeatureBlock = PageBlockBase & {
+  type: "media-feature";
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  body?: string;
+  align?: "left" | "right";
+  media: {
+    type: "image" | "video";
+    src: string;
+    mobileSrc?: string;
+    poster?: string;
+    alt?: string;
+    overlayOpacity?: number;
+    objectPosition?: string;
+    mobileObjectPosition?: string;
+  };
+  cta?: {
+    label: string;
+    href: string;
+  };
+};
+
+export type ProductGridBlock = PageBlockBase & {
+  type: "product-grid";
+  title?: string;
+  subtitle?: string;
+  layout?: "auto-fit" | "3-col" | "4-col";
+  filter: {
+    featured?: boolean;
+    tags?: string[];
+  };
+};
+
+export type EditorialRailItem = {
+  id: string;
+  title: string;
+  excerpt?: string;
+  href: string;
+  ctaLabel?: string;
+  media: {
+    type: "image" | "video";
+    src: string;
+    mobileSrc?: string;
+    poster?: string;
+    alt?: string;
+    overlayOpacity?: number;
+    objectPosition?: string;
+    mobileObjectPosition?: string;
+  };
+};
+
+export type EditorialRailBlock = PageBlockBase & {
+  type: "editorial-rail";
+  title: string;
+  subtitle?: string;
+  items: EditorialRailItem[];
+};
+
+export type RichTextBlock = PageBlockBase & {
+  type: "rich-text";
+  content: string;
+};
+
+export type CtaStripBlock = PageBlockBase & {
+  type: "cta-strip";
+  title: string;
+  href: string;
+};
+
+export type PageBlock =
+  | HeroBlock
+  | ProductGridBlock
+  | MediaFeatureBlock
+  | EditorialRailBlock
+  | RichTextBlock
+  | CtaStripBlock;
+
+export type PageConfig = {
+  id: string;
+  slug: string;
+  kind: "home" | "catalog" | "product" | "custom";
+  title: string;
+  blocks: PageBlock[];
+};
+
+export type CatalogConfig = {
+  products: Product[];
+};
+
+export type StorefrontConfig = {
+  shop: ShopConfig;
+  theme: ThemeConfig;
+  seo: SeoConfig;
+  pages: PageConfig[];
+  catalog: CatalogConfig;
+  integrations: IntegrationsConfig;
+};

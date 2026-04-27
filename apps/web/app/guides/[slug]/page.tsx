@@ -41,11 +41,14 @@ export async function generateMetadata({ params }: GuidePageProps): Promise<Meta
     return {};
   }
 
-  const description = extractGuideDescription(page) || config.seo.description;
+  const baseDesc = extractGuideDescription(page) || config.seo.description;
+  const description = baseDesc.endsWith(".")
+    ? `${baseDesc} Экспертные советы по выбору текстиля для дома.`
+    : `${baseDesc}. Экспертные советы по выбору текстиля для дома.`;
   const image = extractGuideImage(page) ?? config.seo.openGraphImage;
 
   return buildStorefrontMetadata(config, {
-    title: `${page.title} — ${config.shop.name}`,
+    title: `${page.title} — журнал Velura`,
     description,
     path: page.slug,
     image
@@ -101,6 +104,14 @@ export default async function GuidePage({ params }: GuidePageProps) {
           dangerouslySetInnerHTML={jsonLd(schema)}
         />
       ))}
+
+      <nav aria-label="Навигация по разделам" className="mb-4 flex items-center gap-1.5 text-[11px] uppercase tracking-[0.1em] text-muted-foreground/60">
+        <a href="/" className="transition-colors hover:text-foreground/70">Главная</a>
+        <span aria-hidden="true">›</span>
+        <a href="/guides" className="transition-colors hover:text-foreground/70">Журнал</a>
+        <span aria-hidden="true">›</span>
+        <span className="text-foreground/80" aria-current="page">{page.title}</span>
+      </nav>
 
       <article className="space-y-6">
         <header className="rounded-xl border border-border/34 bg-card/90 px-5 py-6 sm:px-6 sm:py-7">

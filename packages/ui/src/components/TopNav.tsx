@@ -179,7 +179,7 @@ export const TopNav: React.FC<TopNavProps> = ({
           ))}
         </nav>
       )}
-      {rightSlot && <div className="flex min-w-0 items-center justify-end gap-1 text-sm sm:gap-2.5">{rightSlot}</div>}
+      {rightSlot && <div className="flex min-w-0 items-center justify-end gap-0.5 text-sm sm:gap-1.5">{rightSlot}</div>}
     </motion.header>
   );
 };

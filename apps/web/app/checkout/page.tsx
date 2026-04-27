@@ -7,7 +7,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { motion } from "framer-motion";
-import { Button, Surface } from "@store-platform/ui";
+import { Button } from "@store-platform/ui";
 import { useCartStore } from "@/store/cart-store";
 import { ApiError, checkout } from "@/lib/api-client";
 
@@ -104,152 +104,136 @@ export default function CheckoutPage() {
     }) ?? "—";
   const isSubmitDisabled = submitting || !hasItems || isPricing;
 
+  const inputClass = "h-11 w-full border-b border-border/30 bg-transparent px-0 text-sm outline-none transition-colors placeholder:text-muted-foreground/40 focus:border-foreground/40";
+
   return (
-    <div className="grid gap-6 pb-28 sm:gap-8 sm:pb-32 md:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)] md:pb-10">
+    <div className="grid gap-10 pb-28 sm:pb-32 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] md:gap-16 md:pb-10">
       <motion.form
         id="checkout-form"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2 }}
         onSubmit={handleSubmit(onSubmit)}
-        className="space-y-5 md:space-y-6"
+        className="space-y-8"
       >
-        <Surface tone="elevated" className="relative overflow-hidden rounded-[20px] px-5 py-6 sm:px-6">
-          <div className="relative z-10 space-y-3">
-            <div>
-              <p className="ui-kicker text-[10px] text-muted-foreground/76">Checkout</p>
-              <h1 className="ui-title text-2xl sm:text-3xl">Оформление заказа</h1>
-              <p className="ui-subtle mt-1 text-sm">
-                Контакты и адрес. В корзине {itemCount} поз.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Безопасная оплата</span>
-              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Поддержка магазина</span>
-              <span className="ui-kicker rounded-[10px] border border-border/45 bg-card/45 px-2.5 py-1">Подтверждение на email</span>
-            </div>
-          </div>
-        </Surface>
+        <header className="space-y-2 pt-4">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Оформление</p>
+          <h1 className="font-serif text-[1.6rem] font-normal tracking-tight sm:text-[2rem]">
+            Оформление заказа
+          </h1>
+          <p className="text-sm text-muted-foreground">
+            {itemCount} {itemCount === 1 ? "позиция" : "позиций"} в корзине
+          </p>
+        </header>
 
         {error && (
           <motion.div
             initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border border-red-400/30 bg-red-500/10 px-4 py-3 text-sm text-red-400"
+            className="border-b border-red-400/30 pb-3 text-sm text-red-500"
           >
             {error}
           </motion.div>
         )}
 
         {!hasItems && (
-          <Surface tone="subtle" className="space-y-4 rounded-[18px] px-5 py-5">
-            <div className="space-y-1">
-              <h2 className="text-sm font-semibold tracking-tight">Корзина пуста</h2>
-              <p className="text-sm text-muted-foreground">
-                Добавьте товары в корзину и вернитесь к оформлению.
-              </p>
-            </div>
+          <div className="space-y-4 border-b border-border/20 pb-6">
+            <p className="text-sm text-muted-foreground">
+              Добавьте товары в корзину и вернитесь к оформлению.
+            </p>
             <Button asChild>
               <Link href="/catalog">Перейти в каталог</Link>
             </Button>
-          </Surface>
+          </div>
         )}
 
-        <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}>
-          <Surface tone="subtle" className="space-y-4 rounded-[18px] px-5 py-5">
-            <p className="ui-kicker">Контакт</p>
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <label htmlFor="checkout-email" className="text-xs font-medium text-muted-foreground">
-                  Email
-                </label>
-                <input
-                  id="checkout-email"
-                  type="email"
-                  autoComplete="email"
-                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
-                  {...register("email")}
-                />
-                {errors.email && <p className="text-xs text-red-400">{errors.email.message}</p>}
-              </div>
-              <div className="space-y-1">
-                <label htmlFor="checkout-name" className="text-xs font-medium text-muted-foreground">
-                  Имя
-                </label>
-                <input
-                  id="checkout-name"
-                  type="text"
-                  autoComplete="name"
-                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
-                  {...register("name")}
-                />
-                {errors.name && <p className="text-xs text-red-400">{errors.name.message}</p>}
-              </div>
-            </div>
-          </Surface>
-        </motion.div>
+        <fieldset className="space-y-5 border-b border-border/20 pb-8">
+          <legend className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Контакт</legend>
+          <div className="space-y-1">
+            <label htmlFor="checkout-email" className="text-[11px] uppercase tracking-[0.1em] text-muted-foreground/70">
+              Email
+            </label>
+            <input
+              id="checkout-email"
+              type="email"
+              autoComplete="email"
+              className={inputClass}
+              {...register("email")}
+            />
+            {errors.email && <p className="text-xs text-red-500">{errors.email.message}</p>}
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="checkout-name" className="text-[11px] uppercase tracking-[0.1em] text-muted-foreground/70">
+              Имя
+            </label>
+            <input
+              id="checkout-name"
+              type="text"
+              autoComplete="name"
+              className={inputClass}
+              {...register("name")}
+            />
+            {errors.name && <p className="text-xs text-red-500">{errors.name.message}</p>}
+          </div>
+        </fieldset>
 
-        <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          <Surface tone="subtle" className="space-y-4 rounded-[18px] px-5 py-5">
-            <p className="ui-kicker">Адрес доставки</p>
-            <div className="space-y-4">
-              <div className="space-y-1">
-                <label htmlFor="checkout-address-line1" className="text-xs font-medium text-muted-foreground">
-                  Улица и дом
-                </label>
-                <input
-                  id="checkout-address-line1"
-                  type="text"
-                  autoComplete="address-line1"
-                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
-                  {...register("addressLine1")}
-                />
-                {errors.addressLine1 && <p className="text-xs text-red-400">{errors.addressLine1.message}</p>}
-              </div>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <div className="space-y-1">
-                  <label htmlFor="checkout-city" className="text-xs font-medium text-muted-foreground">
-                    Город
-                  </label>
-                  <input
-                    id="checkout-city"
-                    type="text"
-                    autoComplete="address-level2"
-                    className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
-                    {...register("addressCity")}
-                  />
-                  {errors.addressCity && <p className="text-xs text-red-400">{errors.addressCity.message}</p>}
-                </div>
-                <div className="space-y-1">
-                  <label htmlFor="checkout-postal-code" className="text-xs font-medium text-muted-foreground">
-                    Индекс
-                  </label>
-                  <input
-                    id="checkout-postal-code"
-                    type="text"
-                    autoComplete="postal-code"
-                    className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
-                    {...register("postalCode")}
-                  />
-                  {errors.postalCode && <p className="text-xs text-red-400">{errors.postalCode.message}</p>}
-                </div>
-              </div>
-              <div className="space-y-1">
-                <label htmlFor="checkout-country" className="text-xs font-medium text-muted-foreground">
-                  Страна
-                </label>
-                <input
-                  id="checkout-country"
-                  type="text"
-                  autoComplete="country-name"
-                  className="h-11 w-full rounded-[12px] border border-border/55 bg-input/80 px-3 text-sm outline-none transition-colors focus:border-border/80 focus:ring-1 focus:ring-ring"
-                  {...register("addressCountry")}
-                />
-                {errors.addressCountry && <p className="text-xs text-red-400">{errors.addressCountry.message}</p>}
-              </div>
+        <fieldset className="space-y-5 border-b border-border/20 pb-8">
+          <legend className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Адрес доставки</legend>
+          <div className="space-y-1">
+            <label htmlFor="checkout-address-line1" className="text-[11px] uppercase tracking-[0.1em] text-muted-foreground/70">
+              Улица и дом
+            </label>
+            <input
+              id="checkout-address-line1"
+              type="text"
+              autoComplete="address-line1"
+              className={inputClass}
+              {...register("addressLine1")}
+            />
+            {errors.addressLine1 && <p className="text-xs text-red-500">{errors.addressLine1.message}</p>}
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div className="space-y-1">
+              <label htmlFor="checkout-city" className="text-[11px] uppercase tracking-[0.1em] text-muted-foreground/70">
+                Город
+              </label>
+              <input
+                id="checkout-city"
+                type="text"
+                autoComplete="address-level2"
+                className={inputClass}
+                {...register("addressCity")}
+              />
+              {errors.addressCity && <p className="text-xs text-red-500">{errors.addressCity.message}</p>}
             </div>
-          </Surface>
-        </motion.div>
+            <div className="space-y-1">
+              <label htmlFor="checkout-postal-code" className="text-[11px] uppercase tracking-[0.1em] text-muted-foreground/70">
+                Индекс
+              </label>
+              <input
+                id="checkout-postal-code"
+                type="text"
+                autoComplete="postal-code"
+                className={inputClass}
+                {...register("postalCode")}
+              />
+              {errors.postalCode && <p className="text-xs text-red-500">{errors.postalCode.message}</p>}
+            </div>
+          </div>
+          <div className="space-y-1">
+            <label htmlFor="checkout-country" className="text-[11px] uppercase tracking-[0.1em] text-muted-foreground/70">
+              Страна
+            </label>
+            <input
+              id="checkout-country"
+              type="text"
+              autoComplete="country-name"
+              className={inputClass}
+              {...register("addressCountry")}
+            />
+            {errors.addressCountry && <p className="text-xs text-red-500">{errors.addressCountry.message}</p>}
+          </div>
+        </fieldset>
 
         <Button type="submit" fullWidth ripple className="hidden md:inline-flex" disabled={isSubmitDisabled}>
           {submitting ? (
@@ -268,67 +252,59 @@ export default function CheckoutPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.2, delay: 0.06 }}
       >
-        <Surface tone="subtle" className="h-fit space-y-4 rounded-[20px] px-4 py-4 sm:px-5 md:sticky md:top-24">
-          <div className="space-y-1 border-b border-border/35 pb-3">
-            <p className="ui-kicker">Ваш заказ</p>
-            <div className="flex items-end justify-between gap-3">
-              <span className="text-sm text-muted-foreground">Итого к оплате</span>
-              <span className="text-[1.45rem] font-semibold leading-none tracking-tight">{totalFormatted}</span>
+        <div className="h-fit space-y-6 pt-4 md:sticky md:top-24">
+          <div className="space-y-1 border-b border-border/20 pb-4">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Ваш заказ</p>
+            <div className="flex items-end justify-between gap-3 pt-2">
+              <span className="text-sm text-muted-foreground">Итого</span>
+              <span className="font-serif text-[1.4rem] font-normal tracking-tight">{totalFormatted}</span>
             </div>
           </div>
 
-          <div className="max-h-56 space-y-2.5 overflow-auto pr-1 md:max-h-none md:overflow-visible md:pr-0">
+          <div className="max-h-56 space-y-3 overflow-auto md:max-h-none md:overflow-visible">
             {cart?.items.map((item) => (
-              <div key={item.id} className="flex items-center justify-between gap-3 rounded-[14px] border border-border/38 px-3 py-2.5">
+              <div key={item.id} className="flex items-center justify-between gap-3 border-b border-border/10 pb-3">
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-medium tracking-tight">{item.productSnapshot.name}</p>
-                  <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground/78">x{item.quantity}</p>
+                  <p className="truncate text-sm tracking-tight">{item.productSnapshot.name}</p>
+                  <p className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground/60">×{item.quantity}</p>
                 </div>
-                <p className="text-xs text-muted-foreground">
+                <p className="text-sm text-muted-foreground">
                   {formatMoney(item.lineTotal.amount, item.lineTotal.currency)}
                 </p>
               </div>
             ))}
 
             {!cart && hasItems && (
-              <div className="space-y-2">
+              <div className="space-y-3">
                 {Array.from({ length: Math.min(lines.length, 3) }).map((_, index) => (
-                  <div key={index} className="skeleton-shimmer h-11 rounded-lg border border-border/50 bg-muted/20" />
+                  <div key={index} className="h-10 animate-pulse border-b border-border/10" />
                 ))}
               </div>
             )}
           </div>
 
-          <div className="space-y-2 rounded-[14px] border border-border/40 bg-card/45 px-3.5 py-3 text-xs text-muted-foreground">
-            <div className="flex items-center justify-between">
-              <span>Товаров</span>
-              <span className="text-foreground/88">{itemCount}</span>
-            </div>
-            <p>Оплата безопасна. Подтверждение и трекинг придут на email.</p>
-          </div>
-        </Surface>
+          <p className="text-xs text-muted-foreground/60">
+            Безопасная оплата · Подтверждение на email · {itemCount} поз.
+          </p>
+        </div>
       </motion.aside>
 
-      <div className="fixed inset-x-3 bottom-3 z-40 md:hidden">
-        <Surface
-          tone="elevated"
-          className="rounded-[18px] border border-border/45 bg-card/90 px-3 py-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] shadow-[0_14px_36px_rgba(0,0,0,0.2)] backdrop-blur-sm"
-        >
-          <div className="mb-2 flex items-center justify-between">
-            <span className="ui-kicker">Итого</span>
-            <span className="text-sm font-semibold">{totalFormatted}</span>
-          </div>
-          <Button type="submit" form="checkout-form" fullWidth ripple disabled={isSubmitDisabled}>
-            {submitting ? (
-              <span className="inline-flex items-center gap-2">
-                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                Оформляем…
-              </span>
-            ) : (
-              `Подтвердить заказ ${totalFormatted !== "—" ? `• ${totalFormatted}` : ""}`
-            )}
-          </Button>
-        </Surface>
+      {/* Mobile sticky bar */}
+      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border/20 bg-background/95 px-4 pb-[calc(0.75rem+env(safe-area-inset-bottom))] pt-3 backdrop-blur-sm md:hidden">
+        <div className="mb-2 flex items-center justify-between">
+          <span className="text-[11px] uppercase tracking-[0.12em] text-muted-foreground">Итого</span>
+          <span className="text-sm font-medium">{totalFormatted}</span>
+        </div>
+        <Button type="submit" form="checkout-form" fullWidth ripple disabled={isSubmitDisabled}>
+          {submitting ? (
+            <span className="inline-flex items-center gap-2">
+              <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-current border-t-transparent" />
+              Оформляем…
+            </span>
+          ) : (
+            `Подтвердить заказ ${totalFormatted !== "—" ? `• ${totalFormatted}` : ""}`
+          )}
+        </Button>
       </div>
     </div>
   );

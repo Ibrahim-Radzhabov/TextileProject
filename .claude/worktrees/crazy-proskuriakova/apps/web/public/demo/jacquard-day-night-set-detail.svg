@@ -1,0 +1,24 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E8DFD1"/>
+      <stop offset="1" stop-color="#CDB293"/>
+    </linearGradient>
+    <pattern id="jacquard" width="44" height="44" patternUnits="userSpaceOnUse">
+      <rect width="44" height="44" fill="#8E6D4E"/>
+      <path d="M0 22H44M22 0V44" stroke="#B59674" stroke-opacity="0.28"/>
+      <circle cx="22" cy="22" r="5.5" fill="#CFB191" fill-opacity="0.34"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <rect x="90" y="90" width="1020" height="1320" rx="34" fill="#EFE3D5" stroke="#A48766" stroke-opacity="0.34"/>
+  <rect x="150" y="140" width="500" height="1220" rx="24" fill="url(#jacquard)"/>
+  <rect x="680" y="140" width="360" height="1220" rx="24" fill="#FFFFFF" fill-opacity="0.4"/>
+  <path d="M720 140C782 248 782 1252 720 1360H844C906 1256 910 248 850 140H720Z" fill="#FFFFFF" fill-opacity="0.68"/>
+  <path d="M838 140C898 248 902 1256 842 1360H964C1026 1252 1034 248 972 140H838Z" fill="#FFFFFF" fill-opacity="0.56"/>
+  <rect x="166" y="1086" width="858" height="154" rx="28" fill="#F7EBDD" fill-opacity="0.84"/>
+  <rect x="198" y="1118" width="210" height="92" rx="16" fill="url(#jacquard)"/>
+  <rect x="438" y="1120" width="218" height="26" rx="13" fill="#7C5E40" fill-opacity="0.34"/>
+  <rect x="438" y="1164" width="326" height="18" rx="9" fill="#7C5E40" fill-opacity="0.2"/>
+  <rect x="438" y="1198" width="250" height="18" rx="9" fill="#7C5E40" fill-opacity="0.16"/>
+</svg>

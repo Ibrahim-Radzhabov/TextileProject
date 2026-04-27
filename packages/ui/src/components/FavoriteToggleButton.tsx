@@ -14,8 +14,7 @@ export type FavoriteToggleButtonProps = {
   tone?: "default" | "bare";
 };
 
-const HEART_PATH =
-  "M12 20.2C8.8 17.7 5 14.6 5 10.6C5 8.4 6.7 6.8 8.8 6.8C10.1 6.8 11.3 7.4 12 8.4C12.7 7.4 13.9 6.8 15.2 6.8C17.3 6.8 19 8.4 19 10.6C19 14.6 15.2 17.7 12 20.2Z";
+const BOOKMARK_PATH = "M5 3h14v18l-7-5-7 5V3z";
 
 export const FavoriteToggleButton: React.FC<FavoriteToggleButtonProps> = ({
   active,
@@ -69,7 +68,7 @@ export const FavoriteToggleButton: React.FC<FavoriteToggleButtonProps> = ({
     >
       <span className={styles.icon}>
         <svg viewBox="0 0 24 24" className={styles.outline} xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d={HEART_PATH} />
+          <path d={BOOKMARK_PATH} />
         </svg>
 
         <svg
@@ -79,7 +78,7 @@ export const FavoriteToggleButton: React.FC<FavoriteToggleButtonProps> = ({
           xmlns="http://www.w3.org/2000/svg"
           aria-hidden="true"
         >
-          <path d={HEART_PATH} />
+          <path d={BOOKMARK_PATH} />
         </svg>
       </span>
 

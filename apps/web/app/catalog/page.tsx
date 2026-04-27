@@ -31,9 +31,10 @@ export async function generateMetadata({
 }: CatalogPageProps): Promise<Metadata> {
   const config = await fetchStorefrontConfig();
   const page = config.pages.find((item) => item.kind === "catalog" || item.slug === "/catalog");
-  const title = page?.title ? `${page.title} — ${config.shop.name}` : `Каталог — ${config.shop.name}`;
+  const title = page?.title ? `${page.title} — ${config.shop.name}` : `Каталог штор и тюля — ${config.shop.name}`;
   const description =
-    page?.blocks.find((block) => block.type === "rich-text")?.content ?? config.seo.description;
+    page?.blocks.find((block) => block.type === "rich-text")?.content ??
+    "Полная коллекция: льняные портьеры, бархатные шторы, воздушный тюль, комплекты day-night. Фильтр по типу, комнате и назначению.";
 
   return buildStorefrontMetadata(config, {
     title,

@@ -1,0 +1,14 @@
+<svg width="256" height="256" viewBox="0 0 256 256" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Velura logo</title>
+  <desc id="desc">Minimal premium monogram V for Velura</desc>
+  <rect width="256" height="256" rx="48" fill="#F4EFE8" />
+  <rect x="24" y="24" width="208" height="208" rx="40" fill="none" stroke="#CFC6BC" stroke-width="2" />
+  <path
+    d="M72 76L112 184C114 190 122 190 124 184L156 102C157 99 161 99 162 102L186 184C188 190 196 190 198 184L228 76"
+    fill="none"
+    stroke="#1E1A17"
+    stroke-width="12"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+</svg>

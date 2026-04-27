@@ -43,7 +43,7 @@ export const AnimatedDock: React.FC<AnimatedDockProps> = ({
           : isMinimal
             ? "gap-4 min-[1280px]:gap-6"
           : isCapsule
-            ? "gap-2 sm:gap-2.5"
+            ? "gap-1 sm:gap-1.5"
             : "gap-1 sm:gap-1.5",
         className ?? ""
       ].filter(Boolean).join(" ")}

@@ -1,0 +1,10 @@
+{
+  "pending": ["cancelled"],
+  "redirect": ["cancelled"],
+  "confirmed": ["processing", "cancelled"],
+  "paid": ["processing", "shipped", "cancelled"],
+  "processing": ["shipped", "cancelled"],
+  "shipped": ["cancelled"],
+  "failed": [],
+  "cancelled": []
+}

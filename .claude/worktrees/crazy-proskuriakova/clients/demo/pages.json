@@ -1,0 +1,261 @@
+[
+  {
+    "id": "home",
+    "slug": "/",
+    "kind": "home",
+    "title": "Главная",
+    "blocks": [
+      {
+        "id": "hero-main",
+        "type": "hero",
+        "contentPlacement": "below",
+        "overlayVariant": "card",
+        "media": {
+          "type": "video",
+          "src": "/demo/hero/textile-loop-desktop-v2.mp4",
+          "mobileSrc": "/demo/hero/textile-loop-mobile-portrait.mp4",
+          "poster": "/demo/hero/textile-loop-poster-v2.jpg",
+          "alt": "Мягкая драпировка ткани у окна",
+          "overlayOpacity": 0.06,
+          "overlayPreset": "editorial",
+          "objectPosition": "50% 50%",
+          "mobileObjectPosition": "50% 50%"
+        }
+      },
+      {
+        "id": "home-featured",
+        "type": "product-grid",
+        "layout": "auto-fit",
+        "filter": {}
+      },
+      {
+        "id": "home-editorial-rail",
+        "type": "editorial-rail",
+        "title": "Журнал Velura",
+        "subtitle": "Сценарии света, фактуры и ухода для штор и тюля.",
+        "items": [
+          {
+            "id": "guide-light-control",
+            "title": "Как выбрать плотность ткани",
+            "excerpt": "От voile до blackout: как выбрать степень затемнения для спальни, гостиной и детской.",
+            "href": "/guides/light-control",
+            "ctaLabel": "Подробнее",
+            "media": {
+              "type": "image",
+              "src": "/demo/journal/journal-light-control.jpg",
+              "alt": "Плотность ткани и контроль света"
+            }
+          },
+          {
+            "id": "guide-day-night",
+            "title": "Day/Night: двухслойный сценарий",
+            "excerpt": "Тюль днем, приватность вечером: как собрать спокойную двухслойную сцену у окна.",
+            "href": "/guides/day-night",
+            "ctaLabel": "Подробнее",
+            "media": {
+              "type": "image",
+              "src": "/demo/satin_one.jpeg",
+              "alt": "Day/Night комплект для окна"
+            }
+          },
+          {
+            "id": "guide-by-room",
+            "title": "Ткани по комнатам",
+            "excerpt": "Какая фактура и светопропускание работают в спальне, гостиной и рабочем пространстве.",
+            "href": "/guides/by-room",
+            "ctaLabel": "Подробнее",
+            "media": {
+              "type": "image",
+              "src": "/demo/journal/journal-by-room.jpg",
+              "alt": "Подбор тканей по типу комнаты"
+            }
+          },
+          {
+            "id": "guide-care",
+            "title": "Уход за текстилем",
+            "excerpt": "Стирка, отпаривание и хранение без потери мягкости, объема и фактуры ткани.",
+            "href": "/guides/care",
+            "ctaLabel": "Подробнее",
+            "media": {
+              "type": "image",
+              "src": "/demo/satin_two.jpeg",
+              "alt": "Уход за шторами и тюлем"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "catalog",
+    "slug": "/catalog",
+    "kind": "catalog",
+    "title": "Каталог",
+    "blocks": [
+      {
+        "id": "catalog-grid",
+        "type": "product-grid",
+        "title": "Все позиции",
+        "layout": "auto-fit",
+        "filter": {}
+      }
+    ]
+  },
+  {
+    "id": "product",
+    "slug": "/product/[slug]",
+    "kind": "product",
+    "title": "Товар",
+    "blocks": [
+      {
+        "id": "product-intro",
+        "type": "rich-text",
+        "content": "Фактура, плотность и светопропускание: всё, что важно при выборе текстиля для окна."
+      }
+    ]
+  },
+  {
+    "id": "guide-light-control",
+    "slug": "/guides/light-control",
+    "kind": "custom",
+    "title": "Как выбрать плотность ткани для штор",
+    "blocks": [
+      {
+        "id": "guide-light-hero",
+        "type": "media-feature",
+        "eyebrow": "GUIDE",
+        "title": "Плотность ткани и контроль света",
+        "subtitle": "От мягкой вуали до полного blackout: выбираем режим под ваш ритм дня.",
+        "body": "Sheer и voile дают воздушный свет днем, dimout убирает лишний блик, а blackout помогает создать глубокую темноту вечером. Важно учитывать сторону света комнаты и сценарий сна.",
+        "media": {
+          "type": "image",
+          "src": "/demo/linen-blackout-drape.svg",
+          "alt": "Плотная драпировка штор"
+        },
+        "cta": {
+          "label": "Смотреть blackout решения",
+          "href": "/catalog?rail=blackout"
+        }
+      },
+      {
+        "id": "guide-light-text",
+        "type": "rich-text",
+        "content": "Для спальни чаще выбирают dimout или blackout, для гостиной — комбинацию тюля и портьеры. Если окна выходят на юг, добавьте более плотный слой, чтобы не перегревать интерьер днем."
+      },
+      {
+        "id": "guide-light-cta",
+        "type": "cta-strip",
+        "title": "Открыть каталог по уровню затемнения",
+        "href": "/catalog?rail=blackout"
+      }
+    ]
+  },
+  {
+    "id": "guide-day-night",
+    "slug": "/guides/day-night",
+    "kind": "custom",
+    "title": "Day/Night: двухслойный сценарий для окна",
+    "blocks": [
+      {
+        "id": "guide-day-night-hero",
+        "type": "media-feature",
+        "eyebrow": "GUIDE",
+        "title": "Сценарий день/ночь",
+        "subtitle": "Днем мягкий свет через тюль, вечером — приватность через плотную портьеру.",
+        "body": "Двухслойная система работает как капсульный гардероб: один слой для света и глубины интерьера, второй — для уюта и затемнения. Это самый гибкий формат для квартиры и дома.",
+        "media": {
+          "type": "image",
+          "src": "/demo/jacquard-day-night-set.svg",
+          "alt": "Комплект day-night для окна"
+        },
+        "cta": {
+          "label": "Посмотреть day-night подборку",
+          "href": "/catalog?rail=day-night"
+        }
+      },
+      {
+        "id": "guide-day-night-text",
+        "type": "rich-text",
+        "content": "Оптимальная полнота складок для портьер — 1.8x–2.2x от ширины карниза. Тюль лучше брать чуть шире для более мягкой волны и ровной посадки по всей высоте."
+      },
+      {
+        "id": "guide-day-night-cta",
+        "type": "cta-strip",
+        "title": "Подобрать комплект day/night",
+        "href": "/catalog?rail=day-night"
+      }
+    ]
+  },
+  {
+    "id": "guide-by-room",
+    "slug": "/guides/by-room",
+    "kind": "custom",
+    "title": "Как подобрать ткани по комнатам",
+    "blocks": [
+      {
+        "id": "guide-by-room-hero",
+        "type": "media-feature",
+        "eyebrow": "GUIDE",
+        "title": "Ткани под задачи комнаты",
+        "subtitle": "Для спальни, гостиной, детской и кабинета нужны разные уровни света и фактуры.",
+        "body": "В спальне важнее приватность и затемнение, в гостиной — баланс света и мягкая фактура, в кабинете — контроль бликов. Подбор всегда стоит делать от функции, а затем от цвета.",
+        "media": {
+          "type": "image",
+          "src": "/demo/airy-voile-tulle.svg",
+          "alt": "Тюль в светлом интерьере"
+        },
+        "cta": {
+          "label": "Открыть каталог по комнате",
+          "href": "/catalog"
+        }
+      },
+      {
+        "id": "guide-by-room-text",
+        "type": "rich-text",
+        "content": "Если помещение с панорамными окнами, используйте двойную ширину тюля, чтобы избежать лишних стыков. Для северной стороны выбирайте более светлые и мягкие фактуры, усиливающие дневной свет."
+      },
+      {
+        "id": "guide-by-room-cta",
+        "type": "cta-strip",
+        "title": "Перейти к подборке по комнатам",
+        "href": "/catalog"
+      }
+    ]
+  },
+  {
+    "id": "guide-care",
+    "slug": "/guides/care",
+    "kind": "custom",
+    "title": "Уход за шторами и тюлем",
+    "blocks": [
+      {
+        "id": "guide-care-hero",
+        "type": "media-feature",
+        "eyebrow": "GUIDE",
+        "title": "Как сохранить фактуру и посадку",
+        "subtitle": "Базовые правила ухода, которые продлевают жизнь ткани и сохраняют форму складок.",
+        "body": "Деликатная стирка, мягкое отпаривание и правильное сезонное хранение помогают избежать усадки и заломов. Всегда учитывайте рекомендации по составу и плотности материала.",
+        "media": {
+          "type": "image",
+          "src": "/demo/ripple-fold-sheer.svg",
+          "alt": "Уход за текстилем для окна"
+        },
+        "cta": {
+          "label": "Смотреть ткани с простым уходом",
+          "href": "/catalog?q=linen"
+        }
+      },
+      {
+        "id": "guide-care-text",
+        "type": "rich-text",
+        "content": "Плотные портьеры лучше отпаривать вертикально, не прижимая ткань утюгом. Легкий тюль сушите в расправленном виде, чтобы сохранить чистую линию волны и прозрачность полотна."
+      },
+      {
+        "id": "guide-care-cta",
+        "type": "cta-strip",
+        "title": "Открыть каталог и выбрать материал",
+        "href": "/catalog"
+      }
+    ]
+  }
+]

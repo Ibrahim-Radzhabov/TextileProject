@@ -2,8 +2,8 @@
   "products": [
     {
       "id": "p1",
-      "slug": "linen-blackout-drape",
-      "name": "Linen Blackout Drape",
+      "slug": "льняная-портьера-блэкаут",
+      "name": "Льняная портьера блэкаут",
       "description": "Плотная льняная портьера для полного затемнения спальни или кино-зоны.",
       "shortDescription": "Плотный лен blackout с мягкой архитектурной драпировкой.",
       "price": {
@@ -31,12 +31,12 @@
         {
           "id": "m1",
           "url": "/demo/satin_one.jpeg",
-          "alt": "Linen blackout drape"
+          "alt": "Льняная штора blackout — плотное затемнение для спальни, цвет ivory"
         },
         {
           "id": "m1-detail",
           "url": "/demo/satin_two.jpeg",
-          "alt": "Linen Blackout Drape detail"
+          "alt": "Льняная blackout портьера крупным планом — фактура ткани и архитектурная складка"
         }
       ],
       "isFeatured": true,
@@ -68,182 +68,6 @@
       }
     },
     {
-      "id": "p2",
-      "slug": "airy-voile-tulle",
-      "name": "Airy Voile Tulle",
-      "description": "Полупрозрачный тюль для дневного света и приватности без утяжеления интерьера.",
-      "shortDescription": "Воздушный тюль voile с мягким рассеиванием света.",
-      "price": {
-        "currency": "USD",
-        "amount": 74.0
-      },
-      "badges": [
-        {
-          "id": "b2",
-          "label": "Essential",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "featured",
-        "tulle",
-        "sheer",
-        "living-room"
-      ],
-      "media": [
-        {
-          "id": "m2",
-          "url": "/demo/airy-voile-tulle.svg",
-          "alt": "Airy voile tulle"
-        },
-        {
-          "id": "m2-detail",
-          "url": "/demo/airy-voile-tulle-detail.svg",
-          "alt": "Airy Voile Tulle detail"
-        }
-      ],
-      "isFeatured": true,
-      "metadata": {
-        "Light control": "40-55%",
-        "Fabric": "Voile",
-        "Width panel": "300 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p3",
-      "slug": "jacquard-day-night-set",
-      "name": "Jacquard Day-Night Set",
-      "description": "Двухслойный комплект: полупрозрачный слой днем и более плотный для вечерней приватности.",
-      "shortDescription": "Day-night комплект для гибкого сценария освещения.",
-      "price": {
-        "currency": "USD",
-        "amount": 239.0
-      },
-      "badges": [
-        {
-          "id": "b3",
-          "label": "Best Seller",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "featured",
-        "jacquard",
-        "day-night",
-        "living-room"
-      ],
-      "media": [
-        {
-          "id": "m3",
-          "url": "/demo/jacquard-day-night-set.svg",
-          "alt": "Jacquard day-night curtain set"
-        },
-        {
-          "id": "m3-detail",
-          "url": "/demo/jacquard-day-night-set-detail.svg",
-          "alt": "Jacquard Day-Night Set detail"
-        }
-      ],
-      "isFeatured": true,
-      "metadata": {
-        "Light control": "60-95%",
-        "Fabric": "Jacquard + voile",
-        "Width panel": "200 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p4",
-      "slug": "ripple-fold-sheer",
-      "name": "Ripple Fold Sheer",
-      "description": "Современный ripple fold с ровной волной по всей ширине, идеален для панорамных окон.",
-      "shortDescription": "Ровная волна и легкая полупрозрачность для современного интерьера.",
-      "price": {
-        "currency": "USD",
-        "amount": 128.0
-      },
-      "badges": [
-        {
-          "id": "b4",
-          "label": "Studio Pick",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "sheer",
-        "ripple-fold",
-        "minimal",
-        "office"
-      ],
-      "media": [
-        {
-          "id": "m4",
-          "url": "/demo/ripple-fold-sheer.svg",
-          "alt": "Ripple fold sheer curtain"
-        },
-        {
-          "id": "m4-detail",
-          "url": "/demo/ripple-fold-sheer-detail.svg",
-          "alt": "Ripple Fold Sheer detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "35-45%",
-        "Fabric": "Poly sheer",
-        "Width panel": "320 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p5",
-      "slug": "velvet-theater-blackout",
-      "name": "Velvet Theater Blackout",
-      "description": "Бархатные портьеры для глубокой затемняющей сцены и мягкой акустики гостиной.",
-      "shortDescription": "Плотный velvet blackout для домашнего кино и уюта вечером.",
-      "price": {
-        "currency": "USD",
-        "amount": 212.0
-      },
-      "compareAtPrice": {
-        "currency": "USD",
-        "amount": 249.0
-      },
-      "badges": [
-        {
-          "id": "b5",
-          "label": "Premium",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "featured",
-        "blackout",
-        "velvet",
-        "living-room"
-      ],
-      "media": [
-        {
-          "id": "m5",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Velvet theater blackout curtain"
-        },
-        {
-          "id": "m5-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Velvet Theater Blackout detail"
-        }
-      ],
-      "isFeatured": true,
-      "metadata": {
-        "Light control": "98-100%",
-        "Fabric": "Velvet",
-        "Width panel": "140 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
       "id": "p6",
       "slug": "Tulle-krujevo",
       "name": "Linen Sheer Sand",
@@ -270,22 +94,22 @@
         {
           "id": "m6",
           "url": "/demo/tulle_1.png",
-          "alt": "Linen sheer sand tulle"
+          "alt": "Льняной тюль песочного тона для мягкого естественного света в спальне"
         },
         {
           "id": "m6-detail",
           "url": "/demo/tulle_2.png",
-          "alt": "Linen Sheer Sand detail"
+          "alt": "Лён voile крупным планом — тёплая полупрозрачная фактура в оттенке ivory"
         },
         {
           "id": "m6-alt-3",
           "url": "/demo/tulle_3.png",
-          "alt": "Linen Sheer Sand alternative color"
+          "alt": "Льняной тюль в оттенке linen — натуральная беж-фактура для тихого интерьера"
         },
         {
           "id": "m6-alt-4",
           "url": "/demo/tulle_4.png",
-          "alt": "Linen Sheer Sand fourth color"
+          "alt": "Льняной тюль в оттенке taupe — тёплый серо-бежевый тон для современного интерьера"
         }
       ],
       "isFeatured": false,
@@ -335,789 +159,11 @@
       }
     },
     {
-      "id": "p7",
-      "slug": "acoustic-weave-drape",
-      "name": "Acoustic Weave Drape",
-      "description": "Плотное плетение снижает эхо и добавляет приватность в рабочем пространстве.",
-      "shortDescription": "Фактурная драпировка с акцентом на акустический комфорт.",
-      "price": {
-        "currency": "USD",
-        "amount": 176.0
-      },
-      "badges": [
-        {
-          "id": "b7",
-          "label": "Acoustic",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "acoustic",
-        "drape",
-        "office",
-        "minimal"
-      ],
-      "media": [
-        {
-          "id": "m7",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Acoustic weave drape"
-        },
-        {
-          "id": "m7-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Acoustic Weave Drape detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "80-90%",
-        "Fabric": "Dense weave",
-        "Width panel": "150 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p8",
-      "slug": "pearl-voile-double-width",
-      "name": "Pearl Voile Double Width",
-      "description": "Тюль двойной ширины для панорамных окон без лишних стыков.",
-      "shortDescription": "Широкий voile с ровными мягкими складками.",
-      "price": {
-        "currency": "USD",
-        "amount": 102.0
-      },
-      "badges": [
-        {
-          "id": "b8",
-          "label": "Wide",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "tulle",
-        "sheer",
-        "living-room",
-        "wide"
-      ],
-      "media": [
-        {
-          "id": "m8",
-          "url": "/demo/airy-voile-tulle.svg",
-          "alt": "Pearl voile double width tulle"
-        },
-        {
-          "id": "m8-detail",
-          "url": "/demo/airy-voile-tulle-detail.svg",
-          "alt": "Pearl Voile Double Width detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "40-55%",
-        "Fabric": "Voile",
-        "Width panel": "320 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p9",
-      "slug": "thermal-dimout-curtain",
-      "name": "Thermal Dimout Curtain",
-      "description": "Dimout портьера с термослоем для комфортной температуры в спальне.",
-      "shortDescription": "Теплосбережение и мягкое затемнение для ежедневного режима.",
-      "price": {
-        "currency": "USD",
-        "amount": 158.0
-      },
-      "badges": [
-        {
-          "id": "b9",
-          "label": "Thermal",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "dimout",
-        "thermal",
-        "bedroom",
-        "drape"
-      ],
-      "media": [
-        {
-          "id": "m9",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Thermal dimout curtain"
-        },
-        {
-          "id": "m9-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Thermal Dimout Curtain detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "75-85%",
-        "Fabric": "Thermal blend",
-        "Width panel": "145 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p10",
-      "slug": "cotton-slub-cafe-curtain",
-      "name": "Cotton Slub Cafe Curtain",
-      "description": "Короткая текстурная штора для кухни и утреннего мягкого света.",
-      "shortDescription": "Легкий slub cotton для уютной кухни и breakfast-зоны.",
-      "price": {
-        "currency": "USD",
-        "amount": 68.0
-      },
-      "badges": [
-        {
-          "id": "b10",
-          "label": "Daily",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "cotton",
-        "cafe",
-        "kitchen",
-        "sheer"
-      ],
-      "media": [
-        {
-          "id": "m10",
-          "url": "/demo/airy-voile-tulle.svg",
-          "alt": "Cotton slub cafe curtain"
-        },
-        {
-          "id": "m10-detail",
-          "url": "/demo/airy-voile-tulle-detail.svg",
-          "alt": "Cotton Slub Cafe Curtain detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "30-45%",
-        "Fabric": "Cotton slub",
-        "Width panel": "180 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p11",
-      "slug": "velvet-pleat-set",
-      "name": "Velvet Pleat Set",
-      "description": "Комплект из плотных портьер и дополнительного легкого слоя для day-night сценария.",
-      "shortDescription": "Двухслойный бархатный сет с аккуратной складкой.",
-      "price": {
-        "currency": "USD",
-        "amount": 264.0
-      },
-      "compareAtPrice": {
-        "currency": "USD",
-        "amount": 299.0
-      },
-      "badges": [
-        {
-          "id": "b11",
-          "label": "Top Pick",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "featured",
-        "velvet",
-        "day-night",
-        "bedroom"
-      ],
-      "media": [
-        {
-          "id": "m11",
-          "url": "/demo/jacquard-day-night-set.svg",
-          "alt": "Velvet pleat set"
-        },
-        {
-          "id": "m11-detail",
-          "url": "/demo/jacquard-day-night-set-detail.svg",
-          "alt": "Velvet Pleat Set detail"
-        }
-      ],
-      "isFeatured": true,
-      "metadata": {
-        "Light control": "65-100%",
-        "Fabric": "Velvet + voile",
-        "Width panel": "150 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p12",
-      "slug": "soft-mesh-tulle-white",
-      "name": "Soft Mesh Tulle White",
-      "description": "Мягкая сетчатая структура для детской и гостевой комнаты с деликатным светом.",
-      "shortDescription": "Нежный mesh-тюль для дневного света и приватности.",
-      "price": {
-        "currency": "USD",
-        "amount": 54.0
-      },
-      "badges": [
-        {
-          "id": "b12",
-          "label": "Light",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "tulle",
-        "sheer",
-        "kids",
-        "minimal"
-      ],
-      "media": [
-        {
-          "id": "m12",
-          "url": "/demo/airy-voile-tulle.svg",
-          "alt": "Soft mesh tulle white"
-        },
-        {
-          "id": "m12-detail",
-          "url": "/demo/airy-voile-tulle-detail.svg",
-          "alt": "Soft Mesh Tulle White detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "25-40%",
-        "Fabric": "Mesh tulle",
-        "Width panel": "300 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p13",
-      "slug": "natural-flax-curtain",
-      "name": "Natural Flax Curtain",
-      "description": "Портьера из льняного микса с теплым натуральным оттенком для спокойного интерьера.",
-      "shortDescription": "Натуральная фактура и мягкое движение ткани.",
-      "price": {
-        "currency": "USD",
-        "amount": 144.0
-      },
-      "badges": [
-        {
-          "id": "b13",
-          "label": "Organic Tone",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "linen",
-        "drape",
-        "living-room",
-        "minimal"
-      ],
-      "media": [
-        {
-          "id": "m13",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Natural flax curtain"
-        },
-        {
-          "id": "m13-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Natural Flax Curtain detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "55-70%",
-        "Fabric": "Flax blend",
-        "Width panel": "150 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p14",
-      "slug": "mocha-blackout-panel",
-      "name": "Mocha Blackout Panel",
-      "description": "Однотонная blackout-панель с плотным полотном для спокойного сна.",
-      "shortDescription": "Надежное затемнение в кофейном оттенке.",
-      "price": {
-        "currency": "USD",
-        "amount": 171.0
-      },
-      "badges": [
-        {
-          "id": "b14",
-          "label": "Sleep",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "blackout",
-        "bedroom",
-        "minimal",
-        "drape"
-      ],
-      "media": [
-        {
-          "id": "m14",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Mocha blackout panel"
-        },
-        {
-          "id": "m14-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Mocha Blackout Panel detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "95-100%",
-        "Fabric": "Poly blackout",
-        "Width panel": "140 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p15",
-      "slug": "herringbone-drape-duo",
-      "name": "Herringbone Drape Duo",
-      "description": "Фактурный herringbone рисунок для живой, но сдержанной интерьерной подачи.",
-      "shortDescription": "Глубокий рисунок и выразительные складки.",
-      "price": {
-        "currency": "USD",
-        "amount": 198.0
-      },
-      "badges": [
-        {
-          "id": "b15",
-          "label": "Best Seller",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "featured",
-        "jacquard",
-        "living-room",
-        "drape"
-      ],
-      "media": [
-        {
-          "id": "m15",
-          "url": "/demo/jacquard-day-night-set.svg",
-          "alt": "Herringbone drape duo"
-        },
-        {
-          "id": "m15-detail",
-          "url": "/demo/jacquard-day-night-set-detail.svg",
-          "alt": "Herringbone Drape Duo detail"
-        }
-      ],
-      "isFeatured": true,
-      "metadata": {
-        "Light control": "70-85%",
-        "Fabric": "Jacquard weave",
-        "Width panel": "160 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p16",
-      "slug": "ivory-ripple-track-sheer",
-      "name": "Ivory Ripple Track Sheer",
-      "description": "Ровный ripple track для современной гостиной и панорамного света.",
-      "shortDescription": "Изящная волна и прозрачная фактура.",
-      "price": {
-        "currency": "USD",
-        "amount": 118.0
-      },
-      "badges": [
-        {
-          "id": "b16",
-          "label": "Modern",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "sheer",
-        "ripple-fold",
-        "office",
-        "living-room"
-      ],
-      "media": [
-        {
-          "id": "m16",
-          "url": "/demo/ripple-fold-sheer.svg",
-          "alt": "Ivory ripple track sheer"
-        },
-        {
-          "id": "m16-detail",
-          "url": "/demo/ripple-fold-sheer-detail.svg",
-          "alt": "Ivory Ripple Track Sheer detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "30-45%",
-        "Fabric": "Sheer poly",
-        "Width panel": "320 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p17",
-      "slug": "sandstone-roman-curtain",
-      "name": "Sandstone Roman Curtain",
-      "description": "Римская штора с чистой геометрией для кабинета и небольших окон.",
-      "shortDescription": "Лаконичная форма и теплый sandstone оттенок.",
-      "price": {
-        "currency": "USD",
-        "amount": 134.0
-      },
-      "badges": [
-        {
-          "id": "b17",
-          "label": "Roman",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "roman",
-        "minimal",
-        "office",
-        "linen"
-      ],
-      "media": [
-        {
-          "id": "m17",
-          "url": "/demo/ripple-fold-sheer.svg",
-          "alt": "Sandstone roman curtain"
-        },
-        {
-          "id": "m17-detail",
-          "url": "/demo/ripple-fold-sheer-detail.svg",
-          "alt": "Sandstone Roman Curtain detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "60-75%",
-        "Fabric": "Linen blend",
-        "Width panel": "120 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p18",
-      "slug": "noise-shield-curtain",
-      "name": "Noise Shield Curtain",
-      "description": "Усиленная плотность ткани для спальни у активной улицы и лучшей приватности.",
-      "shortDescription": "Плотный acoustic blackout для тихого сна.",
-      "price": {
-        "currency": "USD",
-        "amount": 205.0
-      },
-      "badges": [
-        {
-          "id": "b18",
-          "label": "Quiet",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "acoustic",
-        "blackout",
-        "bedroom",
-        "drape"
-      ],
-      "media": [
-        {
-          "id": "m18",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Noise shield curtain"
-        },
-        {
-          "id": "m18-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Noise Shield Curtain detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "95-100%",
-        "Fabric": "Acoustic weave",
-        "Width panel": "145 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p19",
-      "slug": "olive-linen-blend-set",
-      "name": "Olive Linen Blend Set",
-      "description": "Мягкий оливковый тон и натуральная фактура для светлой гостиной.",
-      "shortDescription": "Теплый льняной сет для живого интерьерного акцента.",
-      "price": {
-        "currency": "USD",
-        "amount": 167.0
-      },
-      "badges": [
-        {
-          "id": "b19",
-          "label": "Interior Pick",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "linen",
-        "living-room",
-        "drape",
-        "minimal"
-      ],
-      "media": [
-        {
-          "id": "m19",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Olive linen blend set"
-        },
-        {
-          "id": "m19-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Olive Linen Blend Set detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "55-70%",
-        "Fabric": "Linen blend",
-        "Width panel": "150 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p20",
-      "slug": "cloud-sheer-layer",
-      "name": "Cloud Sheer Layer",
-      "description": "Невесомый слой тюля для второго ряда штор и мягкого рассеивания света.",
-      "shortDescription": "Легкий второй слой для day-to-evening сценария.",
-      "price": {
-        "currency": "USD",
-        "amount": 76.0
-      },
-      "badges": [
-        {
-          "id": "b20",
-          "label": "Layering",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "tulle",
-        "sheer",
-        "bedroom",
-        "day-night"
-      ],
-      "media": [
-        {
-          "id": "m20",
-          "url": "/demo/airy-voile-tulle.svg",
-          "alt": "Cloud sheer layer"
-        },
-        {
-          "id": "m20-detail",
-          "url": "/demo/airy-voile-tulle-detail.svg",
-          "alt": "Cloud Sheer Layer detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "20-35%",
-        "Fabric": "Soft voile",
-        "Width panel": "300 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p21",
-      "slug": "sunset-jacquard-panel",
-      "name": "Sunset Jacquard Panel",
-      "description": "Жаккардовая панель с теплым переходом оттенков для акцентной стены с окном.",
-      "shortDescription": "Мягкий sunset-оттенок и выразительный рисунок.",
-      "price": {
-        "currency": "USD",
-        "amount": 149.0
-      },
-      "badges": [
-        {
-          "id": "b21",
-          "label": "Pattern",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "jacquard",
-        "living-room",
-        "drape",
-        "accent"
-      ],
-      "media": [
-        {
-          "id": "m21",
-          "url": "/demo/jacquard-day-night-set.svg",
-          "alt": "Sunset jacquard panel"
-        },
-        {
-          "id": "m21-detail",
-          "url": "/demo/jacquard-day-night-set-detail.svg",
-          "alt": "Sunset Jacquard Panel detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "65-80%",
-        "Fabric": "Jacquard",
-        "Width panel": "155 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p22",
-      "slug": "dual-track-daylight-kit",
-      "name": "Dual Track Daylight Kit",
-      "description": "Готовый комплект для двухрядного карниза: тюль + плотный слой.",
-      "shortDescription": "Быстрый старт для day-night оформления окна.",
-      "price": {
-        "currency": "USD",
-        "amount": 222.0
-      },
-      "badges": [
-        {
-          "id": "b22",
-          "label": "Bundle",
-          "tone": "accent"
-        }
-      ],
-      "tags": [
-        "featured",
-        "day-night",
-        "living-room",
-        "set"
-      ],
-      "media": [
-        {
-          "id": "m22",
-          "url": "/demo/jacquard-day-night-set.svg",
-          "alt": "Dual track daylight kit"
-        },
-        {
-          "id": "m22-detail",
-          "url": "/demo/jacquard-day-night-set-detail.svg",
-          "alt": "Dual Track Daylight Kit detail"
-        }
-      ],
-      "isFeatured": true,
-      "metadata": {
-        "Light control": "40-95%",
-        "Fabric": "Voile + dimout",
-        "Width panel": "200 cm",
-        "Care": "Dry clean"
-      }
-    },
-    {
-      "id": "p23",
-      "slug": "studio-dimout-office",
-      "name": "Studio Dimout Office",
-      "description": "Сдержанная офисная портьера для контроля бликов и комфортной работы у окна.",
-      "shortDescription": "Dimout для кабинета и рабочих пространств.",
-      "price": {
-        "currency": "USD",
-        "amount": 139.0
-      },
-      "badges": [
-        {
-          "id": "b23",
-          "label": "Office",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "dimout",
-        "office",
-        "minimal",
-        "drape"
-      ],
-      "media": [
-        {
-          "id": "m23",
-          "url": "/demo/ripple-fold-sheer.svg",
-          "alt": "Studio dimout office curtain"
-        },
-        {
-          "id": "m23-detail",
-          "url": "/demo/ripple-fold-sheer-detail.svg",
-          "alt": "Studio Dimout Office detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "70-85%",
-        "Fabric": "Dimout poly",
-        "Width panel": "150 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
-      "id": "p24",
-      "slug": "kids-room-soft-blackout",
-      "name": "Kids Room Soft Blackout",
-      "description": "Мягкое blackout-полотно для детской: дневной сон, вечерний режим и приватность.",
-      "shortDescription": "Спокойный световой режим для детской комнаты.",
-      "price": {
-        "currency": "USD",
-        "amount": 129.0
-      },
-      "badges": [
-        {
-          "id": "b24",
-          "label": "Family",
-          "tone": "neutral"
-        }
-      ],
-      "tags": [
-        "blackout",
-        "kids",
-        "bedroom",
-        "drape"
-      ],
-      "media": [
-        {
-          "id": "m24",
-          "url": "/demo/linen-blackout-drape.svg",
-          "alt": "Kids room soft blackout curtain"
-        },
-        {
-          "id": "m24-detail",
-          "url": "/demo/linen-blackout-drape-detail.svg",
-          "alt": "Kids Room Soft Blackout detail"
-        }
-      ],
-      "isFeatured": false,
-      "metadata": {
-        "Light control": "90-98%",
-        "Fabric": "Soft blackout",
-        "Width panel": "140 cm",
-        "Care": "Machine 30C"
-      }
-    },
-    {
       "id": "product-tyul-batist",
       "slug": "tyul-batist",
       "name": "Тюль Батист",
-      "description": "qqq",
-      "shortDescription": "Тут потом будет",
+      "description": "Классический батистовый тюль из тонкой хлопковой пряжи. Создаёт мягкое рассеивание дневного света, сохраняя приватность. Подходит для гостиных, спален и детских — везде, где важен спокойный естественный свет без плотного затемнения.",
+      "shortDescription": "Лёгкий батист с деликатной прозрачностью для мягкого рассеивания дневного света.",
       "price": {
         "currency": "USD",
         "amount": 555.0
@@ -1127,67 +173,1293 @@
         {
           "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-0-8b6a970a",
           "url": "/uploads/demo/1773743621965-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-0-8b6a970a.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-1-e1a4d573",
           "url": "/uploads/demo/1773743621968-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-1-e1a4d573.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-2-c139cf76",
           "url": "/uploads/demo/1773743621971-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-2-c139cf76.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-3-06880586",
           "url": "/uploads/demo/1773743621973-fofteuolstore-premium-photorealistic-product-photo-of-a-floo-fbbd3c4e-18e4-49bb-a922-7879acf4463d-3-06880586.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-0-8a6aad46",
           "url": "/uploads/demo/1773750895837-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-0-8a6aad46.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-1-aa3bfee1",
           "url": "/uploads/demo/1773750895839-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-1-aa3bfee1.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-2-1c3ed4da",
           "url": "/uploads/demo/1773750895840-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-2-1c3ed4da.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-3-8e309e15",
           "url": "/uploads/demo/1773750895841-fofteuolstore-ultra-premium-photorealistic-product-photograp-87eeef7e-e1cd-4f18-bce0-25ef976e1fc1-3-8e309e15.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-0-2bef7d1a",
           "url": "/uploads/demo/1773750895841-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-0-2bef7d1a.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-1-08f40ffd",
           "url": "/uploads/demo/1773750895842-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-1-08f40ffd.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-2-c66f923d",
           "url": "/uploads/demo/1773750895844-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-2-c66f923d.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         },
         {
           "id": "fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-3-3a94ce57",
           "url": "/uploads/demo/1773750895846-fofteuolstore-ultra-premium-photorealistic-product-photograp-f8643f9e-c922-45f7-990b-6ccf9450ea79-3-3a94ce57.png",
-          "alt": "Fofteuolstore"
+          "alt": "Тюль Батист Velura — лёгкий батист с мягким рассеиванием дневного света"
         }
       ],
       "isActive": true,
       "sortOrder": 0,
-      "isFeatured": false
+      "isFeatured": false,
+      "tags": [
+        "tulle",
+        "batiste"
+      ]
+    },
+    {
+      "id": "p34",
+      "slug": "linen-blackout-drape",
+      "name": "Linen Blackout Drape",
+      "description": "Портьера Linen Blackout Drape. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Linen Blackout Drape.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "curtain",
+        "blackout",
+        "linen"
+      ],
+      "media": [
+        {
+          "id": "p34-img0",
+          "url": "/demo/Linen Blackout Drape.png",
+          "alt": "Linen Blackout Drape — фото 1"
+        },
+        {
+          "id": "p34-img1",
+          "url": "/demo/Linen Blackout Drape 2.png",
+          "alt": "Linen Blackout Drape — фото 2"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p35",
+      "slug": "velvet-theater-blackout",
+      "name": "Velvet Theater Blackout",
+      "description": "Портьера Velvet Theater Blackout. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Velvet Theater Blackout.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "curtain",
+        "blackout",
+        "velvet"
+      ],
+      "media": [
+        {
+          "id": "p35-img0",
+          "url": "/demo/Velvet Theater Blackout.png",
+          "alt": "Velvet Theater Blackout — фото 1"
+        },
+        {
+          "id": "p35-img1",
+          "url": "/demo/Velvet Theater Blackout 2.png",
+          "alt": "Velvet Theater Blackout — фото 2"
+        },
+        {
+          "id": "p35-img2",
+          "url": "/demo/Velvet Theater Blackout 3.png",
+          "alt": "Velvet Theater Blackout — фото 3"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p36",
+      "slug": "day-night-kombinatsii",
+      "name": "day-night комбинаций",
+      "description": "Портьера day-night комбинаций. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции day-night комбинаций.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "curtain",
+        "day-night"
+      ],
+      "media": [
+        {
+          "id": "p36-img0",
+          "url": "/demo/day-night комбинаций.png",
+          "alt": "day-night комбинаций — фото 1"
+        },
+        {
+          "id": "p36-img1",
+          "url": "/demo/day-night комбинаций 2.png",
+          "alt": "day-night комбинаций — фото 2"
+        },
+        {
+          "id": "p36-img2",
+          "url": "/demo/day-night комбинаций 3.png",
+          "alt": "day-night комбинаций — фото 3"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p37",
+      "slug": "arhitekturnyi-minimalizm",
+      "name": "Архитектурный минимализм",
+      "description": "Портьера Архитектурный минимализм. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Архитектурный минимализм.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "curtain",
+        "minimal"
+      ],
+      "media": [
+        {
+          "id": "p37-img0",
+          "url": "/demo/Архитектурный минимализм.png",
+          "alt": "Архитектурный минимализм — фото 1"
+        },
+        {
+          "id": "p37-img1",
+          "url": "/demo/Архитектурный минимализм 2.png",
+          "alt": "Архитектурный минимализм — фото 2"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p38",
+      "slug": "zhakkard",
+      "name": "Жаккард",
+      "description": "Портьера Жаккард. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Жаккард.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "curtain",
+        "jacquard"
+      ],
+      "media": [
+        {
+          "id": "p38-img0",
+          "url": "/demo/Жаккард.png",
+          "alt": "Жаккард — фото 1"
+        },
+        {
+          "id": "p38-img1",
+          "url": "/demo/Жаккард 2.png",
+          "alt": "Жаккард — фото 2"
+        },
+        {
+          "id": "p38-img2",
+          "url": "/demo/Жаккард 3.png",
+          "alt": "Жаккард — фото 3"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p39",
+      "slug": "zanaveska-iz-naturalnogo-lna",
+      "name": "Занавеска из натурального льна",
+      "description": "Портьера Занавеска из натурального льна. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Занавеска из натурального льна.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "curtain",
+        "linen",
+        "natural"
+      ],
+      "media": [
+        {
+          "id": "p39-img0",
+          "url": "/demo/Занавеска из натурального льна.png",
+          "alt": "Занавеска из натурального льна — фото 1"
+        },
+        {
+          "id": "p39-img1",
+          "url": "/demo/Занавеска из натурального льна 2.png",
+          "alt": "Занавеска из натурального льна — фото 2"
+        },
+        {
+          "id": "p39-img2",
+          "url": "/demo/Занавеска из натурального льна 3.png",
+          "alt": "Занавеска из натурального льна — фото 3"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p40",
+      "slug": "klassicheskii-voile",
+      "name": "Классический voile",
+      "description": "Портьера Классический voile. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Классический voile.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer",
+        "voile"
+      ],
+      "media": [
+        {
+          "id": "p40-img0",
+          "url": "/demo/Классический voile.png",
+          "alt": "Классический voile — фото 1"
+        },
+        {
+          "id": "p40-img1",
+          "url": "/demo/Классический voile 2.png",
+          "alt": "Классический voile — фото 2"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p41",
+      "slug": "nezhnyi-variant-dlya-detskoi-i-gostevoi",
+      "name": "Нежный вариант для детской и гостевой",
+      "description": "Портьера Нежный вариант для детской и гостевой. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Нежный вариант для детской и гостевой.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "p41-img0",
+          "url": "/demo/Нежный вариант для детской и гостевой.png",
+          "alt": "Нежный вариант для детской и гостевой — фото 1"
+        },
+        {
+          "id": "p41-img1",
+          "url": "/demo/Нежный вариант для детской и гостевой 2.png",
+          "alt": "Нежный вариант для детской и гостевой — фото 2"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p42",
+      "slug": "reshenie-dlya-panoramnyh-okon",
+      "name": "Решение для панорамных окон",
+      "description": "Портьера Решение для панорамных окон. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Решение для панорамных окон.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "curtain",
+        "panoramic"
+      ],
+      "media": [
+        {
+          "id": "p42-img0",
+          "url": "/demo/Решение для панорамных окон.png",
+          "alt": "Решение для панорамных окон — фото 1"
+        },
+        {
+          "id": "p42-img1",
+          "url": "/demo/Решение для панорамных окон 2.png",
+          "alt": "Решение для панорамных окон — фото 2"
+        },
+        {
+          "id": "p42-img2",
+          "url": "/demo/Решение для панорамных окон 3.png",
+          "alt": "Решение для панорамных окон — фото 3"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p43",
+      "slug": "rogozhka",
+      "name": "Рогожка",
+      "description": "Портьера Рогожка. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции Рогожка.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "natural",
+        "burlap",
+        "curtain"
+      ],
+      "media": [
+        {
+          "id": "p43-img0",
+          "url": "/demo/Рогожка.png",
+          "alt": "Рогожка — фото 1"
+        },
+        {
+          "id": "p43-img1",
+          "url": "/demo/Рогожка 2.png",
+          "alt": "Рогожка — фото 2"
+        },
+        {
+          "id": "p43-img2",
+          "url": "/demo/Рогожка 3.png",
+          "alt": "Рогожка — фото 3"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p44",
+      "slug": "barthatt",
+      "name": "бартхатт",
+      "description": "Портьера бартхатт. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции бартхатт.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "velvet",
+        "curtain"
+      ],
+      "media": [
+        {
+          "id": "p44-img0",
+          "url": "/demo/бартхатт 3.png",
+          "alt": "бартхатт — фото 1"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p45",
+      "slug": "barhatt",
+      "name": "бархатт",
+      "description": "Портьера бархатт. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции бархатт.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "velvet",
+        "curtain"
+      ],
+      "media": [
+        {
+          "id": "p45-img0",
+          "url": "/demo/бархатт.png",
+          "alt": "бархатт — фото 1"
+        },
+        {
+          "id": "p45-img1",
+          "url": "/demo/бархатт 2.png",
+          "alt": "бархатт — фото 2"
+        },
+        {
+          "id": "p45-img2",
+          "url": "/demo/бархатт 4.png",
+          "alt": "бархатт — фото 3"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p46",
+      "slug": "batist",
+      "name": "батист",
+      "description": "Портьера батист. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции батист.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "batiste"
+      ],
+      "media": [
+        {
+          "id": "p46-img0",
+          "url": "/demo/батист.png",
+          "alt": "батист — фото 1"
+        },
+        {
+          "id": "p46-img1",
+          "url": "/demo/батист 2.png",
+          "alt": "батист — фото 2"
+        },
+        {
+          "id": "p46-img2",
+          "url": "/demo/батист 3.png",
+          "alt": "батист — фото 3"
+        },
+        {
+          "id": "p46-img3",
+          "url": "/demo/батист 4.png",
+          "alt": "батист — фото 4"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p47",
+      "slug": "vual",
+      "name": "вуаль",
+      "description": "Портьера вуаль. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции вуаль.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "voile",
+        "sheer"
+      ],
+      "media": [
+        {
+          "id": "p47-img0",
+          "url": "/demo/вуаль.png",
+          "alt": "вуаль — фото 1"
+        },
+        {
+          "id": "p47-img1",
+          "url": "/demo/вуаль 2.png",
+          "alt": "вуаль — фото 2"
+        },
+        {
+          "id": "p47-img2",
+          "url": "/demo/вуаль 3.png",
+          "alt": "вуаль — фото 3"
+        },
+        {
+          "id": "p47-img3",
+          "url": "/demo/вуаль 4.png",
+          "alt": "вуаль — фото 4"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p48",
+      "slug": "kruzhevo",
+      "name": "кружево",
+      "description": "Портьера кружево. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции кружево.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "lace"
+      ],
+      "media": [
+        {
+          "id": "p48-img0",
+          "url": "/demo/кружево.png",
+          "alt": "кружево — фото 1"
+        },
+        {
+          "id": "p48-img1",
+          "url": "/demo/кружево.png 2.png",
+          "alt": "кружево — фото 2"
+        },
+        {
+          "id": "p48-img2",
+          "url": "/demo/кружево.png 3.png",
+          "alt": "кружево — фото 3"
+        },
+        {
+          "id": "p48-img3",
+          "url": "/demo/кружево.png 4.png",
+          "alt": "кружево — фото 4"
+        },
+        {
+          "id": "p48-img4",
+          "url": "/demo/кружево.png 5.png",
+          "alt": "кружево — фото 5"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p49",
+      "slug": "nezhnyi",
+      "name": "нежный",
+      "description": "Портьера нежный. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции нежный.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer"
+      ],
+      "media": [
+        {
+          "id": "p49-img0",
+          "url": "/demo/нежный.png",
+          "alt": "нежный — фото 1"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p50",
+      "slug": "tvid",
+      "name": "твид",
+      "description": "Портьера твид. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции твид.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "natural",
+        "tweed",
+        "curtain"
+      ],
+      "media": [
+        {
+          "id": "p50-img0",
+          "url": "/demo/твид.png",
+          "alt": "твид — фото 1"
+        },
+        {
+          "id": "p50-img1",
+          "url": "/demo/твид 2.png",
+          "alt": "твид — фото 2"
+        },
+        {
+          "id": "p50-img2",
+          "url": "/demo/твид 3.png",
+          "alt": "твид — фото 3"
+        },
+        {
+          "id": "p50-img3",
+          "url": "/demo/твид 4.png",
+          "alt": "твид — фото 4"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p51",
+      "slug": "shenil",
+      "name": "шенил",
+      "description": "Портьера шенил. Стильное решение для вашего интерьера.",
+      "shortDescription": "Элегантная штора из коллекции шенил.",
+      "price": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [],
+      "tags": [
+        "natural",
+        "chenille",
+        "curtain"
+      ],
+      "media": [
+        {
+          "id": "p51-img0",
+          "url": "/demo/шенил.png",
+          "alt": "шенил — фото 1"
+        },
+        {
+          "id": "p51-img1",
+          "url": "/demo/шенил 2.png",
+          "alt": "шенил — фото 2"
+        },
+        {
+          "id": "p51-img2",
+          "url": "/demo/шенил 3.png",
+          "alt": "шенил — фото 3"
+        },
+        {
+          "id": "p51-img3",
+          "url": "/demo/шенил 4.png",
+          "alt": "шенил — фото 4"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {}
+    },
+    {
+      "id": "p52",
+      "slug": "linen-sand-curtain",
+      "name": "Льняная портьера Sand",
+      "description": "Натуральная льняная портьера песочного оттенка с лёгкой фактурой. Идеальна для скандинавских и средиземноморских интерьеров.",
+      "shortDescription": "Плотный лён песочного тона с живой фактурой.",
+      "price": {
+        "currency": "USD",
+        "amount": 169.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 209.0
+      },
+      "badges": [
+        {
+          "id": "b52",
+          "label": "New",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "linen",
+        "curtain",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "p52-img0",
+          "url": "/demo/linen-sand-p52.jpg",
+          "alt": "Льняная портьера Sand — песочный оттенок, натуральная фактура"
+        },
+        {
+          "id": "p52-img1",
+          "url": "/demo/linen-sand-p52-detail.jpg",
+          "alt": "Льняная портьера Sand крупным планом — переплетение нитей"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Fabric": "100% Linen",
+        "Width panel": "140 cm",
+        "Care": "Machine wash 30°C"
+      }
+    },
+    {
+      "id": "p53",
+      "slug": "velvet-emerald-drape",
+      "name": "Бархатная портьера Emerald",
+      "description": "Глубокий изумрудный бархат с мягким матовым блеском. Создаёт атмосферу уюта и роскоши в гостиной или спальне.",
+      "shortDescription": "Плотный бархат изумрудного цвета с драпировкой.",
+      "price": {
+        "currency": "USD",
+        "amount": 219.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 269.0
+      },
+      "badges": [
+        {
+          "id": "b53",
+          "label": "New",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "velvet",
+        "blackout",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "p53-img0",
+          "url": "/demo/velvet-emerald-p53.jpg",
+          "alt": "Бархатная портьера Emerald — глубокий изумрудный цвет"
+        },
+        {
+          "id": "p53-img1",
+          "url": "/demo/velvet-emerald-p53-detail.jpg",
+          "alt": "Бархат Emerald крупным планом — матовый блеск и фактура"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Fabric": "Cotton velvet",
+        "Light control": "85%",
+        "Width panel": "150 cm"
+      }
+    },
+    {
+      "id": "p54",
+      "slug": "cotton-voile-sheer",
+      "name": "Хлопковый тюль Voile",
+      "description": "Воздушный хлопковый тюль белоснежного оттенка. Пропускает мягкий дневной свет, сохраняя приватность.",
+      "shortDescription": "Лёгкий хлопковый voile для мягкого естественного света.",
+      "price": {
+        "currency": "USD",
+        "amount": 89.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 119.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "sheer",
+        "cotton",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "p54-img0",
+          "url": "/demo/cotton-voile-p54.jpg",
+          "alt": "Хлопковый тюль Voile — белоснежный, воздушный"
+        },
+        {
+          "id": "p54-img1",
+          "url": "/demo/cotton-voile-p54-detail.jpg",
+          "alt": "Хлопковый voile крупным планом — тонкое переплетение"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Fabric": "100% Cotton",
+        "Light control": "30%",
+        "Width panel": "300 cm"
+      }
+    },
+    {
+      "id": "p55",
+      "slug": "silk-blush-curtain",
+      "name": "Шёлковая портьера Blush",
+      "description": "Полупрозрачная шёлковая портьера пудрово-розового оттенка. Изящный перелив ткани добавляет интерьеру лёгкости.",
+      "shortDescription": "Шёлковая портьера Blush с нежным переливом.",
+      "price": {
+        "currency": "USD",
+        "amount": 249.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 299.0
+      },
+      "badges": [
+        {
+          "id": "b55",
+          "label": "New",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "featured",
+        "silk",
+        "curtain",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "p55-img0",
+          "url": "/demo/silk-blush-p55.jpg",
+          "alt": "Шёлковая портьера Blush — пудровый розовый оттенок"
+        },
+        {
+          "id": "p55-img1",
+          "url": "/demo/silk-blush-p55-detail.jpg",
+          "alt": "Шёлк Blush крупным планом — мягкий перелив цвета"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Fabric": "Silk blend",
+        "Light control": "40%",
+        "Width panel": "140 cm"
+      }
+    },
+    {
+      "id": "p56",
+      "slug": "jute-natural-drape",
+      "name": "Джутовая портьера Natural",
+      "description": "Экологичная джутовая портьера натурального тона. Грубая фактура идеально подходит для бохо и этно-интерьеров.",
+      "shortDescription": "Экологичный джут натурального оттенка с грубой фактурой.",
+      "price": {
+        "currency": "USD",
+        "amount": 129.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 159.0
+      },
+      "badges": [
+        {
+          "id": "b56",
+          "label": "Eco",
+          "tone": "neutral"
+        }
+      ],
+      "tags": [
+        "jute",
+        "natural",
+        "curtain",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "p56-img0",
+          "url": "/demo/jute-natural-p56.jpg",
+          "alt": "Джутовая портьера Natural — экологичный материал"
+        },
+        {
+          "id": "p56-img1",
+          "url": "/demo/jute-natural-p56-detail.jpg",
+          "alt": "Джут Natural крупным планом — грубое переплетение нитей"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Fabric": "100% Jute",
+        "Light control": "70%",
+        "Width panel": "130 cm"
+      }
+    },
+    {
+      "id": "p57",
+      "slug": "cashmere-grey-throw",
+      "name": "Кашемировый плед Grey",
+      "description": "Мягкий кашемировый плед серого цвета. Идеален для вечернего отдыха на диване или как акцент на кровати.",
+      "shortDescription": "Плотный кашемировый плед серого тона.",
+      "price": {
+        "currency": "USD",
+        "amount": 189.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 229.0
+      },
+      "badges": [],
+      "tags": [
+        "throw",
+        "cashmere",
+        "bedroom",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "p57-img0",
+          "url": "/demo/cashmere-grey-p57.jpg",
+          "alt": "Кашемировый плед Grey — мягкий серый тон"
+        },
+        {
+          "id": "p57-img1",
+          "url": "/demo/cashmere-grey-p57-detail.jpg",
+          "alt": "Кашемир Grey крупным планом — плотное ворсистое переплетение"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Fabric": "Cashmere blend",
+        "Size": "140x200 cm",
+        "Care": "Dry clean"
+      }
+    },
+    {
+      "id": "p58",
+      "slug": "linen-sheer-grey",
+      "name": "Льняной тюль Sheer Grey",
+      "description": "Тонкий льняной тюль серого оттенка. Минималистичное решение для современных интерьеров.",
+      "shortDescription": "Полупрозрачный лён серого тона в минималистичном стиле.",
+      "price": {
+        "currency": "USD",
+        "amount": 99.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 129.0
+      },
+      "badges": [],
+      "tags": [
+        "tulle",
+        "linen",
+        "sheer",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "p58-img0",
+          "url": "/demo/linen-sheer-p58.jpg",
+          "alt": "Льняной тюль Sheer Grey — серый, полупрозрачный"
+        },
+        {
+          "id": "p58-img1",
+          "url": "/demo/linen-sheer-p58-detail.jpg",
+          "alt": "Лён Sheer Grey крупным планом — тонкое полотно"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Fabric": "100% Linen",
+        "Light control": "35%",
+        "Width panel": "280 cm"
+      }
+    },
+    {
+      "id": "p59",
+      "slug": "velvet-midnight-tulle",
+      "name": "Бархатный тюль Midnight",
+      "description": "Необычный бархатный тюль тёмно-синего цвета. Драматичный акцент для смелых интерьеров.",
+      "shortDescription": "Бархатный тюль Midnight — глубокий тёмно-синий цвет.",
+      "price": {
+        "currency": "USD",
+        "amount": 159.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 199.0
+      },
+      "badges": [
+        {
+          "id": "b59",
+          "label": "New",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "tulle",
+        "velvet",
+        "featured",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "p59-img0",
+          "url": "/demo/velvet-midnight-p59.jpg",
+          "alt": "Бархатный тюль Midnight — тёмно-синий, драматичный"
+        },
+        {
+          "id": "p59-img1",
+          "url": "/demo/velvet-midnight-p59-detail.jpg",
+          "alt": "Бархат Midnight крупным планом — глубокий цвет и фактура"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Fabric": "Cotton velvet",
+        "Light control": "50%",
+        "Width panel": "150 cm"
+      }
+    },
+    {
+      "id": "p60",
+      "slug": "organza-ivory-curtain",
+      "name": "Органза Ivory",
+      "description": "Лёгкая органза молочного оттенка с характерным хрустящим звуком и лёгким блеском. Для торжественных интерьеров.",
+      "shortDescription": "Лёгкая органза Ivory с хрустящей фактурой.",
+      "price": {
+        "currency": "USD",
+        "amount": 139.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 169.0
+      },
+      "badges": [],
+      "tags": [
+        "organza",
+        "sheer",
+        "curtain",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "p60-img0",
+          "url": "/demo/organza-ivory-p60.jpg",
+          "alt": "Органза Ivory — молочный оттенок, лёгкий блеск"
+        },
+        {
+          "id": "p60-img1",
+          "url": "/demo/organza-ivory-p60-detail.jpg",
+          "alt": "Органза Ivory крупным планом — хрустящая фактура"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Fabric": "100% Polyester",
+        "Light control": "25%",
+        "Width panel": "300 cm"
+      }
+    },
+    {
+      "id": "p61",
+      "slug": "burlap-terracotta-drape",
+      "name": "Рогожка Terracotta",
+      "description": "Плотная рогожка терракотового цвета. Грубая натуральная фактура для деревенского и этно-стиля.",
+      "shortDescription": "Плотная рогожка Terracotta с грубой фактурой.",
+      "price": {
+        "currency": "USD",
+        "amount": 119.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 149.0
+      },
+      "badges": [
+        {
+          "id": "b61",
+          "label": "New",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "burlap",
+        "natural",
+        "curtain",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "p61-img0",
+          "url": "/demo/burlap-terracotta-p61.jpg",
+          "alt": "Рогожка Terracotta — тёплый терракотовый оттенок"
+        },
+        {
+          "id": "p61-img1",
+          "url": "/demo/burlap-terracotta-p61-detail.jpg",
+          "alt": "Рогожка Terracotta крупным планом — грубое плетение"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Fabric": "100% Jute",
+        "Light control": "75%",
+        "Width panel": "130 cm"
+      }
+    },
+    {
+      "id": "p62",
+      "slug": "muslin-dustyrose-curtain",
+      "name": "Муслин Dusty Rose",
+      "description": "Мягкий муслин пыльно-розового цвета. Двойное полотно обеспечивает красивую драпировку и умеренное затемнение.",
+      "shortDescription": "Мягкий муслин Dusty Rose с воздушной драпировкой.",
+      "price": {
+        "currency": "USD",
+        "amount": 109.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 139.0
+      },
+      "badges": [],
+      "tags": [
+        "muslin",
+        "curtain",
+        "bedroom"
+      ],
+      "media": [
+        {
+          "id": "p62-img0",
+          "url": "/demo/muslin-dustyrose-p62.jpg",
+          "alt": "Муслин Dusty Rose — пыльно-розовый, мягкий"
+        },
+        {
+          "id": "p62-img1",
+          "url": "/demo/muslin-dustyrose-p62-detail.jpg",
+          "alt": "Муслин Dusty Rose крупным планом — мягкое переплетение"
+        }
+      ],
+      "isFeatured": false,
+      "metadata": {
+        "Fabric": "100% Cotton",
+        "Light control": "55%",
+        "Width panel": "280 cm"
+      }
+    },
+    {
+      "id": "p63",
+      "slug": "satin-champagne-curtain",
+      "name": "Сатин Champagne",
+      "description": "Глянцевый сатин шампань для элегантных интерьеров. Мягкий блеск ткани создаёт атмосферу праздника.",
+      "shortDescription": "Глянцевый сатин Champagne с мягким блеском.",
+      "price": {
+        "currency": "USD",
+        "amount": 179.0
+      },
+      "compareAtPrice": {
+        "currency": "USD",
+        "amount": 219.0
+      },
+      "badges": [
+        {
+          "id": "b63",
+          "label": "New",
+          "tone": "accent"
+        }
+      ],
+      "tags": [
+        "satin",
+        "curtain",
+        "featured",
+        "living-room"
+      ],
+      "media": [
+        {
+          "id": "p63-img0",
+          "url": "/demo/satin-champagne-p63.jpg",
+          "alt": "Сатин Champagne — шампань, глянцевый блеск"
+        },
+        {
+          "id": "p63-img1",
+          "url": "/demo/satin-champagne-p63-detail.jpg",
+          "alt": "Сатин Champagne крупным планом — гладкая глянцевая фактура"
+        }
+      ],
+      "isFeatured": true,
+      "metadata": {
+        "Fabric": "Polyester satin",
+        "Light control": "60%",
+        "Width panel": "150 cm"
+      }
     }
   ]
 }

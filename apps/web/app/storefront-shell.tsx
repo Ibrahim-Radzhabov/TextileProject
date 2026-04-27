@@ -15,30 +15,31 @@ import { AnnouncementTicker } from "../components/AnnouncementTicker";
 import { SidebarMenu, type SidebarMenuItem } from "./(components)/sidebar-menu";
 
 const iconSearch = (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  <svg viewBox="0 0 24 24" className="h-10 w-10" style={{ transform: "scale(1.6)" }} fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1" />
+    <path d="M16.5 16l4 4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
   </svg>
 );
-const iconHeart = (
+const iconBookmark = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M12 20c-3.4-2.7-6.5-5.2-6.5-8.7A3.8 3.8 0 0 1 9.3 7.5c1.1 0 2.1.5 2.7 1.4.6-.9 1.6-1.4 2.7-1.4a3.8 3.8 0 0 1 3.8 3.8c0 3.5-3.1 6-6.5 8.7Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round" />
+    <path d="M5 3h14v18l-7-5-7 5V3z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
   </svg>
 );
-const iconCart = (
+const iconBag = (
   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M4.5 6h1.7l1.4 8.2h8.7l1.6-6.3H8" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-    <circle cx="10.4" cy="18.2" r="1.2" fill="currentColor" />
-    <circle cx="16.4" cy="18.2" r="1.2" fill="currentColor" />
+    <path d="M6 6h12l1 14H5L6 6z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+    <path d="M9 6V4a3 3 0 0 1 6 0v2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
   </svg>
 );
 const tickerMessages = [
-  "Book a Private Appointment in Store",
-  "E-Concierging Availability, Monday to Sunday from 9 am to 7 pm"
+  "Запись на личный просмотр тканей — по запросу",
+  "Консультация по подбору: понедельник–воскресенье, 9:00–19:00"
 ];
 
 const desktopSearchIcon = (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <path d="M11 5a6 6 0 1 0 3.87 10.58L19 19.7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+  <svg viewBox="0 0 24 24" className="h-10 w-10" style={{ transform: "scale(1.6)" }} fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1" />
+    <path d="M16.5 16l4 4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
   </svg>
 );
 
@@ -315,9 +316,9 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
     {
       title: "Каталог",
       links: [
-        { label: "Тюль", href: "/catalog" },
-        { label: "Шторы", href: "/catalog" },
-        { label: "Комплекты", href: "/catalog" },
+        { label: "Тюль", href: "/catalog?tags=tulle" },
+        { label: "Шторы", href: "/catalog?tags=drape" },
+        { label: "Комплекты", href: "/catalog?view=kits" },
         { label: "Пошив на заказ", href: "mailto:atelier@textile.studio" }
       ]
     },
@@ -379,12 +380,12 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                       onClick={() => setSearchOpen(true)}
                       className={
                         isHomepage
-                          ? "inline-flex h-10 w-10 items-center justify-center text-foreground/70 transition-colors duration-[160ms] ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+                          ? "inline-flex h-14 w-14 items-center justify-center text-foreground/70 transition-colors duration-[160ms] ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                           : "inline-flex w-40 items-center gap-3 text-[16px] font-normal leading-5 tracking-[0px] text-foreground/80 transition-colors duration-[160ms] ease-out hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                       }
                       aria-label="Открыть поиск по каталогу"
                     >
-                      <span className="text-foreground/80 [&>svg]:h-[18px] [&>svg]:w-[18px]">
+                      <span className="text-foreground/80 [&>svg]:h-[40px] [&>svg]:w-[40px]">
                         {desktopSearchIcon}
                       </span>
                       {!isHomepage && <span>Поиск</span>}
@@ -414,18 +415,18 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                   variant="minimal"
                   className="hidden min-[1280px]:flex"
                   items={[
-                    { href: "/favorites", icon: iconHeart, title: "Избранное", badge: favoriteItemCount },
-                    { onClick: () => setOpen(true), icon: iconCart, title: "Корзина", badge: itemCount }
+                    { href: "/favorites", icon: iconBookmark, title: "Избранное", badge: favoriteItemCount },
+                    { onClick: () => setOpen(true), icon: iconBag, title: "Корзина", badge: itemCount }
                   ]}
                 />
-                <div className="flex items-center gap-3 min-[1280px]:hidden">
+                <div className="flex items-center gap-1 min-[1280px]:hidden">
                   <button
                     type="button"
                     onClick={() => setSearchOpen(true)}
                     aria-label="Поиск"
                     className="inline-flex h-10 w-10 items-center justify-center rounded-full text-foreground/80 transition-[color,background-color] duration-[160ms] ease-out hover:bg-foreground/[0.035] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 focus-visible:ring-offset-4 focus-visible:ring-offset-background"
                   >
-                    <span className="[&>svg]:h-[18px] [&>svg]:w-[18px]">{iconSearch}</span>
+                    <span className="[&>svg]:h-[36px] [&>svg]:w-[36px]">{iconSearch}</span>
                   </button>
                 </div>
               </div>

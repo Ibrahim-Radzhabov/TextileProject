@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 import { getStorefrontConfig } from "@/lib/get-storefront-config";
 import {
@@ -64,54 +65,54 @@ export default async function GuidesPage() {
         />
       ))}
 
-      <div className="space-y-6">
-        <header className="rounded-xl border border-border/34 bg-card/90 px-5 py-6 sm:px-6 sm:py-7">
-          <p className="ui-kicker">Журнал Velura</p>
-          <h1 className="ui-title-display mt-2 text-[clamp(2rem,4.2vw,3.2rem)] leading-[0.96]">
+      <div className="space-y-12 sm:space-y-16">
+        <header className="max-w-2xl space-y-3 pt-4">
+          <p className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Журнал</p>
+          <h1 className="font-serif text-[clamp(1.8rem,3.5vw,2.8rem)] font-normal leading-[1.05] tracking-tight">
             Материалы о свете, ткани и сценариях окна
           </h1>
-          <p className="ui-subtle mt-3 max-w-3xl text-sm sm:text-base">
+          <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
             Спокойные разборы фактур, плотности и интерьерных сценариев, которые помогают выбрать ткань без магазинного шума.
           </p>
         </header>
 
         {guides.length === 0 ? (
-          <section className="rounded-xl border border-border/34 bg-card/90 px-5 py-8 sm:px-6">
-            <p className="ui-subtle">Материалы пока не опубликованы.</p>
-          </section>
+          <p className="text-sm text-muted-foreground">Материалы пока не опубликованы.</p>
         ) : (
-          <section className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {guides.map((guide) => {
+          <section className="grid gap-x-6 gap-y-12 sm:grid-cols-2 sm:gap-y-16">
+            {guides.map((guide, index) => {
               const description = extractGuideDescription(guide);
               const headline = extractGuideHeadline(guide);
               const image = extractGuideImage(guide);
 
               return (
-                <article
-                  key={guide.id}
-                  className="group overflow-hidden rounded-xl border border-border/34 bg-card/88"
-                >
+                <article key={guide.id} className="group">
                   {image && (
-                    <Link href={guide.slug} className="block overflow-hidden">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                    <Link href={guide.slug} className="relative block aspect-[4/3] overflow-hidden">
+                      <Image
                         src={image}
                         alt={headline}
-                        className="h-[280px] w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
+                        fill
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                        priority={index === 0}
+                        className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.02]"
                       />
                     </Link>
                   )}
-                  <div className="space-y-2 px-4 py-4 sm:px-5">
-                    <h2 className="ui-title-serif text-[1.38rem] leading-tight">
-                      <Link href={guide.slug} className="hover:text-foreground/90">
+                  <div className="space-y-2 pt-4">
+                    <h2 className="font-serif text-[1.2rem] font-normal leading-tight tracking-tight sm:text-[1.35rem]">
+                      <Link href={guide.slug} className="transition-colors hover:text-foreground/70">
                         {guide.title}
                       </Link>
                     </h2>
                     {description && (
-                      <p className="ui-subtle line-clamp-3 text-sm leading-relaxed">{description}</p>
+                      <p className="line-clamp-2 text-sm leading-relaxed text-muted-foreground">{description}</p>
                     )}
-                    <Link href={guide.slug} className="inline-flex pt-1 text-sm font-medium">
-                      Читать материал
+                    <Link
+                      href={guide.slug}
+                      className="inline-block pt-1 text-[11px] uppercase tracking-[0.12em] text-foreground/60 transition-colors hover:text-foreground"
+                    >
+                      Читать
                     </Link>
                   </div>
                 </article>

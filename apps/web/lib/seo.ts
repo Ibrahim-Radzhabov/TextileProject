@@ -103,6 +103,7 @@ export function buildOrganizationJsonLd(config: StorefrontConfig) {
     "@type": "Organization",
     name: config.shop.name,
     url: resolveSiteUrl().toString(),
+    description: config.seo.description,
     logo: resolveAbsoluteUrl(config.shop.logo?.src),
     sameAs: []
   };
@@ -181,7 +182,9 @@ export function buildProductJsonLd(config: StorefrontConfig, product: Product) {
       "@type": "Offer",
       priceCurrency: product.price.currency,
       price: product.price.amount,
-      availability: "https://schema.org/InStock",
+      availability: product.isActive === false
+        ? "https://schema.org/OutOfStock"
+        : "https://schema.org/InStock",
       url: resolveAbsoluteUrl(`/product/${encodeURIComponent(product.slug)}`)
     },
     additionalProperty

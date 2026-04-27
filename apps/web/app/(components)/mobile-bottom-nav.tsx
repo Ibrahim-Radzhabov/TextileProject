@@ -71,7 +71,7 @@ export function MobileBottomNav({
               <path
                 d="M4 10v10h6v-6h4v6h6V10L12 4 4 10Z"
                 stroke="currentColor"
-                strokeWidth="1.8"
+                strokeWidth="1"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
@@ -93,35 +93,10 @@ export function MobileBottomNav({
                 height="7"
                 rx="1.4"
                 stroke="currentColor"
-                strokeWidth="1.8"
-              />
-              <rect
-                x="12.5"
-                y="4.5"
-                width="7"
-                height="7"
-                rx="1.4"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              />
-              <rect
-                x="4.5"
-                y="12.5"
-                width="7"
-                height="7"
-                rx="1.4"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              />
-              <rect
-                x="12.5"
-                y="12.5"
-                width="7"
-                height="7"
-                rx="1.4"
-                stroke="currentColor"
-                strokeWidth="1.8"
-              />
+                strokeWidth="1" />
+              <rect x="13" y="4" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1" />
+              <rect x="4" y="13" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1" />
+              <rect x="13" y="13" width="7" height="7" rx="1" stroke="currentColor" strokeWidth="1" />
             </svg>
           </NavIcon>
           <NavLabel text="Каталог" active={isCatalog} />
@@ -134,15 +109,8 @@ export function MobileBottomNav({
         >
           <NavIcon active={isCart}>
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M4.5 6h1.7l1.4 8.2h8.7l1.6-6.3H8"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-              <circle cx="10.4" cy="18.2" r="1.2" fill="currentColor" />
-              <circle cx="16.4" cy="18.2" r="1.2" fill="currentColor" />
+              <path d="M6 6h12l1 14H5L6 6z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
+              <path d="M9 6V4a3 3 0 0 1 6 0v2" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
             </svg>
           </NavIcon>
           <NavLabel text="Корзина" active={isCart} />
@@ -159,12 +127,7 @@ export function MobileBottomNav({
         >
           <NavIcon active={isFavorites}>
             <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path
-                d="M12 20c-3.4-2.7-6.5-5.2-6.5-8.7A3.8 3.8 0 0 1 9.3 7.5c1.1 0 2.1.5 2.7 1.4.6-.9 1.6-1.4 2.7-1.4a3.8 3.8 0 0 1 3.8 3.8c0 3.5-3.1 6-6.5 8.7Z"
-                stroke="currentColor"
-                strokeWidth="1.8"
-                strokeLinejoin="round"
-              />
+              <path d="M5 3h14v18l-7-5-7 5V3z" stroke="currentColor" strokeWidth="1" strokeLinejoin="round" />
             </svg>
           </NavIcon>
           <NavLabel text="Избранное" active={isFavorites} />

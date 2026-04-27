@@ -65,7 +65,7 @@ function filterProducts(products: Product[], block: ProductGridBlock): Product[]
   });
 }
 
-function renderHeroBlock(block: HeroBlock, revealContent?: React.ReactNode): JSX.Element {
+function renderHeroBlock(block: HeroBlock, revealContent?: React.ReactNode, priority?: boolean): JSX.Element {
   const content = resolveHeroContent(block);
   const media = block.media;
   const contentPlacement = block.contentPlacement ?? "overlay";
@@ -187,6 +187,7 @@ function renderHeroBlock(block: HeroBlock, revealContent?: React.ReactNode): JSX
             title={content.title}
             defaultOverlayOpacity={0.04}
             overlayClassName="bg-background/8"
+            priority={priority}
           />
         )}
         {contentPlacement === "overlay" && heroCopy && (
@@ -388,7 +389,7 @@ function EditorialRailSection({ block }: { block: EditorialRailBlock }): JSX.Ele
               <HeroMedia
                 media={item.media}
                 title={item.title}
-                assetClassName="h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.016]"
+                assetClassName="h-full w-full object-cover"
                 defaultOverlayOpacity={0.04}
               />
             </a>
@@ -560,9 +561,9 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
 
   return (
     <div className="home-concept-editorial space-y-16 sm:space-y-20 lg:space-y-28">
-      {homePage.blocks.flatMap((block) => {
+      {homePage.blocks.flatMap((block, index) => {
         if (block.type === "hero") {
-          return [renderHeroBlock(block, <TextileTypeSwitcher key={`${block.id}-textile-switcher`} />)];
+          return [renderHeroBlock(block, <TextileTypeSwitcher key={`${block.id}-textile-switcher`} />, index === 0)];
         }
 
         const blockNode = renderBlock(
@@ -576,15 +577,11 @@ export function HomePageClient({ homePage, products }: HomePageClientProps) {
         }
 
         return [
-          <motion.div
+          <div
             key={`reveal-${block.id}`}
-            initial={{ opacity: 0, y: 24 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           >
             {blockNode}
-          </motion.div>
+          </div>
         ];
       })}
     </div>

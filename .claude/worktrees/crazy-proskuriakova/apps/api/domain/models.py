@@ -1,0 +1,557 @@
+from __future__ import annotations
+
+from datetime import datetime
+from typing import Any, Dict, List, Literal, Optional
+
+from pydantic import BaseModel, Field
+
+
+OrderLifecycleStatus = Literal[
+    "pending",
+    "redirect",
+    "confirmed",
+    "paid",
+    "processing",
+    "shipped",
+    "failed",
+    "cancelled",
+]
+
+
+class Money(BaseModel):
+    currency: str
+    amount: float
+
+
+class ProductMedia(BaseModel):
+    id: str
+    url: str
+    alt: str
+
+
+class ProductBadge(BaseModel):
+    id: str
+    label: str
+    tone: Literal["accent", "neutral", "critical"]
+
+
+class Product(BaseModel):
+    id: str
+    slug: str
+    name: str
+    description: Optional[str] = None
+    short_description: Optional[str] = Field(default=None, alias="shortDescription")
+    price: Money
+    compare_at_price: Optional[Money] = Field(default=None, alias="compareAtPrice")
+    badges: Optional[List[ProductBadge]] = None
+    tags: Optional[List[str]] = None
+    media: List[ProductMedia]
+    is_active: Optional[bool] = Field(default=None, alias="isActive")
+    sort_order: Optional[int] = Field(default=None, alias="sortOrder")
+    is_featured: Optional[bool] = Field(default=None, alias="isFeatured")
+    metadata: Optional[Dict[str, Any]] = None
+
+    class Config:
+        populate_by_name = True
+
+
+class CartItem(BaseModel):
+    id: str
+    product_id: str
+    quantity: int
+    unit_price: Money
+    line_total: Money
+    product_snapshot: Dict[str, Any]
+
+
+class CartTotals(BaseModel):
+    subtotal: Money
+    discount_total: Optional[Money] = None
+    shipping_total: Optional[Money] = None
+    tax_total: Optional[Money] = None
+    grand_total: Money
+
+
+class Cart(BaseModel):
+    id: str
+    items: List[CartItem]
+    totals: CartTotals
+    currency: str
+
+
+class ShopLink(BaseModel):
+    label: str
+    href: str
+
+
+class ShopContacts(BaseModel):
+    phone_label: Optional[str] = Field(default=None, alias="phoneLabel")
+    phone_href: Optional[str] = Field(default=None, alias="phoneHref")
+    email_label: Optional[str] = Field(default=None, alias="emailLabel")
+    email_href: Optional[str] = Field(default=None, alias="emailHref")
+    address: Optional[str] = None
+
+    class Config:
+        populate_by_name = True
+
+
+class ShopConfig(BaseModel):
+    id: str
+    name: str
+    logo: Optional[Dict[str, str]] = None
+    primary_locale: str = Field(alias="primaryLocale")
+    currency: str
+    contacts: Optional[ShopContacts] = None
+    social_links: Optional[List[ShopLink]] = Field(default=None, alias="socialLinks")
+    support_links: Optional[List[ShopLink]] = Field(default=None, alias="supportLinks")
+    primary_cta: Optional[ShopLink] = Field(default=None, alias="primaryCta")
+
+    class Config:
+        populate_by_name = True
+
+
+class ThemeColors(BaseModel):
+    background: str
+    foreground: str
+    muted: str
+    muted_foreground: str = Field(alias="mutedForeground")
+    accent: str
+    accent_soft: str = Field(alias="accentSoft")
+    border: str
+    input: str
+    ring: str
+    card: str
+    card_foreground: str = Field(alias="cardForeground")
+
+    class Config:
+        populate_by_name = True
+
+
+class ThemeRadii(BaseModel):
+    xl: float
+    lg: float
+    md: float
+    sm: float
+
+
+class ThemeShadows(BaseModel):
+    soft: str
+    soft_subtle: str = Field(alias="softSubtle")
+    ring: str
+
+    class Config:
+        populate_by_name = True
+
+
+class ThemeTypography(BaseModel):
+    font_sans: str = Field(alias="fontSans")
+    base_font_size: float = Field(alias="baseFontSize")
+    scale_ratio: float = Field(alias="scaleRatio")
+
+    class Config:
+        populate_by_name = True
+
+
+class ThemeGradients(BaseModel):
+    hero: str
+    surface: str
+
+
+class ThemeVariant(BaseModel):
+    id: str
+    name: str
+    colors: ThemeColors
+    radii: ThemeRadii
+    shadows: ThemeShadows
+    typography: ThemeTypography
+    gradients: ThemeGradients
+
+
+class ThemeConfig(BaseModel):
+    id: str
+    name: str
+    colors: ThemeColors
+    radii: ThemeRadii
+    shadows: ThemeShadows
+    typography: ThemeTypography
+    gradients: ThemeGradients
+    default_variant: Optional[str] = Field(default=None, alias="defaultVariant")
+    variants: Optional[List[ThemeVariant]] = None
+
+    class Config:
+        populate_by_name = True
+
+
+class SeoConfig(BaseModel):
+    title_template: str = Field(alias="titleTemplate")
+    default_title: str = Field(alias="defaultTitle")
+    description: str
+    open_graph_image: Optional[str] = Field(default=None, alias="openGraphImage")
+
+    class Config:
+        populate_by_name = True
+
+
+class IntegrationStripe(BaseModel):
+    type: Literal["stripe"]
+    publishable_key: str = Field(alias="publishableKey")
+    secret_key: str = Field(alias="secretKey")
+    webhook_secret: Optional[str] = Field(default=None, alias="webhookSecret")
+
+    class Config:
+        populate_by_name = True
+
+
+class IntegrationTelegram(BaseModel):
+    type: Literal["telegram"]
+    bot_token: str = Field(alias="botToken")
+    chat_id: str = Field(alias="chatId")
+
+    class Config:
+        populate_by_name = True
+
+
+class IntegrationsConfig(BaseModel):
+    stripe: Optional[IntegrationStripe] = None
+    telegram: Optional[IntegrationTelegram] = None
+
+
+class PageBlockBase(BaseModel):
+    id: str
+    type: str
+
+
+class HeroQuickLink(BaseModel):
+    label: str
+    subtitle: Optional[str] = None
+    href: str
+
+
+class HeroContent(BaseModel):
+    title: str
+    eyebrow: Optional[str] = None
+    subtitle: Optional[str] = None
+    trust_line: Optional[str] = Field(default=None, alias="trustLine")
+    quick_links: Optional[List[HeroQuickLink]] = Field(default=None, alias="quickLinks")
+    primary_cta: Optional[Dict[str, str]] = Field(default=None, alias="primaryCta")
+    secondary_cta: Optional[Dict[str, str]] = Field(default=None, alias="secondaryCta")
+
+    class Config:
+        populate_by_name = True
+
+
+class HeroBlock(PageBlockBase):
+    type: Literal["hero"]
+    content: Optional[HeroContent] = None
+    content_placement: Optional[Literal["overlay", "below"]] = Field(
+        default=None, alias="contentPlacement"
+    )
+    overlay_variant: Optional[Literal["card", "full"]] = Field(
+        default=None, alias="overlayVariant"
+    )
+    card_title: Optional[str] = Field(default=None, alias="cardTitle")
+    intro_text: Optional[str] = Field(default=None, alias="introText")
+    eyebrow: Optional[str] = None
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    trust_line: Optional[str] = Field(default=None, alias="trustLine")
+    quick_links: Optional[List[HeroQuickLink]] = Field(default=None, alias="quickLinks")
+    media: Optional[Dict[str, Any]] = None
+    primary_cta: Optional[Dict[str, str]] = Field(default=None, alias="primaryCta")
+    secondary_cta: Optional[Dict[str, str]] = Field(default=None, alias="secondaryCta")
+
+    class Config:
+        populate_by_name = True
+
+
+class MediaFeatureBlock(PageBlockBase):
+    type: Literal["media-feature"]
+    eyebrow: Optional[str] = None
+    title: str
+    subtitle: Optional[str] = None
+    body: Optional[str] = None
+    align: Optional[Literal["left", "right"]] = None
+    media: Dict[str, Any]
+    cta: Optional[Dict[str, str]] = None
+
+
+class ProductGridBlock(PageBlockBase):
+    type: Literal["product-grid"]
+    title: Optional[str] = None
+    subtitle: Optional[str] = None
+    layout: Optional[Literal["auto-fit", "3-col", "4-col"]] = None
+    filter: Optional[Dict[str, Any]] = None
+
+
+class EditorialRailItem(BaseModel):
+    id: str
+    title: str
+    excerpt: Optional[str] = None
+    href: str
+    cta_label: Optional[str] = Field(default=None, alias="ctaLabel")
+    media: Dict[str, Any]
+
+    class Config:
+        populate_by_name = True
+
+
+class EditorialRailBlock(PageBlockBase):
+    type: Literal["editorial-rail"]
+    title: str
+    subtitle: Optional[str] = None
+    items: List[EditorialRailItem]
+
+
+class RichTextBlock(PageBlockBase):
+    type: Literal["rich-text"]
+    content: str
+
+
+class CtaStripBlock(PageBlockBase):
+    type: Literal["cta-strip"]
+    title: str
+    href: str
+
+
+PageBlock = (
+    HeroBlock
+    | MediaFeatureBlock
+    | ProductGridBlock
+    | EditorialRailBlock
+    | RichTextBlock
+    | CtaStripBlock
+)
+
+
+class PageConfig(BaseModel):
+    id: str
+    slug: str
+    kind: Literal["home", "catalog", "product", "custom"]
+    title: str
+    blocks: List[PageBlock]
+
+
+class CatalogConfig(BaseModel):
+    products: List[Product]
+
+
+class StorefrontConfig(BaseModel):
+    shop: ShopConfig
+    theme: ThemeConfig
+    seo: SeoConfig
+    pages: List[PageConfig]
+    catalog: CatalogConfig
+    integrations: IntegrationsConfig
+
+
+class CartItemInput(BaseModel):
+    product_id: str
+    quantity: int
+
+
+class PriceCartRequest(BaseModel):
+    items: List[CartItemInput]
+
+
+class CheckoutCustomer(BaseModel):
+    email: str
+    name: Optional[str] = None
+    address_line1: Optional[str] = None
+    address_city: Optional[str] = None
+    address_country: Optional[str] = None
+    postal_code: Optional[str] = None
+
+
+class CheckoutRequest(BaseModel):
+    cart: PriceCartRequest
+    customer: CheckoutCustomer
+
+
+class CheckoutResponse(BaseModel):
+    order_id: str
+    status: Literal["pending", "redirect", "confirmed"]
+    stripe_session_id: Optional[str] = None
+    redirect_url: Optional[str] = None
+
+
+class StoredOrder(BaseModel):
+    order_id: str
+    client_id: str
+    status: OrderLifecycleStatus
+    currency: str
+    amount: float
+    stripe_session_id: Optional[str] = None
+    redirect_url: Optional[str] = None
+    cart: Cart
+    customer: CheckoutCustomer
+    created_at: str
+    updated_at: str
+
+
+class StoredOrderListResponse(BaseModel):
+    items: List[StoredOrder]
+    total: int
+    limit: int
+    offset: int
+
+
+class UpdateOrderStatusRequest(BaseModel):
+    status: Literal["processing", "shipped", "cancelled"]
+    reason: Optional[str] = Field(default=None, max_length=500)
+
+
+class OrderStatusAuditEntry(BaseModel):
+    id: int
+    order_id: str
+    client_id: str
+    from_status: Optional[OrderLifecycleStatus] = None
+    to_status: OrderLifecycleStatus
+    reason: Optional[str] = None
+    actor_type: str
+    created_at: str
+
+
+class OrderStatusAuditListResponse(BaseModel):
+    items: List[OrderStatusAuditEntry]
+    total: int
+    limit: int
+    offset: int
+
+
+class StripeWebhookAuditEntry(BaseModel):
+    id: int
+    event_id: str
+    livemode: bool
+    account_id: str
+    client_id: str
+    event_type: str
+    order_id: Optional[str] = None
+    stripe_session_id: Optional[str] = None
+    processing_status: Literal["processing", "processed", "ignored", "failed"]
+    order_status: Optional[Literal["paid", "failed", "cancelled"]] = None
+    error_text: Optional[str] = None
+    created_at: str
+    updated_at: str
+
+
+class StripeWebhookAuditListResponse(BaseModel):
+    items: List[StripeWebhookAuditEntry]
+    total: int
+    limit: int
+    offset: int
+
+
+PwaInstallMetric = Literal[
+    "prompt_available",
+    "ios_hint_shown",
+    "prompt_opened",
+    "installed",
+    "prompt_accepted",
+    "prompt_dismissed",
+    "banner_dismissed",
+]
+
+PwaInstallSource = Literal["web"]
+
+
+class PwaInstallEventRequest(BaseModel):
+    metric: PwaInstallMetric
+    path: str = Field(min_length=1, max_length=300)
+    timestamp: datetime
+    source: PwaInstallSource = "web"
+
+
+class PwaInstallEventEntry(BaseModel):
+    id: int
+    client_id: str
+    metric: PwaInstallMetric
+    path: str
+    source: PwaInstallSource
+    user_agent: Optional[str] = None
+    source_ip: Optional[str] = None
+    event_timestamp: str
+    created_at: str
+
+
+class PwaInstallEventListResponse(BaseModel):
+    items: List[PwaInstallEventEntry]
+    total: int
+    limit: int
+    offset: int
+
+
+class PwaInstallDailySummaryEntry(BaseModel):
+    date: str
+    prompt_available: int
+    ios_hint_shown: int
+    prompt_opened: int
+    installed: int
+    prompt_accepted: int
+    prompt_dismissed: int
+    banner_dismissed: int
+    total: int
+
+
+class PwaInstallDailySummaryResponse(BaseModel):
+    items: List[PwaInstallDailySummaryEntry]
+
+
+FavoritesMetric = Literal[
+    "favorites_opened",
+    "favorite_added",
+    "favorite_removed",
+    "favorites_cleared",
+    "favorites_synced_pull",
+    "favorites_synced_push",
+]
+
+FavoritesEventSource = Literal["web"]
+
+
+class FavoritesEventRequest(BaseModel):
+    metric: FavoritesMetric
+    path: str = Field(min_length=1, max_length=300)
+    timestamp: datetime
+    sync_id: str = Field(alias="syncId", min_length=1, max_length=120)
+    product_id: Optional[str] = Field(default=None, alias="productId", min_length=1, max_length=200)
+    source: FavoritesEventSource = "web"
+
+    class Config:
+        populate_by_name = True
+
+
+class FavoritesEventEntry(BaseModel):
+    id: int
+    client_id: str
+    sync_id: str
+    metric: FavoritesMetric
+    path: str
+    product_id: Optional[str] = None
+    source: FavoritesEventSource
+    user_agent: Optional[str] = None
+    source_ip: Optional[str] = None
+    event_timestamp: str
+    created_at: str
+
+
+class FavoritesEventListResponse(BaseModel):
+    items: List[FavoritesEventEntry]
+    total: int
+    limit: int
+    offset: int
+
+
+class FavoritesSyncPayload(BaseModel):
+    product_ids: List[str] = Field(default_factory=list, alias="productIds")
+
+    class Config:
+        populate_by_name = True
+
+
+class FavoritesSyncResponse(BaseModel):
+    sync_id: str = Field(alias="syncId")
+    product_ids: List[str] = Field(alias="productIds")
+    updated_at: str = Field(alias="updatedAt")
+
+    class Config:
+        populate_by_name = True

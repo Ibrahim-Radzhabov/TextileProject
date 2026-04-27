@@ -1,0 +1,148 @@
+.root {
+  position: relative;
+  width: 100%;
+  min-height: 60px;
+  background:
+    linear-gradient(
+      180deg,
+      rgb(var(--color-card) / 0.74) 0%,
+      rgb(var(--color-card) / 0.9) 100%
+    );
+  color: rgb(var(--color-foreground) / 0.92);
+  isolation: isolate;
+}
+
+.root::before,
+.root::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    rgb(var(--color-accent) / 0.06) 0%,
+    rgb(var(--color-border) / 0.38) 16%,
+    rgb(var(--color-accent) / 0.28) 50%,
+    rgb(var(--color-border) / 0.38) 84%,
+    rgb(var(--color-accent) / 0.06) 100%
+  );
+  pointer-events: none;
+}
+
+.root::before {
+  bottom: 5px;
+  filter: blur(0.25px);
+}
+
+.root::after {
+  bottom: 2px;
+  box-shadow: 0 0 10px rgb(var(--color-accent) / 0.12);
+}
+
+.inner {
+  min-height: 60px;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 36px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 14px;
+}
+
+.chevron {
+  display: inline-flex;
+  width: 24px;
+  height: 24px;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.72;
+}
+
+.chevron svg {
+  width: 16px;
+  height: 16px;
+}
+
+.chevron path {
+  fill: none;
+  stroke: rgb(var(--color-muted-foreground) / 0.86);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.message {
+  display: block;
+  width: 100%;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 0 6px;
+  font-size: clamp(0.82rem, 1.4vw, 0.94rem);
+  line-height: 1.3;
+  letter-spacing: 0.01em;
+  color: rgb(var(--color-foreground) / 0.82);
+  will-change: transform, opacity;
+  transition:
+    transform var(--ticker-transition-ms, 520ms) cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    opacity var(--ticker-transition-ms, 520ms) cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.messageEnter {
+  transform: translate3d(42%, 0, 0);
+  opacity: 0;
+}
+
+.messageHold {
+  transform: translate3d(0, 0, 0);
+  opacity: 1;
+}
+
+.messageExit {
+  transform: translate3d(-42%, 0, 0);
+  opacity: 0;
+}
+
+.messageReduced {
+  transform: none;
+  opacity: 1;
+  transition: opacity 120ms ease-out;
+}
+
+@media (max-width: 640px) {
+  .root {
+    min-height: 56px;
+  }
+
+  .inner {
+    min-height: 56px;
+    grid-template-columns: 30px minmax(0, 1fr) 30px;
+    padding: 0 10px;
+    gap: 4px;
+  }
+
+  .chevron {
+    width: 18px;
+    height: 18px;
+    opacity: 0.62;
+  }
+
+  .chevron svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .message {
+    transition: none;
+    transform: none;
+  }
+}

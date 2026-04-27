@@ -1,0 +1,288 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Typography */
+  --type-kicker-size: 11px;
+  --type-label-size: 11px;
+  --type-meta-size: 11px;
+  --type-body-size: clamp(0.9375rem, 0.92rem + 0.12vw, 1rem);
+  --type-body-leading: 1.6;
+  --type-subtle-leading: 1.6;
+  --type-h1-size: clamp(2.25rem, 5.5vw, 4.5rem);
+  --type-h2-size: clamp(1.75rem, 3.5vw, 3rem);
+  --type-h1-weight: 400;
+  --type-h2-weight: 400;
+  --type-title-weight: 500;
+  --type-meta-weight: 500;
+  --type-meta-tracking: 0.12em;
+  --type-kicker-tracking: 0.12em;
+  --type-label-tracking: 0.08em;
+  --type-button-size: 13px;
+  --type-button-weight: 500;
+  --type-button-leading: 1;
+  --type-button-tracking: 0.06em;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-48: 192px;
+
+  /* Layout */
+  --max-width: 1320px;
+  --content-px: clamp(1rem, 4vw, 2.5rem);
+
+  /* Motion */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 600ms;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-background text-foreground antialiased;
+  font-size: var(--font-base-size, 16px);
+  font-family: var(--font-sans);
+  background-color: rgb(var(--color-background));
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+::selection {
+  @apply bg-accent/35 text-accent-contrast;
+}
+
+.glass-panel {
+  @apply border border-border bg-card;
+}
+
+.glass-panel-strong {
+  @apply border border-border bg-card;
+}
+
+.premium-gradient {
+  background-color: rgb(var(--color-background));
+}
+
+.page-shell {
+  @apply relative min-h-screen;
+  background-color: rgb(var(--color-background));
+}
+
+.text-hero {
+  color: rgb(var(--color-foreground) / 0.96);
+}
+
+.ui-kicker {
+  font-size: var(--type-kicker-size);
+  font-weight: 500;
+  letter-spacing: var(--type-kicker-tracking);
+  text-transform: uppercase;
+  line-height: 1.3;
+  color: rgb(var(--color-muted-foreground));
+}
+
+.ui-label {
+  font-size: var(--type-label-size);
+  font-weight: 500;
+  letter-spacing: var(--type-label-tracking);
+  line-height: 1.4;
+  text-transform: uppercase;
+  color: rgb(var(--color-muted-foreground));
+}
+
+.ui-subtle {
+  color: rgb(var(--color-muted-foreground));
+  line-height: var(--type-subtle-leading);
+}
+
+.ui-body {
+  font-size: var(--type-body-size);
+  line-height: var(--type-body-leading);
+  color: rgb(var(--color-foreground) / 0.72);
+}
+
+.ui-meta {
+  font-size: var(--type-meta-size);
+  font-weight: var(--type-meta-weight);
+  letter-spacing: var(--type-meta-tracking);
+  text-transform: uppercase;
+  color: rgb(var(--color-muted-foreground));
+  line-height: 1.3;
+}
+
+.ui-title {
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  font-weight: var(--type-title-weight);
+}
+
+.ui-title-serif {
+  font-family: var(--font-velura-display), "Cormorant Garamond", "Garamond", "Times New Roman", serif;
+  letter-spacing: 0;
+  font-weight: 300;
+}
+
+.ui-title-display {
+  font-family: var(--font-velura-display), "Cormorant Garamond", "Garamond", "Times New Roman", serif;
+  letter-spacing: 0;
+  font-weight: 300;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+.ui-h1 {
+  font-size: var(--type-h1-size);
+  line-height: 1.0;
+  font-weight: var(--type-h1-weight);
+}
+
+.ui-h2 {
+  font-size: var(--type-h2-size);
+  line-height: 1.05;
+  font-weight: var(--type-h2-weight);
+}
+
+.ui-button {
+  font-size: var(--type-button-size);
+  font-weight: var(--type-button-weight);
+  line-height: var(--type-button-leading);
+  letter-spacing: var(--type-button-tracking);
+  text-transform: uppercase;
+}
+
+.premium-divider {
+  height: 1px;
+  width: 100%;
+  background-color: rgb(var(--color-border));
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    rgb(var(--color-foreground) / 0.08),
+    transparent
+  );
+  animation: skeleton-shimmer 1.25s ease-in-out infinite;
+}
+
+@keyframes skeleton-shimmer {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Hero Ken Burns — slow cinematic zoom */
+@keyframes hero-ken-burns {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.06);
+  }
+}
+
+.hero-ken-burns {
+  animation: hero-ken-burns 14s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ken-burns {
+    animation: none;
+  }
+}
+
+/* Hide scrollbar for horizontal scroll rails */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.home-concept-editorial {
+  position: relative;
+}
+
+/* Scroll reveal */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity var(--duration-slow) var(--ease-out-expo),
+              transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.reveal-on-scroll.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Staggered children */
+.reveal-on-scroll.is-visible > *:nth-child(1) { transition-delay: 0ms; }
+.reveal-on-scroll.is-visible > *:nth-child(2) { transition-delay: 80ms; }
+.reveal-on-scroll.is-visible > *:nth-child(3) { transition-delay: 160ms; }
+.reveal-on-scroll.is-visible > *:nth-child(4) { transition-delay: 240ms; }
+.reveal-on-scroll.is-visible > *:nth-child(5) { transition-delay: 320ms; }
+.reveal-on-scroll.is-visible > *:nth-child(6) { transition-delay: 400ms; }
+
+/* Image hover zoom */
+.img-hover-zoom {
+  overflow: hidden;
+}
+
+.img-hover-zoom img {
+  transition: transform 700ms var(--ease-out-expo);
+}
+
+.img-hover-zoom:hover img {
+  transform: scale(1.04);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .skeleton-shimmer::after,
+  .reveal-on-scroll {
+    transition: none;
+    animation: none;
+  }
+
+  .reveal-on-scroll {
+    opacity: 1;
+    transform: none;
+  }
+
+  .img-hover-zoom img {
+    transition: none;
+  }
+
+  .img-hover-zoom:hover img {
+    transform: none;
+  }
+}

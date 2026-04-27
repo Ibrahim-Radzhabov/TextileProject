@@ -97,6 +97,60 @@ corepack pnpm --dir apps/web exec tsc --noEmit    # typecheck web
 corepack pnpm --dir packages/ui exec tsc --noEmit  # typecheck UI lib
 ```
 
+## Adding new products to the catalog
+
+Products live in `clients/demo/catalog.json`. Each product must follow this structure:
+
+```json
+{
+  "id": "p-unique",
+  "slug": "kebab-case-unique",
+  "name": "Product name",
+  "description": "Full description for PDP.",
+  "shortDescription": "One line for product card (2 lines max).",
+  "price": { "currency": "USD", "amount": 299.0 },
+  "compareAtPrice": { "currency": "USD", "amount": 349.0 },
+  "badges": [{ "id": "b1", "label": "New", "tone": "accent" }],
+  "tags": ["drape", "linen", "bedroom"],
+  "media": [
+    { "id": "m1", "url": "/demo/photo1.jpeg", "alt": "Descriptive Russian alt text — material + scene + color" },
+    { "id": "m1-detail", "url": "/demo/photo2.jpeg", "alt": "Close-up detail alt text" }
+  ],
+  "isFeatured": false,
+  "isActive": true,
+  "metadata": {
+    "Light control": "95-100%",
+    "Fabric": "Linen blend",
+    "Width panel": "150 cm",
+    "Care": "Dry clean",
+    "colorOptions": [
+      { "id": "p1-ivory", "label": "Ivory Linen", "tone": "ivory", "mediaIds": ["m1", "m1-detail"] }
+    ]
+  }
+}
+```
+
+**Rules:**
+- `id` and `slug` must be unique across all products. Slug must be kebab-case.
+- `price` and `compareAtPrice` must use the same `currency`. `compareAtPrice` must be greater than `price`.
+- `media` — always include **two images** (primary + detail/hover). The second image is used for the crossfade hover effect on product cards. Without it, crossfade does not work.
+- `alt` texts must be descriptive in Russian: material + use case + color. Never use filenames or generic words like "photo".
+- `tags` control three things:
+  - **SEO page title** on PDP: use type tags — `drape`, `tulle`, `blackout`, `velvet`, `linen`, `day-night`, `sheer`, `dimout`, `jacquard`, `acoustic`
+  - **Overline label** in product cards: use room tags — `bedroom`, `living-room`, `office`, `kids`
+  - **"You may also like" related products**: products sharing at least one tag appear as related on each other's PDP (max 4 shown). Always share at least one tag with similar products.
+  - Tag `featured` hides the overline in cards.
+- `shortDescription` appears in the product card body (truncated to 2 lines) and in the meta description — keep it under 120 characters.
+- `badges.tone`: `accent` (highlighted), `neutral` (muted), `critical` (sale/urgent).
+- `isActive: false` marks the product as OutOfStock in Schema.org structured data.
+- `metadata.colorOptions[].tone` should match one of the swatch keys in `product-page-client.tsx` (`linen`, `jacquard`, `velvet`, `blackout`, `sheer`, `tulle`) for a named swatch color, or any other string for a neutral fallback.
+- `metadata.colorOptions[].mediaIds` must reference valid `media[].id` values within the same product.
+
+**After adding products**, run:
+```bash
+corepack pnpm --dir apps/web exec tsc --noEmit
+```
+
 ## Files to not commit
 
 - `.tmp_zoom_*.mjs` — temporary debug scripts

@@ -1,0 +1,19 @@
+<svg width="1200" height="1500" viewBox="0 0 1200 1500" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#EFE6D9"/>
+      <stop offset="1" stop-color="#DCC9AF"/>
+    </linearGradient>
+    <linearGradient id="fold" x1="0" y1="0" x2="0" y2="1500" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#A78562"/>
+      <stop offset="1" stop-color="#7B5B3E"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="1500" fill="url(#bg)"/>
+  <rect x="120" y="120" width="960" height="1260" rx="24" fill="#F6EBDD" stroke="#9B7A57" stroke-opacity="0.32"/>
+  <path d="M170 120C220 210 220 1290 170 1380H300C350 1290 350 210 300 120H170Z" fill="url(#fold)"/>
+  <path d="M330 120C380 210 380 1290 330 1380H470C520 1290 520 210 470 120H330Z" fill="url(#fold)" fill-opacity="0.95"/>
+  <path d="M500 120C550 210 550 1290 500 1380H640C690 1290 690 210 640 120H500Z" fill="url(#fold)" fill-opacity="0.9"/>
+  <path d="M670 120C720 210 720 1290 670 1380H810C860 1290 860 210 810 120H670Z" fill="url(#fold)" fill-opacity="0.95"/>
+  <path d="M840 120C890 210 890 1290 840 1380H980C1030 1290 1030 210 980 120H840Z" fill="url(#fold)"/>
+</svg>

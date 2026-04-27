@@ -10,6 +10,26 @@ import {
 } from "@/lib/seo";
 import { ProductPageClient } from "./product-page-client";
 
+const TAG_CATEGORY_MAP: Record<string, string> = {
+  drape: "Шторы",
+  tulle: "Тюль",
+  blackout: "Blackout",
+  velvet: "Бархат",
+  linen: "Лён",
+  "day-night": "Day-Night",
+  sheer: "Тюль",
+  dimout: "Dimout",
+  jacquard: "Жаккард",
+  acoustic: "Акустика"
+};
+
+function resolvePdpCategory(tags: string[]): string | null {
+  for (const tag of tags) {
+    if (TAG_CATEGORY_MAP[tag]) return TAG_CATEGORY_MAP[tag];
+  }
+  return null;
+}
+
 async function getProduct(slug: string): Promise<Product | null> {
   try {
     return await fetchProduct(slug);
@@ -37,9 +57,16 @@ export async function generateMetadata({
     };
   }
 
-  const title = `${product.name} — ${config.shop.name}`;
-  const description =
-    product.shortDescription ?? product.description ?? config.seo.description;
+  const category = resolvePdpCategory(product.tags ?? []);
+  const title = category
+    ? `${product.name} — купить в ${config.shop.name} | ${category}`
+    : `${product.name} — ${config.shop.name}`;
+
+  const baseDescription = product.shortDescription ?? product.description ?? config.seo.description;
+  const priceStr = product.price
+    ? ` Цена от ${product.price.amount} ${product.price.currency}.`
+    : "";
+  const description = `${baseDescription}${priceStr} Доставка по России.`;
 
   const image = product.media?.[0]?.url ?? config.seo.openGraphImage;
 
@@ -104,6 +131,13 @@ export default async function ProductPage({
           dangerouslySetInnerHTML={jsonLd(schema)}
         />
       ))}
+      <nav aria-label="Навигация по разделам" className="mb-4 flex items-center gap-1.5 text-[11px] uppercase tracking-[0.1em] text-muted-foreground/60">
+        <a href="/" className="transition-colors hover:text-foreground/70">Главная</a>
+        <span aria-hidden="true">›</span>
+        <a href="/catalog" className="transition-colors hover:text-foreground/70">Каталог</a>
+        <span aria-hidden="true">›</span>
+        <span className="text-foreground/80" aria-current="page">{product.name}</span>
+      </nav>
       <ProductPageClient
         product={product}
         related={related}

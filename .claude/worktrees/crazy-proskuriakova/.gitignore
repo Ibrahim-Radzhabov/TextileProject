@@ -1,0 +1,46 @@
+# OS
+.DS_Store
+
+# Node.js / package managers
+node_modules/
+.pnpm-store/
+.pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build tooling caches
+.turbo/
+**/.turbo/
+**/.corepack/
+.bin/
+
+# Next.js
+**/.next/
+**/.next-dev/
+out/
+apps/web/next-env.d.ts
+
+# Python
+**/__pycache__/
+*.py[cod]
+.venv/
+apps/api/data/
+
+# Playwright
+playwright-report/
+test-results/
+artifacts/
+
+# Local env files
+infra/.env
+apps/api/.env
+apps/api/.env.*
+
+# Local media backups / alternates
+apps/web/public/demo/hero/hero_var1.mp4
+apps/web/public/demo/hero/*.bak.mp4
+apps/web/public/demo/hero/3051489-sd_960_540_25fps.mp4
+
+# Local package build outputs
+packages/*/dist/

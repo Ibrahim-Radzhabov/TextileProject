@@ -21,6 +21,8 @@ export type HeroMediaProps = {
   overlayClassName?: string;
   defaultOverlayOpacity?: number;
   revealOnReady?: boolean;
+  /** Set true for above-the-fold hero — adds fetchpriority="high" and loading="eager" for LCP */
+  priority?: boolean;
 };
 
 export const HeroMedia: React.FC<HeroMediaProps> = ({
@@ -30,7 +32,8 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   assetClassName,
   overlayClassName,
   defaultOverlayOpacity = 0.5,
-  revealOnReady = false
+  revealOnReady = false,
+  priority = false
 }) => {
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
   const [videoFailed, setVideoFailed] = React.useState(false);
@@ -38,6 +41,9 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   const [isNarrowViewport, setIsNarrowViewport] = React.useState(false);
   const [activeVideoSrc, setActiveVideoSrc] = React.useState(media.src);
   const [videoFallbackAttempted, setVideoFallbackAttempted] = React.useState(false);
+  const shouldRenderVideo = media.type === "video";
+  const [isVisible, setIsVisible] = React.useState(!shouldRenderVideo);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
@@ -55,15 +61,15 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
       viewportQuery.removeEventListener("change", updateViewport);
     };
   }, []);
-
-  const shouldRenderVideo = media.type === "video";
   const overlayOpacity = media.overlayOpacity ?? defaultOverlayOpacity;
   const mergedAssetClassName = [assetClassName ?? "h-full w-full object-cover"].join(" ").trim();
-  const assetStyle = {
+  const assetStyle: React.CSSProperties = {
     objectPosition:
       (isNarrowViewport ? media.mobileObjectPosition : media.objectPosition) ??
       media.objectPosition ??
-      "center center"
+      "center center",
+    willChange: "transform",
+    transform: "translateZ(0)"
   };
   const mergedOverlayClassName = [
     "absolute inset-0",
@@ -88,6 +94,29 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
     setVideoFallbackAttempted(false);
   }, [media.type, primaryVideoSrc]);
 
+  /* ── IntersectionObserver: pause video when off-screen ── */
+  React.useEffect(() => {
+    if (!shouldRenderVideo || typeof window === "undefined") {
+      return;
+    }
+
+    const node = containerRef.current;
+    if (!node) {
+      setIsVisible(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsVisible(entry.isIntersecting);
+      },
+      { threshold: 0.05, rootMargin: "200px" }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [shouldRenderVideo]);
+
   React.useEffect(() => {
     if (!shouldRenderVideo || videoFailed) {
       return;
@@ -95,6 +124,11 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
 
     const node = videoRef.current;
     if (!node) {
+      return;
+    }
+
+    if (!isVisible) {
+      node.pause();
       return;
     }
 
@@ -114,7 +148,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
       node.removeEventListener("loadedmetadata", tryPlay);
       node.removeEventListener("loadeddata", tryPlay);
     };
-  }, [activeVideoSrc, shouldRenderVideo, videoFailed]);
+  }, [activeVideoSrc, shouldRenderVideo, videoFailed, isVisible]);
 
   React.useEffect(() => {
     if (!revealOnReady || !showPoster || videoFailed) {
@@ -135,6 +169,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
 
   return (
     <div
+      ref={shouldRenderVideo ? containerRef : undefined}
       className={["pointer-events-none absolute inset-0", className ?? ""].join(" ").trim()}
     >
       {shouldRenderVideo ? (
@@ -152,6 +187,9 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
                 alt={fallbackAlt}
                 className={mergedAssetClassName}
                 style={assetStyle}
+                loading={priority ? "eager" : "lazy"}
+                fetchPriority={priority ? "high" : "auto"}
+                decoding={priority ? "sync" : "async"}
               />
             </picture>
           )}
@@ -161,7 +199,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
             muted
             loop
             playsInline
-            preload="auto"
+            preload="metadata"
             poster={media.poster}
             src={activeVideoSrc}
             className={[
@@ -209,6 +247,9 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
                 alt={fallbackAlt}
                 className={mergedAssetClassName}
                 style={assetStyle}
+                loading={priority ? "eager" : "lazy"}
+                fetchPriority={priority ? "high" : "auto"}
+                decoding={priority ? "sync" : "async"}
               />
             </picture>
           )}
@@ -222,6 +263,9 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
             alt={fallbackAlt}
             className={mergedAssetClassName}
             style={assetStyle}
+            loading={priority ? "eager" : "lazy"}
+            fetchPriority={priority ? "high" : "auto"}
+            decoding={priority ? "sync" : "async"}
           />
         </picture>
       )}

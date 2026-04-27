@@ -1,0 +1,28 @@
+{
+  "defaults": {
+    "minPerformanceScore": 0.7,
+    "maxLcpMs": 4500,
+    "maxCls": 0.1,
+    "maxInpMs": 450
+  },
+  "routes": {
+    "/": {
+      "minPerformanceScore": 0.68,
+      "maxLcpMs": 5200,
+      "maxCls": 0.12,
+      "maxInpMs": 500
+    },
+    "/catalog": {
+      "minPerformanceScore": 0.75,
+      "maxLcpMs": 3800,
+      "maxCls": 0.08,
+      "maxInpMs": 420
+    },
+    "/product/ripple-fold-sheer": {
+      "minPerformanceScore": 0.73,
+      "maxLcpMs": 4000,
+      "maxCls": 0.1,
+      "maxInpMs": 430
+    }
+  }
+}

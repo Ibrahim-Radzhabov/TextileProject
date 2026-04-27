@@ -1,0 +1,85 @@
+from __future__ import annotations
+
+import json
+from functools import lru_cache
+from pathlib import Path
+from typing import Any, Dict
+
+from .models import CatalogConfig, IntegrationsConfig, SeoConfig, ShopConfig, StorefrontConfig, ThemeConfig, PageConfig
+from ..config import get_settings
+
+
+class ClientConfigLoader:
+    def __init__(self, root_dir: Path, client_id: str) -> None:
+        self.root_dir = root_dir
+        self.client_id = client_id
+
+    @property
+    def client_dir(self) -> Path:
+        return self.root_dir / "clients" / self.client_id
+
+    def _read_json(self, name: str) -> Dict[str, Any]:
+        path = self.client_dir / f"{name}.json"
+        with path.open("r", encoding="utf-8") as f:
+            return json.load(f)
+
+    def _write_json(self, name: str, payload: Dict[str, Any]) -> None:
+        path = self.client_dir / f"{name}.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp_path = path.with_suffix(f"{path.suffix}.tmp")
+        with tmp_path.open("w", encoding="utf-8") as f:
+            json.dump(payload, f, ensure_ascii=False, indent=2)
+            f.write("\n")
+        tmp_path.replace(path)
+
+    def load_shop(self) -> ShopConfig:
+        data = self._read_json("shop")
+        return ShopConfig.model_validate(data)
+
+    def load_theme(self) -> ThemeConfig:
+        data = self._read_json("theme")
+        return ThemeConfig.model_validate(data)
+
+    def load_catalog(self) -> CatalogConfig:
+        data = self._read_json("catalog")
+        return CatalogConfig.model_validate(data)
+
+    def save_catalog(self, catalog: CatalogConfig) -> None:
+        payload = catalog.model_dump(mode="json", by_alias=True, exclude_none=True)
+        self._write_json("catalog", payload)
+
+    def load_pages(self) -> list[PageConfig]:
+        data = self._read_json("pages")
+        return [PageConfig.model_validate(p) for p in data]
+
+    def load_seo(self) -> SeoConfig:
+        data = self._read_json("seo")
+        return SeoConfig.model_validate(data)
+
+    def load_integrations(self) -> IntegrationsConfig:
+        data = self._read_json("integrations")
+        return IntegrationsConfig.model_validate(data)
+
+    def load_storefront_config(self) -> StorefrontConfig:
+        return StorefrontConfig(
+            shop=self.load_shop(),
+            theme=self.load_theme(),
+            seo=self.load_seo(),
+            pages=self.load_pages(),
+            catalog=self.load_catalog(),
+            integrations=self.load_integrations(),
+        )
+
+
+def _resolve_project_root(start: Path) -> Path:
+    for candidate in [start, *start.parents]:
+        if (candidate / "clients").is_dir():
+            return candidate
+    raise RuntimeError("Unable to locate project root containing clients/ directory")
+
+
+@lru_cache(maxsize=1)
+def get_loader() -> ClientConfigLoader:
+    settings = get_settings()
+    root = _resolve_project_root(Path(__file__).resolve())
+    return ClientConfigLoader(root_dir=root, client_id=settings.client_id)
