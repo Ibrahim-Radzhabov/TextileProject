@@ -196,7 +196,6 @@ body {
   background-image:
     radial-gradient(circle at 8% 8%, rgb(var(--color-foreground) / 0.02), transparent 55%),
     radial-gradient(circle at 92% 20%, rgb(var(--color-foreground) / 0.015), transparent 58%);
-  filter: blur(10px);
   z-index: -1;
 }
 

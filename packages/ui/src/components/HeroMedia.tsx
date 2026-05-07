@@ -44,6 +44,11 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   const shouldRenderVideo = media.type === "video";
   const [isVisible, setIsVisible] = React.useState(!shouldRenderVideo);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const isVisibleRef = React.useRef(isVisible);
+
+  React.useEffect(() => {
+    isVisibleRef.current = isVisible;
+  }, [isVisible]);
 
   React.useEffect(() => {
     if (typeof window === "undefined") {
@@ -67,9 +72,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
     objectPosition:
       (isNarrowViewport ? media.mobileObjectPosition : media.objectPosition) ??
       media.objectPosition ??
-      "center center",
-    willChange: "transform",
-    transform: "translateZ(0)"
+      "center center"
   };
   const mergedOverlayClassName = [
     "absolute inset-0",
@@ -149,6 +152,40 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
       node.removeEventListener("loadeddata", tryPlay);
     };
   }, [activeVideoSrc, shouldRenderVideo, videoFailed, isVisible]);
+
+  React.useEffect(() => {
+    if (!shouldRenderVideo || typeof window === "undefined") {
+      return;
+    }
+
+    let resumeTimer = 0;
+
+    const resumeIfVisible = () => {
+      const node = videoRef.current;
+      if (!node || videoFailed || !isVisibleRef.current) {
+        return;
+      }
+
+      void node.play().catch(() => undefined);
+    };
+
+    const handleScroll = () => {
+      const node = videoRef.current;
+      if (!node) {
+        return;
+      }
+
+      node.pause();
+      window.clearTimeout(resumeTimer);
+      resumeTimer = window.setTimeout(resumeIfVisible, 220);
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.clearTimeout(resumeTimer);
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [shouldRenderVideo, videoFailed]);
 
   React.useEffect(() => {
     if (!revealOnReady || !showPoster || videoFailed) {
