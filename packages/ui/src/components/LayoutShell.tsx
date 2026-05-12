@@ -47,8 +47,8 @@ export const LayoutShell: React.FC<LayoutShellProps> = ({ children, topNav, foot
       {topNav && (
         <motion.div
           className={[
-            "sticky top-0 z-40 border-b border-foreground/[0.06] bg-background/92 transition-[background-color,backdrop-filter] duration-[var(--motion-normal)]",
-            isScrolled ? "backdrop-blur-xl" : "backdrop-blur-0"
+            "sticky top-0 z-40 border-b border-foreground/[0.06] bg-background/92 transition-colors duration-[var(--motion-normal)]",
+            isScrolled ? "bg-background/96" : "bg-background/92"
           ].join(" ")}
           initial={{ opacity: 0, y: -4 }}
           animate={

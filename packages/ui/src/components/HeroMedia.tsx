@@ -21,6 +21,7 @@ export type HeroMediaProps = {
   overlayClassName?: string;
   defaultOverlayOpacity?: number;
   revealOnReady?: boolean;
+  resumeAfterScroll?: boolean;
   /** Set true for above-the-fold hero — adds fetchpriority="high" and loading="eager" for LCP */
   priority?: boolean;
 };
@@ -33,6 +34,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   overlayClassName,
   defaultOverlayOpacity = 0.5,
   revealOnReady = false,
+  resumeAfterScroll = true,
   priority = false
 }) => {
   const videoRef = React.useRef<HTMLVideoElement | null>(null);
@@ -45,6 +47,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
   const [isVisible, setIsVisible] = React.useState(!shouldRenderVideo);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
   const isVisibleRef = React.useRef(isVisible);
+  const scrollPausedRef = React.useRef(false);
 
   React.useEffect(() => {
     isVisibleRef.current = isVisible;
@@ -161,8 +164,13 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
     let resumeTimer = 0;
 
     const resumeIfVisible = () => {
+      scrollPausedRef.current = false;
       const node = videoRef.current;
       if (!node || videoFailed || !isVisibleRef.current) {
+        return;
+      }
+
+      if (!resumeAfterScroll && window.scrollY > 32) {
         return;
       }
 
@@ -175,7 +183,10 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
         return;
       }
 
-      node.pause();
+      if (!scrollPausedRef.current) {
+        scrollPausedRef.current = true;
+        node.pause();
+      }
       window.clearTimeout(resumeTimer);
       resumeTimer = window.setTimeout(resumeIfVisible, 220);
     };
@@ -185,7 +196,7 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
       window.clearTimeout(resumeTimer);
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [shouldRenderVideo, videoFailed]);
+  }, [resumeAfterScroll, shouldRenderVideo, videoFailed]);
 
   React.useEffect(() => {
     if (!revealOnReady || !showPoster || videoFailed) {

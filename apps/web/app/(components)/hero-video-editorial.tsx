@@ -55,10 +55,22 @@ export function HeroVideoEditorial({
   const prefersReducedMotion = useReducedMotion();
   const heroRef = React.useRef<HTMLDivElement>(null);
   const overlayRef = React.useRef<HTMLDivElement>(null);
+  const [isDesktopViewport, setIsDesktopViewport] = React.useState(true);
+
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const updateViewport = () => setIsDesktopViewport(mediaQuery.matches);
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
 
   /* ── scroll-linked fadeout for overlay content ── */
   React.useEffect(() => {
-    if (prefersReducedMotion || typeof window === "undefined") return;
+    if (!isDesktopViewport || prefersReducedMotion || typeof window === "undefined") return;
 
     let frame = 0;
     const onScroll = () => {
@@ -89,7 +101,7 @@ export function HeroVideoEditorial({
       cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
     };
-  }, [prefersReducedMotion]);
+  }, [isDesktopViewport, prefersReducedMotion]);
 
   const hasCardContent = Boolean(
     cardTitle || (cardLinks && cardLinks.length > 0) || primaryCta
@@ -217,6 +229,7 @@ export function HeroVideoEditorial({
             media={media}
             title={title}
             defaultOverlayOpacity={0.12}
+            resumeAfterScroll={false}
             overlayClassName="bg-gradient-to-t from-black/30 via-black/5 to-transparent"
             assetClassName="h-full w-full object-cover"
           />
@@ -245,6 +258,7 @@ export function HeroVideoEditorial({
               media={media}
               title={title}
               defaultOverlayOpacity={0.08}
+              resumeAfterScroll={false}
               overlayClassName="bg-gradient-to-t from-black/28 via-black/4 to-transparent"
             />
           </div>
@@ -277,8 +291,7 @@ export function HeroVideoEditorial({
         className ?? ""
       ].filter(Boolean).join(" ")}
     >
-      {renderMobile()}
-      {renderDesktop()}
+      {isDesktopViewport ? renderDesktop() : renderMobile()}
       {renderIntroBlock()}
       {revealContent}
     </div>
