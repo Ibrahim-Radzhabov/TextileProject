@@ -18,7 +18,7 @@ RUN pnpm install --frozen-lockfile --store-dir .pnpm-store/v3
 
 FROM base AS builder
 
-COPY --from=deps /app/node_modules ./node_modules
+COPY --from=deps /app ./
 COPY . .
 
 ENV STORE_API_URL=http://api:8000
