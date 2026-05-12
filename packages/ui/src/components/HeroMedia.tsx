@@ -318,10 +318,12 @@ export const HeroMedia: React.FC<HeroMediaProps> = ({
         </picture>
       )}
 
-      <div
-        className={mergedOverlayClassName}
-        style={{ opacity: overlayOpacity }}
-      />
+      {overlayOpacity > 0 && (
+        <div
+          className={mergedOverlayClassName}
+          style={{ opacity: overlayOpacity }}
+        />
+      )}
     </div>
   );
 };

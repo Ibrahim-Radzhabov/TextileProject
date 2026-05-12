@@ -1,15 +1,12 @@
 import { ImageResponse } from "next/og";
-import { getStorefrontConfig } from "@/lib/get-storefront-config";
-
 export const runtime = "edge";
 export const alt = "Velura — премиум шторы и тюль";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
 export default async function OgImage() {
-  const config = await getStorefrontConfig().catch(() => null);
-  const shopName = config?.shop.name ?? "Velura";
-  const description = config?.seo.description ?? "Текстиль для тихого интерьера";
+  const shopName = "Velura";
+  const description = "Текстиль для тихого интерьера";
 
   return new ImageResponse(
     (

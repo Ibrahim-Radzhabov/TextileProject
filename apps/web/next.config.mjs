@@ -2,7 +2,7 @@
 const nextConfig = {
   // Separate caches to prevent dev runtime corruption after production builds.
   distDir: process.env.NODE_ENV === "development" ? ".next-dev" : ".next",
-  reactStrictMode: true,
+  reactStrictMode: false,
   output: "standalone",
   async headers() {
     return [

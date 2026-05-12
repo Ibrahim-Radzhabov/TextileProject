@@ -56,6 +56,7 @@ export function HeroVideoEditorial({
   const heroRef = React.useRef<HTMLDivElement>(null);
   const overlayRef = React.useRef<HTMLDivElement>(null);
   const [isDesktopViewport, setIsDesktopViewport] = React.useState(true);
+  const isVideoHero = media.type === "video";
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
@@ -214,58 +215,92 @@ export function HeroVideoEditorial({
   };
 
   /* ── mobile hero ── */
-  const renderMobile = () => (
-    <section className="relative md:hidden">
-      <motion.div
-        className="relative isolate overflow-hidden"
-        style={{ height: "85svh", minHeight: "480px" }}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: prefersReducedMotion ? 0.2 : 0.8, ease: EASE_SOFT }}
-      >
-        {/* video/image with Ken Burns */}
-        <div className={`absolute inset-0 ${prefersReducedMotion ? "" : "hero-ken-burns"}`}>
-          <HeroMedia
-            media={media}
-            title={title}
-            defaultOverlayOpacity={0.12}
-            resumeAfterScroll={false}
-            overlayClassName="bg-gradient-to-t from-black/30 via-black/5 to-transparent"
-            assetClassName="h-full w-full object-cover"
-          />
-        </div>
+  const renderMobile = () => {
+    const mediaLayer = (
+      <div className={`absolute inset-0 ${!isVideoHero && !prefersReducedMotion ? "hero-ken-burns" : ""}`}>
+        <HeroMedia
+          media={media}
+          title={title}
+          defaultOverlayOpacity={isVideoHero ? 0 : 0.12}
+          resumeAfterScroll={false}
+          overlayClassName={isVideoHero ? "bg-transparent" : "bg-gradient-to-t from-black/30 via-black/5 to-transparent"}
+          assetClassName="h-full w-full object-cover"
+        />
+      </div>
+    );
 
-        {/* overlay content */}
+    const content = (
+      <>
+        {mediaLayer}
         {renderOverlayContent(true)}
-      </motion.div>
-    </section>
-  );
+      </>
+    );
+
+    return (
+      <section className="relative md:hidden">
+        {isVideoHero ? (
+          <div
+            className="relative isolate overflow-hidden"
+            style={{ height: "85svh", minHeight: "480px" }}
+          >
+            {content}
+          </div>
+        ) : (
+          <motion.div
+            className="relative isolate overflow-hidden"
+            style={{ height: "85svh", minHeight: "480px" }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: prefersReducedMotion ? 0.2 : 0.8, ease: EASE_SOFT }}
+          >
+            {content}
+          </motion.div>
+        )}
+      </section>
+    );
+  };
 
   /* ── desktop hero ── */
   const renderDesktop = () => {
+    const mediaLayer = (
+      <div className={`absolute inset-0 ${!isVideoHero && !prefersReducedMotion ? "hero-ken-burns" : ""}`}>
+        <HeroMedia
+          media={media}
+          title={title}
+          defaultOverlayOpacity={isVideoHero ? 0 : 0.08}
+          resumeAfterScroll={false}
+          overlayClassName={isVideoHero ? "bg-transparent" : "bg-gradient-to-t from-black/28 via-black/4 to-transparent"}
+        />
+      </div>
+    );
+
+    const content = (
+      <>
+        {mediaLayer}
+        {renderOverlayContent(false)}
+      </>
+    );
+
     const scene = (
       <section ref={heroRef} className="relative">
-        <motion.div
-          className="relative isolate overflow-hidden"
-          style={{ height: "100svh", minHeight: "600px" }}
-          initial={{ opacity: 0, scale: 1.01 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: prefersReducedMotion ? 0.2 : 1.0, ease: EASE_SOFT }}
-        >
-          {/* video/image with Ken Burns zoom */}
-          <div className={`absolute inset-0 ${prefersReducedMotion ? "" : "hero-ken-burns"}`}>
-            <HeroMedia
-              media={media}
-              title={title}
-              defaultOverlayOpacity={0.08}
-              resumeAfterScroll={false}
-              overlayClassName="bg-gradient-to-t from-black/28 via-black/4 to-transparent"
-            />
+        {isVideoHero ? (
+          <div
+            className="relative isolate overflow-hidden"
+            style={{ height: "100svh", minHeight: "600px" }}
+          >
+            {content}
           </div>
-
-          {/* overlay content with scroll fadeout */}
-          {renderOverlayContent(false)}
-        </motion.div>
+        ) : (
+          <motion.div
+            className="relative isolate overflow-hidden"
+            style={{ height: "100svh", minHeight: "600px" }}
+            initial={{ opacity: 0, scale: 1.01 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: prefersReducedMotion ? 0.2 : 1.0, ease: EASE_SOFT }}
+          >
+            {content}
+          </motion.div>
+        )}
       </section>
     );
 

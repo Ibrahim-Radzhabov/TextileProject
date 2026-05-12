@@ -37,7 +37,7 @@ const tickerMessages = [
 ];
 
 const desktopSearchIcon = (
-  <svg viewBox="0 0 24 24" className="h-10 w-10" style={{ transform: "scale(1.6)" }} fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <svg viewBox="0 0 24 24" className="h-7 w-7" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
     <circle cx="11" cy="11" r="7" stroke="currentColor" strokeWidth="1" />
     <path d="M16.5 16l4 4" stroke="currentColor" strokeWidth="1" strokeLinecap="round" />
   </svg>
@@ -385,7 +385,7 @@ export function StorefrontShell({ children, config, activeThemeVariantId: _activ
                       }
                       aria-label="Открыть поиск по каталогу"
                     >
-                      <span className="text-foreground/80 [&>svg]:h-[40px] [&>svg]:w-[40px]">
+                      <span className="text-foreground/80 [&>svg]:h-[28px] [&>svg]:w-[28px]">
                         {desktopSearchIcon}
                       </span>
                       {!isHomepage && <span>Поиск</span>}
